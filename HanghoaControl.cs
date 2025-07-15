@@ -79,6 +79,7 @@ namespace SaovietTax
         {
             Suggestions = newSuggestions;
             type = 1;
+            lblTieude.Text = "Danh sách hàng hóa";
             // Hiển thị UserControl nếu có gợi ý
             if (listBox1.Items.Count > 0)
             {
@@ -93,6 +94,7 @@ namespace SaovietTax
         {
             Suggestions2 = newSuggestions;
             type = 2;
+            lblTieude.Text = "Danh sách nhóm hàng hóa";
             // Hiển thị UserControl nếu có gợi ý
             if (listBox1.Items.Count > 0)
             {
@@ -167,6 +169,11 @@ namespace SaovietTax
         {
             e.DrawDefault = true; // Vẽ mặc định để hiển thị văn bản
 
+        }
+
+        private void simpleButton1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
         }
     }
 }

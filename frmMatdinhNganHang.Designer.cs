@@ -31,8 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMatdinhNganHang));
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
-            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
-            this.textEdit2 = new DevExpress.XtraEditors.TextEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.txtMaKH = new DevExpress.XtraEditors.TextEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
@@ -40,6 +38,8 @@
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.txtDiengiai = new DevExpress.XtraEditors.TextEdit();
             this.btnLuudinhdanh = new DevExpress.XtraEditors.SimpleButton();
+            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
+            this.textEdit2 = new DevExpress.XtraEditors.TextEdit();
             this.gcDinhdanh = new DevExpress.XtraGrid.GridControl();
             this.matdinhnganhangBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -51,10 +51,10 @@
             this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaKH.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtDiengiai.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDinhdanh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.matdinhnganhangBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
@@ -73,27 +73,8 @@
             this.panelControl1.Controls.Add(this.btnLuudinhdanh);
             this.panelControl1.Location = new System.Drawing.Point(12, 12);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(795, 110);
+            this.panelControl1.Size = new System.Drawing.Size(757, 110);
             this.panelControl1.TabIndex = 22;
-            // 
-            // labelControl3
-            // 
-            this.labelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelControl3.Location = new System.Drawing.Point(30, 580);
-            this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(91, 19);
-            this.labelControl3.TabIndex = 28;
-            this.labelControl3.Text = "Tài khoản có";
-            this.labelControl3.Visible = false;
-            // 
-            // textEdit2
-            // 
-            this.textEdit2.Location = new System.Drawing.Point(458, 577);
-            this.textEdit2.Name = "textEdit2";
-            this.textEdit2.Size = new System.Drawing.Size(156, 27);
-            this.textEdit2.TabIndex = 27;
-            this.textEdit2.Visible = false;
             // 
             // labelControl2
             // 
@@ -109,7 +90,7 @@
             // 
             this.txtMaKH.Location = new System.Drawing.Point(413, 63);
             this.txtMaKH.Name = "txtMaKH";
-            this.txtMaKH.Size = new System.Drawing.Size(211, 27);
+            this.txtMaKH.Size = new System.Drawing.Size(211, 26);
             this.txtMaKH.TabIndex = 25;
             this.txtMaKH.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMaKH_KeyUp);
             // 
@@ -127,7 +108,7 @@
             // 
             this.textEdit1.Location = new System.Drawing.Point(129, 63);
             this.textEdit1.Name = "textEdit1";
-            this.textEdit1.Size = new System.Drawing.Size(156, 27);
+            this.textEdit1.Size = new System.Drawing.Size(156, 26);
             this.textEdit1.TabIndex = 23;
             // 
             // labelControl8
@@ -146,7 +127,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDiengiai.Location = new System.Drawing.Point(129, 12);
             this.txtDiengiai.Name = "txtDiengiai";
-            this.txtDiengiai.Size = new System.Drawing.Size(495, 27);
+            this.txtDiengiai.Size = new System.Drawing.Size(495, 26);
             this.txtDiengiai.TabIndex = 13;
             // 
             // btnLuudinhdanh
@@ -159,6 +140,25 @@
             this.btnLuudinhdanh.Text = "Lưu";
             this.btnLuudinhdanh.Click += new System.EventHandler(this.btnLuudinhdanh_Click);
             // 
+            // labelControl3
+            // 
+            this.labelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelControl3.Location = new System.Drawing.Point(30, 580);
+            this.labelControl3.Name = "labelControl3";
+            this.labelControl3.Size = new System.Drawing.Size(91, 19);
+            this.labelControl3.TabIndex = 28;
+            this.labelControl3.Text = "Tài khoản có";
+            this.labelControl3.Visible = false;
+            // 
+            // textEdit2
+            // 
+            this.textEdit2.Location = new System.Drawing.Point(458, 577);
+            this.textEdit2.Name = "textEdit2";
+            this.textEdit2.Size = new System.Drawing.Size(156, 26);
+            this.textEdit2.TabIndex = 27;
+            this.textEdit2.Visible = false;
+            // 
             // gcDinhdanh
             // 
             this.gcDinhdanh.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -168,7 +168,7 @@
             this.gcDinhdanh.Location = new System.Drawing.Point(12, 161);
             this.gcDinhdanh.MainView = this.gridView2;
             this.gcDinhdanh.Name = "gcDinhdanh";
-            this.gcDinhdanh.Size = new System.Drawing.Size(795, 466);
+            this.gcDinhdanh.Size = new System.Drawing.Size(757, 409);
             this.gcDinhdanh.TabIndex = 23;
             this.gcDinhdanh.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView2});
@@ -254,7 +254,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(819, 639);
+            this.ClientSize = new System.Drawing.Size(781, 582);
             this.Controls.Add(this.labelControl3);
             this.Controls.Add(this.gcDinhdanh);
             this.Controls.Add(this.textEdit2);
@@ -268,10 +268,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaKH.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtDiengiai.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDinhdanh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.matdinhnganhangBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).EndInit();

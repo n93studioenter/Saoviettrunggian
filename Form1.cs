@@ -9616,17 +9616,20 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                       row.Field<string>("NgayGD") != null &&
                       DateTime.TryParse(row.Field<string>("NgayGD"), out DateTime ngayGD) &&
                       ngayGD.Date == item.NgayGD.Date))
-                    { 
+                    {
+                        if (item.Stt == 48)
+                        {
+                            int a = 10;
+                        }
                         //Nếu bỏ check thì cập nhật bỏ check
-                        var query = @"update tbNganhang set  TKNo=?, TKCo=?,Checked=?,DienGiai=? where SHDon=? and NgayGD=?";
+                        var query = @"update tbNganhang set  TKNo=?, TKCo=?,Checked=?,DienGiai=? where ID=?";
                         var parameters = new OleDbParameter[]
                            {
                                new OleDbParameter("?", item.TKNo),
                                new OleDbParameter("?", item.TKCo),
                                new OleDbParameter("?", item.Checked?"1":"0"),
                                new OleDbParameter("?", Helpers.ConvertUnicodeToVni(item.Diengiai)),
-                               new OleDbParameter("?", item.Maso),
-                               new OleDbParameter("?", item.NgayGD),
+                               new OleDbParameter("?", item.Stt), 
                            };
                         try
                         {
@@ -9958,11 +9961,17 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                     int cellHeight = cellInfo.Bounds.Height;
                     var sreeny = screenPos.Y;
-                    int heightOrigin = 80;
-                    suggestionControl3.Location = new System.Drawing.Point(screenPos.X + 70, heightOrigin);
+                    int heightOrigin = 50;
+                    suggestionControl3.Location = new System.Drawing.Point(screenPos.X- (screenPos.X / 2) +30, heightOrigin);
                     suggestionControl3.Show();
 
                 }
+            }
+            if (gv5.FocusedColumn.FieldName == "Checked")
+            {
+                int getid = (int)gv5.GetRowCellValue(rowindexs, "Stt");
+                var getnh = lstNganhan.Where(m => m.Stt == getid).FirstOrDefault();
+                getnh.Checked = (bool)newValue;
             }
         }
 
@@ -9994,6 +10003,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         private void btnLocdulieuNganhang_Click(object sender, EventArgs e)
         {
             xtraTabControl2.SelectedTabPageIndex = 2;
+            lstNganhan = new List<Nganhang>();
             //typeNganhang = 2;
             //progressPanel1.Visible = true;
             //Application.DoEvents();
@@ -10018,13 +10028,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
  new OleDbParameter("?",null)
                };
             var dtnganhang = ExecuteQuery(queryCheckVatTu, parameterss);
-            //Dịch sang tbnganhang
-            int stt = 1;
+            //Dịch sang tbnganhang 
             foreach (DataRow item in dtnganhang.Rows)
             {
                 Nganhang nganhang = new Nganhang();
-                nganhang.Stt = stt;
-                stt += 1;
+                nganhang.Stt =int.Parse(item["ID"].ToString());
                 nganhang.NgayGD = DateTime.Parse(item["NgayGD"].ToString());
                 nganhang.Maso = item["SHDon"].ToString();
                 nganhang.Diengiai = Helpers.ConvertVniToUnicode(item["DienGiai"].ToString());
@@ -10034,7 +10042,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 nganhang.TKCo = item["TKCo"].ToString();
                 nganhang.MaKH= item["MaKH"].ToString();
                 nganhang.Checked = true;
-                lstNganhan.Add(nganhang);
+                try
+                {
+                    lstNganhan.Add(nganhang);
+                }
+             catch(Exception ex)
+                {
+                    XtraMessageBox.Show(ex.Message);
+                }
             }
             gridControl3.DataSource = lstNganhan;
 
@@ -10057,10 +10072,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             string Diengiai = gridView5.GetRowCellValue(rowHandle, "Diengiai").ToString();
             string NgayGD = gridView5.GetRowCellValue(rowHandle, "NgayGD").ToString();
             string MaKH = gridView5.GetRowCellValue(rowHandle, "MaKH")?.ToString() ?? string.Empty;
-
+            string ID= gridView5.GetRowCellValue(rowHandle, "Stt").ToString();
             string query = @"UPDATE tbNganhang 
                  SET DienGiai = ?, TKNo = ?, TKCo = ? ,MaKH =?
-                 WHERE SHDon = ? AND NgayGD = ?";
+                 WHERE ID=?";
 
             var parameters = new OleDbParameter[]
             {
@@ -10068,8 +10083,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 new OleDbParameter("TKNo", TKNo),
                 new OleDbParameter("TKCo", TKCo),
                 new OleDbParameter("MaKH", MaKH),
-                new OleDbParameter("SHDon", SHDon),
-                new OleDbParameter("NgayGD", DateTime.Parse(NgayGD)) // Chuyển đổi Ngày thành DateTime nếu cần
+                new OleDbParameter("SHDon", ID), 
              };
 
             // Gọi hàm thực thi câu lệnh SQL
