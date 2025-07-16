@@ -422,7 +422,7 @@ namespace SaovietTax
                             {
                                 FileImportDetail fileImportDetail = new FileImportDetail(int.Parse(itemDetail["ID"].ToString()),Helpers.ConvertVniToUnicode(itemDetail["Ten"].ToString()), int.Parse(itemDetail["ParentId"].ToString()), itemDetail["SoHieu"].ToString(), double.Parse(itemDetail["SoLuong"].ToString(), CultureInfo.InvariantCulture), double.Parse(itemDetail["DonGia"].ToString()), Helpers.ConvertVniToUnicode(itemDetail["DVT"].ToString()), itemDetail["MaCT"].ToString(), itemDetail["TKNo"].ToString(), itemDetail["TKCo"].ToString(), double.Parse(itemDetail["TTien"].ToString()));
                                 //Nếu là chiết khấu thì cho ve tk 711
-                                if(string.IsNullOrEmpty(fileImportDetail.DVT) && fileImportDetail.Ten.ToLower().Contains("chiết khấu"))
+                                if(string.IsNullOrEmpty(fileImportDetail.DVT) || fileImportDetail.Ten.ToLower().Contains("chiết khấu"))
                                 {
                                     fileImportDetail.TKNo = "711";
                                 }
@@ -432,6 +432,7 @@ namespace SaovietTax
                         }
                         else
                         {
+
                             GetdetailXML2(item["Mst"].ToString(), item["KHHDon"].ToString(), item["SHDon"].ToString(), tokken, int.Parse(item["InvoiceType"].ToString()), fileImport);
                             if (string.IsNullOrEmpty(item["Path"].ToString()))
                             {
@@ -866,6 +867,10 @@ namespace SaovietTax
                 string tableDinhdanh = "tbDinhdanhtaikhoan";
                 string tableDinhdanhNganhang = "tbDinhdanhNganhang";
                 string tableNganhang = "tbNganhang";
+
+                string alterTableQuery = "ALTER TABLE TP154 ALTER COLUMN TenVattu TEXT;";
+                int rowsAffected = ExecuteQueryResult(alterTableQuery, null);
+
                 // Kiểm tra xem bảng đã tồn tại hay không
                 if (!TableExists(connection, tableNganhang))
                 {
@@ -3518,7 +3523,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             // Chèn ch
                             // i tiết hóa đơn
                             string tkno = "";
-                            if (string.IsNullOrEmpty(it.Dvtinh) && it.Ten.ToLower().Contains("chiết khấu"))
+                            if (string.IsNullOrEmpty(it.Dvtinh) || it.Ten.ToLower().Contains("chiết khấu"))
                             {
                                 tkno = "711";
                             }
@@ -7646,7 +7651,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 foreach (var it2 in item.fileImportDetails)
                 {
                     it2.TKCo = item.TKCo;
-                    it2.TKNo = item.TKNo;
+                    if (it2.TKNo != "711")
+                        it2.TKNo = item.TKNo;
                 }
             }
 
