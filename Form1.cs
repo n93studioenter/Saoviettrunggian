@@ -9920,7 +9920,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                     int cellHeight = cellInfo.Bounds.Height;
                     var sreeny = screenPos.Y;
-                    int heightOrigin = 80;
+                    int heightOrigin =50;
                     suggestionControl3.Location = new System.Drawing.Point(screenPos.X + 70, heightOrigin);
                     suggestionControl3.Show();
 

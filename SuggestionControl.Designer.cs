@@ -30,6 +30,7 @@
         {
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.lblText = new DevExpress.XtraEditors.LabelControl();
             this.SuspendLayout();
             // 
             // listBox1
@@ -43,11 +44,10 @@
             // 
             // listView1
             // 
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(0, 0);
+            this.listView1.Location = new System.Drawing.Point(0, 39);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(652, 394);
+            this.listView1.Size = new System.Drawing.Size(484, 368);
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listView1_DrawColumnHeader);
@@ -55,15 +55,28 @@
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
             // 
+            // lblText
+            // 
+            this.lblText.Appearance.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
+            this.lblText.Appearance.Options.UseFont = true;
+            this.lblText.Location = new System.Drawing.Point(16, 10);
+            this.lblText.Name = "lblText";
+            this.lblText.Size = new System.Drawing.Size(165, 19);
+            this.lblText.TabIndex = 2;
+            this.lblText.Text = "Danh sách tài khoản";
+            // 
             // SuggestionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.Controls.Add(this.lblText);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.listBox1);
             this.Name = "SuggestionControl";
-            this.Size = new System.Drawing.Size(652, 394);
+            this.Size = new System.Drawing.Size(486, 410);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -71,5 +84,6 @@
 
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ListView listView1;
+        private DevExpress.XtraEditors.LabelControl lblText;
     }
 }
