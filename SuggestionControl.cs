@@ -32,13 +32,18 @@ namespace SaovietTax
         public SuggestionControl()
         {
             InitializeComponent();
+            this.BringToFront();
             listBox1.DoubleClick += ListBox1_DoubleClick;
 
             listView1.View = View.Details;
             listView1.Columns.Add("Số hiệu", 100);
             listView1.Columns.Add("Tên", 350);
 
+            int totalWidth = listView1.ClientSize.Width; // Lấy chiều rộng của ListView
 
+            // Tính toán chiều rộng của các cột theo tỷ lệ phần trăm
+            listView1.Columns[0].Width = (int)(totalWidth * 0.3); // 15%
+            listView1.Columns[1].Width = (int)(totalWidth * 0.525); // 35%
             listView1.FullRowSelect = true;
             listView1.GridLines = true;
             listView1.OwnerDraw = true;
@@ -93,16 +98,25 @@ namespace SaovietTax
 
         private void listView1_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
-            e.Graphics.FillRectangle(Brushes.LightBlue, e.Bounds);
+            e.Graphics.FillRectangle(Brushes.GreenYellow, e.Bounds);
 
-            // Vẽ văn bản
-            e.DrawText(TextFormatFlags.Left);
+            // Tạo phông chữ đậm
+            using (Font boldFont = new Font(e.Font, FontStyle.Bold))
+            {
+                // Vẽ văn bản với phông chữ đậm
+                e.Graphics.DrawString(e.Header.Text, boldFont, Brushes.Black, e.Bounds);
+            }
         }
 
         private void listView1_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
 
             e.DrawDefault = true; // Vẽ mặc định để hiển thị văn bản
+        }
+
+        private void simpleButton1_Click(object sender, EventArgs e)
+        {
+            this.Hide(); // Ẩn UserControl khi nút được nhấn    
         }
     }
 

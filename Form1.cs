@@ -9920,8 +9920,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                     int cellHeight = cellInfo.Bounds.Height;
                     var sreeny = screenPos.Y;
-                    int heightOrigin =50;
-                    suggestionControl3.Location = new System.Drawing.Point(screenPos.X + 70, heightOrigin);
+                    int heightOrigin =10;
+                    suggestionControl3.Location = new System.Drawing.Point(screenPos.X + screenPos.X/9, heightOrigin);
                     suggestionControl3.Show();
 
                 }
@@ -10156,7 +10156,9 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     System.Drawing.Point screenPoint = gridView.GridControl.PointToScreen(cellRect.Location);
 
                     // Đặt vị trí cho UserControl ngay dưới cell
-                    suggestionControlhh.Location = new System.Drawing.Point(screenPoint.X * 12 / 9, 0 + cellRect.Height + 30); // Thêm khoảng cách 5 pixels
+                    suggestionControlhh.Location = new System.Drawing.Point(screenPoint.X + screenPoint.X /3, 0 + cellRect.Height + 15);
+                    
+                    
                     // Hiển thị UserControl
                     suggestionControlhh.Show();
 
@@ -10244,7 +10246,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     System.Drawing.Point screenPoint = gridView.GridControl.PointToScreen(cellRect.Location);
 
                     // Đặt vị trí cho UserControl ngay dưới cell
-                    suggestionControlhh2.Location = new System.Drawing.Point(screenPoint.X*12/10, 0 + cellRect.Height+ 30); // Thêm khoảng cách 5 pixels
+                    suggestionControlhh2.Location = new System.Drawing.Point(screenPoint.X+ screenPoint.X/5, 0 + cellRect.Height+ 15); // Thêm khoảng cách 5 pixels
 
                     // Hiển thị UserControl
                     suggestionControlhh2.Show();
