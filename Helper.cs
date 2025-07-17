@@ -15,7 +15,25 @@ namespace SaovietTax
 {
     public static class Helpers
     {
+        public static string ExtractName(string input)
+        {
+            // Danh sách từ khóa
+            List<string> keywords = new List<string> { "Chuyen", "TKThe", "FT", "thue" };
 
+            // Tạo chuỗi từ khóa cho biểu thức chính quy
+            string keywordsPattern = string.Join("|", keywords);
+
+            // Biểu thức chính quy để tìm tên, không phân biệt chữ hoa chữ thường
+            string pattern = $@"(?<=\d\s)([A-Za-z\s]+)(?=\s*(?:{keywordsPattern}))";
+            Match match = Regex.Match(input, pattern, RegexOptions.IgnoreCase);
+
+            if (match.Success)
+            {
+                return match.Value.Trim();
+            }
+
+            return "Không tìm thấy tên.";
+        }
         public static string GetName(string input)
         {
             // Biểu thức chính quy để tìm tên công ty

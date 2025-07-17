@@ -500,6 +500,8 @@ namespace SaovietTax.DTO
 
         [JsonPropertyName("tgia")]
         public object Tgia { get; set; } // Nullable object
+        [JsonPropertyName("tchat")]
+        public int tchat { get; set; } // Nullable object
 
         [JsonPropertyName("tthhdtrung")]
         public List<object> Tthhdtrung { get; set; } = new List<object>(); // Khởi tạo để tránh null
