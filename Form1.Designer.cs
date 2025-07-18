@@ -100,6 +100,7 @@
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
             this.progressPanel1 = new DevExpress.XtraWaitForm.ProgressPanel();
+            this.btnReadPDF = new DevExpress.XtraEditors.SimpleButton();
             this.lblThongbao = new System.Windows.Forms.Label();
             this.panelControl4 = new DevExpress.XtraEditors.PanelControl();
             this.btnRefresh = new DevExpress.XtraEditors.SimpleButton();
@@ -148,7 +149,6 @@
             this.simpleButton3 = new DevExpress.XtraEditors.SimpleButton();
             this.btnImportChungtunganhang = new DevExpress.XtraEditors.SimpleButton();
             this.btnMatdinhnganhang = new DevExpress.XtraEditors.SimpleButton();
-            this.btnReadPDF = new DevExpress.XtraEditors.SimpleButton();
             this.btnimport = new DevExpress.XtraEditors.SimpleButton();
             this.btnMdtk = new DevExpress.XtraEditors.SimpleButton();
             this.btnChonthang = new DevExpress.XtraEditors.SimpleButton();
@@ -159,6 +159,7 @@
             this.radialMenu1 = new DevExpress.XtraBars.Ribbon.RadialMenu(this.components);
             this.toolTipController1 = new DevExpress.Utils.ToolTipController(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.gridColumn13 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileImportBindingSource)).BeginInit();
@@ -988,6 +989,7 @@
             this.xtraTabPage1.Controls.Add(this.progressPanel2);
             this.xtraTabPage1.Controls.Add(this.simpleButton2);
             this.xtraTabPage1.Controls.Add(this.panelControl2);
+            this.xtraTabPage1.Controls.Add(this.btnReadPDF);
             this.xtraTabPage1.Controls.Add(this.lblThongbao);
             this.xtraTabPage1.Controls.Add(this.panelControl4);
             this.xtraTabPage1.Controls.Add(this.xtraTabControl2);
@@ -1031,7 +1033,7 @@
             // 
             this.progressPanel2.Appearance.BackColor = System.Drawing.Color.Transparent;
             this.progressPanel2.Appearance.Options.UseBackColor = true;
-            this.progressPanel2.Location = new System.Drawing.Point(935, 443);
+            this.progressPanel2.Location = new System.Drawing.Point(766, 611);
             this.progressPanel2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.progressPanel2.Name = "progressPanel2";
             this.progressPanel2.Size = new System.Drawing.Size(154, 28);
@@ -1041,7 +1043,7 @@
             // 
             // simpleButton2
             // 
-            this.simpleButton2.Location = new System.Drawing.Point(832, 443);
+            this.simpleButton2.Location = new System.Drawing.Point(924, 610);
             this.simpleButton2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton2.Name = "simpleButton2";
             this.simpleButton2.Size = new System.Drawing.Size(87, 29);
@@ -1086,6 +1088,19 @@
             this.progressPanel1.Text = "progressPanel1";
             this.progressPanel1.Visible = false;
             this.progressPanel1.WaitAnimationType = DevExpress.Utils.Animation.WaitingAnimatorType.Ring;
+            // 
+            // btnReadPDF
+            // 
+            this.btnReadPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnReadPDF.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnReadPDF.ImageOptions.Image")));
+            this.btnReadPDF.Location = new System.Drawing.Point(1030, 604);
+            this.btnReadPDF.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnReadPDF.Name = "btnReadPDF";
+            this.btnReadPDF.Size = new System.Drawing.Size(126, 35);
+            this.btnReadPDF.TabIndex = 10;
+            this.btnReadPDF.Text = "Abbyy";
+            this.btnReadPDF.Visible = false;
+            this.btnReadPDF.Click += new System.EventHandler(this.btnReadPDF_Click_1);
             // 
             // lblThongbao
             // 
@@ -1296,6 +1311,7 @@
             this.colTKNo1,
             this.colTKCo1,
             this.colMaKH,
+            this.gridColumn13,
             this.colCheck});
             this.gridView5.DetailHeight = 295;
             this.gridView5.GridControl = this.gridControl3;
@@ -1304,6 +1320,7 @@
             this.gridView5.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
             new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colTKNo1, DevExpress.Data.ColumnSortOrder.Ascending)});
             this.gridView5.RowClick += new DevExpress.XtraGrid.Views.Grid.RowClickEventHandler(this.gridView5_RowClick);
+            this.gridView5.RowCellClick += new DevExpress.XtraGrid.Views.Grid.RowCellClickEventHandler(this.gridView5_RowCellClick);
             this.gridView5.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView5_CellValueChanged);
             this.gridView5.CellValueChanging += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView5_CellValueChanging);
             this.gridView5.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridView5_KeyDown);
@@ -1317,7 +1334,7 @@
             this.colStt.Name = "colStt";
             this.colStt.Visible = true;
             this.colStt.VisibleIndex = 0;
-            this.colStt.Width = 42;
+            this.colStt.Width = 43;
             // 
             // colNgayGD
             // 
@@ -1327,7 +1344,7 @@
             this.colNgayGD.Name = "colNgayGD";
             this.colNgayGD.Visible = true;
             this.colNgayGD.VisibleIndex = 1;
-            this.colNgayGD.Width = 84;
+            this.colNgayGD.Width = 113;
             // 
             // colMaso
             // 
@@ -1337,7 +1354,7 @@
             this.colMaso.Name = "colMaso";
             this.colMaso.Visible = true;
             this.colMaso.VisibleIndex = 2;
-            this.colMaso.Width = 88;
+            this.colMaso.Width = 91;
             // 
             // colDiengiai
             // 
@@ -1347,7 +1364,7 @@
             this.colDiengiai.Name = "colDiengiai";
             this.colDiengiai.Visible = true;
             this.colDiengiai.VisibleIndex = 3;
-            this.colDiengiai.Width = 421;
+            this.colDiengiai.Width = 438;
             // 
             // colThanhTien1
             // 
@@ -1359,7 +1376,7 @@
             this.colThanhTien1.Name = "colThanhTien1";
             this.colThanhTien1.Visible = true;
             this.colThanhTien1.VisibleIndex = 4;
-            this.colThanhTien1.Width = 91;
+            this.colThanhTien1.Width = 94;
             // 
             // gridColumn11
             // 
@@ -1371,7 +1388,7 @@
             this.gridColumn11.Name = "gridColumn11";
             this.gridColumn11.Visible = true;
             this.gridColumn11.VisibleIndex = 5;
-            this.gridColumn11.Width = 105;
+            this.gridColumn11.Width = 83;
             // 
             // colTKNo1
             // 
@@ -1385,7 +1402,7 @@
             this.colTKNo1.Name = "colTKNo1";
             this.colTKNo1.Visible = true;
             this.colTKNo1.VisibleIndex = 6;
-            this.colTKNo1.Width = 135;
+            this.colTKNo1.Width = 85;
             // 
             // colTKCo1
             // 
@@ -1399,7 +1416,7 @@
             this.colTKCo1.Name = "colTKCo1";
             this.colTKCo1.Visible = true;
             this.colTKCo1.VisibleIndex = 7;
-            this.colTKCo1.Width = 95;
+            this.colTKCo1.Width = 68;
             // 
             // colMaKH
             // 
@@ -1410,7 +1427,7 @@
             this.colMaKH.OptionsColumn.ShowInExpressionEditor = false;
             this.colMaKH.Visible = true;
             this.colMaKH.VisibleIndex = 8;
-            this.colMaKH.Width = 128;
+            this.colMaKH.Width = 265;
             // 
             // colCheck
             // 
@@ -1418,9 +1435,10 @@
             this.colCheck.FieldName = "Checked";
             this.colCheck.MinWidth = 23;
             this.colCheck.Name = "colCheck";
+            this.colCheck.OptionsColumn.AllowEdit = false;
             this.colCheck.Visible = true;
-            this.colCheck.VisibleIndex = 9;
-            this.colCheck.Width = 71;
+            this.colCheck.VisibleIndex = 10;
+            this.colCheck.Width = 79;
             // 
             // lblDpPath
             // 
@@ -1605,7 +1623,6 @@
             this.panelControl1.Controls.Add(this.simpleButton3);
             this.panelControl1.Controls.Add(this.btnImportChungtunganhang);
             this.panelControl1.Controls.Add(this.btnMatdinhnganhang);
-            this.panelControl1.Controls.Add(this.btnReadPDF);
             this.panelControl1.Controls.Add(this.btnimport);
             this.panelControl1.Controls.Add(this.btnMdtk);
             this.panelControl1.Controls.Add(this.btnChonthang);
@@ -1613,16 +1630,16 @@
             this.panelControl1.Location = new System.Drawing.Point(432, 3);
             this.panelControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(662, 156);
+            this.panelControl1.Size = new System.Drawing.Size(704, 156);
             this.panelControl1.TabIndex = 1;
             // 
             // simpleButton4
             // 
             this.simpleButton4.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton4.ImageOptions.Image")));
-            this.simpleButton4.Location = new System.Drawing.Point(511, 6);
+            this.simpleButton4.Location = new System.Drawing.Point(423, 5);
             this.simpleButton4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton4.Name = "simpleButton4";
-            this.simpleButton4.Size = new System.Drawing.Size(146, 29);
+            this.simpleButton4.Size = new System.Drawing.Size(276, 29);
             this.simpleButton4.TabIndex = 15;
             this.simpleButton4.Text = "Đọc file PDF";
             this.simpleButton4.Click += new System.EventHandler(this.simpleButton4_Click);
@@ -1630,7 +1647,7 @@
             // btnLocdulieuNganhang
             // 
             this.btnLocdulieuNganhang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnLocdulieuNganhang.ImageOptions.Image")));
-            this.btnLocdulieuNganhang.Location = new System.Drawing.Point(381, 75);
+            this.btnLocdulieuNganhang.Location = new System.Drawing.Point(423, 74);
             this.btnLocdulieuNganhang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnLocdulieuNganhang.Name = "btnLocdulieuNganhang";
             this.btnLocdulieuNganhang.Size = new System.Drawing.Size(276, 35);
@@ -1652,7 +1669,7 @@
             // btnImportChungtunganhang
             // 
             this.btnImportChungtunganhang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnImportChungtunganhang.ImageOptions.Image")));
-            this.btnImportChungtunganhang.Location = new System.Drawing.Point(381, 114);
+            this.btnImportChungtunganhang.Location = new System.Drawing.Point(423, 113);
             this.btnImportChungtunganhang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnImportChungtunganhang.Name = "btnImportChungtunganhang";
             this.btnImportChungtunganhang.Size = new System.Drawing.Size(276, 35);
@@ -1663,7 +1680,7 @@
             // btnMatdinhnganhang
             // 
             this.btnMatdinhnganhang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnMatdinhnganhang.ImageOptions.Image")));
-            this.btnMatdinhnganhang.Location = new System.Drawing.Point(381, 39);
+            this.btnMatdinhnganhang.Location = new System.Drawing.Point(423, 38);
             this.btnMatdinhnganhang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnMatdinhnganhang.Name = "btnMatdinhnganhang";
             this.btnMatdinhnganhang.Size = new System.Drawing.Size(276, 35);
@@ -1671,24 +1688,13 @@
             this.btnMatdinhnganhang.Text = "Mật định ngân hàng";
             this.btnMatdinhnganhang.Click += new System.EventHandler(this.btnMatdinhnganhang_Click);
             // 
-            // btnReadPDF
-            // 
-            this.btnReadPDF.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnReadPDF.ImageOptions.Image")));
-            this.btnReadPDF.Location = new System.Drawing.Point(381, 2);
-            this.btnReadPDF.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.btnReadPDF.Name = "btnReadPDF";
-            this.btnReadPDF.Size = new System.Drawing.Size(126, 35);
-            this.btnReadPDF.TabIndex = 10;
-            this.btnReadPDF.Text = "Abbyy";
-            this.btnReadPDF.Click += new System.EventHandler(this.btnReadPDF_Click_1);
-            // 
             // btnimport
             // 
             this.btnimport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnimport.ImageOptions.Image")));
             this.btnimport.Location = new System.Drawing.Point(4, 120);
             this.btnimport.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnimport.Name = "btnimport";
-            this.btnimport.Size = new System.Drawing.Size(358, 29);
+            this.btnimport.Size = new System.Drawing.Size(415, 29);
             this.btnimport.TabIndex = 2;
             this.btnimport.Text = "Tải vào phần mềm";
             this.btnimport.Click += new System.EventHandler(this.btnimport_Click);
@@ -1699,7 +1705,7 @@
             this.btnMdtk.Location = new System.Drawing.Point(4, 45);
             this.btnMdtk.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnMdtk.Name = "btnMdtk";
-            this.btnMdtk.Size = new System.Drawing.Size(358, 29);
+            this.btnMdtk.Size = new System.Drawing.Size(415, 29);
             this.btnMdtk.TabIndex = 9;
             this.btnMdtk.Text = "Mật định tài khoản";
             this.btnMdtk.Click += new System.EventHandler(this.btnMdtk_Click);
@@ -1710,7 +1716,7 @@
             this.btnChonthang.Location = new System.Drawing.Point(4, 82);
             this.btnChonthang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnChonthang.Name = "btnChonthang";
-            this.btnChonthang.Size = new System.Drawing.Size(358, 29);
+            this.btnChonthang.Size = new System.Drawing.Size(415, 29);
             this.btnChonthang.TabIndex = 8;
             this.btnChonthang.Text = "Liệt kê hóa đơn";
             this.btnChonthang.Click += new System.EventHandler(this.btnChonthang_Click);
@@ -1721,7 +1727,7 @@
             this.btnTaicoquanthue.Location = new System.Drawing.Point(171, 9);
             this.btnTaicoquanthue.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnTaicoquanthue.Name = "btnTaicoquanthue";
-            this.btnTaicoquanthue.Size = new System.Drawing.Size(191, 29);
+            this.btnTaicoquanthue.Size = new System.Drawing.Size(248, 29);
             this.btnTaicoquanthue.TabIndex = 0;
             this.btnTaicoquanthue.Text = "Tải dữ liệu từ cơ quan thuế";
             this.btnTaicoquanthue.Click += new System.EventHandler(this.btnTaicoquanthue_Click);
@@ -1750,6 +1756,16 @@
             // radialMenu1
             // 
             this.radialMenu1.Name = "radialMenu1";
+            // 
+            // gridColumn13
+            // 
+            this.gridColumn13.Caption = "Số hoá đơn";
+            this.gridColumn13.FieldName = "SoHD";
+            this.gridColumn13.MinWidth = 25;
+            this.gridColumn13.Name = "gridColumn13";
+            this.gridColumn13.Visible = true;
+            this.gridColumn13.VisibleIndex = 9;
+            this.gridColumn13.Width = 94;
             // 
             // frmMain
             // 
@@ -1943,5 +1959,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn colMaKH;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn12;
         private DevExpress.XtraEditors.SimpleButton simpleButton4;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn13;
     }
 }

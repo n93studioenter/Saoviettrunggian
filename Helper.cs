@@ -15,6 +15,97 @@ namespace SaovietTax
 {
     public static class Helpers
     {
+        public static string ExtractNumber(string input)
+        {
+            // Tìm số sau từ SO, HD, HOA DON hoặc HDS
+            var match = Regex.Match(input, @"(?:so|hd|hoa don|hds)\s*([-\d]+)", RegexOptions.IgnoreCase);
+
+            if (match.Success)
+            {
+                // Trích xuất số từ chuỗi (ví dụ: lấy 184 từ HD184)
+                string extractedNumber = Regex.Match(match.Value, @"\d+").Value;
+                return extractedNumber;
+            }
+
+            return "Không tìm thấy số";
+        }
+        public static List<string> FindCommonAdjacentPhrases(string str1, string str2, int minWords = 2)
+        {
+            // Chuẩn hóa chuỗi: loại bỏ khoảng trắng thừa và chuyển về chữ thường
+            string[] words1 = str1.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] words2 = str2.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            List<string> commonPhrases = new List<string>();
+
+            // Duyệt qua tất cả các cụm từ có thể trong chuỗi 1
+            for (int i = 0; i <= words1.Length - minWords; i++)
+            {
+                // Tạo cụm từ với độ dài từ minWords đến tối đa có thể
+                for (int length = minWords; length <= words1.Length - i; length++)
+                {
+                    string[] phraseToFind = words1.Skip(i).Take(length).ToArray();
+                    string phraseStr = string.Join(" ", phraseToFind);
+
+                    // Kiểm tra xem cụm từ này có tồn tại trong chuỗi 2 không
+                    if (ContainsPhrase(words2, phraseToFind))
+                    {
+                        commonPhrases.Add(phraseStr);
+                    }
+                }
+            }
+
+            // Loại bỏ các cụm từ con (nếu có cụm từ dài hơn chứa nó)
+            return commonPhrases
+                .Distinct()
+                .OrderByDescending(p => p.Split(' ').Length)
+                .Where(p => !commonPhrases.Any(q => q != p && q.Contains(p)))
+                .ToList();
+        }
+        private static bool ContainsPhrase(string[] words, string[] phrase)
+        {
+            if (phrase.Length > words.Length) return false;
+
+            for (int i = 0; i <= words.Length - phrase.Length; i++)
+            {
+                bool match = true;
+                for (int j = 0; j < phrase.Length; j++)
+                {
+                    if (!string.Equals(words[i + j], phrase[j], StringComparison.OrdinalIgnoreCase))
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) return true;
+            }
+
+            return false;
+        }
+        public static List<string> FindTwoWordPhrases(string str1, string str2)
+        {
+            List<string> commonPhrases = new List<string>();
+
+            // Tách các từ
+            var words1 = str1.ToLower().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var words2 = str2.ToLower().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Duyệt qua từng cụm từ hai từ trong words1
+            for (int i = 0; i < words1.Length - 1; i++)
+            {
+                string phrase = words1[i] + " " + words1[i + 1];
+
+                // Kiểm tra xem cụm từ có xuất hiện trong str2
+                if (str2.ToLower().Contains(phrase))
+                {
+                    if (!commonPhrases.Contains(phrase)) // Đảm bảo không trùng lặp
+                    {
+                        commonPhrases.Add(phrase);
+                    }
+                }
+            }
+
+            return commonPhrases;
+        }
         public static string ExtractName(string input)
         {
             // Danh sách từ khóa
@@ -72,7 +163,7 @@ namespace SaovietTax
             str = Regex.Replace(str, "đ", "d");
 
             // Thay thế khoảng trắng bằng dấu gạch ngang
-            str = Regex.Replace(str, " ", "-");
+           // str = Regex.Replace(str, " ", "-");
             str = str.Replace(",", "");
             str = str.Replace(".", "");
 

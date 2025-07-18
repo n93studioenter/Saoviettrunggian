@@ -1502,10 +1502,11 @@ namespace SaovietTax
 
             return matrix[a.Length, b.Length];
         }
+        DataTable existingTbChungtu;
         private async void frmMain_Load(object sender, EventArgs e)
         {
-            string testkt = "TKThe :2912746666, tai Techcombank. NGHIEM THI NIEN chuyen tien FT25125350067571 - CTLNHIDI00001167881111 0-1/1-CRE-002";
-            var checks = Helpers.ExtractName(testkt); 
+            string input = "PVT TT TIEN MUA BAN GHE THEO HD 202 GD 296416-063025 15:12:00";
+            string number = Helpers.ExtractNumber(input);
 
             // Kiemtraphienban();
             InitDB();
@@ -1520,10 +1521,14 @@ namespace SaovietTax
             tbKhachhang = await Task.Run(() => ExecuteQuery(query));
             query = "SELECT * FROM tbNganhang"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
             tbNganhang = await Task.Run(() => ExecuteQuery(query));
-            
+            //Lay chung tu
+            query = "SELECT * FROM ChungTu"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
+             existingTbChungtu = ExecuteQuery(query);
             gridView1.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
             gridView3.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
             gridView5.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+           // gridView5.OptionsCustomization.AllowSort = false;
+
             //
             // query = "SELECT * FROM tbimport"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
             // var tbip = ExecuteQuery(query);
@@ -8807,6 +8812,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             public string TKCo { get; set; }
             public string MaKH { get; set; }
             public bool Checked { get; set; }
+            public string SoHD { get; set; }
         }
         private List<Nganhang> lstNganhan = new List<Nganhang>();
         System.Windows.Forms.BindingSource bdNganhang = new System.Windows.Forms.BindingSource();
@@ -10003,8 +10009,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                     int cellHeight = cellInfo.Bounds.Height;
                     var sreeny = screenPos.Y;
-                    int heightOrigin = 50;
-                    suggestionControl3.Location = new System.Drawing.Point(screenPos.X- (screenPos.X / 2) +30, heightOrigin);
+                    int heightOrigin = 30;
+                    suggestionControl3.Location = new System.Drawing.Point(screenPos.X- (screenPos.X / 4) +10, heightOrigin);
                     suggestionControl3.Show();
 
                 }
@@ -10299,7 +10305,30 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void simpleButton4_Click(object sender, EventArgs e)
         {
-            
+            xtraTabControl2.SelectedTabPageIndex = 2;
+            if (lblTKNganhang.Text == "...")
+            {
+                XtraMessageBox.Show("Vui lòng chọn tài khoản ngân hàng!");
+                return;
+            }
+
+            progressPanel1.Visible = true;
+            Application.DoEvents();
+           
+            if (dtMatdinhnganhang.Rows.Count == 0)
+            {
+                string queryCheckVatTu = @"SELECT * FROM tbDinhdanhNganhang ";
+                var parameterss = new OleDbParameter[]
+                {
+                 new OleDbParameter("?",null)
+                   };
+                dtMatdinhnganhang = ExecuteQuery(queryCheckVatTu, parameterss);
+            }
+            ConvertImageTOexcel();
+
+
+
+            lstNganhan =new List<Nganhang>();
             SetGridViewOptions(gridView5);
             int stt = 1;
             int currentMaso=0;  
@@ -10340,23 +10369,23 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
                 //
                 int ngayGDIndex = 0;
-                string[] lstNgayGD = new string[] {"Ngày giao dịch" };
+                string[] lstNgayGD = new string[] { "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL" };
 
                 int noidungGDIndex = 0;
-                string[] lstNoidung = new string[] { "Nội dung giao dịch", "Diễn giải" };
+                string[] lstNoidung = new string[] { "Nội dung giao dịch", "Diễn giải", "Details" };
 
                 int TTNoIndex = 0;
-                string[] lstNo = new string[] { "Phát sinh nợ", "Số tiền rút ra" };
+                string[] lstNo = new string[] { "Phát sinh nợ", "Số tiền rút", "Debit" };
 
                 int TTCoIndex = 0;
-                string[] lstCo = new string[] { "Phát sinh có", "Số tiền gửi vào" };
+                string[] lstCo = new string[] { "Phát sinh có", "Số tiền gửi", "Credit" };
 
                 //Lấy tiêu đề
                 foreach (var cell in worksheet.Row(hasrowIndex).CellsUsed())
                 {
                     string cellAddress = cell.Address.ToString(); // Địa chỉ ô
                     string cellValue = cell.GetString(); // Giá trị của ô 
-                 
+                   
                     //Lấy index ngày giao dịch
                     if (lstNgayGD.Any(header => cellValue.Contains(header)))
                     {
@@ -10390,14 +10419,18 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     {
                         Nganhang nganhang = new Nganhang();
                         var cell = worksheet.Cell("A2"); // Thay đổi địa chỉ ô theo nhu cầu
-
+                       
                         var backgroundColor = cell.Style.Fill.BackgroundColor;
 
                         //Kiểm tra row hợp lệ và lấy ngày giao dịch
                         string getNgayGD = row.Cell(ngayGDIndex).GetString();
-                        if(getNgayGD== "24/06/2025 15:41:58")
+                        if (stt==26)
                         {
-                            int aaa = 10;
+                            int a = 100;
+                        }
+                        if (!string.IsNullOrEmpty(getNgayGD) && getNgayGD.Split('/').Length < 3)
+                        {
+                            continue;
                         }
                         if (!DateTime.TryParse(getNgayGD, out _))
                         {
@@ -10433,6 +10466,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                         //Lấy nội dung giao dịch
                         string GetNoidung = row.Cell(noidungGDIndex).GetString();
+                        //Phòng cho trường hợp lệch cột
+                        if (!string.IsNullOrEmpty(GetNoidung) && GetNoidung.Length < 6)
+                        {
+                            GetNoidung = row.Cell(noidungGDIndex+1).GetString();
+                        }
                         //Kiểm tra xem co noi dung bo sung truoc  do
                         if (rowBosung!=null)
                         {
@@ -10520,12 +10558,85 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             nganhang.TKNo = tknganhan;  // Tài khoản Nợ mẫu
                         }
                         stt++;  
-                        lstNganhan.Add(nganhang);
+                       
+                        if(!string.IsNullOrEmpty(nganhang.Diengiai))
+                        {
+                            //Tìm mã khách hàng thông qua số hoá đơn
+                            string number = Helpers.ExtractNumber(nganhang.Diengiai);
+                            bool isFindSohd = false;
+                            if (number != "Không tìm thấy số")
+                            {
+                                //Tìm bỏ số 0 trước
+                                int number2 = int.Parse(number);
+                                int countwhile = 3;
+                                nganhang.SoHD = number2.ToString();
+                                var findct = existingTbChungtu.AsEnumerable().Where(m => m.Field<string>("SoHieu").EndsWith(number2.ToString())).FirstOrDefault();
+                                while (findct == null && countwhile>0)
+                                {
+                                   string snumber2 = "0" + number2.ToString();
+                                    findct = existingTbChungtu.AsEnumerable().Where(m => m.Field<string>("SoHieu").Contains(snumber2)).FirstOrDefault();
+                                    countwhile -= 1;
+                                }
+                                if (countwhile > 0)
+                                {
+                                    string makh = findct["MaKH"].ToString();
+                                    var kh = tbKhachhang.AsEnumerable().Where(m => m.Field<int>("MaSo").ToString().Contains(makh)).FirstOrDefault();
+                                    string tenkh = Helpers.ConvertVniToUnicode(kh["Ten"].ToString());
+                                    string getMaSo = kh["SoHieu"].ToString();
+                                    nganhang.MaKH = tenkh + " | " + getMaSo;
+                                }
+                                else
+                                {
+                                    isFindSohd = false;
+                                }
+                               
+                            }
+                            if(isFindSohd==false)
+                            {
+                                //Tìm mã khách hàng thông qua diễn giải
+                                foreach (DataRow dtrow in tbKhachhang.Rows)
+                                {
+                                    string getTen = Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()));
+
+                                    List<string> wordsToReplace = new List<string>
+                                {
+                                    "cty", "tnhh", "cong ty", "cp tm", "noi that", "vung tau", "dich vu","tinh","brvt","dau gia","tai san","ba ria","mam non","ubnd","hang hai","trach nhiem","huu han","xay dung","dau tu","dau khi","tm","sx","cn","vung  tau","tham dinh","trung tam","thuong mai","quan ly","lien doanh","tu dong","giai phap","o to","kiem soat","co phan","thiet bi","trung tam","ky thuat","san xuat","do go","nha nuoc khu vuc","bac nha nuoc","khu vuc","so 1","nha nuoc","cp dv","dv va","lap dat"
+                                };
+                                    string str1 = ReplaceWords(getTen.Trim().ToLower(), wordsToReplace).ToLower();
+                                    string str2 = nganhang.Diengiai.ToLower();
+                                    var commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2,4);
+                                    if (commonPhrases.Count()==0)
+                                    {
+                                        commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 3);
+                                        if (commonPhrases.Count() == 0)
+                                        {
+                                            commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 2);
+                                        }
+                                    }
+                                    if (commonPhrases.Count > 0)
+                                    {
+                                        nganhang.MaKH = Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()) + " | " + dtrow["SoHieu"].ToString();
+                                        continue;
+                                    }
+                                }
+                            }
+                            lstNganhan.Add(nganhang);
+                        }
 
                     }
                 }
-                gridControl3.DataSource = lstNganhan;
+                gridControl3.DataSource = lstNganhan.OrderBy(m=>m.NgayGD).ToList();
+                gridControl3.Refresh(); // Đảm bảo làm mới để hiển thị dữ liệu mới
+                progressPanel1.Visible = false;
             }
+        }
+        public static string ReplaceWords(string input, List<string> wordsToReplace)
+        {
+            foreach (var word in wordsToReplace)
+            {
+                input = input.Replace(word, "");
+            }
+            return input.Trim(); // Loại bỏ khoảng trắng thừa
         }
         static DataTable ExtractDataFromPdf(string pdfPath)
         {
@@ -10576,6 +10687,22 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             string columnName = gridView5.FocusedColumn.FieldName;
             if (columnName != "Checked")
                 gridView5.ShowEditor(); // Hiển thị chế độ chỉnh sửa
+        }
+
+        private void gridView5_RowCellClick(object sender, RowCellClickEventArgs e)
+        {
+            if (e.Column.FieldName == "Checked") // Thay đổi tên cột cho phù hợp
+            {
+                var getAcess = (bool)gridView5.GetRowCellValue(e.RowHandle, "Checked");
+                if (getAcess)
+                {
+                    gridView5.SetRowCellValue(e.RowHandle, e.Column, false);
+                }
+                else
+                {
+                    gridView5.SetRowCellValue(e.RowHandle, e.Column, true);
+                }
+            }
         }
 
         //private void btnScanCmera_Click(object sender, EventArgs e)
