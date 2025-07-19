@@ -1503,6 +1503,7 @@ namespace SaovietTax
             return matrix[a.Length, b.Length];
         }
         DataTable existingTbChungtu;
+        DataTable existingTbHeThongTK;
         private async void frmMain_Load(object sender, EventArgs e)
         {
             string input = "PVT TT TIEN MUA BAN GHE THEO HD 202 GD 296416-063025 15:12:00";
@@ -1524,6 +1525,10 @@ namespace SaovietTax
             //Lay chung tu
             query = "SELECT * FROM ChungTu"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
              existingTbChungtu = ExecuteQuery(query);
+
+
+            var querydinhdanh = @"SELECT * FROM HeThongTK";
+            existingTbHeThongTK = ExecuteQuery(querydinhdanh,null);
             gridView1.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
             gridView3.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
             gridView5.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
@@ -10301,7 +10306,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                 }
             }
-        }
+        }   
 
         private void simpleButton4_Click(object sender, EventArgs e)
         {
@@ -10558,68 +10563,157 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             nganhang.TKNo = tknganhan;  // Tài khoản Nợ mẫu
                         }
                         stt++;  
-                       
-                        if(!string.IsNullOrEmpty(nganhang.Diengiai))
+                        bool findMakh = false;
+                        if(nganhang.Maso == "ACB6/6")
                         {
-                            //Tìm mã khách hàng thông qua số hoá đơn
-                            string number = Helpers.ExtractNumber(nganhang.Diengiai);
-                            bool isFindSohd = false;
-                            if (number != "Không tìm thấy số")
-                            {
-                                //Tìm bỏ số 0 trước
-                                int number2 = int.Parse(number);
-                                int countwhile = 3;
-                                nganhang.SoHD = number2.ToString();
-                                var findct = existingTbChungtu.AsEnumerable().Where(m => m.Field<string>("SoHieu").EndsWith(number2.ToString())).FirstOrDefault();
-                                while (findct == null && countwhile>0)
-                                {
-                                   string snumber2 = "0" + number2.ToString();
-                                    findct = existingTbChungtu.AsEnumerable().Where(m => m.Field<string>("SoHieu").Contains(snumber2)).FirstOrDefault();
-                                    countwhile -= 1;
-                                }
-                                if (countwhile > 0)
-                                {
-                                    string makh = findct["MaKH"].ToString();
-                                    var kh = tbKhachhang.AsEnumerable().Where(m => m.Field<int>("MaSo").ToString().Contains(makh)).FirstOrDefault();
-                                    string tenkh = Helpers.ConvertVniToUnicode(kh["Ten"].ToString());
-                                    string getMaSo = kh["SoHieu"].ToString();
-                                    nganhang.MaKH = tenkh + " | " + getMaSo;
-                                }
-                                else
-                                {
-                                    isFindSohd = false;
-                                }
-                               
-                            }
-                            if(isFindSohd==false)
-                            {
-                                //Tìm mã khách hàng thông qua diễn giải
-                                foreach (DataRow dtrow in tbKhachhang.Rows)
-                                {
-                                    string getTen = Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()));
+                            var test = "Asd";
+                        }
+                        if (!string.IsNullOrEmpty(nganhang.Diengiai))
+                        {
 
-                                    List<string> wordsToReplace = new List<string>
+                            //Tìm mã khách hàng thông qua diễn giải
+                            foreach (DataRow dtrow in tbKhachhang.Rows)
+                            {
+                                string getTen = Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()));
+
+                                List<string> wordsToReplace = new List<string>
                                 {
                                     "cty", "tnhh", "cong ty", "cp tm", "noi that", "vung tau", "dich vu","tinh","brvt","dau gia","tai san","ba ria","mam non","ubnd","hang hai","trach nhiem","huu han","xay dung","dau tu","dau khi","tm","sx","cn","vung  tau","tham dinh","trung tam","thuong mai","quan ly","lien doanh","tu dong","giai phap","o to","kiem soat","co phan","thiet bi","trung tam","ky thuat","san xuat","do go","nha nuoc khu vuc","bac nha nuoc","khu vuc","so 1","nha nuoc","cp dv","dv va","lap dat"
                                 };
-                                    string str1 = ReplaceWords(getTen.Trim().ToLower(), wordsToReplace).ToLower();
-                                    string str2 = nganhang.Diengiai.ToLower();
-                                    var commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2,4);
-                                    if (commonPhrases.Count()==0)
+                                string str1 = ReplaceWords(getTen.Trim().ToLower(), wordsToReplace).ToLower();
+                                if (str1.Contains("theone"))
+                                {
+                                    var hasone = "Sdad";
+                                }
+                                string str2 = nganhang.Diengiai.ToLower();
+                                var commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 4);
+                                if (commonPhrases.Count() == 0)
+                                {
+                                    commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 3);
+                                    if (commonPhrases.Count() == 0)
                                     {
-                                        commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 3);
-                                        if (commonPhrases.Count() == 0)
+                                        commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 2);
+                                    }
+                                }
+                                if (commonPhrases.Count > 0)
+                                {
+                                    //nganhang.MaKH = Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()) + " | " + dtrow["SoHieu"].ToString();
+                                    nganhang.MaKH =  dtrow["SoHieu"].ToString();
+                                    //Tìm tk 131
+                                    var getTk131 = existingTbHeThongTK.AsEnumerable().Where(m=> m.Field<string>("SoHieu").StartsWith("131")).ToList();
+                                    if (getTk131.Count == 1)
+                                    {
+                                        if(nganhang.ThanhTien2 > 0)
                                         {
-                                            commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 2);
+                                            nganhang.TKCo = "131";
+                                        } 
+                                    }
+                                    else
+                                    {
+                                        if (nganhang.ThanhTien2 > 0)
+                                        {
+                                            nganhang.TKCo = "1311";
                                         }
                                     }
-                                    if (commonPhrases.Count > 0)
+                                    //
+                                    //Tìm tk 3311
+                                    var getTk331 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("331")).ToList();
+                                    if (getTk331.Count == 1)
                                     {
-                                        nganhang.MaKH = Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()) + " | " + dtrow["SoHieu"].ToString();
-                                        continue;
+                                        if (nganhang.ThanhTien > 0)
+                                        {
+                                            nganhang.TKNo = "331";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (nganhang.ThanhTien > 0)
+                                        {
+                                            nganhang.TKNo = "3311";
+                                        }
+                                    }
+
+
+                                    findMakh = true;
+                                    continue;
+                                }
+                            }
+                            //Tìm mã khách hàng thông qua số hoá đơn
+                            if (findMakh == false)
+                            {
+                                string number = Helpers.ExtractNumber(nganhang.Diengiai);
+                                bool isFindSohd = false;
+                                if (number != "Không tìm thấy số")
+                                { 
+                                    //Tìm bỏ số 0 trước
+                                    int number2 = int.Parse(number);
+                                     
+                                    int countwhile = 3;
+                                    nganhang.SoHD = number2.ToString();
+                                    var getlist = existingTbChungtu.AsEnumerable().Where(m => m.Field<string>("SoHieu").EndsWith(number2.ToString())).ToList();
+                                    double TT = 0;
+                                    foreach(DataRow item in getlist)
+                                    {
+                                        string makh = item["MaKH"].ToString();
+                                        if(makh!="0")
+                                         TT += double.Parse(item["SoPS"].ToString());
+                                    }
+                                    var findct = getlist.Where(m => m["MaKH"].ToString()!="0").FirstOrDefault();
+                                    while (findct == null && countwhile > 0)
+                                    {
+                                        string snumber2 = "0" + number2.ToString();
+                                        findct = existingTbChungtu.AsEnumerable().Where(m => m.Field<string>("SoHieu").Contains(snumber2)).FirstOrDefault();
+                                        countwhile -= 1;
+                                    }
+                                    if (countwhile > 0)
+                                    {
+                                        //Kiểm tra tổng tiền trước
+                                        if((nganhang.ThanhTien > 0 && TT == nganhang.ThanhTien) || (nganhang.ThanhTien2 > 0 && TT == nganhang.ThanhTien2))
+                                        {
+                                            string makh = findct["MaKH"].ToString();
+                                            var kh = tbKhachhang.AsEnumerable().Where(m => m.Field<int>("MaSo").ToString().Contains(makh)).FirstOrDefault();
+                                            string tenkh = Helpers.ConvertVniToUnicode(kh["Ten"].ToString());
+                                            string getMaSo = kh["SoHieu"].ToString();
+                                            //nganhang.MaKH = tenkh + " | " + getMaSo;
+                                            nganhang.MaKH =  getMaSo;
+                                            var getTk131 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("131")).ToList();
+                                            if (getTk131.Count == 1)
+                                            {
+                                                if (nganhang.ThanhTien2 > 0)
+                                                {
+                                                    nganhang.TKCo = "131";
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (nganhang.ThanhTien2 > 0)
+                                                {
+                                                    nganhang.TKCo = "1311";
+                                                }
+                                            }
+                                            //Tìm tk 3311
+                                            var getTk331 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("331")).ToList();
+                                            if (getTk331.Count == 1)
+                                            {
+                                                if (nganhang.ThanhTien > 0)
+                                                {
+                                                    nganhang.TKNo = "331";
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (nganhang.ThanhTien > 0)
+                                                {
+                                                    nganhang.TKNo = "3311";
+                                                }
+                                            }
+
+                                        }
+
                                     }
                                 }
                             }
+                            
                             lstNganhan.Add(nganhang);
                         }
 

@@ -162,6 +162,7 @@ namespace SaovietTax.DTO
         [JsonPropertyName("shdgoc")]
         public object Shdgoc { get; set; } // Nullable object
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [JsonPropertyName("tchat")]
         public int ? Tchat { get; set; }
 
@@ -468,6 +469,8 @@ namespace SaovietTax.DTO
         [JsonPropertyName("stt")]
         public int ? Stt { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+
         [JsonPropertyName("tchat")]
         public int ?  Tchat { get; set; }
 
@@ -500,6 +503,7 @@ namespace SaovietTax.DTO
 
         [JsonPropertyName("tgia")]
         public object Tgia { get; set; } // Nullable object
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [JsonPropertyName("tchat")]
         public int tchat { get; set; } // Nullable object
 

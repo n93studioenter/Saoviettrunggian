@@ -128,6 +128,7 @@
             this.colTKNo1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colTKCo1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colMaKH = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn13 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colCheck = new DevExpress.XtraGrid.Columns.GridColumn();
             this.lblDpPath = new DevExpress.XtraEditors.LabelControl();
             this.panelControl3 = new DevExpress.XtraEditors.PanelControl();
@@ -159,7 +160,6 @@
             this.radialMenu1 = new DevExpress.XtraBars.Ribbon.RadialMenu(this.components);
             this.toolTipController1 = new DevExpress.Utils.ToolTipController(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.gridColumn13 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileImportBindingSource)).BeginInit();
@@ -1334,7 +1334,7 @@
             this.colStt.Name = "colStt";
             this.colStt.Visible = true;
             this.colStt.VisibleIndex = 0;
-            this.colStt.Width = 43;
+            this.colStt.Width = 41;
             // 
             // colNgayGD
             // 
@@ -1344,7 +1344,7 @@
             this.colNgayGD.Name = "colNgayGD";
             this.colNgayGD.Visible = true;
             this.colNgayGD.VisibleIndex = 1;
-            this.colNgayGD.Width = 113;
+            this.colNgayGD.Width = 110;
             // 
             // colMaso
             // 
@@ -1354,7 +1354,7 @@
             this.colMaso.Name = "colMaso";
             this.colMaso.Visible = true;
             this.colMaso.VisibleIndex = 2;
-            this.colMaso.Width = 91;
+            this.colMaso.Width = 89;
             // 
             // colDiengiai
             // 
@@ -1364,7 +1364,7 @@
             this.colDiengiai.Name = "colDiengiai";
             this.colDiengiai.Visible = true;
             this.colDiengiai.VisibleIndex = 3;
-            this.colDiengiai.Width = 438;
+            this.colDiengiai.Width = 492;
             // 
             // colThanhTien1
             // 
@@ -1376,7 +1376,7 @@
             this.colThanhTien1.Name = "colThanhTien1";
             this.colThanhTien1.Visible = true;
             this.colThanhTien1.VisibleIndex = 4;
-            this.colThanhTien1.Width = 94;
+            this.colThanhTien1.Width = 65;
             // 
             // gridColumn11
             // 
@@ -1388,7 +1388,7 @@
             this.gridColumn11.Name = "gridColumn11";
             this.gridColumn11.Visible = true;
             this.gridColumn11.VisibleIndex = 5;
-            this.gridColumn11.Width = 83;
+            this.gridColumn11.Width = 64;
             // 
             // colTKNo1
             // 
@@ -1402,7 +1402,7 @@
             this.colTKNo1.Name = "colTKNo1";
             this.colTKNo1.Visible = true;
             this.colTKNo1.VisibleIndex = 6;
-            this.colTKNo1.Width = 85;
+            this.colTKNo1.Width = 108;
             // 
             // colTKCo1
             // 
@@ -1416,7 +1416,7 @@
             this.colTKCo1.Name = "colTKCo1";
             this.colTKCo1.Visible = true;
             this.colTKCo1.VisibleIndex = 7;
-            this.colTKCo1.Width = 68;
+            this.colTKCo1.Width = 109;
             // 
             // colMaKH
             // 
@@ -1427,7 +1427,17 @@
             this.colMaKH.OptionsColumn.ShowInExpressionEditor = false;
             this.colMaKH.Visible = true;
             this.colMaKH.VisibleIndex = 8;
-            this.colMaKH.Width = 265;
+            this.colMaKH.Width = 109;
+            // 
+            // gridColumn13
+            // 
+            this.gridColumn13.Caption = "Số hoá đơn";
+            this.gridColumn13.FieldName = "SoHD";
+            this.gridColumn13.MinWidth = 25;
+            this.gridColumn13.Name = "gridColumn13";
+            this.gridColumn13.Visible = true;
+            this.gridColumn13.VisibleIndex = 9;
+            this.gridColumn13.Width = 116;
             // 
             // colCheck
             // 
@@ -1438,7 +1448,7 @@
             this.colCheck.OptionsColumn.AllowEdit = false;
             this.colCheck.Visible = true;
             this.colCheck.VisibleIndex = 10;
-            this.colCheck.Width = 79;
+            this.colCheck.Width = 56;
             // 
             // lblDpPath
             // 
@@ -1756,16 +1766,6 @@
             // radialMenu1
             // 
             this.radialMenu1.Name = "radialMenu1";
-            // 
-            // gridColumn13
-            // 
-            this.gridColumn13.Caption = "Số hoá đơn";
-            this.gridColumn13.FieldName = "SoHD";
-            this.gridColumn13.MinWidth = 25;
-            this.gridColumn13.Name = "gridColumn13";
-            this.gridColumn13.Visible = true;
-            this.gridColumn13.VisibleIndex = 9;
-            this.gridColumn13.Width = 94;
             // 
             // frmMain
             // 
