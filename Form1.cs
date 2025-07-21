@@ -716,6 +716,20 @@ namespace SaovietTax
             }
             return false;
         }
+        static void CreateTableMatdinhghichu(OleDbConnection connection, string tableName)
+        {
+            string createTableQuery = $@"
+        CREATE TABLE {tableName} (
+            ID AUTOINCREMENT PRIMARY KEY,
+            TK TEXT,
+            Noidung TEXT 
+        );";
+
+            using (OleDbCommand command = new OleDbCommand(createTableQuery, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
         static void CreateTableNganhang(OleDbConnection connection, string tableName)
         {
             string createTableQuery = $@"
@@ -873,11 +887,26 @@ namespace SaovietTax
                 string tableDinhdanh = "tbDinhdanhtaikhoan";
                 string tableDinhdanhNganhang = "tbDinhdanhNganhang";
                 string tableNganhang = "tbNganhang";
-
+                string tbMatdinhghichu= "tbMatdinhghichu";
                 string alterTableQuery = "ALTER TABLE TP154 ALTER COLUMN TenVattu TEXT;";
                 int rowsAffected = ExecuteQueryResult(alterTableQuery, null);
 
                 // Kiểm tra xem bảng đã tồn tại hay không
+                if (!TableExists(connection, tbMatdinhghichu))
+                {
+                    // Tạo bảng nếu chưa tồn tại
+                    CreateTableMatdinhghichu(connection, tbMatdinhghichu);
+                    Console.WriteLine($"Bảng '{tbMatdinhghichu}' đã được tạo thành công.");
+                    //Tạo sẵn 1 dòng mặc đinh
+                  var  query = @"INSERT INTO tbMatdinhghichu (TK,Noidung) VALUES (?, ?)";
+                    var parameters = new OleDbParameter[]
+                     {
+            new OleDbParameter("?", "131"),
+             new OleDbParameter("?",""), 
+                     };
+                     rowsAffected = ExecuteQueryResult(query, parameters);
+                }
+
                 if (!TableExists(connection, tableNganhang))
                 {
                     // Tạo bảng nếu chưa tồn tại
@@ -9695,24 +9724,24 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     }
                     else
                     {
-                        if (item.TKNo.Contains("131") || item.TKNo.Contains("341"))
-                        {
-                            if (!item.TKNo.Contains('|'))
-                            {
-                                XtraMessageBox.Show("Vui lòng chọn khách hàng", "Thông báo", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
-                                return;
-                            }
-                        }
-                        if (item.TKCo.Contains("131") || item.TKCo.Contains("341"))
-                        {
-                            if (!item.TKCo.Contains('|'))
-                            {
-                                XtraMessageBox.Show("Vui lòng chọn khách hàng", "Thông báo", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
-                                return;
-                            }
-                        }
+                        //if (item.TKNo.Contains("131") || item.TKNo.Contains("341"))
+                        //{
+                        //    if (!item.TKNo.Contains('|'))
+                        //    {
+                        //        XtraMessageBox.Show("Vui lòng chọn khách hàng", "Thông báo", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
+                        //        return;
+                        //    }
+                        //}
+                        //if (item.TKCo.Contains("131") || item.TKCo.Contains("341"))
+                        //{
+                        //    if (!item.TKCo.Contains('|'))
+                        //    {
+                        //        XtraMessageBox.Show("Vui lòng chọn khách hàng", "Thông báo", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
+                        //        return;
+                        //    }
+                        //}
 
-                        var query = @"INSERT INTO tbNganhang (SHDon, NgayGD, DienGiai, TongTien,TongTien2, TKNo,TKCo,Status,Checked) VALUES (?, ?, ?, ?, ?,?,?,?,?)";
+                        var query = @"INSERT INTO tbNganhang (SHDon, NgayGD, DienGiai, TongTien,TongTien2, TKNo,TKCo,Status,Checked,MaKH) VALUES (?, ?, ?, ?, ?,?,?,?,?,?)";
                         var parameters = new OleDbParameter[]
                            {
             new OleDbParameter("?", item.Maso),
@@ -9724,6 +9753,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             new OleDbParameter("?", item.TKCo),
               new OleDbParameter("?","0"),
                new OleDbParameter("?",item.Checked?"1":"0"),
+                 new OleDbParameter("?", item.MaKH!=null?item.MaKH:""),
                            };
                         try
                         {
@@ -10306,10 +10336,21 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                 }
             }
-        }   
-
+        }
+        static string RemoveDecimal(string number)
+        {
+            // Chỉ loại bỏ ".00" ở cuối
+            if (number.EndsWith(".00"))
+            {
+                return number.Substring(0, number.Length - 3); // Cắt bỏ 3 ký tự cuối
+            }
+            return number; // Nếu không có ".00", trả về số nguyên
+        }
         private void simpleButton4_Click(object sender, EventArgs e)
         {
+
+            var query = "SELECT * FROM tbMatdinhghichu"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
+            DataTable tbMatdinhghichu = ExecuteQuery(query);
             xtraTabControl2.SelectedTabPageIndex = 2;
             if (lblTKNganhang.Text == "...")
             {
@@ -10488,8 +10529,9 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             nganhang.Diengiai = GetNoidung;
                         }
 
-                            //Lấy Nợ
-                            string GetNo = row.Cell(TTNoIndex).GetString().Replace(".", "").Replace(",", ""); 
+                        //Lấy Nợ
+                        string gettkno = RemoveDecimal(row.Cell(TTNoIndex).GetString());
+                        string GetNo = gettkno.Replace(".", "").Replace(",", "");
                         if (!string.IsNullOrEmpty(GetNo))
                         {
                             nganhang.ThanhTien = double.Parse(GetNo, CultureInfo.InvariantCulture);
@@ -10502,8 +10544,9 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             }
                         }
 
-                            //Lấy có
-                            string GetCo = row.Cell(TTCoIndex).GetString().Replace(".", "").Replace(",", ""); ;
+                        //Lấy có
+                        string gettkco = RemoveDecimal(row.Cell(TTCoIndex).GetString());
+                        string GetCo = gettkco.Replace(".", "").Replace(",", ""); ;
                         if (!string.IsNullOrEmpty(GetCo))
                         {
                             nganhang.ThanhTien2 = double.Parse(GetCo, CultureInfo.InvariantCulture);
@@ -10564,21 +10607,25 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         }
                         stt++;  
                         bool findMakh = false;
-                        if(nganhang.Maso == "ACB6/6")
+                        if(nganhang.Maso == "BIDV5/55")
                         {
                             var test = "Asd";
                         }
                         if (!string.IsNullOrEmpty(nganhang.Diengiai))
                         {
 
+                            string loai_4 = "";
+                            string loai_3 = "";
+                            string loai_2 = "";
                             //Tìm mã khách hàng thông qua diễn giải
+                            bool hasTen = false;
                             foreach (DataRow dtrow in tbKhachhang.Rows)
                             {
                                 string getTen = Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()));
 
                                 List<string> wordsToReplace = new List<string>
                                 {
-                                    "cty", "tnhh", "cong ty", "cp tm", "noi that", "vung tau", "dich vu","tinh","brvt","dau gia","tai san","ba ria","mam non","ubnd","hang hai","trach nhiem","huu han","xay dung","dau tu","dau khi","tm","sx","cn","vung  tau","tham dinh","trung tam","thuong mai","quan ly","lien doanh","tu dong","giai phap","o to","kiem soat","co phan","thiet bi","trung tam","ky thuat","san xuat","do go","nha nuoc khu vuc","bac nha nuoc","khu vuc","so 1","nha nuoc","cp dv","dv va","lap dat"
+                                    "cty", "tnhh", "cong ty", "cp tm", "noi that", "vung tau", "dich vu","tinh","brvt","dau gia","tai san","ba ria","mam non","ubnd","hang hai","trach nhiem","huu han","xay dung","dau tu","dau khi","tm","sx","cn","vung  tau","tham dinh","trung tam","thuong mai","quan ly","lien doanh","tu dong","giai phap","o to","kiem soat","co phan","thiet bi","trung tam","ky thuat","san xuat","do go","nha nuoc khu vuc","bac nha nuoc","khu vuc","so 1","nha nuoc","cp dv","dv va","lap dat","nha khoa"
                                 };
                                 string str1 = ReplaceWords(getTen.Trim().ToLower(), wordsToReplace).ToLower();
                                 if (str1.Contains("theone"))
@@ -10587,56 +10634,84 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 }
                                 string str2 = nganhang.Diengiai.ToLower();
                                 var commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 4);
+                                if (commonPhrases.Count > 0)
+                                { 
+                                    loai_4= dtrow["SoHieu"].ToString(); 
+                                    hasTen = true;
+                                }
                                 if (commonPhrases.Count() == 0)
                                 {
                                     commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 3);
+                                    if (commonPhrases.Count > 0)
+                                    { 
+                                        loai_3 = dtrow["SoHieu"].ToString();
+                                        hasTen = true;
+                                    }
                                     if (commonPhrases.Count() == 0)
                                     {
                                         commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 2);
+                                        if (commonPhrases.Count > 0)
+                                        {
+                                            if (string.IsNullOrEmpty(loai_2))
+                                                loai_2 = dtrow["SoHieu"].ToString();
+                                            hasTen = true;
+                                        }
                                     }
                                 }
-                                if (commonPhrases.Count > 0)
+                              
+                            }
+
+                            if (hasTen)
+                            {
+                                //nganhang.MaKH = Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()) + " | " + dtrow["SoHieu"].ToString();
+                                if (!string.IsNullOrEmpty(loai_4))
+                                    nganhang.MaKH = loai_4;
+                                else
                                 {
-                                    //nganhang.MaKH = Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()) + " | " + dtrow["SoHieu"].ToString();
-                                    nganhang.MaKH =  dtrow["SoHieu"].ToString();
-                                    //Tìm tk 131
-                                    var getTk131 = existingTbHeThongTK.AsEnumerable().Where(m=> m.Field<string>("SoHieu").StartsWith("131")).ToList();
-                                    if (getTk131.Count == 1)
-                                    {
-                                        if(nganhang.ThanhTien2 > 0)
-                                        {
-                                            nganhang.TKCo = "131";
-                                        } 
-                                    }
+                                    if (!string.IsNullOrEmpty(loai_3))
+                                        nganhang.MaKH = loai_3;
                                     else
                                     {
-                                        if (nganhang.ThanhTien2 > 0)
-                                        {
-                                            nganhang.TKCo = "1311";
-                                        }
+                                        if (!string.IsNullOrEmpty(loai_2))
+                                            nganhang.MaKH = loai_2;
                                     }
-                                    //
-                                    //Tìm tk 3311
-                                    var getTk331 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("331")).ToList();
-                                    if (getTk331.Count == 1)
-                                    {
-                                        if (nganhang.ThanhTien > 0)
-                                        {
-                                            nganhang.TKNo = "331";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (nganhang.ThanhTien > 0)
-                                        {
-                                            nganhang.TKNo = "3311";
-                                        }
-                                    }
-
-
-                                    findMakh = true;
-                                    continue;
                                 }
+                                    //Tìm tk 131
+                                    var getTk131 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("131")).ToList();
+                                if (getTk131.Count == 1)
+                                {
+                                    if (nganhang.ThanhTien2 > 0)
+                                    {
+                                        nganhang.TKCo = "131";
+                                    }
+                                }
+                                else
+                                {
+                                    if (nganhang.ThanhTien2 > 0)
+                                    {
+                                        nganhang.TKCo = "1311";
+                                    }
+                                }
+                                //
+                                //Tìm tk 3311
+                                var getTk331 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("331")).ToList();
+                                if (getTk331.Count == 1)
+                                {
+                                    if (nganhang.ThanhTien > 0)
+                                    {
+                                        nganhang.TKNo = "331";
+                                    }
+                                }
+                                else
+                                {
+                                    if (nganhang.ThanhTien > 0)
+                                    {
+                                        nganhang.TKNo = "3311";
+                                    }
+                                }
+
+
+                                findMakh = true; 
                             }
                             //Tìm mã khách hàng thông qua số hoá đơn
                             if (findMakh == false)
@@ -10713,7 +10788,18 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     }
                                 }
                             }
-                            
+                            //Kiểm tra có ghi chú mặc định không
+                            if (!string.IsNullOrEmpty(tbMatdinhghichu.Rows[0]["TK"].ToString()) && chkMatdinhghichu.Checked)
+                            {
+                                if(nganhang.TKCo.Contains(tbMatdinhghichu.Rows[0]["TK"].ToString()))
+                                {
+                                    nganhang.Diengiai = Helpers.ConvertVniToUnicode(tbMatdinhghichu.Rows[0]["Noidung"].ToString());
+                                    //Lấy tên khách hàng
+                                    var getNameKH=tbKhachhang.AsEnumerable().Where(m => m.Field<string>("SoHieu").ToLower().Equals(nganhang.MaKH.ToLower())).FirstOrDefault()["Ten"].ToString();
+                                    nganhang.Diengiai = nganhang.Diengiai.Replace("MaKH", Helpers.ConvertVniToUnicode(getNameKH));
+                                }
+                               
+                            }
                             lstNganhan.Add(nganhang);
                         }
 

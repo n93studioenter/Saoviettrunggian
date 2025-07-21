@@ -114,6 +114,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lblSofiles2 = new System.Windows.Forms.Label();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
+            this.chkMatdinhghichu = new DevExpress.XtraEditors.CheckEdit();
             this.lblTKNganhang = new DevExpress.XtraEditors.LabelControl();
             this.btnChontknganhang = new DevExpress.XtraEditors.SimpleButton();
             this.gridControl3 = new DevExpress.XtraGrid.GridControl();
@@ -180,6 +181,7 @@
             this.xtraTabPage3.SuspendLayout();
             this.xtraTabPage4.SuspendLayout();
             this.xtraTabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chkMatdinhghichu.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nganhangBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).BeginInit();
@@ -1247,6 +1249,7 @@
             // 
             // xtraTabPage2
             // 
+            this.xtraTabPage2.Controls.Add(this.chkMatdinhghichu);
             this.xtraTabPage2.Controls.Add(this.lblTKNganhang);
             this.xtraTabPage2.Controls.Add(this.btnChontknganhang);
             this.xtraTabPage2.Controls.Add(this.gridControl3);
@@ -1254,6 +1257,15 @@
             this.xtraTabPage2.Name = "xtraTabPage2";
             this.xtraTabPage2.Size = new System.Drawing.Size(1382, 359);
             this.xtraTabPage2.Text = "Ngân hàng";
+            // 
+            // chkMatdinhghichu
+            // 
+            this.chkMatdinhghichu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkMatdinhghichu.Location = new System.Drawing.Point(623, 11);
+            this.chkMatdinhghichu.Name = "chkMatdinhghichu";
+            this.chkMatdinhghichu.Properties.Caption = "Mật định ghi chú";
+            this.chkMatdinhghichu.Size = new System.Drawing.Size(179, 20);
+            this.chkMatdinhghichu.TabIndex = 3;
             // 
             // lblTKNganhang
             // 
@@ -1806,6 +1818,7 @@
             this.xtraTabPage4.PerformLayout();
             this.xtraTabPage2.ResumeLayout(false);
             this.xtraTabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chkMatdinhghichu.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nganhangBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView5)).EndInit();
@@ -1960,5 +1973,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn12;
         private DevExpress.XtraEditors.SimpleButton simpleButton4;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn13;
+        private DevExpress.XtraEditors.CheckEdit chkMatdinhghichu;
     }
 }

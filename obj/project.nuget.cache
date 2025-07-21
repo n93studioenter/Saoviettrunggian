@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "GFSr5WgE/rQ=",
+  "dgSpecHash": "wXCHrRVgdMA=",
   "success": true,
   "projectFilePath": "D:\\DA3\\SourcePmTrungGiang\\SaovietTax\\SaovietTax\\SaovietTax.csproj",
   "expectedPackageFiles": [
@@ -29,7 +29,7 @@
     "C:\\Users\\Admin\\.nuget\\packages\\pdfsharp\\6.2.0\\pdfsharp.6.2.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\selenium.support\\4.33.0\\selenium.support.4.33.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver\\4.33.0\\selenium.webdriver.4.33.0.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver.chromedriver\\137.0.7151.5500\\selenium.webdriver.chromedriver.137.0.7151.5500.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver.chromedriver\\138.0.7204.15700\\selenium.webdriver.chromedriver.138.0.7204.15700.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\svg\\3.4.7\\svg.3.4.7.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.buffers\\4.6.0\\system.buffers.4.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.diagnostics.diagnosticsource\\8.0.1\\system.diagnostics.diagnosticsource.8.0.1.nupkg.sha512",

@@ -36,7 +36,7 @@ namespace SaovietTax
             {
                 foreach(DataRow item in kq.Rows)
                 {
-                    if (item["SoHieu"].ToString().StartsWith("1121"))
+                    if (item["SoHieu"].ToString().StartsWith("112") && item["Ten"].ToString().ToLower().Contains("ngaân haøng"))
                     {
                         dsTk.Add(new Item { Id = (int)item["MaSo"], Name = (string)item["SoHieu"] + "|" + Helpers.ConvertVniToUnicode((string)item["Ten"] + "|" + item["KyHieu"]), ParentId = (int)item["TKCha0"] });
                     }

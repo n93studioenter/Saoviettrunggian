@@ -34,7 +34,14 @@ namespace SaovietTax
 
             var result = ExecuteQuery(querykh, new OleDbParameter("?", ""));
             gcDinhdanh.DataSource = result;
+
+             querykh = @" SELECT *  FROM tbMatdinhghichu"; // Sử dụng ? thay cho @mst trong OleDb
+
+             result = ExecuteQuery(querykh, new OleDbParameter("?", ""));
+            textEdit4.Text = Helpers.ConvertVniToUnicode(result.Rows[0]["Noidung"].ToString());
+            textEdit3.Text = result.Rows[0]["TK"].ToString();
         }
+
         private void btnLuudinhdanh_Click(object sender, EventArgs e)
         {
             var query = @"INSERT INTO tbDinhdanhNganhang (Noidung,TK,SoHieu,TK2) VALUES (?, ?,?,?)";
@@ -183,6 +190,24 @@ namespace SaovietTax
                 frmKhachhang.ShowDialog();
                 txtMaKH.Text = Sohieu; // Lấy giá trị từ frmKhachhang
             }
+        }
+
+        private void simpleButton1_Click(object sender, EventArgs e)
+        {
+            string sql = "UPDATE tbMatdinhghichu SET TK = ?, Noidung = ?";
+            OleDbParameter[] parameters = new OleDbParameter[]
+             {
+                       new OleDbParameter("?",textEdit3.Text),
+                       new OleDbParameter("?",Helpers.ConvertUnicodeToVni(textEdit4.Text)), 
+             };
+            try
+            {
+                int resl = ExecuteQueryResult(sql, parameters);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cập nhật: " + ex.Message);
+            }   
         }
     }
 }
