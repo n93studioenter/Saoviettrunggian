@@ -56,6 +56,20 @@
             this.textEdit4 = new DevExpress.XtraEditors.TextEdit();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.textEdit3 = new DevExpress.XtraEditors.TextEdit();
+            this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
+            this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.gridControl1 = new DevExpress.XtraGrid.GridControl();
+            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn6 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.panelControl3 = new DevExpress.XtraEditors.PanelControl();
+            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
+            this.txtTKChung = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl10 = new DevExpress.XtraEditors.LabelControl();
+            this.txtNoidungchung = new DevExpress.XtraEditors.TextEdit();
+            this.btnLuuchung = new DevExpress.XtraEditors.SimpleButton();
+            this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaKH.Properties)).BeginInit();
@@ -69,6 +83,16 @@
             this.panelControl2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit4.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit3.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
+            this.xtraTabControl1.SuspendLayout();
+            this.xtraTabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl3)).BeginInit();
+            this.panelControl3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTKChung.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtNoidungchung.Properties)).BeginInit();
+            this.xtraTabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelControl1
@@ -82,10 +106,10 @@
             this.panelControl1.Controls.Add(this.labelControl8);
             this.panelControl1.Controls.Add(this.txtDiengiai);
             this.panelControl1.Controls.Add(this.btnLuudinhdanh);
-            this.panelControl1.Location = new System.Drawing.Point(9, 10);
+            this.panelControl1.Location = new System.Drawing.Point(10, 15);
             this.panelControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(609, 93);
+            this.panelControl1.Size = new System.Drawing.Size(752, 93);
             this.panelControl1.TabIndex = 22;
             // 
             // labelControl2
@@ -145,7 +169,7 @@
             this.txtDiengiai.Location = new System.Drawing.Point(100, 10);
             this.txtDiengiai.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.txtDiengiai.Name = "txtDiengiai";
-            this.txtDiengiai.Size = new System.Drawing.Size(500, 23);
+            this.txtDiengiai.Size = new System.Drawing.Size(643, 23);
             this.txtDiengiai.TabIndex = 13;
             // 
             // btnLuudinhdanh
@@ -163,7 +187,7 @@
             // 
             this.labelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelControl3.Location = new System.Drawing.Point(23, 488);
+            this.labelControl3.Location = new System.Drawing.Point(29, 577);
             this.labelControl3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(73, 16);
@@ -173,7 +197,7 @@
             // 
             // textEdit2
             // 
-            this.textEdit2.Location = new System.Drawing.Point(356, 486);
+            this.textEdit2.Location = new System.Drawing.Point(362, 575);
             this.textEdit2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textEdit2.Name = "textEdit2";
             this.textEdit2.Size = new System.Drawing.Size(121, 23);
@@ -187,11 +211,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gcDinhdanh.DataSource = this.matdinhnganhangBindingSource;
             this.gcDinhdanh.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.gcDinhdanh.Location = new System.Drawing.Point(9, 136);
+            this.gcDinhdanh.Location = new System.Drawing.Point(10, 115);
             this.gcDinhdanh.MainView = this.gridView2;
             this.gcDinhdanh.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gcDinhdanh.Name = "gcDinhdanh";
-            this.gcDinhdanh.Size = new System.Drawing.Size(609, 446);
+            this.gcDinhdanh.Size = new System.Drawing.Size(752, 446);
             this.gcDinhdanh.TabIndex = 23;
             this.gcDinhdanh.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView2});
@@ -282,15 +306,15 @@
             this.panelControl2.Controls.Add(this.textEdit4);
             this.panelControl2.Controls.Add(this.labelControl4);
             this.panelControl2.Controls.Add(this.textEdit3);
-            this.panelControl2.Location = new System.Drawing.Point(623, 10);
+            this.panelControl2.Location = new System.Drawing.Point(781, 15);
             this.panelControl2.Name = "panelControl2";
-            this.panelControl2.Size = new System.Drawing.Size(455, 572);
+            this.panelControl2.Size = new System.Drawing.Size(296, 538);
             this.panelControl2.TabIndex = 29;
             // 
             // simpleButton1
             // 
             this.simpleButton1.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton1.ImageOptions.Image")));
-            this.simpleButton1.Location = new System.Drawing.Point(330, 148);
+            this.simpleButton1.Location = new System.Drawing.Point(175, 139);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(93, 29);
@@ -302,7 +326,7 @@
             // 
             this.labelControl6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelControl6.Location = new System.Drawing.Point(25, 109);
+            this.labelControl6.Location = new System.Drawing.Point(15, 91);
             this.labelControl6.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl6.Name = "labelControl6";
             this.labelControl6.Size = new System.Drawing.Size(50, 16);
@@ -313,7 +337,7 @@
             // 
             this.labelControl5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelControl5.Location = new System.Drawing.Point(25, 60);
+            this.labelControl5.Location = new System.Drawing.Point(15, 42);
             this.labelControl5.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl5.Name = "labelControl5";
             this.labelControl5.Size = new System.Drawing.Size(56, 16);
@@ -324,17 +348,17 @@
             // 
             this.textEdit4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textEdit4.Location = new System.Drawing.Point(111, 106);
+            this.textEdit4.Location = new System.Drawing.Point(101, 88);
             this.textEdit4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textEdit4.Name = "textEdit4";
-            this.textEdit4.Size = new System.Drawing.Size(312, 23);
+            this.textEdit4.Size = new System.Drawing.Size(167, 23);
             this.textEdit4.TabIndex = 27;
             // 
             // labelControl4
             // 
             this.labelControl4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelControl4.Location = new System.Drawing.Point(23, 24);
+            this.labelControl4.Location = new System.Drawing.Point(13, 6);
             this.labelControl4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl4.Name = "labelControl4";
             this.labelControl4.Size = new System.Drawing.Size(94, 16);
@@ -343,22 +367,172 @@
             // 
             // textEdit3
             // 
-            this.textEdit3.Location = new System.Drawing.Point(111, 55);
+            this.textEdit3.Location = new System.Drawing.Point(101, 37);
             this.textEdit3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textEdit3.Name = "textEdit3";
-            this.textEdit3.Size = new System.Drawing.Size(312, 23);
+            this.textEdit3.Size = new System.Drawing.Size(167, 23);
             this.textEdit3.TabIndex = 27;
+            // 
+            // xtraTabControl1
+            // 
+            this.xtraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
+            this.xtraTabControl1.Name = "xtraTabControl1";
+            this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
+            this.xtraTabControl1.Size = new System.Drawing.Size(1090, 592);
+            this.xtraTabControl1.TabIndex = 29;
+            this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
+            this.xtraTabPage1,
+            this.xtraTabPage2});
+            // 
+            // xtraTabPage1
+            // 
+            this.xtraTabPage1.Controls.Add(this.gridControl1);
+            this.xtraTabPage1.Controls.Add(this.panelControl3);
+            this.xtraTabPage1.Name = "xtraTabPage1";
+            this.xtraTabPage1.Size = new System.Drawing.Size(1088, 564);
+            this.xtraTabPage1.Text = "Mật định chung";
+            // 
+            // gridControl1
+            // 
+            this.gridControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridControl1.DataSource = this.matdinhnganhangBindingSource;
+            this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gridControl1.Location = new System.Drawing.Point(10, 107);
+            this.gridControl1.MainView = this.gridView1;
+            this.gridControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gridControl1.Name = "gridControl1";
+            this.gridControl1.Size = new System.Drawing.Size(1068, 446);
+            this.gridControl1.TabIndex = 24;
+            this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridView1});
+            // 
+            // gridView1
+            // 
+            this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.gridColumn4,
+            this.gridColumn5,
+            this.gridColumn6});
+            this.gridView1.DetailHeight = 295;
+            this.gridView1.GridControl = this.gridControl1;
+            this.gridView1.Name = "gridView1";
+            this.gridView1.OptionsView.ShowGroupPanel = false;
+            this.gridView1.CustomRowCellEdit += new DevExpress.XtraGrid.Views.Grid.CustomRowCellEditEventHandler(this.gridView1_CustomRowCellEdit);
+            this.gridView1.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView1_CellValueChanged);
+            this.gridView1.CellValueChanging += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView1_CellValueChanging);
+            // 
+            // gridColumn4
+            // 
+            this.gridColumn4.FieldName = "ID";
+            this.gridColumn4.MinWidth = 23;
+            this.gridColumn4.Name = "gridColumn4";
+            this.gridColumn4.Width = 87;
+            // 
+            // gridColumn5
+            // 
+            this.gridColumn5.Caption = "Nội dung";
+            this.gridColumn5.FieldName = "Noidung";
+            this.gridColumn5.MinWidth = 23;
+            this.gridColumn5.Name = "gridColumn5";
+            this.gridColumn5.Visible = true;
+            this.gridColumn5.VisibleIndex = 0;
+            this.gridColumn5.Width = 361;
+            // 
+            // gridColumn6
+            // 
+            this.gridColumn6.Caption = "Tài khoản";
+            this.gridColumn6.FieldName = "Tk";
+            this.gridColumn6.MinWidth = 23;
+            this.gridColumn6.Name = "gridColumn6";
+            this.gridColumn6.Visible = true;
+            this.gridColumn6.VisibleIndex = 1;
+            this.gridColumn6.Width = 599;
+            // 
+            // panelControl3
+            // 
+            this.panelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelControl3.Controls.Add(this.labelControl9);
+            this.panelControl3.Controls.Add(this.txtTKChung);
+            this.panelControl3.Controls.Add(this.labelControl10);
+            this.panelControl3.Controls.Add(this.txtNoidungchung);
+            this.panelControl3.Controls.Add(this.btnLuuchung);
+            this.panelControl3.Location = new System.Drawing.Point(10, 3);
+            this.panelControl3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.panelControl3.Name = "panelControl3";
+            this.panelControl3.Size = new System.Drawing.Size(1068, 93);
+            this.panelControl3.TabIndex = 23;
+            // 
+            // labelControl9
+            // 
+            this.labelControl9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelControl9.Location = new System.Drawing.Point(14, 56);
+            this.labelControl9.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.labelControl9.Name = "labelControl9";
+            this.labelControl9.Size = new System.Drawing.Size(56, 16);
+            this.labelControl9.TabIndex = 24;
+            this.labelControl9.Text = "Tài khoản";
+            // 
+            // txtTKChung
+            // 
+            this.txtTKChung.Location = new System.Drawing.Point(100, 53);
+            this.txtTKChung.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtTKChung.Name = "txtTKChung";
+            this.txtTKChung.Size = new System.Drawing.Size(849, 23);
+            this.txtTKChung.TabIndex = 23;
+            // 
+            // labelControl10
+            // 
+            this.labelControl10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelControl10.Location = new System.Drawing.Point(14, 13);
+            this.labelControl10.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.labelControl10.Name = "labelControl10";
+            this.labelControl10.Size = new System.Drawing.Size(50, 16);
+            this.labelControl10.TabIndex = 22;
+            this.labelControl10.Text = "Nội dung";
+            // 
+            // txtNoidungchung
+            // 
+            this.txtNoidungchung.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNoidungchung.Location = new System.Drawing.Point(100, 10);
+            this.txtNoidungchung.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtNoidungchung.Name = "txtNoidungchung";
+            this.txtNoidungchung.Size = new System.Drawing.Size(959, 23);
+            this.txtNoidungchung.TabIndex = 13;
+            // 
+            // btnLuuchung
+            // 
+            this.btnLuuchung.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnLuuchung.ImageOptions.Image")));
+            this.btnLuuchung.Location = new System.Drawing.Point(966, 49);
+            this.btnLuuchung.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnLuuchung.Name = "btnLuuchung";
+            this.btnLuuchung.Size = new System.Drawing.Size(93, 29);
+            this.btnLuuchung.TabIndex = 20;
+            this.btnLuuchung.Text = "Lưu";
+            this.btnLuuchung.Click += new System.EventHandler(this.btnLuuchung_Click);
+            // 
+            // xtraTabPage2
+            // 
+            this.xtraTabPage2.Controls.Add(this.panelControl1);
+            this.xtraTabPage2.Controls.Add(this.panelControl2);
+            this.xtraTabPage2.Controls.Add(this.gcDinhdanh);
+            this.xtraTabPage2.Name = "xtraTabPage2";
+            this.xtraTabPage2.Size = new System.Drawing.Size(1088, 564);
+            this.xtraTabPage2.Text = "Mật định riêng";
             // 
             // frmMatdinhNganHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1090, 592);
-            this.Controls.Add(this.panelControl2);
+            this.Controls.Add(this.xtraTabControl1);
             this.Controls.Add(this.labelControl3);
-            this.Controls.Add(this.gcDinhdanh);
             this.Controls.Add(this.textEdit2);
-            this.Controls.Add(this.panelControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.IconOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("frmMatdinhNganHang.IconOptions.LargeImage")));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -381,6 +555,17 @@
             this.panelControl2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit4.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit3.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
+            this.xtraTabControl1.ResumeLayout(false);
+            this.xtraTabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl3)).EndInit();
+            this.panelControl3.ResumeLayout(false);
+            this.panelControl3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTKChung.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtNoidungchung.Properties)).EndInit();
+            this.xtraTabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -414,5 +599,19 @@
         private DevExpress.XtraEditors.TextEdit textEdit4;
         private DevExpress.XtraEditors.TextEdit textEdit3;
         private DevExpress.XtraEditors.SimpleButton simpleButton1;
+        private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
+        private DevExpress.XtraTab.XtraTabPage xtraTabPage2;
+        private DevExpress.XtraTab.XtraTabPage xtraTabPage1;
+        private DevExpress.XtraGrid.GridControl gridControl1;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn4;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn5;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn6;
+        private DevExpress.XtraEditors.PanelControl panelControl3;
+        private DevExpress.XtraEditors.LabelControl labelControl9;
+        private DevExpress.XtraEditors.TextEdit txtTKChung;
+        private DevExpress.XtraEditors.LabelControl labelControl10;
+        private DevExpress.XtraEditors.TextEdit txtNoidungchung;
+        private DevExpress.XtraEditors.SimpleButton btnLuuchung;
     }
 }

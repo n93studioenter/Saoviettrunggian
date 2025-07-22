@@ -350,7 +350,7 @@
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(1382, 359);
+            this.gridControl1.Size = new System.Drawing.Size(1382, 474);
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1,
@@ -723,20 +723,22 @@
             // 
             // gridControl2
             // 
+            this.gridControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl2.DataSource = this.fileImportBindingSource;
-            this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             gridLevelNode2.LevelTemplate = this.gridView4;
             gridLevelNode2.RelationName = "Detail";
             this.gridControl2.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
             gridLevelNode2});
-            this.gridControl2.Location = new System.Drawing.Point(0, 0);
+            this.gridControl2.Location = new System.Drawing.Point(2, 5);
             this.gridControl2.LookAndFeel.SkinName = "Office 2016 Colorful";
             this.gridControl2.LookAndFeel.UseDefaultLookAndFeel = false;
             this.gridControl2.MainView = this.gridView3;
             this.gridControl2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gridControl2.Name = "gridControl2";
-            this.gridControl2.Size = new System.Drawing.Size(1382, 359);
+            this.gridControl2.Size = new System.Drawing.Size(1382, 474);
             this.gridControl2.TabIndex = 1;
             this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView3,
@@ -979,7 +981,7 @@
             this.xtraTabControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(1404, 675);
+            this.xtraTabControl1.Size = new System.Drawing.Size(1404, 790);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1});
@@ -1003,7 +1005,7 @@
             this.xtraTabPage1.Controls.Add(this.comboBoxEdit1);
             this.xtraTabPage1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(1402, 647);
+            this.xtraTabPage1.Size = new System.Drawing.Size(1402, 762);
             this.xtraTabPage1.Text = "Sao việt tải hóa đơn";
             this.xtraTabPage1.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
             // 
@@ -1011,7 +1013,7 @@
             // 
             this.btnLichsuimport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLichsuimport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnLichsuimport.ImageOptions.Image")));
-            this.btnLichsuimport.Location = new System.Drawing.Point(1178, 610);
+            this.btnLichsuimport.Location = new System.Drawing.Point(1178, 725);
             this.btnLichsuimport.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnLichsuimport.Name = "btnLichsuimport";
             this.btnLichsuimport.Size = new System.Drawing.Size(215, 29);
@@ -1035,7 +1037,7 @@
             // 
             this.progressPanel2.Appearance.BackColor = System.Drawing.Color.Transparent;
             this.progressPanel2.Appearance.Options.UseBackColor = true;
-            this.progressPanel2.Location = new System.Drawing.Point(766, 611);
+            this.progressPanel2.Location = new System.Drawing.Point(833, 731);
             this.progressPanel2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.progressPanel2.Name = "progressPanel2";
             this.progressPanel2.Size = new System.Drawing.Size(154, 28);
@@ -1045,7 +1047,7 @@
             // 
             // simpleButton2
             // 
-            this.simpleButton2.Location = new System.Drawing.Point(924, 610);
+            this.simpleButton2.Location = new System.Drawing.Point(955, 730);
             this.simpleButton2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton2.Name = "simpleButton2";
             this.simpleButton2.Size = new System.Drawing.Size(87, 29);
@@ -1095,7 +1097,7 @@
             // 
             this.btnReadPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReadPDF.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnReadPDF.ImageOptions.Image")));
-            this.btnReadPDF.Location = new System.Drawing.Point(1030, 604);
+            this.btnReadPDF.Location = new System.Drawing.Point(1030, 719);
             this.btnReadPDF.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnReadPDF.Name = "btnReadPDF";
             this.btnReadPDF.Size = new System.Drawing.Size(126, 35);
@@ -1108,7 +1110,7 @@
             // 
             this.lblThongbao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblThongbao.AutoSize = true;
-            this.lblThongbao.Location = new System.Drawing.Point(1216, 617);
+            this.lblThongbao.Location = new System.Drawing.Point(1216, 732);
             this.lblThongbao.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblThongbao.Name = "lblThongbao";
             this.lblThongbao.Size = new System.Drawing.Size(41, 16);
@@ -1169,7 +1171,7 @@
             this.xtraTabControl2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabControl2.Name = "xtraTabControl2";
             this.xtraTabControl2.SelectedTabPage = this.xtraTabPage3;
-            this.xtraTabControl2.Size = new System.Drawing.Size(1384, 387);
+            this.xtraTabControl2.Size = new System.Drawing.Size(1384, 502);
             this.xtraTabControl2.TabIndex = 8;
             this.xtraTabControl2.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage3,
@@ -1185,7 +1187,7 @@
             this.xtraTabPage3.Controls.Add(this.gridControl1);
             this.xtraTabPage3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(1382, 359);
+            this.xtraTabPage3.Size = new System.Drawing.Size(1382, 474);
             this.xtraTabPage3.Text = "HĐ đầu vào";
             // 
             // label1
@@ -1220,7 +1222,7 @@
             this.xtraTabPage4.Controls.Add(this.gridControl2);
             this.xtraTabPage4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(1382, 359);
+            this.xtraTabPage4.Size = new System.Drawing.Size(1382, 474);
             this.xtraTabPage4.Text = "HĐ Đầu ra";
             // 
             // label2
@@ -1255,14 +1257,16 @@
             this.xtraTabPage2.Controls.Add(this.gridControl3);
             this.xtraTabPage2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(1382, 359);
+            this.xtraTabPage2.Size = new System.Drawing.Size(1382, 474);
             this.xtraTabPage2.Text = "Ngân hàng";
             // 
             // chkMatdinhghichu
             // 
             this.chkMatdinhghichu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkMatdinhghichu.Location = new System.Drawing.Point(623, 11);
+            this.chkMatdinhghichu.Location = new System.Drawing.Point(703, 13);
             this.chkMatdinhghichu.Name = "chkMatdinhghichu";
+            this.chkMatdinhghichu.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.chkMatdinhghichu.Properties.Appearance.Options.UseBackColor = true;
             this.chkMatdinhghichu.Properties.Caption = "Mật định ghi chú";
             this.chkMatdinhghichu.Size = new System.Drawing.Size(179, 20);
             this.chkMatdinhghichu.TabIndex = 3;
@@ -1272,7 +1276,7 @@
             this.lblTKNganhang.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTKNganhang.Appearance.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
             this.lblTKNganhang.Appearance.Options.UseFont = true;
-            this.lblTKNganhang.Location = new System.Drawing.Point(1016, 15);
+            this.lblTKNganhang.Location = new System.Drawing.Point(1114, 15);
             this.lblTKNganhang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.lblTKNganhang.Name = "lblTKNganhang";
             this.lblTKNganhang.Size = new System.Drawing.Size(12, 16);
@@ -1283,7 +1287,7 @@
             // 
             this.btnChontknganhang.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnChontknganhang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnChontknganhang.ImageOptions.Image")));
-            this.btnChontknganhang.Location = new System.Drawing.Point(812, 7);
+            this.btnChontknganhang.Location = new System.Drawing.Point(907, 5);
             this.btnChontknganhang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnChontknganhang.Name = "btnChontknganhang";
             this.btnChontknganhang.Size = new System.Drawing.Size(188, 29);
@@ -1293,16 +1297,16 @@
             // 
             // gridControl3
             // 
-            this.gridControl3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl3.DataSource = this.nganhangBindingSource1;
+            this.gridControl3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl3.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.gridControl3.Location = new System.Drawing.Point(0, 42);
+            this.gridControl3.Location = new System.Drawing.Point(0, 0);
+            this.gridControl3.LookAndFeel.SkinName = "Office 2010 Silver";
+            this.gridControl3.LookAndFeel.UseDefaultLookAndFeel = false;
             this.gridControl3.MainView = this.gridView5;
             this.gridControl3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gridControl3.Name = "gridControl3";
-            this.gridControl3.Size = new System.Drawing.Size(1380, 314);
+            this.gridControl3.Size = new System.Drawing.Size(1382, 474);
             this.gridControl3.TabIndex = 0;
             this.gridControl3.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView5});
@@ -1328,7 +1332,6 @@
             this.gridView5.DetailHeight = 295;
             this.gridView5.GridControl = this.gridControl3;
             this.gridView5.Name = "gridView5";
-            this.gridView5.OptionsView.ShowGroupPanel = false;
             this.gridView5.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
             new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colTKNo1, DevExpress.Data.ColumnSortOrder.Ascending)});
             this.gridView5.RowClick += new DevExpress.XtraGrid.Views.Grid.RowClickEventHandler(this.gridView5_RowClick);
@@ -1336,6 +1339,7 @@
             this.gridView5.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView5_CellValueChanged);
             this.gridView5.CellValueChanging += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView5_CellValueChanging);
             this.gridView5.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridView5_KeyDown);
+            this.gridView5.KeyUp += new System.Windows.Forms.KeyEventHandler(this.gridView5_KeyUp);
             this.gridView5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.gridView5_KeyPress);
             this.gridView5.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridView5_MouseDown);
             // 
@@ -1344,6 +1348,7 @@
             this.colStt.FieldName = "Stt";
             this.colStt.MinWidth = 23;
             this.colStt.Name = "colStt";
+            this.colStt.OptionsColumn.AllowEdit = false;
             this.colStt.Visible = true;
             this.colStt.VisibleIndex = 0;
             this.colStt.Width = 41;
@@ -1354,6 +1359,7 @@
             this.colNgayGD.FieldName = "NgayGD";
             this.colNgayGD.MinWidth = 23;
             this.colNgayGD.Name = "colNgayGD";
+            this.colNgayGD.OptionsColumn.AllowEdit = false;
             this.colNgayGD.Visible = true;
             this.colNgayGD.VisibleIndex = 1;
             this.colNgayGD.Width = 110;
@@ -1386,6 +1392,7 @@
             this.colThanhTien1.FieldName = "ThanhTien";
             this.colThanhTien1.MinWidth = 23;
             this.colThanhTien1.Name = "colThanhTien1";
+            this.colThanhTien1.OptionsColumn.AllowEdit = false;
             this.colThanhTien1.Visible = true;
             this.colThanhTien1.VisibleIndex = 4;
             this.colThanhTien1.Width = 65;
@@ -1398,6 +1405,7 @@
             this.gridColumn11.FieldName = "ThanhTien2";
             this.gridColumn11.MinWidth = 23;
             this.gridColumn11.Name = "gridColumn11";
+            this.gridColumn11.OptionsColumn.AllowEdit = false;
             this.gridColumn11.Visible = true;
             this.gridColumn11.VisibleIndex = 5;
             this.gridColumn11.Width = 64;
@@ -1469,7 +1477,7 @@
             this.lblDpPath.Appearance.ForeColor = System.Drawing.Color.Purple;
             this.lblDpPath.Appearance.Options.UseFont = true;
             this.lblDpPath.Appearance.Options.UseForeColor = true;
-            this.lblDpPath.Location = new System.Drawing.Point(9, 617);
+            this.lblDpPath.Location = new System.Drawing.Point(9, 732);
             this.lblDpPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.lblDpPath.Name = "lblDpPath";
             this.lblDpPath.Size = new System.Drawing.Size(146, 17);
@@ -1783,7 +1791,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1404, 675);
+            this.ClientSize = new System.Drawing.Size(1404, 790);
             this.Controls.Add(this.xtraTabControl1);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
