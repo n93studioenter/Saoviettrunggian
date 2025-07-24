@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "wXCHrRVgdMA=",
+  "dgSpecHash": "rUlhnvhfL1A=",
   "success": true,
   "projectFilePath": "D:\\DA3\\SourcePmTrungGiang\\SaovietTax\\SaovietTax\\SaovietTax.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\Admin\\.nuget\\packages\\aforge.video.directshow\\2.2.5\\aforge.video.directshow.2.2.5.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\exceldatareader\\3.7.0\\exceldatareader.3.7.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\excss\\4.2.3\\excss.4.2.3.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\htmlagilitypack\\1.12.2\\htmlagilitypack.1.12.2.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\itext\\9.2.0\\itext.9.2.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\itext.commons\\9.2.0\\itext.commons.9.2.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\itext7\\9.2.0\\itext7.9.2.0.nupkg.sha512",

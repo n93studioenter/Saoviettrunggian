@@ -4,6 +4,7 @@ using ClosedXML.Excel;
 using DevExpress.ChartRangeControlClient.Core;
 using DevExpress.ClipboardSource.SpreadsheetML;
 using DevExpress.CodeParser;
+using DevExpress.DashboardCommon.Viewer;
 using DevExpress.Data.Filtering;
 using DevExpress.DataAccess.Sql;
 using DevExpress.Internal.WinApi.Windows.UI.Notifications;
@@ -19,6 +20,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid;
+using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraGrid.Views.Printing;
@@ -37,6 +39,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.VariantTypes;
 using DocumentFormat.OpenXml.Wordprocessing;
+using HtmlAgilityPack;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
@@ -46,6 +49,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+using PdfSharp.Internal.Png.BigGustave;
 using PdfSharp.Pdf.IO;
 using SaovietTax.DTO;
 using Svg;
@@ -92,7 +96,8 @@ using DataTable = System.Data.DataTable;
 using GridView = DevExpress.XtraGrid.Views.Grid.GridView;
 using Keys = OpenQA.Selenium.Keys;
 using PdfReader = PdfSharp.Pdf.IO.PdfReader;
-using XmlNode = System.Xml.XmlNode; 
+using XmlNode = System.Xml.XmlNode;
+
 
 namespace SaovietTax
 {
@@ -1534,6 +1539,42 @@ namespace SaovietTax
         }
         DataTable existingTbChungtu;
         DataTable existingTbHeThongTK;
+        public void SeedingData()
+        {
+            // Thêm dữ liệu mẫu vào bảng tbDinhdanhNganhang
+           
+            //Lai vay
+            string querykh2 = @" SELECT *  FROM tbDinhdanhNganhang"; // Sử dụng ? thay cho @mst trong OleDb
+
+            var result2 = ExecuteQuery(querykh2, new OleDbParameter("?",null));
+
+            //LAI NHAP VON 
+            if (!result2.AsEnumerable().Any(m=>m.Field<string>("Noidung").ToLower()=="lai nhap von"))
+            {
+                string query = @"INSERT INTO tbDinhdanhNganhang (Noidung, TK) VALUES ('lai nhap von', '515')";
+                ExecuteQueryResult(query);
+            }
+            //LAI vay 
+            if (!result2.AsEnumerable().Any(m => m.Field<string>("Noidung").ToLower() == "lai vay"))
+            {
+                string query = @"INSERT INTO tbDinhdanhNganhang (Noidung, TK) VALUES ('lai vay', '635')";
+                ExecuteQueryResult(query);
+            }
+
+            //Thue mon bài  
+            if (!result2.AsEnumerable().Any(m => m.Field<string>("Noidung").ToLower() == "thue mon bai"))
+            {
+                string query = @"INSERT INTO tbDinhdanhNganhang (Noidung, TK) VALUES ('thue mon bai', '3339')";
+                ExecuteQueryResult(query);
+            }
+
+            //Phí sms
+            if (!result2.AsEnumerable().Any(m => m.Field<string>("Noidung").ToLower() == "phi sms"))
+            {
+                string query = @"INSERT INTO tbDinhdanhNganhang (Noidung, TK) VALUES ('phi sms', '6422')";
+                ExecuteQueryResult(query);
+            }
+        }
         private async void frmMain_Load(object sender, EventArgs e)
         {
             string input = "PVT TT TIEN MUA BAN GHE THEO HD 202 GD 296416-063025 15:12:00";
@@ -1547,6 +1588,7 @@ namespace SaovietTax
             string fileName = Path.GetFileName(dbPath.Trim());
             CheckDB();
             ControlsSetup();
+            SeedingData();
             lstvt = await LoadDataVattuAsync();
             var query = "SELECT * FROM KhachHang"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
             tbKhachhang = await Task.Run(() => ExecuteQuery(query));
@@ -5625,7 +5667,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             str = Regex.Replace(str, "đ", "d");
 
             // Thay thế khoảng trắng bằng dấu gạch ngang
-            str = Regex.Replace(str, " ", "-");
+          //  str = Regex.Replace(str, " ", "-");
             str = str.Replace(",", "");
             str = str.Replace(".", "");
 
@@ -7007,7 +7049,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void xtraTabControl2_Click(object sender, EventArgs e)
         {
+            if( xtraTabControl2.SelectedTabPageIndex ==2)
+            {
+                btnChontknganhang.PerformClick(); // Sử dụng PerformClick thay vì Click
 
+            }
 
         }
 
@@ -8716,6 +8762,103 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         {
             LoadCustomDrawcell(sender, e);
         }
+        private void ConvertImageTOhtml()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            // Thiết lập các thuộc tính cho hộp thoại mở file
+            openFileDialog.Title = "Chọn file PDF hóa đơn"; // Tiêu đề của hộp thoại
+            openFileDialog.Filter = "Tệp PDF (*.pdf)|*.pdf|Tất cả các tệp (*.*)|*.*"; // Lọc loại file
+            openFileDialog.FilterIndex = 1; // Chọn bộ lọc mặc định là PDF
+            openFileDialog.RestoreDirectory = true; // Nhớ thư mục đã mở lần trước
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // Người dùng đã chọn một file
+                string inputFile = openFileDialog.FileName; // Lấy đường dẫn file đã chọn
+
+                // Định nghĩa đường dẫn file đầu ra
+                string outputDirectory = Path.Combine(Path.GetDirectoryName(inputFile), "Converted_HTML");
+                if (!Directory.Exists(outputDirectory))
+                {
+                    Directory.CreateDirectory(outputDirectory);
+                }
+                string outputFile = savedPath + @"\output.html";
+                // Định nghĩa đường dẫn đến file thực thi của ABBYY FineReader
+                string abbyyExePath = @"C:\Program Files\ABBYY FineReader 16\finereaderocr.exe";
+
+                // --- Kiểm tra trước khi chạy ---
+                if (!File.Exists(abbyyExePath))
+                {
+                    Console.WriteLine($"Lỗi: Không tìm thấy file thực thi của ABBYY FineReader tại: {abbyyExePath}");
+                    return;
+                }
+
+                if (!File.Exists(inputFile))
+                {
+                    Console.WriteLine($"Lỗi: File đầu vào không tồn tại: {inputFile}");
+                    return;
+                }
+
+                // Xây dựng chuỗi đối số cho lệnh ABBYY
+                string arguments = $@"""{inputFile}"" /out ""{outputFile}"" /format ""HTML"" /lang ""Vietnamese""";
+
+                Console.WriteLine($"\nĐang cố gắng gọi ABBYY FineReader với lệnh:");
+                Console.WriteLine($"Application: {abbyyExePath}");
+                Console.WriteLine($"Arguments: {arguments}");
+
+                try
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = abbyyExePath,
+                        Arguments = arguments,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        CreateNoWindow = true
+                    };
+
+                    using (Process process = Process.Start(startInfo))
+                    {
+                        string output = process.StandardOutput.ReadToEnd();
+                        string error = process.StandardError.ReadToEnd();
+
+                        process.WaitForExit();
+
+                        Console.WriteLine("\n--- Kết quả từ ABBYY Process ---");
+                        Console.WriteLine("Standard Output:\n" + output);
+                        Console.WriteLine("Standard Error:\n" + error);
+                        Console.WriteLine($"Mã thoát (Exit Code): {process.ExitCode}");
+                        Console.WriteLine("--------------------------------\n");
+
+                        if (process.ExitCode == 0)
+                        {
+                            Console.WriteLine("Lệnh ABBYY FineReader đã hoàn tất (Exit Code 0).");
+                            if (File.Exists(outputFile))
+                            {
+                                Console.WriteLine($"File HTML đã được lưu tại: {outputFile}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("File HTML đầu ra không được tìm thấy.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Lệnh ABBYY FineReader kết thúc với **mã lỗi {process.ExitCode}**.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Đã xảy ra lỗi khi cố gắng chạy ABBYY FineReader: {ex.Message}");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Bạn chưa chọn file nào.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
         private void ConvertImageTOexcel()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -8847,6 +8990,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             public string MaKH { get; set; }
             public bool Checked { get; set; }
             public string SoHD { get; set; }
+            public int Rowindex { get; set; }
         }
         private List<Nganhang> lstNganhan = new List<Nganhang>();
         System.Windows.Forms.BindingSource bdNganhang = new System.Windows.Forms.BindingSource();
@@ -10134,8 +10278,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     XtraMessageBox.Show(ex.Message);
                 }
             }
-            gridControl3.DataSource = lstNganhan;
-
+            gridControl3.DataSource = lstNganhan.OrderBy(m=>m.NgayGD).ToList();
+           // gridView5.Columns["NgayGD"].SortOrder = DevExpress.Data.ColumnSortOrder.Ascending; // Hoặc Descending 
         }
 
         private void gridView5_KeyPress(object sender, KeyPressEventArgs e)
@@ -10145,9 +10289,29 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 int a = 100;
             }
         }
-
+        
         private void gridView5_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
         {
+
+            //xử lý cho các row còn lại
+            if (e.Column.FieldName == "Maso" && e.RowHandle==0)
+            {
+                string getvalue= e.Value.ToString();
+                string[] parts = getvalue.Split('/');
+                string prefix = parts[0];
+                int number = int.Parse(parts[1]);
+                foreach (var item in lstNganhan)
+                {
+
+                    number += 1;
+                    string newtext = number.ToString("D2");
+                    item.Maso= prefix+"/"+ newtext; // Cập nhật giá trị mới cho item.Maso
+                    // Định dạng số với số chữ số hiện tại 
+                }
+                gridControl3.DataSource= lstNganhan;
+                gridControl3.RefreshDataSource();
+            }
+
             int rowHandle = e.RowHandle;
             string SHDon = gridView5.GetRowCellValue(rowHandle, "Maso").ToString();
             string TKNo = gridView5.GetRowCellValue(rowHandle, "TKNo").ToString();
@@ -10348,7 +10512,6 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         }
         private void simpleButton4_Click(object sender, EventArgs e)
         {
-
             var query = "SELECT * FROM tbMatdinhghichu"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
             DataTable tbMatdinhghichu = ExecuteQuery(query);
             xtraTabControl2.SelectedTabPageIndex = 2;
@@ -10370,17 +10533,17 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                    };
                 dtMatdinhnganhang = ExecuteQuery(queryCheckVatTu, parameterss);
             }
-            ConvertImageTOexcel();
+             ConvertImageTOexcel();
+           // ConvertImageTOhtml();
 
 
-
-            lstNganhan =new List<Nganhang>();
-           SetGridViewOptions(gridView5);
+             lstNganhan =new List<Nganhang>();
+          // SetGridViewOptions(gridView5);
             int stt = 1;
             int currentMaso=0;  
             int hasrowIndex = 0;
             string excelFilePath = savedPath + @"\output.xlsx";
-            string[] headers = new string[] { "Ngày hiệu lực", "Ngày giao dịch","Ngày GD","Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày GD", "Số GD" };
+            string[] headers = new string[] { "Ngày hiệu lực", "Ngày giao dịch","Ngày GD","Ngày HL", "hiệu lực" };
             using (var workbook = new XLWorkbook(excelFilePath))
             {
                 var worksheet = workbook.Worksheet(1); // Lấy worksheet đầu tiên
@@ -10419,7 +10582,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 int TTNoIndex = 0;
                 int TTCoIndex = 0;
 
-                string[] lstNgayGD = { "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày giá trị" };
+                string[] lstNgayGD = { "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày giá trị", "hiệu lực" };
                 string[] lstNoidung = { "Nội dung giao dịch", "Diễn giải", "Details", "Description","Mô tả" };
                 string[] lstNo = { "Phát sinh nợ", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Ghi nợ" };
                 string[] lstCo = { "Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có", "Ghi có" };
@@ -10433,23 +10596,62 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     {
                         foreach (var cell in worksheet.Row(hasrowIndex + rowOffset).CellsUsed())
                         {
-                            string cellValue = cell.GetString(); // Giá trị của ô  
+                            string cellValue = cell.GetString(); // Giá trị của ô   
+                            string nextCellValue = ""; // Khởi tạo biến cho giá trị ô bên dưới
+
+                            var nextCell = worksheet.Cell(cell.Address.RowNumber + 1, cell.Address.ColumnNumber);
+                            if (nextCell != null)
+                            {
+                                nextCellValue = nextCell.GetString(); // Giá trị của ô bên dưới
+                            }
                             // Kiểm tra từng danh sách tiêu đề
                             if (lstNgayGD.Any(header => cellValue.Contains(header)))
                             {
                                 ngayGDIndex = cell.Address.ColumnNumber;
                             }
+                            else
+                            {
+                                string cellgop = cellValue + " " + nextCellValue; // Ghép giá trị ô hiện tại và ô bên dưới  
+                                if (lstNgayGD.Any(header => cellgop.Contains(header)))
+                                {
+                                    ngayGDIndex = cell.Address.ColumnNumber;
+                                }
+                            }
                             if (lstNoidung.Any(header => cellValue.Contains(header)))
                             {
                                 noidungGDIndex = cell.Address.ColumnNumber;
+                            }
+                            else
+                            {
+                                string cellgop = cellValue + " " + nextCellValue; // Ghép giá trị ô hiện tại và ô bên dưới  
+                                if (lstNoidung.Any(header => cellgop.Contains(header)))
+                                {
+                                    noidungGDIndex = cell.Address.ColumnNumber;
+                                }
                             }
                             if (lstNo.Any(header => cellValue.Contains(header)))
                             {
                                 TTNoIndex = cell.Address.ColumnNumber;
                             }
+                            else
+                            {
+                                string cellgop = cellValue + " " + nextCellValue; // Ghép giá trị ô hiện tại và ô bên dưới  
+                                if (lstNo.Any(header => cellgop.Contains(header)))
+                                {
+                                    TTNoIndex = cell.Address.ColumnNumber;
+                                }
+                            }
                             if (lstCo.Any(header => cellValue.Contains(header)))
                             {
                                 TTCoIndex = cell.Address.ColumnNumber;
+                            }
+                            else
+                            {
+                                string cellgop = cellValue + " " + nextCellValue; // Ghép giá trị ô hiện tại và ô bên dưới  
+                                if (lstCo.Any(header => cellgop.Contains(header)))
+                                {
+                                    TTCoIndex = cell.Address.ColumnNumber;
+                                }
                             }
                         }
                     }
@@ -10553,7 +10755,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         string GetNo = gettkno.Replace(".", "").Replace(",", "");
                         if (!string.IsNullOrEmpty(GetNo))
                         {
-                            nganhang.ThanhTien = double.Parse(GetNo, CultureInfo.InvariantCulture);
+                            try
+                            {
+                                nganhang.ThanhTien = double.Parse(GetNo, CultureInfo.InvariantCulture);
+                            }
+                            catch (Exception ex)
+                            {
+                                continue;
+                            }
                         }
                         else
                         {
@@ -10568,7 +10777,16 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         string GetCo = gettkco.Replace(".", "").Replace(",", ""); ;
                         if (!string.IsNullOrEmpty(GetCo))
                         {
-                            nganhang.ThanhTien2 = double.Parse(GetCo, CultureInfo.InvariantCulture);
+                            try
+                            {
+                                if (nganhang.ThanhTien == 0)
+                                    nganhang.ThanhTien2 = double.Parse(GetCo, CultureInfo.InvariantCulture);
+                            }
+                            catch(Exception ex)
+                            {
+                                continue;
+                            }
+                           
                         }
                         else
                         {
@@ -10604,10 +10822,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 {
                                   if(string.IsNullOrEmpty(dtRow["SoHieu"].ToString()))
                                     {
-                                        if (nganhang.ThanhTien != 0)
-                                            tkDoiung = dtRow["TK"].ToString();
-                                        else
-                                            tkDoiung = dtRow["TK2"].ToString();
+                                        tkDoiung = dtRow["TK"].ToString();
                                     }
                                     else
                                         tkDoiung = dtRow["TK"].ToString()+"|"+ dtRow["SoHieu"].ToString();
@@ -10620,7 +10835,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             nganhang.TKNo = tkDoiung; // Tài khoản Nợ mẫu
                         }
                         else if (nganhang.ThanhTien2 != 0) // Dùng else if để tránh trường hợp cả hai đều có giá trị (nếu có lỗi dữ liệu)
-                        { 
+                        {
                             nganhang.TKCo = tkDoiung; // Tài khoản Có mẫu
                             nganhang.TKNo = tknganhan;  // Tài khoản Nợ mẫu
                         }
@@ -10638,14 +10853,21 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             string loai_2 = "";
                             //Tìm mã khách hàng thông qua diễn giải
                             bool hasTen = false;
+                            query = "SELECT * FROM License";
+                            var kq2 = ExecuteQuery(query, null);
                             foreach (DataRow dtrow in tbKhachhang.Rows)
                             {
                                 string getTen = Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()));
 
                                 List<string> wordsToReplace = new List<string>
                                 {
-                                    "cty", "tnhh", "cong ty", "cp tm", "noi that", "vung tau", "dich vu","tinh","brvt","dau gia","tai san","ba ria","mam non","ubnd","hang hai","trach nhiem","huu han","xay dung","dau tu","dau khi","tm","sx","cn","vung  tau","tham dinh","trung tam","thuong mai","quan ly","lien doanh","tu dong","giai phap","o to","kiem soat","co phan","thiet bi","trung tam","ky thuat","san xuat","do go","nha nuoc khu vuc","bac nha nuoc","khu vuc","so 1","nha nuoc","cp dv","dv va","lap dat","nha khoa","hoa don","va xd","xd","cp dt"
+                                   "thue","cty", "tnhh", "cong ty", "cp tm", "noi that", "vung tau", "dich vu","tinh","brvt","dau gia","tai san","ba ria","mam non","ubnd","hang hai","trach nhiem","huu han","xay dung","dau tu","dau khi","tm","sx","cn","vung  tau","tham dinh","trung tam","thuong mai","quan ly","lien doanh","tu dong","giai phap","o to","kiem soat","co phan","thiet bi","trung tam","ky thuat","san xuat","do go","nha nuoc khu vuc","bac nha nuoc","khu vuc","so 1","nha nuoc","cp dv","dv va","lap dat","nha khoa","hoa don","va xd","xd","cp dt","viet nam","ke toan"
                                 };
+                                //Lấy tên công ty
+                                
+                                string tencty=Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(kq2.Rows[0]["TenCty"].ToString()));
+                                tencty=ReplaceWords(tencty.Trim().ToLower(), wordsToReplace).ToLower();
+
                                 string str1 = ReplaceWords(getTen.Trim().ToLower(), wordsToReplace).ToLower();
                                 if (str1.Contains("theone"))
                                 {
@@ -10653,7 +10875,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 }
                                 string str2 = nganhang.Diengiai.ToLower();
                                 var commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 4);
-                                if (commonPhrases.Count > 0)
+                                if (commonPhrases.Count > 0 && !commonPhrases.Any(m => m.Contains(tencty)))
                                 { 
                                     loai_4= dtrow["SoHieu"].ToString(); 
                                     hasTen = true;
@@ -10661,7 +10883,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 if (commonPhrases.Count() == 0)
                                 {
                                     commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 3);
-                                    if (commonPhrases.Count > 0)
+                                    if (commonPhrases.Count > 0 && !commonPhrases.Any(m => m.Contains(tencty)))
                                     { 
                                         loai_3 = dtrow["SoHieu"].ToString();
                                         hasTen = true;
@@ -10669,7 +10891,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     if (commonPhrases.Count() == 0)
                                     {
                                         commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 2);
-                                        if (commonPhrases.Count > 0)
+                                        if (commonPhrases.Count > 0 && !commonPhrases.Any(m=>m.Contains(tencty)))
                                         {
                                             if (string.IsNullOrEmpty(loai_2))
                                                 loai_2 = dtrow["SoHieu"].ToString();
@@ -10868,7 +11090,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                 gridControl3.RefreshDataSource(); // Làm mới để hiển thị dữ liệu mới
                 progressPanel1.Visible = false; 
-                gridView5.OptionsCustomization.AllowSort = true;   
+                gridView5.OptionsCustomization.AllowSort = true;
 
             }
         }
@@ -10986,52 +11208,267 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void gridView5_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == System.Windows.Forms.Keys.Enter)
-            {
-                var selectedCells = gridView5.GetSelectedCells();
-                int currentRowHandle = gridView5.FocusedRowHandle;
+            //if (e.KeyCode == System.Windows.Forms.Keys.Enter)
+            //{
+            //    var selectedCells = gridView5.GetSelectedCells();
+            //    int currentRowHandle = gridView5.FocusedRowHandle;
 
-                if (selectedCells[0].Column.ToString() != "Mã số")
-                {
-                    return;
-                }
-                // Lấy giá trị ô hiện tại
-                var currentValue = gridView5.GetRowCellValue(currentRowHandle, gridView5.FocusedColumn);
-                if (!currentValue.ToString().Contains("/"))
-                {
-                    return;
-                }
-                var getsplit= currentValue.ToString().Split('/');
-                string newvalue = "";
-                if (int.TryParse(getsplit[1], out int number))
-                {
-                    // Tăng số lên 1 và định dạng lại thành chuỗi
-                    newvalue= getsplit[0]+"/"+(number + 1).ToString("D2");
-                }
-                int nextRowHandle = currentRowHandle + 1;
-                if (nextRowHandle < gridView5.DataRowCount)
-                {
-                    // Gán giá trị cho cột trong hàng tiếp theo
-                    gridView5.SetRowCellValue(nextRowHandle, gridView5.FocusedColumn, newvalue);
-                    if (gridView5.FocusedColumn == gridView5.Columns["TKNo"])
-                    {
+            //    if (selectedCells[0].Column.ToString() != "Mã số")
+            //    {
+            //        return;
+            //    }
+            //    // Lấy giá trị ô hiện tại
+            //    var currentValue = gridView5.GetRowCellValue(currentRowHandle, gridView5.FocusedColumn);
+            //    if (!currentValue.ToString().Contains("/"))
+            //    {
+            //        return;
+            //    }
+            //    var getsplit= currentValue.ToString().Split('/');
+            //    string newvalue = "";
+            //    if (int.TryParse(getsplit[1], out int number))
+            //    {
+            //        // Tăng số lên 1 và định dạng lại thành chuỗi
+            //        newvalue= getsplit[0]+"/"+(number + 1).ToString("D2");
+            //    }
+            //    int nextRowHandle = currentRowHandle + 1;
+            //    if (nextRowHandle < gridView5.DataRowCount)
+            //    {
+            //        // Gán giá trị cho cột trong hàng tiếp theo
+            //        gridView5.SetRowCellValue(nextRowHandle, gridView5.FocusedColumn, newvalue);
+            //        if (gridView5.FocusedColumn == gridView5.Columns["TKNo"])
+            //        {
                         
-                    }
+            //        }
 
-                    // Di chuyển tiêu điểm đến ô trong hàng tiếp theo
-                    gridView5.FocusedRowHandle = nextRowHandle;
-                    gridView5.FocusedColumn = gridView5.FocusedColumn; // Giữ nguyên cột
-                    gridView5.FocusedColumn = gridView5.FocusedColumn; // Giữ nguyên cột
-                    gridView5.ShowEditor(); // Hiển thị editor của ô
+            //        // Di chuyển tiêu điểm đến ô trong hàng tiếp theo
+            //        gridView5.FocusedRowHandle = nextRowHandle;
+            //        gridView5.FocusedColumn = gridView5.FocusedColumn; // Giữ nguyên cột
+            //        gridView5.FocusedColumn = gridView5.FocusedColumn; // Giữ nguyên cột
+            //        gridView5.ShowEditor(); // Hiển thị editor của ô
 
-                    // Chọn tất cả văn bản trong ô editor
-                    if (gridView5.ActiveEditor is DevExpress.XtraEditors.TextEdit textEdit)
+            //        // Chọn tất cả văn bản trong ô editor
+            //        if (gridView5.ActiveEditor is DevExpress.XtraEditors.TextEdit textEdit)
+            //        {
+            //            textEdit.SelectAll(); // Chọn tất cả văn bản
+            //        }
+            //    }
+            //}
+        }
+
+        private void btnClearNganhang_Click(object sender, EventArgs e)
+        {
+           var query = @"delete from  tbNganhang"; 
+            var rowsAffected = ExecuteQueryResult(query, null);
+            XtraMessageBox.Show($"Đã xóa dữ liệu.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        public int indexNgay = 0;
+        public int indexNoidung = 0;    
+        public int indexNo = 0;
+        public int indexCo = 0;
+
+        public void GetindexAcb()
+        {
+            indexNgay = 0;
+            indexNoidung = 3;
+            indexNo = 4;
+            indexCo = 5;
+        }
+
+        private void DocfilePDF_Click(object sender, EventArgs e)
+        {
+            string pathHTMl=savedPath+ "\\output.html";
+            try
+            {
+                // Tải file HTML
+                var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+                htmlDoc.Load(pathHTMl);
+
+                //Kiểm tra mẫu ngân hàng
+                string allText = htmlDoc.DocumentNode.InnerText;
+                if (allText.ToLower().Contains("acb"))
+                {
+                    GetindexAcb();
+                }
+
+                // Duyệt qua tất cả các bảng trong tài liệu
+                try
+                {
+                    int tableindex = 0;
+                    foreach (var table in htmlDoc.DocumentNode.SelectNodes("//table"))
                     {
-                        textEdit.SelectAll(); // Chọn tất cả văn bản
+                        int newStt = 1;
+
+                        int hasData = 0;
+                      
+                        Nganhang nganhangBosung = null;
+                        int indexBosung = 0;    
+                        int rowindex = 0;
+                        bool hasRowspan = false;
+                        foreach (var row in table.SelectNodes(".//tr"))
+                        {
+
+                            if (tableindex == 2 && rowindex==5)
+                            {
+                                int checkd = 10;
+                            }
+                                bool rowHople = false;
+                            var cells = row.SelectNodes("td");
+
+                            Nganhang nganhang = new Nganhang();
+
+                            for (int j = 0; j < cells.Count; j++)
+                            {
+                                var cell = cells[j];
+                                string cellText = cell.InnerText.Replace("\r\n", "").Trim();
+                                string rowspanValue = cell.GetAttributeValue("rowspan", null);
+                            
+                                if (rowspanValue != null && hasData > 0)
+                                {
+                                    hasRowspan = true;
+                                    //nganhangBosung = new Nganhang();
+                                    //indexBosung = rowindex;
+                                    //rowHople = true;
+                                    ////ô đang bị dư lên
+                                    //Console.WriteLine($"Ô có rowspan: {rowspanValue}. Nội dung: {cellText}");
+                                }
+                                // Kiểm tra nếu nội dung là định dạng ngày
+                                if (DateTime.TryParse(cellText, out DateTime dateValue))
+                                {
+                                    if (j == indexNgay)
+                                    {
+                                        nganhang.NgayGD = dateValue;
+                                        hasData += 1;
+                                        rowHople = true;
+                                    }
+                                }
+                                //Trường hop mà ko có rowspan thì kiểm tra ngày  null
+                                else
+                                {
+                                    if (nganhangBosung == null && hasData>0 && string.IsNullOrEmpty(cellText) && j==0)
+                                    {
+                                        nganhangBosung = new Nganhang();
+                                        indexBosung = rowindex;
+                                        rowHople = true;
+                                    }
+                                }
+                                if (rowHople)
+                                {
+                                    if (j == indexNoidung)
+                                    {
+
+                                        if (nganhangBosung != null)
+                                        {
+                                            if (indexBosung == rowindex)
+                                            {
+                                                nganhangBosung.Diengiai += cellText;
+                                            }
+                                            else
+                                            {
+                                                nganhang.Diengiai = nganhangBosung.Diengiai + cellText;
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            nganhang.Diengiai = cellText;
+                                        }
+
+
+                                    }
+                                    else if (j == indexNo)
+                                    {
+                                        string gettkno = RemoveDecimal(cellText);
+                                        string GetNo = gettkno.Replace(".", "").Replace(",", "");
+                                        // Lấy số tiền nợ
+                                        if (double.TryParse(GetNo, out double noValue))
+                                        {
+
+                                            if (nganhangBosung != null)
+                                            {
+                                                nganhangBosung.ThanhTien = nganhang.ThanhTien;
+                                            }
+                                            else
+                                            {
+                                                nganhang.ThanhTien = noValue;
+                                            }
+                                        }
+                                    }
+                                    else if (j == indexCo)
+                                    {
+
+                                        // Lấy số tiền có
+                                        string gettkco = RemoveDecimal(cellText);
+                                        string GetCo = gettkco.Replace(".", "").Replace(",", "");
+                                        if (string.IsNullOrEmpty(GetCo))
+                                        {
+                                            GetCo = "0";
+                                        }
+                                        if (double.TryParse(GetCo, out double coValue))
+                                        {
+                                            nganhang.ThanhTien2 = coValue;
+                                            if (nganhang.ThanhTien != 0)
+                                                nganhang.ThanhTien2 = 0;
+                                            if (nganhangBosung != null)
+                                            {
+                                                nganhangBosung.ThanhTien2 = nganhang.ThanhTien2;
+                                                if (indexBosung == rowindex)
+                                                {
+                                                    //Lùi index lại 
+                                                    if(hasRowspan)
+                                                    {
+                                                        indexNoidung = indexNoidung - 1;
+                                                        indexCo = indexCo - 1;
+                                                        indexNo = indexNo - 1;
+                                                    }
+                                                    break;
+                                                }
+                                            }
+
+                                            nganhang.Maso = $"{KyHieu}{nganhang.NgayGD.Month}/{newStt}";
+                                            nganhang.Stt = newStt; // Cập nhật Stt
+                                            newStt += 1;
+                                            lstNganhan.Add(nganhang);
+                                            if (nganhangBosung != null)
+                                            {
+                                                nganhangBosung = null; // Reset nganhangBosung sau khi thêm vào danh sách
+                                                 
+                                                //Reset lại index
+                                                if(hasRowspan)
+                                                {
+
+                                                    indexNoidung += 1;
+                                                    indexCo += 1;
+                                                    indexNo += 1;
+                                                    hasRowspan = false;
+                                                }
+
+                                                break;
+                                            }
+
+                                        }
+                                    }
+                                }
+
+
+                            }
+                            rowindex += 1;
+                        }
+                        tableindex += 1;
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Lỗi khi duyệt qua các bảng: " + ex.Message);
+                }
+             
+
+                gridControl3.DataSource = lstNganhan.OrderBy(m => m.NgayGD).ToList();
             }
-        } 
+            catch (Exception ex)
+            {
+                Console.WriteLine("Đã xảy ra lỗi: " + ex.Message);
+            }
+        }
 
         //private void btnScanCmera_Click(object sender, EventArgs e)
         //{

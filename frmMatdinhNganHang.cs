@@ -23,7 +23,7 @@ namespace SaovietTax
         {
             InitializeComponent();
         }
-
+       
         private void frmMatdinhNganHang_Load(object sender, EventArgs e)
         {
             LoadData();
@@ -33,6 +33,7 @@ namespace SaovietTax
             deleteColumn.FieldName = "Delete"; // Chỉ định FieldName
             deleteColumn.VisibleIndex = gridView1.Columns.Count; // Đặt vị trí cột
             gridView1.Columns.Add(deleteColumn);
+            xtraTabControl1.TabPages[0].PageVisible= false; // Ẩn tab đầu tiên
         }
         private void LoadDatachung()
         {

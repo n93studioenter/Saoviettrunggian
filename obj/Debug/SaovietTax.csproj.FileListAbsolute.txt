@@ -896,3 +896,5 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\PdfSharp.WPFonts.pdb
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\PdfSharp.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\PdfSharp.pdb
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.Security.Cryptography.Pkcs.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\HtmlAgilityPack.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\HtmlAgilityPack.pdb

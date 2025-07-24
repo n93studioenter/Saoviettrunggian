@@ -59,6 +59,10 @@
               "target": "Package",
               "version": "[3.7.0, )"
             },
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.12.2, )"
+            },
             "Microsoft.Toolkit.Uwp.Notifications": {
               "target": "Package",
               "version": "[7.1.3, )"

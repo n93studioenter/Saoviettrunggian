@@ -255,7 +255,7 @@
             this.colNoidung.Name = "colNoidung";
             this.colNoidung.Visible = true;
             this.colNoidung.VisibleIndex = 0;
-            this.colNoidung.Width = 120;
+            this.colNoidung.Width = 252;
             // 
             // gridColumn2
             // 
@@ -265,7 +265,7 @@
             this.gridColumn2.Name = "gridColumn2";
             this.gridColumn2.Visible = true;
             this.gridColumn2.VisibleIndex = 1;
-            this.gridColumn2.Width = 177;
+            this.gridColumn2.Width = 415;
             // 
             // gridColumn3
             // 
@@ -273,8 +273,6 @@
             this.gridColumn3.FieldName = "TK2";
             this.gridColumn3.MinWidth = 23;
             this.gridColumn3.Name = "gridColumn3";
-            this.gridColumn3.Visible = true;
-            this.gridColumn3.VisibleIndex = 2;
             this.gridColumn3.Width = 141;
             // 
             // colSoHieu
@@ -283,8 +281,6 @@
             this.colSoHieu.FieldName = "SoHieu";
             this.colSoHieu.MinWidth = 23;
             this.colSoHieu.Name = "colSoHieu";
-            this.colSoHieu.Visible = true;
-            this.colSoHieu.VisibleIndex = 3;
             this.colSoHieu.Width = 111;
             // 
             // gridColumn1
@@ -295,8 +291,8 @@
             this.gridColumn1.Name = "gridColumn1";
             this.gridColumn1.OptionsColumn.AllowEdit = false;
             this.gridColumn1.Visible = true;
-            this.gridColumn1.VisibleIndex = 4;
-            this.gridColumn1.Width = 51;
+            this.gridColumn1.VisibleIndex = 2;
+            this.gridColumn1.Width = 64;
             // 
             // panelControl2
             // 
@@ -400,7 +396,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl1.DataSource = this.matdinhnganhangBindingSource;
             this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.gridControl1.Location = new System.Drawing.Point(10, 107);
+            this.gridControl1.Location = new System.Drawing.Point(10, 115);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gridControl1.Name = "gridControl1";
@@ -523,7 +519,7 @@
             this.xtraTabPage2.Controls.Add(this.gcDinhdanh);
             this.xtraTabPage2.Name = "xtraTabPage2";
             this.xtraTabPage2.Size = new System.Drawing.Size(1088, 564);
-            this.xtraTabPage2.Text = "Mật định riêng";
+            this.xtraTabPage2.Text = "Mật định tài khoản";
             // 
             // frmMatdinhNganHang
             // 

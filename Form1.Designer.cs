@@ -94,6 +94,7 @@
             this.colInvoiceType2 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.DocfilePDF = new DevExpress.XtraEditors.SimpleButton();
             this.btnLichsuimport = new DevExpress.XtraEditors.SimpleButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.progressPanel2 = new DevExpress.XtraWaitForm.ProgressPanel();
@@ -103,6 +104,7 @@
             this.btnReadPDF = new DevExpress.XtraEditors.SimpleButton();
             this.lblThongbao = new System.Windows.Forms.Label();
             this.panelControl4 = new DevExpress.XtraEditors.PanelControl();
+            this.btnClearNganhang = new DevExpress.XtraEditors.SimpleButton();
             this.btnRefresh = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.btnOpenFolder = new DevExpress.XtraEditors.SimpleButton();
@@ -988,6 +990,7 @@
             // 
             // xtraTabPage1
             // 
+            this.xtraTabPage1.Controls.Add(this.DocfilePDF);
             this.xtraTabPage1.Controls.Add(this.btnLichsuimport);
             this.xtraTabPage1.Controls.Add(this.pictureBox1);
             this.xtraTabPage1.Controls.Add(this.progressPanel2);
@@ -1008,6 +1011,20 @@
             this.xtraTabPage1.Size = new System.Drawing.Size(1402, 762);
             this.xtraTabPage1.Text = "Sao việt tải hóa đơn";
             this.xtraTabPage1.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
+            // 
+            // DocfilePDF
+            // 
+            this.DocfilePDF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DocfilePDF.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("DocfilePDF.ImageOptions.Image")));
+            this.DocfilePDF.Location = new System.Drawing.Point(511, 725);
+            this.DocfilePDF.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.DocfilePDF.Name = "DocfilePDF";
+            this.DocfilePDF.Size = new System.Drawing.Size(276, 29);
+            this.DocfilePDF.TabIndex = 16;
+            this.DocfilePDF.Text = "Đọc file PDF";
+            this.DocfilePDF.Visible = false;
+            this.DocfilePDF.Click += new System.EventHandler(this.DocfilePDF_Click);
             // 
             // btnLichsuimport
             // 
@@ -1121,6 +1138,7 @@
             // panelControl4
             // 
             this.panelControl4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelControl4.Controls.Add(this.btnClearNganhang);
             this.panelControl4.Controls.Add(this.btnRefresh);
             this.panelControl4.Controls.Add(this.simpleButton1);
             this.panelControl4.Controls.Add(this.btnOpenFolder);
@@ -1129,6 +1147,15 @@
             this.panelControl4.Name = "panelControl4";
             this.panelControl4.Size = new System.Drawing.Size(51, 156);
             this.panelControl4.TabIndex = 10;
+            // 
+            // btnClearNganhang
+            // 
+            this.btnClearNganhang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnClearNganhang.ImageOptions.Image")));
+            this.btnClearNganhang.Location = new System.Drawing.Point(8, 110);
+            this.btnClearNganhang.Name = "btnClearNganhang";
+            this.btnClearNganhang.Size = new System.Drawing.Size(40, 38);
+            this.btnClearNganhang.TabIndex = 12;
+            this.btnClearNganhang.Click += new System.EventHandler(this.btnClearNganhang_Click);
             // 
             // btnRefresh
             // 
@@ -1982,5 +2009,7 @@
         private DevExpress.XtraEditors.SimpleButton simpleButton4;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn13;
         private DevExpress.XtraEditors.CheckEdit chkMatdinhghichu;
+        private DevExpress.XtraEditors.SimpleButton btnClearNganhang;
+        private DevExpress.XtraEditors.SimpleButton DocfilePDF;
     }
 }
