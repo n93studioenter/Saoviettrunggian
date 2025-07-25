@@ -1574,6 +1574,13 @@ namespace SaovietTax
                 string query = @"INSERT INTO tbDinhdanhNganhang (Noidung, TK) VALUES ('phi sms', '6422')";
                 ExecuteQueryResult(query);
             }
+
+            //Phí quản lý tk
+            if (!result2.AsEnumerable().Any(m => m.Field<string>("Noidung").ToLower() == "phi quan ly tai khoan"))
+            {
+                string query = @"INSERT INTO tbDinhdanhNganhang (Noidung, TK) VALUES ('phi quan ly tai khoan', '635')";
+                ExecuteQueryResult(query);
+            }
         }
         private async void frmMain_Load(object sender, EventArgs e)
         {
@@ -1603,8 +1610,11 @@ namespace SaovietTax
             existingTbHeThongTK = ExecuteQuery(querydinhdanh,null);
             gridView1.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
             gridView3.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
-            gridView5.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False; 
+            gridView5.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
 
+
+            gridView5.SortInfo.Clear(); // Xóa thông tin sắp xếp hiện tại
+            gridView5.SortInfo.Add(new GridColumnSortInfo(gridView5.Columns["NgayGD"], DevExpress.Data.ColumnSortOrder.Ascending)); // Sắp xếp theo thứ tự tăng dần
             //
             // query = "SELECT * FROM tbimport"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
             // var tbip = ExecuteQuery(query);
@@ -10229,6 +10239,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         private int typeNganhang=0;
         private void btnLocdulieuNganhang_Click(object sender, EventArgs e)
         {
+            progressPanel1.Visible  = true;
+            Application.DoEvents();
             xtraTabControl2.SelectedTabPageIndex = 2;
             lstNganhan = new List<Nganhang>();
             //typeNganhang = 2;
@@ -10279,7 +10291,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
             }
             gridControl3.DataSource = lstNganhan.OrderBy(m=>m.NgayGD).ToList();
-           // gridView5.Columns["NgayGD"].SortOrder = DevExpress.Data.ColumnSortOrder.Ascending; // Hoặc Descending 
+            // gridView5.Columns["NgayGD"].SortOrder = DevExpress.Data.ColumnSortOrder.Ascending; // Hoặc Descending 
+            progressPanel1.Visible= false;
         }
 
         private void gridView5_KeyPress(object sender, KeyPressEventArgs e)
@@ -10292,20 +10305,28 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         
         private void gridView5_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
         {
-
+            //Lấy tháng của dòng
+            int getMonthFirst = DateTime.Parse(gridView5.GetRowCellValue(e.RowHandle, "NgayGD").ToString()).Month;
             //xử lý cho các row còn lại
             if (e.Column.FieldName == "Maso" && e.RowHandle==0)
             {
                 string getvalue= e.Value.ToString();
                 string[] parts = getvalue.Split('/');
-                string prefix = parts[0];
+                string prefix = parts[0].Substring(0, parts[0].Length-1);
                 int number = int.Parse(parts[1]);
+                bool resetNumber = false;
                 foreach (var item in lstNganhan)
                 {
-
+                    //Tìm tháng hiện tại
+                    var findmonthcurrent= DateTime.Parse(item.NgayGD.ToString()).Month;
+                    if( findmonthcurrent != getMonthFirst && resetNumber==false)
+                    {
+                        number = 0;
+                        resetNumber = true; 
+                    }
                     number += 1;
                     string newtext = number.ToString("D2");
-                    item.Maso= prefix+"/"+ newtext; // Cập nhật giá trị mới cho item.Maso
+                    item.Maso= prefix+ findmonthcurrent+"/" + newtext; // Cập nhật giá trị mới cho item.Maso
                     // Định dạng số với số chữ số hiện tại 
                 }
                 gridControl3.DataSource= lstNganhan;
@@ -10543,13 +10564,25 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             int currentMaso=0;  
             int hasrowIndex = 0;
             string excelFilePath = savedPath + @"\output.xlsx";
-            string[] headers = new string[] { "Ngày hiệu lực", "Ngày giao dịch","Ngày GD","Ngày HL", "hiệu lực" };
+            string[] headers = new string[] { "Ngày hiệu lực", "Ngày giao dịch","Ngày GD","Ngày HL", "hiệu lực", "Ghi chú", "Ngay hieu luc" };
+            string Maunganhang = "";
             using (var workbook = new XLWorkbook(excelFilePath))
             {
                 var worksheet = workbook.Worksheet(1); // Lấy worksheet đầu tiên
                                                        // Duyệt qua từng hàng để tìm dòng tiêu đề
                 foreach (var row in worksheet.RowsUsed())
                 {
+
+                    foreach (var cell in row.Cells())
+                    {
+                        if (cell.GetString().ToLower().Contains("sacombank"))
+                        { 
+                            // In ra thông tin về dòng chứa "sacombank"
+                            Console.WriteLine($"Found 'sacombank' in row {row.RowNumber()}");
+                            Maunganhang="Sacombank";
+                            break; // Thoát vòng lặp nếu đã tìm thấy
+                        }
+                    }
                     bool isHeaderRow = false;
 
                     // Kiểm tra cột 1
@@ -10582,10 +10615,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 int TTNoIndex = 0;
                 int TTCoIndex = 0;
 
-                string[] lstNgayGD = { "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày giá trị", "hiệu lực" };
-                string[] lstNoidung = { "Nội dung giao dịch", "Diễn giải", "Details", "Description","Mô tả" };
-                string[] lstNo = { "Phát sinh nợ", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Ghi nợ" };
-                string[] lstCo = { "Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có", "Ghi có" };
+                string[] lstNgayGD = { "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày giá trị", "hiệu lực","Date","STT", "Ngay hieu luc" };
+                string[] lstNoidung = { "Nội dung giao dịch", "Diễn giải", "Details", "Description","Mô tả", "Ghi chú" };
+                string[] lstNo = { "Phát sinh nợ", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Ghi nợ","Nợ" };
+                string[] lstCo = { "Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có", "Ghi có","Có" };
 
                 // Tạo danh sách tiêu đề và hành động tương ứng
                
@@ -10668,7 +10701,13 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         TTCoIndex =7;
                     }
                 }
-
+                if (Maunganhang == "Sacombank")
+                {
+                    ngayGDIndex = 3;
+                    noidungGDIndex = 5;
+                    TTNoIndex = 7;
+                    TTCoIndex = 8;
+                }
 
                     Nganhang rowBosung = null; 
                 //Duyệt tiếp lấy thông tin 
@@ -10677,6 +10716,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     // Kiểm tra chỉ số hàng 
                     if (row.RowNumber() > (hasrowIndex)) // Bắt đầu từ chỉ số hàng 10
                     {
+                        int lechcot = 0;
                         Nganhang nganhang = new Nganhang();
                         var cell = worksheet.Cell("A2"); // Thay đổi địa chỉ ô theo nhu cầu
                        
@@ -10692,14 +10732,19 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         {
                             continue;
                         }
+                        getNgayGD= getNgayGD.Replace(" ","").Replace("\n", "").Replace("\r", "");
                         if (!DateTime.TryParse(getNgayGD, out _))
                         {
                             //Nếu không có ngày thì lưu lại thông tin bổ dung
                             //Kiểm tra rowBosung có null hay không
                             if (rowBosung == null)
                             {
+                                if(string.IsNullOrEmpty(row.Cell(noidungGDIndex).GetString()))
+                                {
+                                    continue;
+                                }
                                 rowBosung = new Nganhang();
-                                rowBosung.Diengiai = row.Cell(noidungGDIndex).GetString();
+                                rowBosung.Diengiai = row.Cell(noidungGDIndex).GetString();  
                                 string GetNobosung = row.Cell(TTNoIndex).GetString().Replace(".", "").Replace(",", "");
                                 try
                                 {
@@ -10748,11 +10793,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         else
                         {
                             nganhang.Diengiai = GetNoidung;
+                            
                         }
 
                         //Lấy Nợ
-                        string gettkno = RemoveDecimal(row.Cell(TTNoIndex).GetString());
+                        string gettkno = "";
+                        gettkno = RemoveDecimal(row.Cell(TTNoIndex).GetString());
                         string GetNo = gettkno.Replace(".", "").Replace(",", "");
+
                         if (!string.IsNullOrEmpty(GetNo))
                         {
                             try
@@ -10772,8 +10820,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             }
                         }
 
+
                         //Lấy có
-                        string gettkco = RemoveDecimal(row.Cell(TTCoIndex).GetString());
+                        string gettkco = "";
+                        gettkco = RemoveDecimal(row.Cell(TTCoIndex).GetString());
                         string GetCo = gettkco.Replace(".", "").Replace(",", ""); ;
                         if (!string.IsNullOrEmpty(GetCo))
                         {
@@ -10782,11 +10832,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 if (nganhang.ThanhTien == 0)
                                     nganhang.ThanhTien2 = double.Parse(GetCo, CultureInfo.InvariantCulture);
                             }
-                            catch(Exception ex)
+                            catch (Exception ex)
                             {
                                 continue;
                             }
-                           
+
                         }
                         else
                         {
@@ -10855,105 +10905,160 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             bool hasTen = false;
                             query = "SELECT * FROM License";
                             var kq2 = ExecuteQuery(query, null);
+                            bool hastenghichu = false;
+
+                            //Kiểm tra ghi chú trước 
                             foreach (DataRow dtrow in tbKhachhang.Rows)
                             {
-                                string getTen = Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()));
+                                string ghichu = dtrow["GhiChu"].ToString().ToLower();
+                                string str2 = nganhang.Diengiai.ToLower();
+                                if (str2.Contains(ghichu))
+                                {
 
-                                List<string> wordsToReplace = new List<string>
+                                    hastenghichu = true;
+                                    findMakh = true;
+                                    nganhang.MaKH = dtrow["SoHieu"].ToString();
+                                    //Tìm tk 131
+                                    var getTk131 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("131")).ToList();
+                                    if (getTk131.Count == 1)
+                                    {
+                                        if (nganhang.ThanhTien2 > 0)
+                                        {
+                                            nganhang.TKCo = "131";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (nganhang.ThanhTien2 > 0)
+                                        {
+                                            nganhang.TKCo = "1311";
+                                        }
+                                    }
+                                    //
+                                    //Tìm tk 3311
+                                    var getTk331 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("331")).ToList();
+                                    if (getTk331.Count == 1)
+                                    {
+                                        if (nganhang.ThanhTien > 0)
+                                        {
+                                            nganhang.TKNo = "331";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (nganhang.ThanhTien > 0)
+                                        {
+                                            nganhang.TKNo = "3311";
+                                        }
+                                    }
+
+                                    break; // Nếu đã tìm thấy, không cần kiểm tra tiếp
+                                }
+                            }
+                            if (hastenghichu == false)
+                            {
+                                foreach (DataRow dtrow in tbKhachhang.Rows)
+                                {
+
+                                    string getTen = Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()));
+
+                                    List<string> wordsToReplace = new List<string>
                                 {
                                    "thue","cty", "tnhh", "cong ty", "cp tm", "noi that", "vung tau", "dich vu","tinh","brvt","dau gia","tai san","ba ria","mam non","ubnd","hang hai","trach nhiem","huu han","xay dung","dau tu","dau khi","tm","sx","cn","vung  tau","tham dinh","trung tam","thuong mai","quan ly","lien doanh","tu dong","giai phap","o to","kiem soat","co phan","thiet bi","trung tam","ky thuat","san xuat","do go","nha nuoc khu vuc","bac nha nuoc","khu vuc","so 1","nha nuoc","cp dv","dv va","lap dat","nha khoa","hoa don","va xd","xd","cp dt","viet nam","ke toan"
                                 };
-                                //Lấy tên công ty
-                                
-                                string tencty=Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(kq2.Rows[0]["TenCty"].ToString()));
-                                tencty=ReplaceWords(tencty.Trim().ToLower(), wordsToReplace).ToLower();
+                                    //Lấy tên công ty
 
-                                string str1 = ReplaceWords(getTen.Trim().ToLower(), wordsToReplace).ToLower();
-                                if (str1.Contains("theone"))
-                                {
-                                    var hasone = "Sdad";
-                                }
-                                string str2 = nganhang.Diengiai.ToLower();
-                                var commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 4);
-                                if (commonPhrases.Count > 0 && !commonPhrases.Any(m => m.Contains(tencty)))
-                                { 
-                                    loai_4= dtrow["SoHieu"].ToString(); 
-                                    hasTen = true;
-                                }
-                                if (commonPhrases.Count() == 0)
-                                {
-                                    commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 3);
+                                    string tencty = Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(kq2.Rows[0]["TenCty"].ToString()));
+                                    tencty = ReplaceWords(tencty.Trim().ToLower(), wordsToReplace).ToLower();
+
+                                    string str1 = ReplaceWords(getTen.Trim().ToLower(), wordsToReplace).ToLower();
+                                    if (str1.Contains("theone"))
+                                    {
+                                        var hasone = "Sdad";
+                                    }
+                                    string str2 = nganhang.Diengiai.ToLower();
+                                    var commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 4);
                                     if (commonPhrases.Count > 0 && !commonPhrases.Any(m => m.Contains(tencty)))
-                                    { 
-                                        loai_3 = dtrow["SoHieu"].ToString();
+                                    {
+                                        loai_4 = dtrow["SoHieu"].ToString();
                                         hasTen = true;
                                     }
                                     if (commonPhrases.Count() == 0)
                                     {
-                                        commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 2);
-                                        if (commonPhrases.Count > 0 && !commonPhrases.Any(m=>m.Contains(tencty)))
+                                        commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 3);
+                                        if (commonPhrases.Count > 0 && !commonPhrases.Any(m => m.Contains(tencty)))
                                         {
-                                            if (string.IsNullOrEmpty(loai_2))
-                                                loai_2 = dtrow["SoHieu"].ToString();
+                                            loai_3 = dtrow["SoHieu"].ToString();
                                             hasTen = true;
                                         }
+                                        if (commonPhrases.Count() == 0)
+                                        {
+                                            commonPhrases = Helpers.FindCommonAdjacentPhrases(str1, str2, 2);
+                                            if (commonPhrases.Count > 0 && !commonPhrases.Any(m => m.Contains(tencty)))
+                                            {
+                                                if (string.IsNullOrEmpty(loai_2))
+                                                    loai_2 = dtrow["SoHieu"].ToString();
+                                                hasTen = true;
+                                            }
+                                        }
                                     }
-                                }
-                              
-                            }
 
-                            if (hasTen)
-                            {
-                                //nganhang.MaKH = Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()) + " | " + dtrow["SoHieu"].ToString();
-                                if (!string.IsNullOrEmpty(loai_4))
-                                    nganhang.MaKH = loai_4;
-                                else
+                                }
+
+                                if (hasTen)
                                 {
-                                    if (!string.IsNullOrEmpty(loai_3))
-                                        nganhang.MaKH = loai_3;
+                                    //nganhang.MaKH = Helpers.ConvertVniToUnicode(dtrow["Ten"].ToString()) + " | " + dtrow["SoHieu"].ToString();
+                                    if (!string.IsNullOrEmpty(loai_4))
+                                        nganhang.MaKH = loai_4;
                                     else
                                     {
-                                        if (!string.IsNullOrEmpty(loai_2))
-                                            nganhang.MaKH = loai_2;
+                                        if (!string.IsNullOrEmpty(loai_3))
+                                            nganhang.MaKH = loai_3;
+                                        else
+                                        {
+                                            if (!string.IsNullOrEmpty(loai_2))
+                                                nganhang.MaKH = loai_2;
+                                        }
                                     }
-                                }
                                     //Tìm tk 131
                                     var getTk131 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("131")).ToList();
-                                if (getTk131.Count == 1)
-                                {
-                                    if (nganhang.ThanhTien2 > 0)
+                                    if (getTk131.Count == 1)
                                     {
-                                        nganhang.TKCo = "131";
+                                        if (nganhang.ThanhTien2 > 0)
+                                        {
+                                            nganhang.TKCo = "131";
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    if (nganhang.ThanhTien2 > 0)
+                                    else
                                     {
-                                        nganhang.TKCo = "1311";
+                                        if (nganhang.ThanhTien2 > 0)
+                                        {
+                                            nganhang.TKCo = "1311";
+                                        }
                                     }
-                                }
-                                //
-                                //Tìm tk 3311
-                                var getTk331 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("331")).ToList();
-                                if (getTk331.Count == 1)
-                                {
-                                    if (nganhang.ThanhTien > 0)
+                                    //
+                                    //Tìm tk 3311
+                                    var getTk331 = existingTbHeThongTK.AsEnumerable().Where(m => m.Field<string>("SoHieu").StartsWith("331")).ToList();
+                                    if (getTk331.Count == 1)
                                     {
-                                        nganhang.TKNo = "331";
+                                        if (nganhang.ThanhTien > 0)
+                                        {
+                                            nganhang.TKNo = "331";
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    if (nganhang.ThanhTien > 0)
+                                    else
                                     {
-                                        nganhang.TKNo = "3311";
+                                        if (nganhang.ThanhTien > 0)
+                                        {
+                                            nganhang.TKNo = "3311";
+                                        }
                                     }
-                                }
 
 
-                                findMakh = true; 
+                                    findMakh = true;
+                                }
                             }
+                           
                             //Tìm mã khách hàng thông qua số hoá đơn
                             if (findMakh == false)
                             {
@@ -11065,7 +11170,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                             nganhang.Diengiai = nganhang.Diengiai.Replace("MaKH", Helpers.ConvertVniToUnicode(getNameKH));
                                     }
                                 }
-                            }
+                            } 
                             lstNganhan.Add(nganhang);
                         }
 
@@ -11208,51 +11313,61 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void gridView5_KeyUp(object sender, KeyEventArgs e)
         {
-            //if (e.KeyCode == System.Windows.Forms.Keys.Enter)
-            //{
-            //    var selectedCells = gridView5.GetSelectedCells();
-            //    int currentRowHandle = gridView5.FocusedRowHandle;
+            if (e.KeyCode == System.Windows.Forms.Keys.Enter)
+            {
+                string columnName = gridView5.FocusedColumn.FieldName;
+                if (columnName != "MaKH")
+                    return;
+                var selectedCells = gridView5.GetSelectedCells();
+                int currentRowHandle = gridView5.FocusedRowHandle;
+                string mst = "";
+                string ten = "";
 
-            //    if (selectedCells[0].Column.ToString() != "Mã số")
-            //    {
-            //        return;
-            //    }
-            //    // Lấy giá trị ô hiện tại
-            //    var currentValue = gridView5.GetRowCellValue(currentRowHandle, gridView5.FocusedColumn);
-            //    if (!currentValue.ToString().Contains("/"))
-            //    {
-            //        return;
-            //    }
-            //    var getsplit= currentValue.ToString().Split('/');
-            //    string newvalue = "";
-            //    if (int.TryParse(getsplit[1], out int number))
-            //    {
-            //        // Tăng số lên 1 và định dạng lại thành chuỗi
-            //        newvalue= getsplit[0]+"/"+(number + 1).ToString("D2");
-            //    }
-            //    int nextRowHandle = currentRowHandle + 1;
-            //    if (nextRowHandle < gridView5.DataRowCount)
-            //    {
-            //        // Gán giá trị cho cột trong hàng tiếp theo
-            //        gridView5.SetRowCellValue(nextRowHandle, gridView5.FocusedColumn, newvalue);
-            //        if (gridView5.FocusedColumn == gridView5.Columns["TKNo"])
-            //        {
-                        
-            //        }
+                var currentValue = gridView5.GetRowCellValue(currentRowHandle, gridView5.FocusedColumn);
+                //
+                var findcus=tbKhachhang.AsEnumerable().Where(m => m.Field<string>("SoHieu").ToLower().Equals(currentValue.ToString().ToLower())).FirstOrDefault();
+                if(findcus != null)
+                {
+                    mst = findcus["SoHieu"].ToString();
+                    ten = findcus["Ten"].ToString();
+                }
+                frmKhachhang frmKhachhang = new frmKhachhang();
+                frmKhachhang.frmMain = this;
 
-            //        // Di chuyển tiêu điểm đến ô trong hàng tiếp theo
-            //        gridView5.FocusedRowHandle = nextRowHandle;
-            //        gridView5.FocusedColumn = gridView5.FocusedColumn; // Giữ nguyên cột
-            //        gridView5.FocusedColumn = gridView5.FocusedColumn; // Giữ nguyên cột
-            //        gridView5.ShowEditor(); // Hiển thị editor của ô
-
-            //        // Chọn tất cả văn bản trong ô editor
-            //        if (gridView5.ActiveEditor is DevExpress.XtraEditors.TextEdit textEdit)
-            //        {
-            //            textEdit.SelectAll(); // Chọn tất cả văn bản
-            //        }
-            //    }
-            //}
+                frmKhachhang.Khachhang vatTu = new frmKhachhang.Khachhang();
+                DataRow kh = null;
+                if (!string.IsNullOrEmpty(mst))
+                {
+                    kh = tbKhachhang.AsEnumerable().Where(row => row.Field<string>("MST") == mst).FirstOrDefault();
+                    //Nếu ko lấy dc thì chuyển sang kiem tra theo số hiệu
+                    if (kh == null)
+                    {
+                        kh = tbKhachhang.AsEnumerable().Where(row => row.Field<string>("SoHieu") == mst).FirstOrDefault();
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(ten))
+                    {
+                        ten = Helpers.ConvertUnicodeToVni(ten);
+                        kh = tbKhachhang.AsEnumerable().Where(row => Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(row.Field<string>("Ten").ToLower())) == Helpers.RemoveVietnameseDiacritics(Helpers.ConvertVniToUnicode(ten.ToLower()))).FirstOrDefault();
+                    }
+                }
+                vatTu.MaSo = int.Parse(kh["MaSo"].ToString());
+                vatTu.Ten = Helpers.ConvertVniToUnicode(ten);
+                vatTu.Mst = kh["MST"] != null ? kh["MST"].ToString() : "";
+                vatTu.DiaChi = kh["DiaChi"] != null ? Helpers.ConvertVniToUnicode(kh["DiaChi"].ToString()) : "";
+                vatTu.SoHieu = kh["SoHieu"].ToString();
+                vatTu.MaPhanLoai = int.Parse(kh["MaPhanLoai"].ToString());
+                currentselectId = int.Parse(kh["MaPhanLoai"].ToString());
+                frmKhachhang.dtoVatTu = vatTu;
+                frmKhachhang.ShowDialog();
+                if (!string.IsNullOrEmpty(hiddenValue3) && frmKhachhang.isChange)
+                {
+                     var findRow = tbKhachhang.AsEnumerable().Where(m => m.Field<string>("MST") == hiddenValue3).FirstOrDefault();
+                    gridView5.SetRowCellValue(currentRowHandle, "MaKH", findRow["SoHieu"].ToString());
+                }
+            }
         }
 
         private void btnClearNganhang_Click(object sender, EventArgs e)

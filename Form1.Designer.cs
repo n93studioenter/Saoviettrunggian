@@ -1409,7 +1409,7 @@
             this.colDiengiai.Name = "colDiengiai";
             this.colDiengiai.Visible = true;
             this.colDiengiai.VisibleIndex = 3;
-            this.colDiengiai.Width = 492;
+            this.colDiengiai.Width = 493;
             // 
             // colThanhTien1
             // 
@@ -1449,7 +1449,7 @@
             this.colTKNo1.Name = "colTKNo1";
             this.colTKNo1.Visible = true;
             this.colTKNo1.VisibleIndex = 6;
-            this.colTKNo1.Width = 108;
+            this.colTKNo1.Width = 106;
             // 
             // colTKCo1
             // 
@@ -1463,7 +1463,7 @@
             this.colTKCo1.Name = "colTKCo1";
             this.colTKCo1.Visible = true;
             this.colTKCo1.VisibleIndex = 7;
-            this.colTKCo1.Width = 109;
+            this.colTKCo1.Width = 86;
             // 
             // colMaKH
             // 
@@ -1474,7 +1474,7 @@
             this.colMaKH.OptionsColumn.ShowInExpressionEditor = false;
             this.colMaKH.Visible = true;
             this.colMaKH.VisibleIndex = 8;
-            this.colMaKH.Width = 109;
+            this.colMaKH.Width = 142;
             // 
             // gridColumn13
             // 
@@ -1484,7 +1484,7 @@
             this.gridColumn13.Name = "gridColumn13";
             this.gridColumn13.Visible = true;
             this.gridColumn13.VisibleIndex = 9;
-            this.gridColumn13.Width = 116;
+            this.gridColumn13.Width = 107;
             // 
             // colCheck
             // 
@@ -1495,7 +1495,7 @@
             this.colCheck.OptionsColumn.AllowEdit = false;
             this.colCheck.Visible = true;
             this.colCheck.VisibleIndex = 10;
-            this.colCheck.Width = 56;
+            this.colCheck.Width = 55;
             // 
             // lblDpPath
             // 
