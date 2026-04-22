@@ -1,0 +1,588 @@
+﻿namespace SaovietTax
+{
+    partial class frmHangHoa
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmHangHoa));
+            this.gridControl1 = new DevExpress.XtraGrid.GridControl();
+            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colTenVattu = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colSoHieu = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDonvitinh = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPercent = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.btnGhi = new DevExpress.XtraEditors.SimpleButton();
+            this.btnThem = new DevExpress.XtraEditors.SimpleButton();
+            this.txtGhichu = new DevExpress.XtraEditors.TextEdit();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtDonvi = new DevExpress.XtraEditors.TextEdit();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtTenvattu = new DevExpress.XtraEditors.TextEdit();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtSohieu = new DevExpress.XtraEditors.TextEdit();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnXoa = new DevExpress.XtraEditors.SimpleButton();
+            this.comboBoxEdit1 = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.btnThoat = new DevExpress.XtraEditors.SimpleButton();
+            this.btnSearch = new DevExpress.XtraEditors.SimpleButton();
+            this.gridControl2 = new DevExpress.XtraGrid.GridControl();
+            this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colSoLuong = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDongia = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colThanhTien = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.txtMaSo = new DevExpress.XtraEditors.TextEdit();
+            this.txtSearch = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
+            this.textEdit2 = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
+            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtGhichu.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtDonvi.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTenvattu.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSohieu.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
+            this.panelControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaSo.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSearch.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // gridControl1
+            // 
+            this.gridControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gridControl1.Location = new System.Drawing.Point(11, 208);
+            this.gridControl1.MainView = this.gridView1;
+            this.gridControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gridControl1.Name = "gridControl1";
+            this.gridControl1.Size = new System.Drawing.Size(725, 454);
+            this.gridControl1.TabIndex = 2;
+            this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridView1});
+            this.gridControl1.DoubleClick += new System.EventHandler(this.gridControl1_DoubleClick);
+            this.gridControl1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridControl1_KeyDown);
+            this.gridControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridControl1_MouseDown);
+            // 
+            // gridView1
+            // 
+            this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colTenVattu,
+            this.colSoHieu,
+            this.colDonvitinh,
+            this.gridColumn2,
+            this.gridColumn1,
+            this.gridColumn3,
+            this.colPercent});
+            this.gridView1.DetailHeight = 295;
+            this.gridView1.GridControl = this.gridControl1;
+            this.gridView1.Name = "gridView1";
+            this.gridView1.OptionsView.ShowGroupPanel = false;
+            this.gridView1.RowClick += new DevExpress.XtraGrid.Views.Grid.RowClickEventHandler(this.gridView1_RowClick);
+            this.gridView1.DataSourceChanged += new System.EventHandler(this.gridView1_DataSourceChanged);
+            // 
+            // colTenVattu
+            // 
+            this.colTenVattu.Caption = "Tên vật tư";
+            this.colTenVattu.FieldName = "TenVattu";
+            this.colTenVattu.MinWidth = 23;
+            this.colTenVattu.Name = "colTenVattu";
+            this.colTenVattu.OptionsColumn.AllowEdit = false;
+            this.colTenVattu.Visible = true;
+            this.colTenVattu.VisibleIndex = 2;
+            this.colTenVattu.Width = 322;
+            // 
+            // colSoHieu
+            // 
+            this.colSoHieu.Caption = "Số hiệu";
+            this.colSoHieu.FieldName = "SoHieu";
+            this.colSoHieu.MinWidth = 23;
+            this.colSoHieu.Name = "colSoHieu";
+            this.colSoHieu.OptionsColumn.AllowEdit = false;
+            this.colSoHieu.Visible = true;
+            this.colSoHieu.VisibleIndex = 1;
+            this.colSoHieu.Width = 92;
+            // 
+            // colDonvitinh
+            // 
+            this.colDonvitinh.Caption = "ĐVT";
+            this.colDonvitinh.FieldName = "DonVi";
+            this.colDonvitinh.MinWidth = 23;
+            this.colDonvitinh.Name = "colDonvitinh";
+            this.colDonvitinh.Visible = true;
+            this.colDonvitinh.VisibleIndex = 3;
+            this.colDonvitinh.Width = 76;
+            // 
+            // gridColumn2
+            // 
+            this.gridColumn2.Caption = "Số lượng";
+            this.gridColumn2.DisplayFormat.FormatString = "N2";
+            this.gridColumn2.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumn2.FieldName = "SoLuong";
+            this.gridColumn2.MinWidth = 23;
+            this.gridColumn2.Name = "gridColumn2";
+            this.gridColumn2.Visible = true;
+            this.gridColumn2.VisibleIndex = 4;
+            this.gridColumn2.Width = 68;
+            // 
+            // gridColumn1
+            // 
+            this.gridColumn1.Caption = "Dongia";
+            this.gridColumn1.DisplayFormat.FormatString = "N2";
+            this.gridColumn1.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumn1.FieldName = "Dongia";
+            this.gridColumn1.MinWidth = 23;
+            this.gridColumn1.Name = "gridColumn1";
+            this.gridColumn1.Visible = true;
+            this.gridColumn1.VisibleIndex = 5;
+            this.gridColumn1.Width = 110;
+            // 
+            // gridColumn3
+            // 
+            this.gridColumn3.Caption = "Thành tiền";
+            this.gridColumn3.DisplayFormat.FormatString = "N2";
+            this.gridColumn3.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumn3.FieldName = "ThanhTien";
+            this.gridColumn3.MinWidth = 23;
+            this.gridColumn3.Name = "gridColumn3";
+            this.gridColumn3.Width = 106;
+            // 
+            // colPercent
+            // 
+            this.colPercent.Caption = "%";
+            this.colPercent.FieldName = "Percent";
+            this.colPercent.MinWidth = 25;
+            this.colPercent.Name = "colPercent";
+            this.colPercent.OptionsColumn.AllowEdit = false;
+            this.colPercent.Visible = true;
+            this.colPercent.VisibleIndex = 0;
+            this.colPercent.Width = 94;
+            // 
+            // btnGhi
+            // 
+            this.btnGhi.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGhi.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnGhi.ImageOptions.Image")));
+            this.btnGhi.Location = new System.Drawing.Point(3, 54);
+            this.btnGhi.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnGhi.Name = "btnGhi";
+            this.btnGhi.Size = new System.Drawing.Size(93, 29);
+            this.btnGhi.TabIndex = 9;
+            this.btnGhi.Text = "&Ghi";
+            this.btnGhi.Click += new System.EventHandler(this.btnGhi_Click);
+            // 
+            // btnThem
+            // 
+            this.btnThem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnThem.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnThem.ImageOptions.Image")));
+            this.btnThem.Location = new System.Drawing.Point(2, 11);
+            this.btnThem.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnThem.Name = "btnThem";
+            this.btnThem.Size = new System.Drawing.Size(94, 29);
+            this.btnThem.TabIndex = 8;
+            this.btnThem.Text = "Thêm";
+            this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
+            // 
+            // txtGhichu
+            // 
+            this.txtGhichu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtGhichu.Location = new System.Drawing.Point(376, 108);
+            this.txtGhichu.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtGhichu.Name = "txtGhichu";
+            this.txtGhichu.Size = new System.Drawing.Size(330, 23);
+            this.txtGhichu.TabIndex = 7;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(308, 109);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(49, 16);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Ghi chú";
+            // 
+            // txtDonvi
+            // 
+            this.txtDonvi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDonvi.Location = new System.Drawing.Point(177, 106);
+            this.txtDonvi.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtDonvi.Name = "txtDonvi";
+            this.txtDonvi.Size = new System.Drawing.Size(106, 23);
+            this.txtDonvi.TabIndex = 5;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(116, 109);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(43, 16);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Đơn vị";
+            // 
+            // txtTenvattu
+            // 
+            this.txtTenvattu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTenvattu.Location = new System.Drawing.Point(177, 60);
+            this.txtTenvattu.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtTenvattu.Name = "txtTenvattu";
+            this.txtTenvattu.Size = new System.Drawing.Size(529, 23);
+            this.txtTenvattu.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(116, 63);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 16);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Tên";
+            // 
+            // txtSohieu
+            // 
+            this.txtSohieu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSohieu.Location = new System.Drawing.Point(177, 15);
+            this.txtSohieu.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtSohieu.Name = "txtSohieu";
+            this.txtSohieu.Size = new System.Drawing.Size(106, 23);
+            this.txtSohieu.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(116, 18);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 16);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Mã số";
+            // 
+            // panelControl1
+            // 
+            this.panelControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelControl1.Controls.Add(this.label5);
+            this.panelControl1.Controls.Add(this.btnXoa);
+            this.panelControl1.Controls.Add(this.btnGhi);
+            this.panelControl1.Controls.Add(this.btnThem);
+            this.panelControl1.Controls.Add(this.txtGhichu);
+            this.panelControl1.Controls.Add(this.label4);
+            this.panelControl1.Controls.Add(this.txtDonvi);
+            this.panelControl1.Controls.Add(this.label3);
+            this.panelControl1.Controls.Add(this.txtTenvattu);
+            this.panelControl1.Controls.Add(this.comboBoxEdit1);
+            this.panelControl1.Controls.Add(this.label2);
+            this.panelControl1.Controls.Add(this.txtSohieu);
+            this.panelControl1.Controls.Add(this.label1);
+            this.panelControl1.Location = new System.Drawing.Point(13, 12);
+            this.panelControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.panelControl1.Name = "panelControl1";
+            this.panelControl1.Size = new System.Drawing.Size(720, 144);
+            this.panelControl1.TabIndex = 3;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(308, 18);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(64, 16);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Danh mục";
+            // 
+            // btnXoa
+            // 
+            this.btnXoa.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnXoa.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnXoa.ImageOptions.Image")));
+            this.btnXoa.Location = new System.Drawing.Point(1, 102);
+            this.btnXoa.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnXoa.Name = "btnXoa";
+            this.btnXoa.Size = new System.Drawing.Size(95, 29);
+            this.btnXoa.TabIndex = 10;
+            this.btnXoa.Text = "Xóa";
+            this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
+            // 
+            // comboBoxEdit1
+            // 
+            this.comboBoxEdit1.Location = new System.Drawing.Point(376, 15);
+            this.comboBoxEdit1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.comboBoxEdit1.Name = "comboBoxEdit1";
+            this.comboBoxEdit1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.comboBoxEdit1.Size = new System.Drawing.Size(330, 23);
+            this.comboBoxEdit1.TabIndex = 4;
+            this.comboBoxEdit1.SelectedIndexChanged += new System.EventHandler(this.comboBoxEdit1_SelectedIndexChanged);
+            // 
+            // btnThoat
+            // 
+            this.btnThoat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnThoat.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnThoat.ImageOptions.Image")));
+            this.btnThoat.Location = new System.Drawing.Point(560, 319);
+            this.btnThoat.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnThoat.Name = "btnThoat";
+            this.btnThoat.Size = new System.Drawing.Size(93, 29);
+            this.btnThoat.TabIndex = 11;
+            this.btnThoat.Text = "Thoát";
+            this.btnThoat.Visible = false;
+            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSearch.ImageOptions.Image")));
+            this.btnSearch.Location = new System.Drawing.Point(680, 349);
+            this.btnSearch.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(42, 29);
+            this.btnSearch.TabIndex = 12;
+            this.btnSearch.Visible = false;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // gridControl2
+            // 
+            this.gridControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gridControl2.Location = new System.Drawing.Point(1198, 647);
+            this.gridControl2.MainView = this.gridView2;
+            this.gridControl2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gridControl2.Name = "gridControl2";
+            this.gridControl2.Size = new System.Drawing.Size(0, 44);
+            this.gridControl2.TabIndex = 16;
+            this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridView2});
+            this.gridControl2.Visible = false;
+            // 
+            // gridView2
+            // 
+            this.gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colSoLuong,
+            this.colDongia,
+            this.colThanhTien});
+            this.gridView2.DetailHeight = 295;
+            this.gridView2.GridControl = this.gridControl2;
+            this.gridView2.Name = "gridView2";
+            this.gridView2.OptionsView.ShowGroupPanel = false;
+            // 
+            // colSoLuong
+            // 
+            this.colSoLuong.Caption = "Số lượng";
+            this.colSoLuong.DisplayFormat.FormatString = "N2";
+            this.colSoLuong.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colSoLuong.FieldName = "SoLuong";
+            this.colSoLuong.MinWidth = 23;
+            this.colSoLuong.Name = "colSoLuong";
+            this.colSoLuong.OptionsColumn.AllowEdit = false;
+            this.colSoLuong.Width = 87;
+            // 
+            // colDongia
+            // 
+            this.colDongia.Caption = "Đơn giá";
+            this.colDongia.DisplayFormat.FormatString = "N2";
+            this.colDongia.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colDongia.FieldName = "DonGia";
+            this.colDongia.MinWidth = 23;
+            this.colDongia.Name = "colDongia";
+            this.colDongia.OptionsColumn.AllowEdit = false;
+            this.colDongia.Width = 87;
+            // 
+            // colThanhTien
+            // 
+            this.colThanhTien.Caption = "Thành tiền";
+            this.colThanhTien.DisplayFormat.FormatString = "N2";
+            this.colThanhTien.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colThanhTien.FieldName = "ThanhTien";
+            this.colThanhTien.MinWidth = 23;
+            this.colThanhTien.Name = "colThanhTien";
+            this.colThanhTien.OptionsColumn.AllowEdit = false;
+            this.colThanhTien.Visible = true;
+            this.colThanhTien.VisibleIndex = 0;
+            this.colThanhTien.Width = 87;
+            // 
+            // txtMaSo
+            // 
+            this.txtMaSo.Location = new System.Drawing.Point(211, 353);
+            this.txtMaSo.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtMaSo.Name = "txtMaSo";
+            this.txtMaSo.Size = new System.Drawing.Size(94, 23);
+            this.txtMaSo.TabIndex = 15;
+            this.txtMaSo.Visible = false;
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(13, 177);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(720, 23);
+            this.txtSearch.TabIndex = 11;
+            this.txtSearch.EditValueChanged += new System.EventHandler(this.txtSearch_EditValueChanged);
+            // 
+            // labelControl1
+            // 
+            this.labelControl1.Location = new System.Drawing.Point(13, 684);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(140, 16);
+            this.labelControl1.TabIndex = 12;
+            this.labelControl1.Text = "Tên sản phẩm trong kho";
+            // 
+            // textEdit1
+            // 
+            this.textEdit1.Location = new System.Drawing.Point(190, 677);
+            this.textEdit1.Name = "textEdit1";
+            this.textEdit1.Size = new System.Drawing.Size(404, 23);
+            this.textEdit1.TabIndex = 13;
+            // 
+            // textEdit2
+            // 
+            this.textEdit2.Location = new System.Drawing.Point(190, 718);
+            this.textEdit2.Name = "textEdit2";
+            this.textEdit2.Size = new System.Drawing.Size(546, 23);
+            this.textEdit2.TabIndex = 15;
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Location = new System.Drawing.Point(13, 718);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(159, 16);
+            this.labelControl2.TabIndex = 14;
+            this.labelControl2.Text = "Tên sản phẩm trên hoá đơn";
+            // 
+            // simpleButton1
+            // 
+            this.simpleButton1.Location = new System.Drawing.Point(606, 673);
+            this.simpleButton1.Name = "simpleButton1";
+            this.simpleButton1.Size = new System.Drawing.Size(130, 29);
+            this.simpleButton1.TabIndex = 16;
+            this.simpleButton1.Text = "Đánh giá tương đồng";
+            this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
+            // 
+            // frmHangHoa
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(741, 744);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.btnThoat);
+            this.Controls.Add(this.simpleButton1);
+            this.Controls.Add(this.gridControl2);
+            this.Controls.Add(this.textEdit2);
+            this.Controls.Add(this.txtMaSo);
+            this.Controls.Add(this.labelControl2);
+            this.Controls.Add(this.textEdit1);
+            this.Controls.Add(this.labelControl1);
+            this.Controls.Add(this.txtSearch);
+            this.Controls.Add(this.gridControl1);
+            this.Controls.Add(this.panelControl1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.Name = "frmHangHoa";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Quản lý danh sách vật tư";
+            this.Load += new System.EventHandler(this.frmHangHoa_Load_1);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmHangHoa_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmHangHoa_KeyPress);
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtGhichu.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtDonvi.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTenvattu.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSohieu.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
+            this.panelControl1.ResumeLayout(false);
+            this.panelControl1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaSo.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSearch.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private DevExpress.XtraGrid.GridControl gridControl1;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
+        private DevExpress.XtraGrid.Columns.GridColumn colSoHieu;
+        private DevExpress.XtraGrid.Columns.GridColumn colTenVattu;
+        private DevExpress.XtraEditors.SimpleButton btnGhi;
+        private DevExpress.XtraEditors.SimpleButton btnThem;
+        private DevExpress.XtraEditors.TextEdit txtGhichu;
+        private System.Windows.Forms.Label label4;
+        private DevExpress.XtraEditors.TextEdit txtDonvi;
+        private System.Windows.Forms.Label label3;
+        private DevExpress.XtraEditors.TextEdit txtTenvattu;
+        private System.Windows.Forms.Label label2;
+        private DevExpress.XtraEditors.TextEdit txtSohieu;
+        private System.Windows.Forms.Label label1;
+        private DevExpress.XtraEditors.PanelControl panelControl1;
+        private DevExpress.XtraEditors.SimpleButton btnThoat;
+        private DevExpress.XtraEditors.SimpleButton btnXoa;
+        private DevExpress.XtraEditors.ComboBoxEdit comboBoxEdit1;
+        private DevExpress.XtraGrid.Columns.GridColumn colDonvitinh;
+        private DevExpress.XtraEditors.TextEdit txtMaSo;
+        private DevExpress.XtraGrid.GridControl gridControl2;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridView2;
+        private DevExpress.XtraGrid.Columns.GridColumn colSoLuong;
+        private DevExpress.XtraGrid.Columns.GridColumn colDongia;
+        private DevExpress.XtraGrid.Columns.GridColumn colThanhTien;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn1;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn2;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn3;
+        private DevExpress.XtraEditors.SimpleButton btnSearch;
+        private DevExpress.XtraEditors.TextEdit txtSearch;
+        private DevExpress.XtraEditors.LabelControl labelControl1;
+        private DevExpress.XtraEditors.TextEdit textEdit1;
+        private DevExpress.XtraEditors.TextEdit textEdit2;
+        private DevExpress.XtraEditors.LabelControl labelControl2;
+        private DevExpress.XtraEditors.SimpleButton simpleButton1;
+        private System.Windows.Forms.Label label5;
+        private DevExpress.XtraGrid.Columns.GridColumn colPercent;
+    }
+}
