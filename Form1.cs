@@ -1396,7 +1396,7 @@ namespace SaovietTax
                             FileImport fileImport = null;
                             try
                             {
-                                if (item["SHDon"].ToString() == "3038")
+                                if (item["SHDon"].ToString() == "427")
                                 {
                                     int a = 10;
                                 }
@@ -1616,7 +1616,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                         FileImport fileImport = null;
                         string path = item["Path"].ToString();
                         string shDon = item["SHDon"].ToString();
-                        if(shDon== "137")
+                        if(shDon== "427")
                         {
                             int a = 10;
                         }
@@ -1725,10 +1725,17 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                                 dvt = Helpers.ConvertVniToUnicode(itemDetail["DVT"].ToString());
                             }
                             int vatdt = 0;
-                            if (!string.IsNullOrEmpty(itemDetail["VAT"].ToString()))
+                            try
                             {
-                                vatdt = int.Parse(itemDetail["VAT"].ToString());
+                                if (!string.IsNullOrEmpty(itemDetail["VAT"].ToString()))
+                                {
+                                    vatdt = int.Parse(itemDetail["VAT"].ToString());
+                                }
                             }
+                            catch(Exception ex)
+                            {
+                                vatdt = 0;
+                            }   
                             FileImportDetail fileImportDetail = new FileImportDetail(int.Parse(itemDetail["ID"].ToString()), Helpers.ConvertVniToUnicode(itemDetail["Ten"].ToString()), int.Parse(itemDetail["ParentId"].ToString()), itemDetail["SoHieu"].ToString(), double.Parse(itemDetail["SoLuong"].ToString()), double.Parse(itemDetail["DonGia"].ToString()), dvt, MaCT, tkNo, tkCo, double.Parse(itemDetail["TTien"].ToString()), itemDetail["Percent"].ToString(), tchat, vatdt);
                             fileImportDetail.ID = int.Parse(itemDetail["ID"].ToString());
                             fileImport.fileImportDetails.Add(fileImportDetail);
@@ -21238,7 +21245,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         bool isAddhd = true;
         private async Task<TbImport> DocfileXmlOne(string pathXml, int stt)
         {
-            if(pathXml.Contains("137"))
+            if(pathXml.Contains("427"))
             {
                 int kiemtra = 10;
             }   
@@ -23907,7 +23914,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             string[] headers=null;
             //Acb header
             //if (lblTKNganHangTitle.Text.ToLower().Contains("acb") || lblTKNganHangTitle.Text.ToLower().Contains("á châu"))
-            headers = new string[] {"Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co" };
+            headers = new string[] {"Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co","Phát sinh co" };
             int countcol = 0;
             bool isHeaderRow = false;
             for (int i = 1; i <= 12; i++)
@@ -23982,8 +23989,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     int DoiungIndex = 0;
                     string[] lstNgayGD = {"Ngay GD","Ngày giá trị", "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày GD", "Ngày giao dịch","NGÀY GIAO DỊCH", "Ngày giá trị", "Ngay hieu luc", "Ngày Date", "Transaction Date", "Ngày", "Date", "NGÀY GIAO DỊCH", "Transaction date" };
                     string[] lstNoidung = { "Nội dung", "Nội dung giao dịch", "Diễn giải", "Details", "Description", "Mô tả", "Ghi chú", "Remarks", "Nội dung chi tiết", "Chi tiết giao dịch", "Remark", "Ghi chú Remark", "NỘI DUNG", "Transaction Comment", "Noi dung chi tiet" };
-                    string[] lstNo = { "Phát sinh nợ","So tien ghi no", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Số tiền ghi nợ", "Ghi nợ", "Nợ", "Debt", "dr", "PHÁT SINH NỢ" };
-                    string[] lstCo = { "Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có","So tien ghi co", "Số tiền ghi có", "Ghi có", "Có", "Credit", "Credit amount", "Có", "PHÁT SINH CÓ" };
+                    string[] lstNo = { "Phát sinh nợ","So tien ghi no", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Số tiền ghi nợ", "Ghi nợ", "Nợ", "Debt", "dr", "PHÁT SINH NỢ"};
+                    string[] lstCo = { "Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có","So tien ghi co", "Số tiền ghi có", "Ghi có", "Có", "Credit", "Credit amount", "Có", "PHÁT SINH CÓ", "Phát sinh co" };
                     string[] lstBalance = { "Số dư", "Balance", "Available Balance", "Số dư khả dụng", "Số dư tài khoản", "Số dư cuối", "Running balance", "SỐ DƯ" };
                     string[] lstDoiung = { "Tên tài khoản đối ứng", "Remitter's account name", "Đơn vị thụ hưởng", "Đơn vị chuyển", "Beneficiary", "Applicant" };
                     foreach (var worksheet in workbook.Worksheets)
@@ -26523,7 +26530,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             {
                 try
                 {
-                    if (item["SHDon"].ToString()== "NKPVP1/2")
+                    if (item["SHDon"].ToString()== "427")
                     {
                         int a = 10;
                     }
