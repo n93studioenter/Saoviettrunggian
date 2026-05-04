@@ -1358,6 +1358,19 @@
           }
         }
       },
+      "Pkcs11Interop/5.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Protobuf.Text/0.7.2": {
         "type": "package",
         "dependencies": {
@@ -1395,10 +1408,10 @@
           }
         }
       },
-      "Selenium.Support/4.33.0": {
+      "Selenium.Support/4.43.0": {
         "type": "package",
         "dependencies": {
-          "Selenium.WebDriver": "4.33.0"
+          "Selenium.WebDriver": "4.43.0"
         },
         "frameworkAssemblies": [
           "System.Drawing"
@@ -1414,29 +1427,46 @@
           }
         }
       },
-      "Selenium.WebDriver/4.33.0": {
+      "Selenium.WebDriver/4.43.0": {
         "type": "package",
         "dependencies": {
-          "System.Text.Json": "8.0.5"
+          "System.Text.Json": "8.0.5",
+          "System.Threading.Channels": "8.0.0"
         },
         "frameworkAssemblies": [
-          "System.Drawing"
+          "System.Drawing",
+          "System.IO.Compression",
+          "System.Net.Http"
         ],
         "compile": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/Selenium.WebDriver.targets": {}
+          "buildTransitive/Selenium.WebDriver.props": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux/native/selenium-manager": {
+            "assetType": "native",
+            "rid": "linux"
+          },
+          "runtimes/osx/native/selenium-manager": {
+            "assetType": "native",
+            "rid": "osx"
+          },
+          "runtimes/win/native/selenium-manager.exe": {
+            "assetType": "native",
+            "rid": "win"
+          }
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.5600": {
+      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -3192,6 +3222,19 @@
           }
         }
       },
+      "Pkcs11Interop/5.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Protobuf.Text/0.7.2": {
         "type": "package",
         "dependencies": {
@@ -3229,10 +3272,10 @@
           }
         }
       },
-      "Selenium.Support/4.33.0": {
+      "Selenium.Support/4.43.0": {
         "type": "package",
         "dependencies": {
-          "Selenium.WebDriver": "4.33.0"
+          "Selenium.WebDriver": "4.43.0"
         },
         "frameworkAssemblies": [
           "System.Drawing"
@@ -3248,29 +3291,35 @@
           }
         }
       },
-      "Selenium.WebDriver/4.33.0": {
+      "Selenium.WebDriver/4.43.0": {
         "type": "package",
         "dependencies": {
-          "System.Text.Json": "8.0.5"
+          "System.Text.Json": "8.0.5",
+          "System.Threading.Channels": "8.0.0"
         },
         "frameworkAssemblies": [
-          "System.Drawing"
+          "System.Drawing",
+          "System.IO.Compression",
+          "System.Net.Http"
         ],
         "compile": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
+        },
+        "native": {
+          "runtimes/win/native/selenium-manager.exe": {}
         },
         "build": {
-          "buildTransitive/Selenium.WebDriver.targets": {}
+          "buildTransitive/Selenium.WebDriver.props": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.5600": {
+      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -5020,6 +5069,19 @@
           }
         }
       },
+      "Pkcs11Interop/5.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Protobuf.Text/0.7.2": {
         "type": "package",
         "dependencies": {
@@ -5057,10 +5119,10 @@
           }
         }
       },
-      "Selenium.Support/4.33.0": {
+      "Selenium.Support/4.43.0": {
         "type": "package",
         "dependencies": {
-          "Selenium.WebDriver": "4.33.0"
+          "Selenium.WebDriver": "4.43.0"
         },
         "frameworkAssemblies": [
           "System.Drawing"
@@ -5076,29 +5138,32 @@
           }
         }
       },
-      "Selenium.WebDriver/4.33.0": {
+      "Selenium.WebDriver/4.43.0": {
         "type": "package",
         "dependencies": {
-          "System.Text.Json": "8.0.5"
+          "System.Text.Json": "8.0.5",
+          "System.Threading.Channels": "8.0.0"
         },
         "frameworkAssemblies": [
-          "System.Drawing"
+          "System.Drawing",
+          "System.IO.Compression",
+          "System.Net.Http"
         ],
         "compile": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/Selenium.WebDriver.targets": {}
+          "buildTransitive/Selenium.WebDriver.props": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.5600": {
+      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -6851,6 +6916,19 @@
           }
         }
       },
+      "Pkcs11Interop/5.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Protobuf.Text/0.7.2": {
         "type": "package",
         "dependencies": {
@@ -6888,10 +6966,10 @@
           }
         }
       },
-      "Selenium.Support/4.33.0": {
+      "Selenium.Support/4.43.0": {
         "type": "package",
         "dependencies": {
-          "Selenium.WebDriver": "4.33.0"
+          "Selenium.WebDriver": "4.43.0"
         },
         "frameworkAssemblies": [
           "System.Drawing"
@@ -6907,29 +6985,32 @@
           }
         }
       },
-      "Selenium.WebDriver/4.33.0": {
+      "Selenium.WebDriver/4.43.0": {
         "type": "package",
         "dependencies": {
-          "System.Text.Json": "8.0.5"
+          "System.Text.Json": "8.0.5",
+          "System.Threading.Channels": "8.0.0"
         },
         "frameworkAssemblies": [
-          "System.Drawing"
+          "System.Drawing",
+          "System.IO.Compression",
+          "System.Net.Http"
         ],
         "compile": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/Selenium.WebDriver.targets": {}
+          "buildTransitive/Selenium.WebDriver.props": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.5600": {
+      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -8682,6 +8763,19 @@
           }
         }
       },
+      "Pkcs11Interop/5.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Pkcs11Interop.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Protobuf.Text/0.7.2": {
         "type": "package",
         "dependencies": {
@@ -8719,10 +8813,10 @@
           }
         }
       },
-      "Selenium.Support/4.33.0": {
+      "Selenium.Support/4.43.0": {
         "type": "package",
         "dependencies": {
-          "Selenium.WebDriver": "4.33.0"
+          "Selenium.WebDriver": "4.43.0"
         },
         "frameworkAssemblies": [
           "System.Drawing"
@@ -8738,29 +8832,32 @@
           }
         }
       },
-      "Selenium.WebDriver/4.33.0": {
+      "Selenium.WebDriver/4.43.0": {
         "type": "package",
         "dependencies": {
-          "System.Text.Json": "8.0.5"
+          "System.Text.Json": "8.0.5",
+          "System.Threading.Channels": "8.0.0"
         },
         "frameworkAssemblies": [
-          "System.Drawing"
+          "System.Drawing",
+          "System.IO.Compression",
+          "System.Net.Http"
         ],
         "compile": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netstandard2.0/WebDriver.dll": {
+          "lib/net462/WebDriver.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/Selenium.WebDriver.targets": {}
+          "buildTransitive/Selenium.WebDriver.props": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.5600": {
+      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -11972,6 +12069,27 @@
         "pdfsharp.nuspec"
       ]
     },
+    "Pkcs11Interop/5.1.0": {
+      "sha512": "KKlnxyBOhpV3bioZzUm1wFKviOymPPGZkGDAsXAGba6e3udtXNYja1rzNO4HunXNqNo5n3eWLn5Rd33hvjaaVA==",
+      "type": "package",
+      "path": "pkcs11interop/5.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "NOTICE.txt",
+        "lib/net20/Pkcs11Interop.dll",
+        "lib/net20/Pkcs11Interop.xml",
+        "lib/net40/Pkcs11Interop.dll",
+        "lib/net40/Pkcs11Interop.xml",
+        "lib/net45/Pkcs11Interop.dll",
+        "lib/net45/Pkcs11Interop.xml",
+        "lib/netstandard2.0/Pkcs11Interop.dll",
+        "lib/netstandard2.0/Pkcs11Interop.xml",
+        "pkcs11interop.5.1.0.nupkg.sha512",
+        "pkcs11interop.nuspec"
+      ]
+    },
     "Protobuf.Text/0.7.2": {
       "sha512": "xwhiptA+8dMgFX8N3V3FD6SD5N9jMsx/9OHw9+xWgRTaSjsLUDSuw2u94D8IBDS2z7s7ESLTOUqSyLZggE0p4w==",
       "type": "package",
@@ -12015,46 +12133,48 @@
         "readme.md"
       ]
     },
-    "Selenium.Support/4.33.0": {
-      "sha512": "AsjM8PqJkueDBzw9StEHLLUq6bT7au9IY9mMLlwMxOdNYfu7PMJOqpHCMg2xVtLrUHGd6mADqrbFxcs9QWe6JA==",
+    "Selenium.Support/4.43.0": {
+      "sha512": "Q395pb0VkESAlyf+caT6qaFIfI6OPR0kWZZRaKh7Zxx5Ci7qIMfwpRzyJq+E/DA5bnbH5uhAq4TI3p57E1AvhQ==",
       "type": "package",
-      "path": "selenium.support/4.33.0",
+      "path": "selenium.support/4.43.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "icon.png",
         "lib/netstandard2.0/WebDriver.Support.dll",
         "lib/netstandard2.0/WebDriver.Support.xml",
-        "selenium.support.4.33.0.nupkg.sha512",
+        "selenium.support.4.43.0.nupkg.sha512",
         "selenium.support.nuspec"
       ]
     },
-    "Selenium.WebDriver/4.33.0": {
-      "sha512": "5dzwA1cMorwYWudX46zyeUqyZn48TZeCHbSERxbpKezGxZ8hMBpcL12XwG4RGUuQKGH8FiEOJOFK4eCE//uNpQ==",
+    "Selenium.WebDriver/4.43.0": {
+      "sha512": "gsT0/pFeTUbyeUL9qcf/KLeII802sZrRNeb7YGKKOlFfT50MKxggWQW3Wh9p82IstCcXG91Ya9OLbu3tH/BRoQ==",
       "type": "package",
-      "path": "selenium.webdriver/4.33.0",
+      "path": "selenium.webdriver/4.43.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "build/Selenium.WebDriver.targets",
-        "buildTransitive/Selenium.WebDriver.targets",
+        "build/Selenium.WebDriver.props",
+        "buildTransitive/Selenium.WebDriver.props",
         "icon.png",
+        "lib/net462/WebDriver.dll",
+        "lib/net462/WebDriver.xml",
         "lib/net8.0/WebDriver.dll",
         "lib/net8.0/WebDriver.xml",
         "lib/netstandard2.0/WebDriver.dll",
         "lib/netstandard2.0/WebDriver.xml",
-        "manager/linux/selenium-manager",
-        "manager/macos/selenium-manager",
-        "manager/windows/selenium-manager.exe",
-        "selenium.webdriver.4.33.0.nupkg.sha512",
+        "runtimes/linux/native/selenium-manager",
+        "runtimes/osx/native/selenium-manager",
+        "runtimes/win/native/selenium-manager.exe",
+        "selenium.webdriver.4.43.0.nupkg.sha512",
         "selenium.webdriver.nuspec"
       ]
     },
-    "Selenium.WebDriver.ChromeDriver/147.0.7727.5600": {
-      "sha512": "tkkDX0hvR4mLKlv5yUq1HqcxwbJeGlwjpsLD4S3R2VC1IrsiQV9JTTdDZXTjd7kdWfFvMVYadF4rHad1E94+5g==",
+    "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
+      "sha512": "NKur0NrsxJwFUmz0WJjAEyJ9LeLzuRi/gNEb+RN4pB5NZjYFLtAwNw9ISbyD+pp79YQ+Pan2rfwt3dUUdtufSw==",
       "type": "package",
-      "path": "selenium.webdriver.chromedriver/147.0.7727.5600",
+      "path": "selenium.webdriver.chromedriver/147.0.7727.11700",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -12071,7 +12191,7 @@
         "driver/win32/LICENSE.chromedriver",
         "driver/win32/chromedriver.exe",
         "nupkg-icon.png",
-        "selenium.webdriver.chromedriver.147.0.7727.5600.nupkg.sha512",
+        "selenium.webdriver.chromedriver.147.0.7727.11700.nupkg.sha512",
         "selenium.webdriver.chromedriver.nuspec"
       ]
     },
@@ -13231,8 +13351,9 @@
       "Microsoft.Windows.SDK.Contracts >= 10.0.19041.1",
       "PdfPig >= 0.1.10",
       "PdfSharp >= 6.2.0",
-      "Selenium.Support >= 4.33.0",
-      "Selenium.WebDriver.ChromeDriver >= 147.0.7727.5600",
+      "Pkcs11Interop >= 5.0.1",
+      "Selenium.Support >= 4.43.0",
+      "Selenium.WebDriver.ChromeDriver >= 147.0.7727.11700",
       "SimMetrics.Net >= 1.0.5",
       "Svg >= 3.4.7",
       "System.Data.SQLite >= 2.0.1",
@@ -13366,13 +13487,17 @@
             "target": "Package",
             "version": "[6.2.0, )"
           },
+          "Pkcs11Interop": {
+            "target": "Package",
+            "version": "[5.0.1, )"
+          },
           "Selenium.Support": {
             "target": "Package",
-            "version": "[4.33.0, )"
+            "version": "[4.43.0, )"
           },
           "Selenium.WebDriver.ChromeDriver": {
             "target": "Package",
-            "version": "[147.0.7727.5600, )"
+            "version": "[147.0.7727.11700, )"
           },
           "SimMetrics.Net": {
             "target": "Package",
@@ -13426,6 +13551,20 @@
     }
   },
   "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "SaovietTax depends on Pkcs11Interop (>= 5.0.1) but Pkcs11Interop 5.0.1 was not found. Pkcs11Interop 5.1.0 was resolved instead.",
+      "libraryId": "Pkcs11Interop",
+      "targetGraphs": [
+        ".NETFramework,Version=v4.8",
+        ".NETFramework,Version=v4.8/win",
+        ".NETFramework,Version=v4.8/win-arm64",
+        ".NETFramework,Version=v4.8/win-x64",
+        ".NETFramework,Version=v4.8/win-x86"
+      ]
+    },
     {
       "code": "NU1903",
       "level": "Warning",

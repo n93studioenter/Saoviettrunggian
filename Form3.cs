@@ -603,9 +603,9 @@ namespace SaovietTax
 
                     currentRow += 2;
                     var now = DateTime.Now;
-                    int lastDay = DateTime.DaysInMonth(now.Year, now.Month);
+                    int lastDay = DateTime.DaysInMonth(NamTC, int.Parse(comboBoxEdit2.Text));
 
-                    sheet.Cell(currentRow, 7).Value = $"Ngày {lastDay} tháng {now.Month} năm {now.Year}";
+                    sheet.Cell(currentRow, 7).Value = $"Ngày {lastDay} tháng {comboBoxEdit2.Text} năm {NamTC}";
                     range = sheet.Range($"G{currentRow}:H{currentRow}");
                     range.Merge();
                     range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -940,9 +940,9 @@ ORDER BY ThangCT, ChungTu.NgayGS, IIF(HethongTK.SoHieu LIKE '111%','0','1')+Cstr
                         sheet.Style.Font.FontName = "Times New Roman";
 
                         var now = DateTime.Now;
-                        int lastDay = DateTime.DaysInMonth(now.Year, now.Month);
+                        int lastDay = DateTime.DaysInMonth(NamTC, int.Parse(comboBoxEdit2.Text));
                         currentRow += 3;
-                        sheet.Cell(currentRow, 3).Value = $"Ngày {lastDay} tháng {now.Month} năm {now.Year}";
+                        sheet.Cell(currentRow, 3).Value = $"Ngày {lastDay} tháng {comboBoxEdit2.Text} năm {NamTC}";
                        var range = sheet.Range($"C{currentRow}:D{currentRow}");
                         range.Merge();
                         range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -1362,9 +1362,9 @@ ORDER BY ThangCT, ChungTu.NgayGS, IIF(HethongTK.SoHieu LIKE '111%','0','1')+Cstr
 
                         currentRow += 2;
                         var now = DateTime.Now;
-                        int lastDay = DateTime.DaysInMonth(now.Year, now.Month);
+                        int lastDay = DateTime.DaysInMonth(NamTC, int.Parse(comboBoxEdit2.Text));
 
-                        sheet.Cell(currentRow, 6).Value = $"Ngày {lastDay} tháng {now.Month} năm {now.Year}";
+                        sheet.Cell(currentRow, 6).Value = $"Ngày {lastDay} tháng {comboBoxEdit2.Text} năm {NamTC}";
                         range = sheet.Range($"F{currentRow}:G{currentRow}");
                         range.Merge();
                         range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;

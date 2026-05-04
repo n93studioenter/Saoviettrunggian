@@ -2766,6 +2766,18 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Pkcs11Interop.dll" size="557200">
+      <assemblyIdentity name="Pkcs11Interop" version="5.1.0.0" publicKeyToken="C10E9C2D8C006D2A" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>WoV/fFljeKLfVXgYxm9JkkI+t9W3Me/NTEp1hE+2Q1Y=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Protobuf.Text.dll" size="55296">
       <assemblyIdentity name="Protobuf.Text" version="0.7.2.0" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -2802,14 +2814,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SaovietTax.exe" size="7937440">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SaovietTax.exe" size="7979936">
       <assemblyIdentity name="SaovietTax" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>RNu75RsJk1lO8AsMKIXhwRmD4NYc38QsM2aDnUsQUm4=</dsig:DigestValue>
+        <dsig:DigestValue>iYmwFLq3EvuShvzNWkoY6jTPEubrjqpoO8agPnP9abg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -3210,26 +3222,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.dll" size="5740544">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.dll" size="7004672">
       <assemblyIdentity name="WebDriver" version="4.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>XNEPA4jcZ8+TeE6LCas2g7NuNwxL8E15iKt9wdLWZ5M=</dsig:DigestValue>
+        <dsig:DigestValue>6wQ/8yA5eFgQS05jaWHqqPUjrQC8hexa5PJAyxa+5gc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Support.dll" size="43008">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Support.dll" size="46080">
       <assemblyIdentity name="WebDriver.Support" version="4.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>pDIQwdDGDTK91O0ML8K2RmK+Y8Wo8jU0ZiZIyuy76iM=</dsig:DigestValue>
+        <dsig:DigestValue>0xnhHOPCJDzXz2LcL1lMCO/obyM4DXmq1DQY59zxBds=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -7466,13 +7478,13 @@
       <dsig:DigestValue>gyTzhhp6jbD50pT2oYkYKy0jGEDOu38+pfRjV3PNr0E=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Hoadon\invoice.txt" size="24">
+  <file name="Hoadon\invoice.txt" size="17">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>bDdqBN9vBG90SsIaHvPbayq5EIibnyshm3U9sFlQylo=</dsig:DigestValue>
+      <dsig:DigestValue>CI8q6AgPCO2kPEsf3VjdG9+A/0MZdBkg6Sn7U3S5K2c=</dsig:DigestValue>
     </hash>
   </file>
   <file name="LdaNative.dll" size="164136">
@@ -7493,6 +7505,33 @@
       <dsig:DigestValue>mNbYf7t7KFpVK6RGn++06JpjHl+olvEm5NxLzeS2amM=</dsig:DigestValue>
     </hash>
   </file>
+  <file name="runtimes\linux\native\selenium-manager" size="5386048">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>+BuamjlOfTTgy+H9PZEsdAfh4jHRyj6VpfNYacg1KPs=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="runtimes\osx\native\selenium-manager" size="8027024">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>H07B8Bq6kU2qiBMH/mY35ywpGNMq0FzwV1BZXy6CUtQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="runtimes\win\native\selenium-manager.exe" size="3648000">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>DtomWsiKOhhIp/LsY64IhLVTMU93+Cm95BsU8vfbRBo=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="runtimes\win-x64\native\WebView2Loader.dll" size="161864">
     <hash>
       <dsig:Transforms>
@@ -7511,31 +7550,31 @@
       <dsig:DigestValue>E37oQO/jRQCtmiTY7l2SFKL6XcUfm/pAhyKGeZdk2r8=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="selenium-manager\linux\selenium-manager" size="5398208">
+  <file name="selenium-manager\linux\selenium-manager" size="5422816">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>0LlQnlSFztUeGvjGX5ICjYDRUO9AF3pbJcxaS9/3648=</dsig:DigestValue>
+      <dsig:DigestValue>CyVrY6/+kBPJJrxHe/5DRlNUlEA+nP4zjPqd0UqkL48=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="selenium-manager\macos\selenium-manager" size="8027888">
+  <file name="selenium-manager\macos\selenium-manager" size="8076960">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>c3uJ1C9g0A8pF7mpOp+Q2kg1VKmFapkIhxZ+Q5h/8/0=</dsig:DigestValue>
+      <dsig:DigestValue>gWvlupbesyG2sOEJpZ1rjJ/wGU8rMgTxgBrZbBkOz9U=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="selenium-manager\windows\selenium-manager.exe" size="3662848">
+  <file name="selenium-manager\windows\selenium-manager.exe" size="3686912">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>oHTSft2rEMfLYCybzF6Nu0IGf5RvB/IlPuQvElZGY7s=</dsig:DigestValue>
+      <dsig:DigestValue>0alCvT5c21pw6OloP46WTZ1vz1vkcvmjAkUd3JkIQ9k=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

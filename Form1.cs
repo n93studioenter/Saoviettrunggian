@@ -5440,7 +5440,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             }
             catch (Exception ex)
             {
-                throw new Exception("Lỗi migrate database: " + ex.Message);
+                //throw new Exception("Lỗi migrate database: " + ex.Message);
             }
             finally
             {
@@ -23914,7 +23914,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             string[] headers=null;
             //Acb header
             //if (lblTKNganHangTitle.Text.ToLower().Contains("acb") || lblTKNganHangTitle.Text.ToLower().Contains("á châu"))
-            headers = new string[] {"Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co","Phát sinh co" };
+            headers = new string[] {"Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co","Phát sinh co", "Số tiền rút", "Số tiền gửi" };
             int countcol = 0;
             bool isHeaderRow = false;
             for (int i = 1; i <= 12; i++)

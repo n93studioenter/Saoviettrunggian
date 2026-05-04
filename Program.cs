@@ -94,29 +94,42 @@ namespace SaovietTax {
 
                     }
 
-                    if (content.Trim() == "1")
-                        Application.Run(new frmMain());
-                    else
+                    //if (content.Trim() == "1")
+                    //    Application.Run(new frmMain());
+                    //else
+                    //{
+                    //    if (content.Trim() == "2")
+                    //        Application.Run(new KTHT());
+                    //    else
+                    //    {
+                    //        if (content.Trim() == "3")
+                    //            Application.Run(new frmTaihoadonvb());
+                    //        else
+                    //        {
+                    //            if (content.Trim() == "4")
+                    //                Application.Run(new Form3());
+                    //            else
+                    //            {
+                    //                if (content.Trim() == "5")
+                    //                    Application.Run(new APIInvoice());
+                    //                else
+                    //                {
+                    //                    if (content.Trim() == "6")
+                    //                        Application.Run(new BkavInvoice());
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                    switch (content.Trim())
                     {
-                        if (content.Trim() == "2")
-                            Application.Run(new KTHT());
-                        else
-                        {
-                            if (content.Trim() == "3")
-                                Application.Run(new frmTaihoadonvb());
-                            else
-                            {
-                                if (content.Trim() == "4")
-                                    Application.Run(new Form3());
-                                else
-                                {
-                                    if (content.Trim() == "5")
-                                        Application.Run(new APIInvoice());
-                                }
-                            }
-                        }
+                        case "1": Application.Run(new frmMain()); break;
+                        case "2": Application.Run(new KTHT()); break;
+                        case "3": Application.Run(new frmTaihoadonvb()); break;
+                        case "4": Application.Run(new Form3()); break;
+                        case "5": Application.Run(new APIInvoice()); break;
+                        case "6": Application.Run(new BkavInvoice()); break;
                     }
-
                 }
             }
             finally

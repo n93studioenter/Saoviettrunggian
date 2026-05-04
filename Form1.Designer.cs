@@ -1393,7 +1393,7 @@
             this.gridControl1.Name = "gridControl1";
             this.gridControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemButtonEdit1});
-            this.gridControl1.Size = new System.Drawing.Size(1638, 477);
+            this.gridControl1.Size = new System.Drawing.Size(1638, 469);
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1,
@@ -1681,7 +1681,7 @@
             this.xtraTabControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(1660, 768);
+            this.xtraTabControl1.Size = new System.Drawing.Size(1660, 760);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -1697,7 +1697,7 @@
             this.xtraTabPage1.Controls.Add(this.comboBoxEdit1);
             this.xtraTabPage1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(1651, 733);
+            this.xtraTabPage1.Size = new System.Drawing.Size(1651, 725);
             this.xtraTabPage1.Text = "Sao việt tải hóa đơn";
             this.xtraTabPage1.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
             // 
@@ -1710,7 +1710,7 @@
             this.xtraTabControl2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabControl2.Name = "xtraTabControl2";
             this.xtraTabControl2.SelectedTabPage = this.xtraTabPage3;
-            this.xtraTabControl2.Size = new System.Drawing.Size(1647, 512);
+            this.xtraTabControl2.Size = new System.Drawing.Size(1647, 504);
             this.xtraTabControl2.TabIndex = 8;
             this.xtraTabControl2.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage3,
@@ -1730,7 +1730,7 @@
             this.xtraTabPage3.Controls.Add(this.btnReadPDF);
             this.xtraTabPage3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(1638, 477);
+            this.xtraTabPage3.Size = new System.Drawing.Size(1638, 469);
             this.xtraTabPage3.Text = "HĐ đầu vào";
             // 
             // progressPanel1
@@ -1791,7 +1791,7 @@
             // 
             this.btnReadPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReadPDF.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnReadPDF.ImageOptions.Image")));
-            this.btnReadPDF.Location = new System.Drawing.Point(1596, 225);
+            this.btnReadPDF.Location = new System.Drawing.Point(1596, 217);
             this.btnReadPDF.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnReadPDF.Name = "btnReadPDF";
             this.btnReadPDF.Size = new System.Drawing.Size(162, 39);
@@ -2955,7 +2955,7 @@
             this.panelControl6.Controls.Add(this.btnTaicoquanthue);
             this.panelControl6.Controls.Add(this.simpleButton2);
             this.panelControl6.Controls.Add(this.lblThongbao);
-            this.panelControl6.Location = new System.Drawing.Point(3, 671);
+            this.panelControl6.Location = new System.Drawing.Point(3, 663);
             this.panelControl6.Name = "panelControl6";
             this.panelControl6.Size = new System.Drawing.Size(1652, 59);
             this.panelControl6.TabIndex = 20;
@@ -3793,7 +3793,7 @@
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1671, 771);
+            this.ClientSize = new System.Drawing.Size(1671, 763);
             this.Controls.Add(this.xtraTabControl1);
             this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
             this.IconOptions.Image = ((System.Drawing.Image)(resources.GetObject("frmMain.IconOptions.Image")));

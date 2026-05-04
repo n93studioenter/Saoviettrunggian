@@ -123,13 +123,17 @@
               "target": "Package",
               "version": "[6.2.0, )"
             },
+            "Pkcs11Interop": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
             "Selenium.Support": {
               "target": "Package",
-              "version": "[4.33.0, )"
+              "version": "[4.43.0, )"
             },
             "Selenium.WebDriver.ChromeDriver": {
               "target": "Package",
-              "version": "[147.0.7727.5600, )"
+              "version": "[147.0.7727.11700, )"
             },
             "SimMetrics.Net": {
               "target": "Package",

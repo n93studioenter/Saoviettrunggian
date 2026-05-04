@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "X7KfanxUYbc=",
+  "dgSpecHash": "gz9xpcbr2Bk=",
   "success": true,
   "projectFilePath": "D:\\DA3\\SourcePmTrungGiang\\SaovietTax\\SaovietTax\\SaovietTax.csproj",
   "expectedPackageFiles": [
@@ -59,12 +59,13 @@
     "C:\\Users\\Admin\\.nuget\\packages\\oneof\\3.0.263\\oneof.3.0.263.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\pdfpig\\0.1.10\\pdfpig.0.1.10.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\pdfsharp\\6.2.0\\pdfsharp.6.2.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\pkcs11interop\\5.1.0\\pkcs11interop.5.1.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\protobuf.text\\0.7.2\\protobuf.text.0.7.2.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\razorvine.pickle\\1.4.0\\razorvine.pickle.1.4.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\rbush.signed\\4.0.0\\rbush.signed.4.0.0.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\selenium.support\\4.33.0\\selenium.support.4.33.0.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver\\4.33.0\\selenium.webdriver.4.33.0.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver.chromedriver\\147.0.7727.5600\\selenium.webdriver.chromedriver.147.0.7727.5600.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\selenium.support\\4.43.0\\selenium.support.4.43.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver\\4.43.0\\selenium.webdriver.4.43.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver.chromedriver\\147.0.7727.11700\\selenium.webdriver.chromedriver.147.0.7727.11700.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\serilog\\2.10.0\\serilog.2.10.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\serilog.sinks.console\\4.1.0\\serilog.sinks.console.4.1.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sharpziplib\\1.4.2\\sharpziplib.1.4.2.nupkg.sha512",
@@ -99,6 +100,22 @@
     "C:\\Users\\Admin\\.nuget\\packages\\webdrivermanager\\2.17.6\\webdrivermanager.2.17.6.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "SaovietTax depends on Pkcs11Interop (>= 5.0.1) but Pkcs11Interop 5.0.1 was not found. Pkcs11Interop 5.1.0 was resolved instead.",
+      "projectPath": "D:\\DA3\\SourcePmTrungGiang\\SaovietTax\\SaovietTax\\SaovietTax.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\DA3\\SourcePmTrungGiang\\SaovietTax\\SaovietTax\\SaovietTax.csproj",
+      "libraryId": "Pkcs11Interop",
+      "targetGraphs": [
+        ".NETFramework,Version=v4.8",
+        ".NETFramework,Version=v4.8/win",
+        ".NETFramework,Version=v4.8/win-arm64",
+        ".NETFramework,Version=v4.8/win-x64",
+        ".NETFramework,Version=v4.8/win-x86"
+      ]
+    },
     {
       "code": "NU1903",
       "level": "Warning",

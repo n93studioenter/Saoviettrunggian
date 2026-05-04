@@ -19,11 +19,17 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Tensorflow;
-using Cookie = System.Net.Cookie;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Cookie = System.Net.Cookie; 
+
 namespace SaovietTax
 {
     public partial class APIInvoice : Form
@@ -53,6 +59,7 @@ namespace SaovietTax
         }
         public static LoginResponse loginResponse { get; set; } = new LoginResponse();
         public static UseCookie useCookie { get; set; } = new UseCookie();
+        public static ChromeDriver Driver { get; private set; }
         private async Task Login()
         {
             string qrq = "SELECT * FROM tbInvoiceInfo";
@@ -122,27 +129,587 @@ namespace SaovietTax
                     loginResponse = JsonConvert.DeserializeObject<LoginResponse>(result);
                     if (loginResponse != null)
                     {
+                        //TestChukyso(); 
                         if (_content == "1")
                         {
                             btnGetTemplate.PerformClick();
+                            return;
                         }
                         else
                         {
-                            simpleButton3.PerformClick();
+                            if (_content.Contains("2_"))
+                            {
+                                int idinvoice= int.Parse(_content.Split('_')[1]);   
+                                getcardid=idinvoice.ToString();
+                                //TestChukyso(idinvoice);
+                                simpleButton5.PerformClick();   
+                                return;
+                            }
+                            else
+                            {
+                                simpleButton3.PerformClick();
+                            }
                         }
                     }
                 }
             }
         }
-        private async  void APIInvoice_Load(object sender, EventArgs e)
+        private void LoadCertificateInfo(string certString)
         {
-          
+
+           // string certString = "Viettel-CA SHA2,MIIE7jCCA9agAwIBAgIQVAT//rcDP7MktyjTwuvAmjANBgkqhkiG9w0BAQsFADA/MRgwFgYDVQQDDA9WaWV0dGVsLUNBIFNIQTIxFjAUBgNVBAoMDVZpZXR0ZWwgR3JvdXAxCzAJBgNVBAYTAlZOMB4XDTI1MDkwNjAyNDYwMFoXDTI2MDcwNjAyNDYwMFowgYkxCzAJBgNVBAYTAlZOMR0wGwYDVQQHDBRCw4AgUuG7ikEgVsWoTkcgVMOAVTE7MDkGA1UEAwwyQ8OUTkcgVFkgVE5ISCBDxqAgxJBJ4buGTiBM4bqgTkggVFLhu4xORyBUw41OIFZJTkExHjAcBgoJkiaJk/IsZAEBDA5NU1Q6MzUwMjQyMjU5MzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOOWrlHk9p0CLoXvXbHjsB2Fo5v1QJDPYulfSLjr1sh01lGv+dZ+lPVbNtrzcY9to5VmTbuzdtZH+Qt5kJ259CrbBfG5O/Jy605/CtN6ar9k/yAbakA5WYz00bsY678sT5+NoTK8hDRlTKoUSGbK//PIOtjoyNypAVQ6WA7pY8UwwyIyI6DlQMyTYsHbLJkf0+UD40kK7/Mt35haT+ig4drNvCKGPJqYKglGiDWHi6scjckFVv5Y8k2CKpX4f68Ivr4rEJDFCIKkBJTzGIirPCGVkr0x/e2wMLytm0ImXfsu9JIs0OOThY3tsXGk8AaNnaYCT744iGlCttEQU3XlNDMCAwEAAaOCAZkwggGVMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUQ9U1AIu+B7rjTeYeJFlWiFu+zEoweQYIKwYBBQUHAQEEbTBrMEIGCCsGAQUFBzAChjZodHRwOi8vdmlldHRlbC1jYS52bi9kb3dubG9hZHMvc3ViL1ZpZXR0ZWwtQ0FfU0hBMi5jcnQwJQYIKwYBBQUHMAGGGWh0dHA6Ly9vY3NwLnZpZXR0ZWwtY2Eudm4wMwYDVR0lBCwwKgYIKwYBBQUHAwIGCCsGAQUFBwMEBgorBgEEAYI3CgMMBggrBgEFBQcDJDCBhAYDVR0fBH0wezB5oDKgMIYuaHR0cDovL2NybC52aWV0dGVsLWNhLnZuL1ZpZXR0ZWwtQ0EtU0hBMi0yLmNybKJDpEEwPzEYMBYGA1UEAwwPVmlldHRlbC1DQSBTSEEyMRYwFAYDVQQKDA1WaWV0dGVsIEdyb3VwMQswCQYDVQQGEwJWTjAdBgNVHQ4EFgQUzivJFzXn5ur7hOeWAr8vhYlIXbcwDgYDVR0PAQH/BAQDAgXgMA0GCSqGSIb3DQEBCwUAA4IBAQBmOe9tZxCRB029WW/HY8OFzjo16HLUp+jsXsC+2LcNBCPqBlWLbLxGZgDlLyL3siOhg1iNPOI3U6fM89TVNk2oGFj5GbazlECgT+x2ml+cUsyd4W4af7lCfuaO93ToXxPosAz/5bJ43KHZQOd6hWskeBlsFhxsP99Ue4oOV56aHm+ks9FgR6Do/3sNZdTLrqtE7gIo1T09bmb2oYC8Pl58212fHcXZEl90OJq4dzkxwPSvbtK1jHvUwWMwTTS2L7e1CxbXeLDoV3FGMFiV0vsISEX+hzuUirkJE+iTJMC33wBn6f78mKgYg1VJt7Pbojars3PWJzghCSF6zs/JeFFn";
+            // tách phần base64
+            string base64 = certString.Split(',')[1];
+
+            // decode
+            byte[] bytes = Convert.FromBase64String(base64);
+
+            // load cert
+            var cert = new X509Certificate2(bytes);
+
+            // đọc thông tin
+            Console.WriteLine(cert.Subject);   // Tên công ty + MST
+            Console.WriteLine(cert.Issuer);    // CA (Viettel-CA)
+            Console.WriteLine(cert.NotBefore); // Ngày bắt đầu
+            Console.WriteLine(cert.NotAfter);  // Ngày hết hạn
+        }
+        private void TestChukyso2()
+        {
+            // 1. Mở store
+            X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadOnly);
+
+            var cert = store.Certificates
+                .Cast<X509Certificate2>()
+                .Where(c => c.HasPrivateKey)
+                .Where(c => c.Issuer.Contains("Viettel"))
+                .FirstOrDefault();
+
+            if (cert == null)
+            {
+                Console.WriteLine("❌ Không tìm thấy certificate Viettel");
+                return;
+            }
+
+            // 2. Lấy certString
+            byte[] certBytes = cert.Export(X509ContentType.Cert);
+            string certString = Convert.ToBase64String(certBytes);
+
+            // 3. Dữ liệu cần ký
+            string dataToSign = "591468950|Hello Viettel Sign";
+            byte[] data = Encoding.UTF8.GetBytes(dataToSign);
+
+            byte[] signature;
+            byte[] hash;
+
+            // 4. Ký
+            using (RSA rsa = cert.GetRSAPrivateKey())
+            {
+                using (SHA256 sha256 = SHA256.Create())
+                {
+                    hash = sha256.ComputeHash(data);
+                }
+                signature = rsa.SignHash(hash, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            }
+
+            string signatureBase64 = Convert.ToBase64String(signature);
+            string hashBase64 = Convert.ToBase64String(hash);
+
+            // 5. Tạo XML chữ ký TỐI GIẢN (chỉ có cái cần thiết)
+            string xmlSignature = $@"<Signature>
+  <SignatureValue>{signatureBase64}</SignatureValue>
+  <DigestValue>{hashBase64}</DigestValue>
+  <X509Certificate>{certString}</X509Certificate>
+</Signature>";
+
+            // 6. Mã hóa Base64 toàn bộ XML
+            string hashValue = Convert.ToBase64String(Encoding.UTF8.GetBytes(xmlSignature));
+
+            Console.WriteLine("✔ hashValue đã tạo:");
+            Console.WriteLine(hashValue);
+
+            // 7. In kết quả API
+            Console.WriteLine("\n========== KẾT QUẢ GỬI API ==========");
+            Console.WriteLine("{");
+            Console.WriteLine("  \"lstInvoiceDTO\": [{");
+            Console.WriteLine($"    \"id\": 591468950,");
+            Console.WriteLine($"    \"certString\": \"{certString}\",");
+            Console.WriteLine($"    \"serial\": \"{cert.SerialNumber}\",");
+            Console.WriteLine($"    \"hashValue\": \"{hashValue}\"");
+            Console.WriteLine("  }]");
+            Console.WriteLine("}");
+
+            store.Close();
+        }
+
+        private async Task TestChukyso(int idInvoice)
+        {
+            // 1. Mở store
+            X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadOnly);
+
+            // Lấy TẤT CẢ cert Viettel có private key
+            var allCerts = store.Certificates
+                .Cast<X509Certificate2>()
+                .Where(c => c.HasPrivateKey)
+                .Where(c => c.Issuer.Contains("Viettel"))
+                .Where(c => c.NotAfter > DateTime.Now)
+                .ToList();
+
+            if (allCerts.Count == 0)
+            {
+                Console.WriteLine("❌ Không tìm thấy certificate Viettel còn hiệu lực");
+                return;
+            }
+
+            // In ra thông tin từng cert để debug
+            Console.WriteLine($"Tìm thấy {allCerts.Count} cert:\n");
+            foreach (var c in allCerts)
+            {
+                string b64 = Convert.ToBase64String(c.Export(X509ContentType.Cert));
+                Console.WriteLine($"- Serial: {c.SerialNumber}");
+                Console.WriteLine($"  Issuer: {c.Issuer}");
+                Console.WriteLine($"  NotAfter: {c.NotAfter:yyyy-MM-dd}");
+                Console.WriteLine($"  Base64 length: {b64.Length}");
+                Console.WriteLine($"  HasPrivateKey: {c.HasPrivateKey}");
+                Console.WriteLine();
+            }
+
+            // Chọn cert có Base64 DÀI NHẤT (đó là cert 2048 bit)
+            var cert = allCerts
+                .OrderByDescending(c => Convert.ToBase64String(c.Export(X509ContentType.Cert)).Length)
+                .FirstOrDefault();
+
+            Console.WriteLine($"✅ Chọn cert có độ dài Base64 lớn nhất (khóa 2048 bit)");
+            Console.WriteLine($"✔ Serial: {cert.SerialNumber}");
+            Console.WriteLine($"✔ NotAfter: {cert.NotAfter:yyyy-MM-dd}");
+
+            // ========== LẤY certString ==========
+            string issuerName = "Viettel-CA SHA2";
+            byte[] certBytes = cert.Export(X509ContentType.Cert);
+            string certBase64 = Convert.ToBase64String(certBytes);
+            string certString = $"{issuerName},{certBase64}";
+            certString = certString.Replace("\n", "").Replace("\r", "").Replace(" ", "");
+
+            Console.WriteLine($"📝 Độ dài certString: {certString.Length} ký tự (phải > 1200 nếu là cert đúng)");
+
+            // ========== GỌI API before-sign ==========
+            int invoiceId = idInvoice;
+            string invoiceXml = null;
+            string transactionId = null;
+
+            using (var client = new HttpClient())
+            {
+                client.Timeout = TimeSpan.FromSeconds(30);
+
+                // ========== THÊM ACCESS_TOKEN VÀO HEADER ==========
+                // Lấy access_token từ loginResponse (đã có sau khi login)
+                if (loginResponse == null || string.IsNullOrEmpty(loginResponse.access_token))
+                {
+                    Console.WriteLine("❌ Chưa có access_token. Hãy đăng nhập trước!");
+                    return;
+                }
+
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {loginResponse.access_token}");
+                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
+                client.DefaultRequestHeaders.Add("Accept", "application/json, text/plain, */*");
+                client.DefaultRequestHeaders.Add("X-Session-Token", useCookie.session_token);
+                client.DefaultRequestHeaders.Add("Referer", "https://vinvoice.viettel.vn/invoice-management/invoice-draft");
+                client.DefaultRequestHeaders.Add("Origin", "https://vinvoice.viettel.vn");
+
+                var beforeRequest = new
+                {
+                    invoiceIds = new[] { invoiceId },
+                    issueDate = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                    certString = certString,
+                    serial = cert.SerialNumber,
+                    source = "WEB"
+                };
+
+                var jsonBefore = JsonConvert.SerializeObject(beforeRequest);
+                Console.WriteLine("\n📤 Before-sign request:");
+                Console.WriteLine($"certString length: {certString.Length}");
+                Console.WriteLine($"serial: {cert.SerialNumber}");
+                Console.WriteLine($"access_token: {loginResponse.access_token?.Substring(0, Math.Min(50, loginResponse.access_token?.Length ?? 0))}...");
+
+                var contentBefore = new StringContent(jsonBefore, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var responseBefore = await client.PostAsync("https://vinvoice.viettel.vn/api/cluster5/services/einvoiceapplication/api/invoice/draft/release-list-invoice/usb-token/before-sign", contentBefore);
+                    var responseBeforeString = await responseBefore.Content.ReadAsStringAsync();
+
+                    Console.WriteLine($"📥 Before-sign response status: {responseBefore.StatusCode}");
+                    Console.WriteLine($"📥 Before-sign response body: {responseBeforeString}");
+
+                    if (!responseBefore.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine($"❌ before-sign thất bại: {responseBefore.StatusCode}");
+                        return;
+                    }
+
+                    // Lấy nội dung hóa đơn từ response
+                    dynamic beforeResult = JsonConvert.DeserializeObject(responseBeforeString);
+
+                    // Thử các field có thể chứa nội dung
+                    invoiceXml = beforeResult?.dataToSign ??
+                                beforeResult?.xmlContent ??
+                                beforeResult?.content ??
+                                beforeResult?.invoiceXml;
+
+                    transactionId = beforeResult?.transactionId;
+
+                    if (string.IsNullOrEmpty(invoiceXml))
+                    {
+                        Console.WriteLine("⚠️ Response không có dataToSign, dùng chính request JSON làm dữ liệu ký");
+                        invoiceXml = jsonBefore;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"✔ Đã lấy được nội dung hóa đơn (độ dài: {invoiceXml.Length})");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Lỗi: {ex.Message}");
+                    return;
+                }
+            }
+
+            // ========== TẠO HASH VÀ KÝ ==========
+            byte[] data = Encoding.UTF8.GetBytes(invoiceXml);
+            byte[] hash;
+            byte[] signature;
+
+            using (RSA rsa = cert.GetRSAPrivateKey())
+            {
+                if (rsa == null)
+                {
+                    Console.WriteLine("❌ Không lấy được private key");
+                    return;
+                }
+
+                Console.WriteLine($"🔐 Key size: {rsa.KeySize} bits");
+
+                using (SHA1 sha1 = SHA1.Create())
+                {
+                    hash = sha1.ComputeHash(data);
+                }
+
+                signature = rsa.SignHash(hash, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
+                Console.WriteLine($"✅ Ký thành công");
+            }
+
+            string digestValueBase64 = Convert.ToBase64String(hash);
+            string signatureValueBase64 = Convert.ToBase64String(signature);
+
+            // ========== TẠO XML CHỮ KÝ ==========
+            string xmlSignature = $@"<?xml version=""1.0"" encoding=""utf-8""?>
+<Signature xmlns=""http://www.w3.org/2000/09/xmldsig#"">
+  <SignedInfo>
+    <CanonicalizationMethod Algorithm=""http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments""/>
+    <SignatureMethod Algorithm=""http://www.w3.org/2000/09/xmldsig#rsa-sha1""/>
+    <Reference URI="""">
+      <DigestMethod Algorithm=""http://www.w3.org/2000/09/xmldsig#sha1""/>
+      <DigestValue>{digestValueBase64}</DigestValue>
+    </Reference>
+  </SignedInfo>
+  <SignatureValue>{signatureValueBase64}</SignatureValue>
+  <KeyInfo>
+    <X509Data>
+      <X509Certificate>{certBase64}</X509Certificate>
+    </X509Data>
+  </KeyInfo>
+</Signature>";
+
+            string hashValue = Convert.ToBase64String(Encoding.UTF8.GetBytes(xmlSignature));
+
+            // ========== GỌI API after-sign ==========
+            using (var client = new HttpClient())
+            {
+                // ========== THÊM ACCESS_TOKEN VÀO HEADER ==========
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {loginResponse.access_token}");
+                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
+                client.DefaultRequestHeaders.Add("Accept", "application/json, text/plain, */*");
+                client.DefaultRequestHeaders.Add("X-Session-Token", useCookie.session_token);
+                client.DefaultRequestHeaders.Add("Referer", "https://vinvoice.viettel.vn/invoice-management/invoice-draft");
+                client.DefaultRequestHeaders.Add("Origin", "https://vinvoice.viettel.vn");
+
+                var afterRequest = new
+                {
+                    lstInvoiceDTO = new[]
+                    {
+                new
+                {
+                    id = invoiceId,
+                    certString = certString,
+                    serial = cert.SerialNumber,
+                    hashValue = hashValue
+                }
+            }
+                };
+
+                Console.WriteLine("\n========== GỬI API after-sign ==========");
+                var afterJson = JsonConvert.SerializeObject(afterRequest);
+                var contentAfter = new StringContent(afterJson, Encoding.UTF8, "application/json");
+                XtraMessageBox.Show(contentAfter.ToString()); 
+                try
+                {
+                    var responseAfter = await client.PostAsync("https://vinvoice.viettel.vn/api/cluster5/services/einvoiceapplication/api/invoice/draft/release-invoices/usb-token/after-sign", contentAfter);
+                    var responseAfterString = await responseAfter.Content.ReadAsStringAsync();
+
+                    Console.WriteLine($"📥 After-sign response status: {responseAfter.StatusCode}");
+                    Console.WriteLine($"📥 After-sign response: {responseAfterString}");
+
+                    if (responseAfter.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("\n✅ PHÁT HÀNH HÓA ĐƠN THÀNH CÔNG!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"\n❌ after-sign thất bại: {responseAfter.StatusCode}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Lỗi: {ex.Message}");
+                }
+            }
+
+            store.Close();
+        }
+
+        // Hàm lấy nội dung XML của hóa đơn theo ID
+        private string GetInvoiceXmlById(int invoiceId)
+        {
+            // TODO: Gọi API của Viettel để lấy nội dung hóa đơn
+            // GET /api/invoice/draft/{invoiceId}
+            // Hoặc lấy từ database của bạn
+
+            // Tạm thời trả về sample (cần thay bằng API thật)
+            return @"<?xml version=""1.0"" encoding=""utf-8""?>
+<Invoice>
+  <Info>Hóa đơn số 591468950</Info>
+  <Amount>50000000</Amount>
+</Invoice>";
+        }
+        private void TestGetCertString()
+        {
+            // 1. Lấy certificate từ Windows Store
+            X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadOnly);
+
+            var cert = store.Certificates
+                .Cast<X509Certificate2>()
+                .Where(c => c.HasPrivateKey)
+                .Where(c => c.Issuer.Contains("Viettel-CA SHA2")) // Lọc đúng cert mới
+                .Where(c => c.NotAfter > DateTime.Now) // Còn hiệu lực
+                .FirstOrDefault();
+
+            if (cert == null)
+            {
+                Console.WriteLine("❌ Không tìm thấy certificate Viettel-CA SHA2 còn hiệu lực");
+                return;
+            }
+
+            // 2. Lấy Issuer name (phần CN=...)
+            string issuerCn = cert.Issuer
+                .Split(',')
+                .FirstOrDefault(part => part.Trim().StartsWith("CN="))
+                ?.Replace("CN=", "") ?? "Viettel-CA SHA2";
+
+            Console.WriteLine($"Issuer CN: {issuerCn}");
+
+            // 3. Xuất certificate sang Base64
+            byte[] certBytes = cert.Export(X509ContentType.Cert);
+            string certBase64 = Convert.ToBase64String(certBytes);
+
+            // 4. Ghép thành certString hoàn chỉnh
+            string certString = $"{issuerCn},{certBase64}";
+
+            Console.WriteLine("✅ certString:");
+            Console.WriteLine(certString);
+            Console.WriteLine($"📝 Độ dài: {certString.Length} ký tự");
+
+            store.Close();
+        }
+        public string GetSession(string username, string password)
+        {
+            string loginUrl = "https://van.ehoadon.vn/";
+            var cookieJar = new CookieContainer();
+
+            // 1. GET trang login lấy VIEWSTATE và EVENTVALIDATION
+            var getReq = (HttpWebRequest)WebRequest.Create(loginUrl);
+            getReq.CookieContainer = cookieJar;
+            getReq.Method = "GET";
+            getReq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36";
+
+            string html;
+            using (var response = (HttpWebResponse)getReq.GetResponse())
+            using (var reader = new StreamReader(response.GetResponseStream()))
+            {
+                html = reader.ReadToEnd();
+            }
+
+            // Lấy __VIEWSTATE
+            string viewState = Regex.Match(html, @"__VIEWSTATE"" value=""([^""]+)""").Groups[1].Value;
+            // Lấy __EVENTVALIDATION
+            string eventVal = Regex.Match(html, @"__EVENTVALIDATION"" value=""([^""]+)""").Groups[1].Value;
+
+            // 2. POST login với đầy đủ field
+            string postData = string.Format(
+                "__VIEWSTATE={0}&__EVENTVALIDATION={1}&txtUserName={2}&txtPassword={3}&btnLogin=Đăng nhập",
+                Uri.EscapeDataString(viewState),
+                Uri.EscapeDataString(eventVal),
+                username,
+                password
+            );
+
+            byte[] bytes = Encoding.UTF8.GetBytes(postData);
+
+            var postReq = (HttpWebRequest)WebRequest.Create(loginUrl);
+            postReq.CookieContainer = cookieJar;
+            postReq.Method = "POST";
+            postReq.ContentType = "application/x-www-form-urlencoded";
+            postReq.ContentLength = bytes.Length;
+            postReq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36";
+            postReq.Referer = loginUrl;
+            postReq.AllowAutoRedirect = false;  // QUAN TRỌNG: Không tự động redirect
+
+            using (var stream = postReq.GetRequestStream())
+            {
+                stream.Write(bytes, 0, bytes.Length);
+            }
+
+            // Đọc response
+            using (var response = (HttpWebResponse)postReq.GetResponse())
+            using (var reader = new StreamReader(response.GetResponseStream()))
+            {
+                string resultHtml = reader.ReadToEnd();
+
+                // In ra trang hiện tại để debug
+                Console.WriteLine("Response contains 'Đăng nhập' : " + resultHtml.Contains("Đăng nhập"));
+                Console.WriteLine("Response contains 'QLHD' : " + resultHtml.Contains("QLHD"));
+            }
+
+            // Lấy session cookie
+            foreach (Cookie c in cookieJar.GetCookies(new Uri(loginUrl)))
+            {
+                Console.WriteLine($"{c.Name} = {c.Value}");
+                if (c.Name == "ASP.NET_SessionId")
+                    return c.Value;
+            }
+
+            return null;
+        }
+        public void TestBrowser()
+        {
+            try
+            {
+                // ===== TĂNG PRIORITY CHO PROCESS =====
+                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High;
+
+                // ===== SET WORKING DIRECTORY =====
+                string exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                Directory.SetCurrentDirectory(exeDir);
+
+                // Delay ổn định
+                Thread.Sleep(3000);
+
+                if (Driver == null)
+                {
+                    var options = new ChromeOptions();
+
+                    // ===== ARGUMENTS CẦN THIẾT =====
+                    options.AddArgument("--no-sandbox");
+                    options.AddArgument("--disable-setuid-sandbox");
+                    options.AddArgument("--disable-dev-shm-usage");
+                    options.AddArgument("--disable-gpu");
+                    options.AddArgument("--disable-software-rasterizer");
+                    options.AddArgument("--disable-features=VizDisplayCompositor");
+                    options.AddArgument("--disable-blink-features=AutomationControlled");
+                    options.AddArgument("--disable-extensions");
+                    options.AddArgument("--disable-background-timer-throttling");
+                    options.AddArgument("--disable-backgrounding-occluded-windows");
+                    options.AddArgument("--disable-renderer-backgrounding");
+                    options.AddArgument("--disable-infobars");
+                    options.AddArgument("--start-maximized");
+                    options.AddArgument("--log-level=3");
+                    options.AddArgument("--silent");
+
+                    // ===== PROFILE TẠM THỜI =====
+                    string tempProfile = Path.Combine(Path.GetTempPath(), "ChromeVB6_" + Guid.NewGuid().ToString());
+                    options.AddArgument($"--user-data-dir={tempProfile}");
+
+                    // Tắt Safe Browsing
+                    options.AddArgument("--safebrowsing-disable-download-protection");
+                    options.AddArgument("--safebrowsing-disable-extension-blacklist");
+                    options.AddUserProfilePreference("safebrowsing.enabled", false);
+                    options.AddUserProfilePreference("safebrowsing.disable_download_protection", true);
+
+                    string downloadPath = Path.GetTempPath();
+                    options.AddUserProfilePreference("download.default_directory", downloadPath);
+                    options.AddUserProfilePreference("download.prompt_for_download", false);
+                    options.AddUserProfilePreference("disable-popup-blocking", "true");
+
+                    // ===== KIỂM TRA chromedriver.exe =====
+                    string chromeDriverPath = Path.Combine(exeDir, "chromedriver.exe");
+                    if (!File.Exists(chromeDriverPath))
+                    {
+                        MessageBox.Show($"Không tìm thấy chromedriver.exe tại: {chromeDriverPath}");
+                        return;
+                    }
+
+                    // ===== KHỞI TẠO DRIVER =====
+                    ChromeDriverService service = ChromeDriverService.CreateDefaultService(exeDir);
+                    service.HideCommandPromptWindow = true;
+                    service.SuppressInitialDiagnosticInformation = true;
+
+                    Driver = new ChromeDriver(service, options);
+
+                    Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+                    Driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(60);
+
+                    Thread.Sleep(2000);
+
+                    // Navigate
+                    Driver.Navigate().GoToUrl("https://hoadondientu.gdt.gov.vn");
+
+                    // ... code xử lý tiếp của bạn
+                }
+            }
+            catch (Exception ex)
+            {
+                string logPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "error.log");
+                File.AppendAllText(logPath, $"{DateTime.Now}: {ex.ToString()}\r\n");
+                MessageBox.Show($"Lỗi: {ex.Message}");
+            }
+        }
+
+        private void RestartProcess()
+        {
+            // Khởi động lại process với môi trường mới
+            var startInfo = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = Assembly.GetExecutingAssembly().Location,
+                UseShellExecute = true,
+                WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+            };
+            System.Diagnostics.Process.Start(startInfo);
+            Environment.Exit(0);
+        }
+        private async  void APIInvoice_Load(object sender, EventArgs e)
+        { 
+            //LoadCertificateInfo("Viettel-CASHA2,MIIEdTCCA12gAwIBAgIQVAT//rcDP7MktyjTwv3hEjANBgkqhkiG9w0BAQsFADA/MRgwFgYDVQQDDA9WaWV0dGVsLUNBIFNIQTIxFjAUBgNVBAoMDVZpZXR0ZWwgR3JvdXAxCzAJBgNVBAYTAlZOMB4XDTI2MDIxMDAzMzgwMFoXDTI4MDIxMDAzMzgwMFowgZQxCzAJBgNVBAYTAlZOMR0wGwYDVQQHDBRCw4AgUuG7ikEgVsWoTkcgVMOAVTFGMEQGA1UEAww9Q8OUTkcgVFkgVE5ISCBUSMavxqBORyBN4bqgSSBT4bqiTiBYVeG6pFQgVMOCTiDEkOG7qEMgVEjhu4pOSDEeMBwGCgmSJomT8ixkAQEMDk1TVDozNTAyNDEyNjY5MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDcHMBQ9TGwpTVIn8aLPUnkzlxBAi3rhinHW3H+ayohgwmyhNbfGHiHXDmJrWcYHf+UeNCHlG2KrO/5z7IL7jfwdzkwvOX68HOAmKV5F7PoYlxbLGJNizMYAoEVk1QLemkxx6JNE2IVKlSKMrKIe4IIGW8yV2Z7folnNSLKOCRRnwIDAQABo4IBmTCCAZUwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBRD1TUAi74HuuNN5h4kWVaIW77MSjB5BggrBgEFBQcBAQRtMGswQgYIKwYBBQUHMAKGNmh0dHA6Ly92aWV0dGVsLWNhLnZuL2Rvd25sb2Fkcy9zdWIvVmlldHRlbC1DQV9TSEEyLmNydDAlBggrBgEFBQcwAYYZaHR0cDovL29jc3AudmlldHRlbC1jYS52bjAzBgNVHSUELDAqBggrBgEFBQcDAgYIKwYBBQUHAwQGCisGAQQBgjcKAwwGCCsGAQUFBwMkMIGEBgNVHR8EfTB7MHmgMqAwhi5odHRwOi8vY3JsLnZpZXR0ZWwtY2Eudm4vVmlldHRlbC1DQS1TSEEyLTIuY3JsokOkQTA/MRgwFgYDVQQDDA9WaWV0dGVsLUNBIFNIQTIxFjAUBgNVBAoMDVZpZXR0ZWwgR3JvdXAxCzAJBgNVBAYTAlZOMB0GA1UdDgQWBBT9h9792TjUnd+bEg0Dyu1V67moMjAOBgNVHQ8BAf8EBAMCBeAwDQYJKoZIhvcNAQELBQADggEBAND1s5vWjelHocG3nF8sSzTOJN1nLKOD8ec42dJ+nSh55tFLmQIQ7C0ThZipZu5l01l3z3pnbK7v2RcEx2FV6Vpj2LW/VIXG/e2H4NII8ADz0n9wLfQTABxhngy2jAVci3rcHWd7/WnH7GqDeU9j2ScwHbH3NZDkz5D+VyzJYcXVFUMzKWwNiXq2h0hFOZnAtPJFAwefiptMeRH58hNs9ro9HvqhVrbEinRcv21Xpp0R1PVNJ400wHBiFadAlgjvChWGKv/8aykM1wp7QnWiFoauhkfAAsesa/6kB0Tbdv6PReTX1667elLe1ABlhXKQUitmaUKiL6FrsSzgfti4pNc=");
+
 
             using (HttpClient client = new HttpClient())
             {
                 string url = $"https://mst.vn/api/company/{"3502495312"}";
                 var res = await client.GetStringAsync(url); 
             }
+
+
 
             //await LoginWithSelenium();   // Gọi hàm login mới
             string dbPath = "";
@@ -176,125 +743,321 @@ namespace SaovietTax
         }
         string _content;
         private IWebDriver driver;
-        private async Task LoginWithSelenium()
+        private async Task LoginWithSelenium2()
         {
+            string qrq = "SELECT * FROM tbInvoiceInfo";
+            var dtInvoiceInfo = ExecuteQuery(qrq, null);
+            var row = dtInvoiceInfo.Rows[0];
+
             try
             {
-                var options = new ChromeOptions();
-                options.AddArgument("--disable-blink-features=AutomationControlled");
-                options.AddExcludedArgument("enable-automation");
-                options.AddArgument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36");
+                // ===== KHỞI TẠO TRÌNH DUYỆT =====
+                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High;
 
-                // options.AddArgument("--headless");   // Bỏ comment nếu muốn chạy ngầm (dễ bị block hơn)
+                string exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                Directory.SetCurrentDirectory(exeDir);
 
-                driver = new ChromeDriver(options);
+                Thread.Sleep(3000);
 
+                if (driver == null)
+                {
+                    var options = new ChromeOptions();
+
+                    options.AddArgument("--no-sandbox");
+                    options.AddArgument("--disable-setuid-sandbox");
+                    options.AddArgument("--disable-dev-shm-usage");
+                    options.AddArgument("--disable-gpu");
+                    options.AddArgument("--disable-software-rasterizer");
+                    options.AddArgument("--disable-features=VizDisplayCompositor");
+                    options.AddArgument("--disable-blink-features=AutomationControlled");
+                    options.AddArgument("--disable-extensions");
+                    options.AddArgument("--disable-background-timer-throttling");
+                    options.AddArgument("--disable-backgrounding-occluded-windows");
+                    options.AddArgument("--disable-renderer-backgrounding");
+                    options.AddArgument("--disable-infobars");
+                    options.AddArgument("--start-maximized");
+                    options.AddArgument("--log-level=3");
+                    options.AddArgument("--silent");
+                    options.AddArgument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
+
+                    string tempProfile = Path.Combine(Path.GetTempPath(), "ChromeVB6_" + Guid.NewGuid().ToString());
+                    options.AddArgument($"--user-data-dir={tempProfile}");
+
+                    options.AddArgument("--safebrowsing-disable-download-protection");
+                    options.AddArgument("--safebrowsing-disable-extension-blacklist");
+                    options.AddUserProfilePreference("safebrowsing.enabled", false);
+                    options.AddUserProfilePreference("safebrowsing.disable_download_protection", true);
+
+                    string downloadPath = Path.GetTempPath();
+                    options.AddUserProfilePreference("download.default_directory", downloadPath);
+                    options.AddUserProfilePreference("download.prompt_for_download", false);
+                    options.AddUserProfilePreference("disable-popup-blocking", "true");
+
+                    string chromeDriverPath = Path.Combine(exeDir, "chromedriver.exe");
+                    if (!File.Exists(chromeDriverPath))
+                    {
+                        MessageBox.Show($"Không tìm thấy chromedriver.exe tại: {chromeDriverPath}");
+                        return;
+                    }
+
+                    ChromeDriverService service = ChromeDriverService.CreateDefaultService(exeDir);
+                    service.HideCommandPromptWindow = true;
+                    service.SuppressInitialDiagnosticInformation = true;
+
+                    driver = new ChromeDriver(service, options);
+                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+                    driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(60);
+
+                    Thread.Sleep(2000);
+                }
+
+                // ===== ĐĂNG NHẬP =====
                 lblStatus.Text = "Đang mở trang đăng nhập...";
                 driver.Navigate().GoToUrl("https://vinvoice.viettel.vn/account/login");
 
                 var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(25));
 
-                lblStatus.Text = "Đang tìm form đăng nhập...";
+                IWebElement txtUsername = wait.Until(d => d.FindElement(By.CssSelector("input[placeholder*='Nhập tên đăng nhập của bạn *']")));
+                IWebElement txtPassword = driver.FindElement(By.CssSelector("input[type='password']"));
+                IWebElement btnLogin = driver.FindElement(By.CssSelector("button[type='submit']"));
 
-                // === SỬA SELECTOR Ở ĐÂY ===
-                IWebElement txtUsername;
-                IWebElement txtPassword;
-                IWebElement btnLogin;
-
-                try
-                {
-                    // Cách 1: Tìm theo placeholder "Tên đăng nhập"
-                    txtUsername = wait.Until(d => d.FindElement(By.CssSelector("input[placeholder*='Nhập tên đăng nhập của bạn *']")));
-                }
-                catch
-                {
-                    // Cách 2: Tìm input đầu tiên kiểu text/email
-                    txtUsername = driver.FindElement(By.CssSelector("input[type='text'], input[type='email'], input[name='username']"));
-                }
-
-                try
-                {
-                    // Tìm input password
-                    txtPassword = driver.FindElement(By.CssSelector("input[type='password']"));
-                }
-                catch
-                {
-                    txtPassword = driver.FindElement(By.CssSelector("input[name='password']"));
-                }
-
-                // Điền thông tin
                 txtUsername.Clear();
-                txtUsername.SendKeys("3502412669");   // ← THAY BẰNG USERNAME THẬT
+                txtUsername.SendKeys(row["Username"].ToString());
 
                 txtPassword.Clear();
-                txtPassword.SendKeys("Tdt@12345678");        // ← THAY BẰNG PASSWORD THẬT
-
-                lblStatus.Text = "Đang click Đăng nhập...";
-
-                // === Selector nút Đăng nhập (đã sửa) ===
-                try
-                {
-                    btnLogin = driver.FindElement(By.CssSelector("button[type='submit']"));
-                }
-                catch
-                {
-                    try
-                    {
-                        btnLogin = driver.FindElement(By.XPath("//button[contains(., 'Đăng nhập')]"));
-                    }
-                    catch
-                    {
-                        btnLogin = driver.FindElement(By.CssSelector("button.btn, button.btn-primary, button.login-button"));
-                    }
-                }
+                txtPassword.SendKeys(row["Password"].ToString());
 
                 btnLogin.Click();
 
-                // Chờ sau khi login thành công
-                wait.Until(d =>
-                    d.Url.Contains("vinvoice.viettel.vn") &&
-                    !d.Url.ToLower().Contains("login") &&
-                    !d.Url.ToLower().Contains("forgot")
-                );
+                // Chờ đăng nhập thành công
+                wait.Until(d => d.Url.Contains("vinvoice.viettel.vn") && !d.Url.ToLower().Contains("login"));
 
-                await Task.Delay(4000); // Chờ JavaScript set thêm cookie (_ga, showNoti...)
+                await Task.Delay(3000);
 
+                // ===== CHUYỂN ĐẾN TRANG DRAFT =====
+                lblStatus.Text = "Đang chuyển đến trang hóa đơn nháp...";
+                driver.Navigate().GoToUrl("https://vinvoice.viettel.vn/invoice-management/invoice-draft");
+                await Task.Delay(4000); // Chờ trang load
+
+                // ===== XỬ LÝ POPUP (SAU KHI CHUYỂN TRANG) =====
+                lblStatus.Text = "Đang xử lý popup...";
+                richTextBox1.AppendText("Đang xử lý popup trên trang draft...\n");
+
+                try
+                {
+                    // Hàm xử lý popup chung
+                    bool popupClosed = false;
+
+                    // Thử click nút Đóng trong modal-footer
+                    try
+                    {
+                        var closeButton = driver.FindElement(By.XPath("//div[@class='modal-footer']//button[contains(., 'Đóng')]"));
+                        if (closeButton.Displayed && closeButton.Enabled)
+                        {
+                            // Tích vào checkbox "Không hiển thị lại lần sau" nếu có
+                            try
+                            {
+                                var dontShowAgain = driver.FindElement(By.Id("viewNoti"));
+                                if (!dontShowAgain.Selected)
+                                {
+                                    dontShowAgain.Click();
+                                    richTextBox1.AppendText("✓ Đã chọn 'Không hiển thị lại lần sau'\n");
+                                }
+                            }
+                            catch { }
+
+                            closeButton.Click();
+                            richTextBox1.AppendText("✓ Đã đóng popup (nút Đóng)\n");
+                            popupClosed = true;
+                            await Task.Delay(500);
+                        }
+                    }
+                    catch { }
+
+                    // Nếu chưa đóng, thử nút X
+                    if (!popupClosed)
+                    {
+                        try
+                        {
+                            var xButton = driver.FindElement(By.CssSelector("button.close span[aria-hidden='true']"));
+                            if (xButton.Displayed && xButton.Enabled)
+                            {
+                                xButton.Click();
+                                richTextBox1.AppendText("✓ Đã đóng popup (nút X)\n");
+                                popupClosed = true;
+                                await Task.Delay(500);
+                            }
+                        }
+                        catch { }
+                    }
+
+                    // Dùng JavaScript để ẩn popup (cách cuối)
+                    if (!popupClosed)
+                    {
+                        IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+                        js.ExecuteScript(@"
+                    var popup = document.querySelector('jhi-popup-notification');
+                    if(popup) popup.remove();
+                    var modal = document.querySelector('.modal');
+                    if(modal) modal.remove();
+                    var backdrop = document.querySelector('.modal-backdrop');
+                    if(backdrop) backdrop.remove();
+                ");
+                        richTextBox1.AppendText("✓ Đã xóa popup bằng JavaScript\n");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    richTextBox1.AppendText($"⚠️ Lỗi xử lý popup: {ex.Message}\n");
+                }
+
+                await Task.Delay(1000);
+
+                // ===== LẤY COOKIES =====
                 lblStatus.Text = "Đăng nhập thành công! Đang lấy cookies...";
 
                 var allCookies = driver.Manage().Cookies.AllCookies;
 
                 richTextBox1.Clear();
                 richTextBox1.AppendText($"✅ Đăng nhập thành công!\n");
+                richTextBox1.AppendText($"Đã vào trang: {driver.Url}\n");
                 richTextBox1.AppendText($"Tìm thấy {allCookies.Count} cookies:\n\n");
 
                 foreach (var cookie in allCookies.OrderBy(c => c.Name))
                 {
-                    lstallCookies.Add(cookie.Name, cookie.Value);   // Lưu vào dictionary để dùng sau
+                    lstallCookies[cookie.Name] = cookie.Value;
                     richTextBox1.AppendText($"Name : {cookie.Name}\n");
                     richTextBox1.AppendText($"Value: {cookie.Value}\n");
                     richTextBox1.AppendText($"Domain: {cookie.Domain}\n");
                     richTextBox1.AppendText(new string('-', 60) + "\n");
                 }
-                //allCookies.Clear();
 
-                var seleniumCookies = driver.Manage().Cookies.AllCookies;
-
-                //foreach (var cookie in seleniumCookies)
-                //{
-                //    allCookies[cookie.Name] = cookie.Value;
-
-                //    // In ra để bạn xem
-                //    richTextBox1.AppendText($"Cookie lưu: {cookie.Name} = {cookie.Value.Substring(0, Math.Min(50, cookie.Value.Length))}...\n");
-                //}
                 string cookieString = string.Join("; ", allCookies.Select(c => $"{c.Name}={c.Value}"));
-                richTextBox1.AppendText("\n=== COOKIE STRING ĐẦY ĐỦ ===\n" + cookieString);
+                richTextBox1.AppendText("\n=== COOKIE STRING ===\n" + cookieString);
 
-                MessageBox.Show($"Thành công! Lấy được {allCookies.Count} cookies.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Thành công! Đã vào trang hóa đơn nháp.\nCookies: {allCookies.Count}", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message + "\n\nHãy chụp màn hình lỗi và gửi lại.", "Lỗi Selector", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string logPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "error.log");
+                File.AppendAllText(logPath, $"{DateTime.Now}: {ex.ToString()}\r\n");
+
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 lblStatus.Text = "Lỗi: " + ex.Message;
+            }
+        }
+        private async Task LoginWithSelenium(string cardid)
+        {
+            string qrq = "SELECT * FROM tbInvoiceInfo";
+            var dtInvoiceInfo = ExecuteQuery(qrq, null);
+            var row = dtInvoiceInfo.Rows[0];
+
+            try
+            {
+                // ===== KHỞI TẠO TRÌNH DUYỆT =====
+                string exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                Directory.SetCurrentDirectory(exeDir);
+
+                if (driver == null)
+                {
+                    var options = new ChromeOptions();
+                    options.AddArgument("--no-sandbox");
+                    options.AddArgument("--disable-dev-shm-usage");
+                    options.AddArgument("--disable-gpu");
+                    options.AddArgument("--disable-extensions");
+                    options.AddArgument("--start-maximized");
+                    options.AddArgument("--log-level=3");
+
+                    string tempProfile = Path.Combine(Path.GetTempPath(), "Chrome_" + Guid.NewGuid().ToString());
+                    options.AddArgument($"--user-data-dir={tempProfile}");
+                    options.AddUserProfilePreference("safebrowsing.enabled", false);
+
+                    ChromeDriverService service = ChromeDriverService.CreateDefaultService(exeDir);
+                    service.HideCommandPromptWindow = true;
+
+                    driver = new ChromeDriver(service, options);
+                    driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(30);
+                }
+
+                // ===== ĐĂNG NHẬP =====
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+
+                driver.Navigate().GoToUrl("https://vinvoice.viettel.vn/account/login");
+
+                // Điền thông tin đăng nhập
+                wait.Until(d => d.FindElement(By.CssSelector("input[placeholder*='Nhập tên đăng nhập']"))).SendKeys(row["Username"].ToString());
+                driver.FindElement(By.CssSelector("input[type='password']")).SendKeys(row["Password"].ToString());
+                driver.FindElement(By.CssSelector("button[type='submit']")).Click();
+
+                // Chờ đăng nhập xong (không delay cứng)
+                wait.Until(d => d.Url.Contains("vinvoice.viettel.vn") && !d.Url.Contains("/login"));
+
+                // Chuyển thẳng đến trang draft (không delay)
+                driver.Navigate().GoToUrl("https://vinvoice.viettel.vn/invoice-management/invoice-draft");
+                 wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                 
+                // chờ button tồn tại + click được luôn
+                var btnUpload = wait.Until(driver =>
+                {
+                    try
+                    {
+                        var el = driver.FindElement(By.XPath(
+                            $"//input[@value='{cardid}']/ancestor::tr//button[i[contains(@class,'fa-cloud-upload')]]"
+                        ));
+
+                        return (el.Displayed && el.Enabled) ? el : null;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                });
+
+                btnUpload.Click();
+               this.Close();
+                // Chờ trang draft load + xử lý popup cùng lúc
+                try
+                {
+                    // Chờ popup xuất hiện (nếu có) trong 3 giây
+                    var closeBtn = wait.Until(d =>
+                    {
+                        try
+                        {
+                            var btn = d.FindElement(By.XPath("//div[@class='modal-footer']//button[contains(., 'Đóng')]"));
+                            return btn.Displayed ? btn : null;
+                        }
+                        catch { return null; }
+                    });
+
+                    if (closeBtn != null)
+                    {
+                        // Tích checkbox nếu có (không cần check Selected)
+                        try { driver.FindElement(By.Id("viewNoti")).Click(); } catch { }
+                        closeBtn.Click();
+                    }
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    // Không có popup, tiếp tục
+                }
+              
+                // ===== LẤY COOKIES =====
+                var allCookies = driver.Manage().Cookies.AllCookies;
+
+                richTextBox1.Clear();
+                richTextBox1.AppendText($"✅ Thành công! {allCookies.Count} cookies\n");
+
+                foreach (var cookie in allCookies)
+                {
+                    lstallCookies[cookie.Name] = cookie.Value;
+                    richTextBox1.AppendText($"{cookie.Name}={cookie.Value}\n");
+                }
+
+                MessageBox.Show($"Hoàn thành! Cookies: {allCookies.Count}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
         private Dictionary<string, string> lstallCookies = new Dictionary<string, string>();   // Lưu tất cả cookie
@@ -575,14 +1338,25 @@ namespace SaovietTax
 
                 };
                 var checkupdate = ExecuteQuery(sqlcheck, paramcheck);
-                if (!string.IsNullOrEmpty(checkupdate.Rows[0]["IdNhap"].ToString()))
+                if (!string.IsNullOrEmpty(checkupdate.Rows[0]["IdNhap"].ToString()) && checkupdate.Rows[0]["IdNhap"].ToString()!="...")
                 {
                     dataJson.id= checkupdate.Rows[0]["IdNhap"].ToString();
                     dataJson.transactionUuid = null;
                 }
+                //Tìm template theo mã đơn hàng
+                var sqlTemplate = @"select * from tbInvoiceTemplate  WHERE ID =?";
+                var paramtemplate = new OleDbParameter[]
+                {
+        new OleDbParameter("?",getsplit[3].ToString()),
+
+                };
+                var tbtemplate = ExecuteQuery(sqlTemplate, paramtemplate);
+
+
+
                 dataJson.invoiceType = "1";
-                dataJson.templateCode = "1/001";
-                dataJson.invoiceSeri = "C22TDT";
+                dataJson.templateCode = tbtemplate.Rows[0]["Code"].ToString();
+                dataJson.invoiceSeri = tbtemplate.Rows[0]["KHHD"].ToString();
                 dataJson.buyerTaxCode = dtKhachhang.Rows[0]["MST"].ToString();
                 dataJson.buyerName = Helpers.ConvertVniToUnicode(kq2.Rows[0]["Nguoimuahang"].ToString());
                 dataJson.buyerAddress = Helpers.ConvertVniToUnicode(dtKhachhang.Rows[0]["DiaChi"].ToString());
@@ -595,6 +1369,7 @@ namespace SaovietTax
                 dataJson.totalExciseTaxAmount = 0;
                 dataJson.currencyCode = "VND";
                 dataJson.buyerViewStatus = 0;
+              
                 dataJson.invoiceTemplateId = int.Parse(getsplit[3].ToString());
                 dataJson.paymentMethod = 3;
                 dataJson.buyerUnitName = Helpers.ConvertVniToUnicode(dtKhachhang.Rows[0]["Ten"].ToString());
@@ -640,10 +1415,11 @@ namespace SaovietTax
                 {
                     var jObj = JObject.Parse(result);
                     long invoiceId = jObj["data"]["id"].Value<long>();
-                    var updateQr = @"UPDATE HoaDon  SET IdNhap = ? WHERE MaSo =?";
+                    var updateQr = @"UPDATE HoaDon  SET IdNhap = ?,IdTemplate =? WHERE MaSo =?";
                     var updateParameters = new OleDbParameter[]
                     {
         new OleDbParameter("?", invoiceId.ToString()), // Cập nhật giá trị TiLe
+        new OleDbParameter("?", getsplit[3].ToString()),
         new OleDbParameter("?", kq2.Rows[0]["HOADON.MaSo"].ToString()),
 
                     };
@@ -718,11 +1494,30 @@ namespace SaovietTax
                     {
                         Id = (long)x["id"],
                         TemplateCode = (string)x["templateCode"],
-                        InvoiceName = (string)x["invoiceName"]
+                        InvoiceName = (string)x["invoiceName"],
+                        status= (int)x["status"]
                     })
-                    .ToList();
+                    .Where(m=>m.status==1).ToList();
                     foreach(var item in list)
                     {
+                        string getKHHd = "";
+                        //Lấy từ api KHHD
+                        searchUrl = "https://vinvoice.viettel.vn/api/cluster5/services/einvoiceapplication/api/invoice-release/serial/search?page=0&size=10&createdDate.greaterThanOrEqual=2018-04-01T17%3A00%3A00.000Z&createdDate.lessThanOrEqual=" + DateTime.Now.ToString("yyyy-MM-dd") + "T17%3A00%3A00.000Z&sort=id%2Cdesc";
+                        response = await client.GetAsync(searchUrl);
+                        result = await response.Content.ReadAsStringAsync();
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var lists = JObject.Parse(result)["data"]["content"]
+                               .Select(x => new
+                               {
+                                   Id = (int)x["id"],
+                                   serialNo = (string)x["serialNo"],
+                                   invoiceTemplateId= (int)x["invoiceTemplateId"],
+                               })
+                                .Where(m => m.invoiceTemplateId == item.Id).FirstOrDefault();
+                            getKHHd= lists != null ? lists.serialNo : "";
+                        }
+
                         string sqlCheck = "SELECT * FROM tbInvoiceTemplate WHERE Id = @Id";
                         var paramHangHoa = new OleDbParameter[]
                   {
@@ -731,19 +1526,21 @@ namespace SaovietTax
                         var kqHangHoa = ExecuteQuery(sqlCheck, paramHangHoa);
                         if (kqHangHoa.Rows.Count==0)
                         {
-                            string sqlInsert = "INSERT INTO tbInvoiceTemplate (ID, Code, Name) VALUES (?, ?, ?)";
+                            string sqlInsert = "INSERT INTO tbInvoiceTemplate (ID, Code, Name,KHHD) VALUES (?, ?, ?,?)";
                             var updateParameters = new OleDbParameter[]
                    {
         new OleDbParameter("?", item.Id.ToString()), // Cập nhật giá trị TiLe
         new OleDbParameter("?", item.TemplateCode),
-        new OleDbParameter("?", item.InvoiceName)   
+        new OleDbParameter("?", item.InvoiceName),
+         new OleDbParameter("?", getKHHd)
 
                    };
                             var updateRowsAffected = ExecuteQueryResult(sqlInsert, updateParameters);
                         }
                         // richTextBox1.AppendText($"ID: {item.Id}, TemplateCode: {item.TemplateCode}, InvoiceName: {item.InvoiceName}\n");
                     }
-                    MessageBox.Show($"Thành công!\n{result}");
+                   // MessageBox.Show($"Thành công!\n{result}");
+                   Application.Exit();
                 }
                 else
                 {
@@ -757,6 +1554,12 @@ namespace SaovietTax
         private void simpleButton4_Click(object sender, EventArgs e)
         {
 
+        }
+        string getcardid="";
+        private void simpleButton5_Click(object sender, EventArgs e)
+        {
+            //TestBrowser();
+            LoginWithSelenium(getcardid);
         }
 
         public int ExecuteQueryResult(string query, params OleDbParameter[] parameters)
