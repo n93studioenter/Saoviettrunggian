@@ -137,7 +137,7 @@ namespace SaovietTax
                         }
                         else
                         {
-                            if (_content.Contains("2_"))
+                            if (_content.Contains("PH_"))
                             {
                                 int idinvoice= int.Parse(_content.Split('_')[1]);   
                                 getcardid=idinvoice.ToString();
@@ -1224,15 +1224,14 @@ namespace SaovietTax
             {
                 XtraMessageBox.Show(ex.Message);
             }
-
-
+            //Lấy tbgetphieu
             var getsplit = _content.Split('_');
-
+           
             // Có thể bạn nên JOIN theo ID, không phải MaSo
             var qrTimct = @"
     SELECT ChungTu.*,HOADON.*
     FROM ChungTu 
-    INNER JOIN HOADON ON HOADON.MaSo = ChungTu.MaSo
+    INNER JOIN HOADON ON HOADON.MaSo = ChungTu.MaSo 
     WHERE ChungTu.SoHieu = ? AND KyHieu = ? AND NgayCT=? ";
 
             var parameterss = new OleDbParameter[]
@@ -1243,8 +1242,23 @@ namespace SaovietTax
             };
 
             var kq2 = ExecuteQuery(qrTimct, parameterss);
+
+            string sqlgp = @"
+    SELECT tbGetphieu.*
+    FROM tbGetphieu
+    INNER JOIN HOADON ON CStr(HOADON.MaSo) = tbGetphieu.MaCT
+    WHERE HOADON.MaSo = @MaSo";
+
+            parameterss = new OleDbParameter[]
+          {
+    new OleDbParameter(" ? ", kq2.Rows[0]["HOADON.MaSo"].ToString()),
+          };
+
+            var kqgphieu = ExecuteQuery(sqlgp, parameterss);
+             
+
             //Lấy danh sách chứng từ từ MaCT
-            var sql= "SELECT * FROM KhachHang WHERE MaSo = ?";
+            var sql = "SELECT * FROM KhachHang WHERE MaSo = ?";
             parameterss = new OleDbParameter[]
           {
     new OleDbParameter("?",  kq2.Rows[0]["MaKhachHang"]),
@@ -1352,14 +1366,24 @@ namespace SaovietTax
                 };
                 var tbtemplate = ExecuteQuery(sqlTemplate, paramtemplate);
 
-
+                if (!string.IsNullOrEmpty(kqgphieu.Rows[0]["CCCD"].ToString()) && kqgphieu.Rows[0]["CCCD"].ToString() != "...")
+                {
+                    dataJson.buyerIdNo = kqgphieu.Rows[0]["CCCD"].ToString();
+                    dataJson.buyerIdType = 1;
+                    dataJson.buyerIdTypeName = "CCCD";
+                }
 
                 dataJson.invoiceType = "1";
                 dataJson.templateCode = tbtemplate.Rows[0]["Code"].ToString();
                 dataJson.invoiceSeri = tbtemplate.Rows[0]["KHHD"].ToString();
+                if(dtKhachhang.Rows[0]["MST"]!=null && dtKhachhang.Rows[0]["MST"].ToString()!="...")
                 dataJson.buyerTaxCode = dtKhachhang.Rows[0]["MST"].ToString();
-                dataJson.buyerName = Helpers.ConvertVniToUnicode(kq2.Rows[0]["Nguoimuahang"].ToString());
-                dataJson.buyerAddress = Helpers.ConvertVniToUnicode(dtKhachhang.Rows[0]["DiaChi"].ToString());
+                if (kq2.Rows[0]["Nguoimuahang"].ToString() != "...")
+                    dataJson.buyerName = Helpers.ConvertVniToUnicode(kq2.Rows[0]["Nguoimuahang"].ToString());
+                else
+                    dataJson.buyerName = null;
+                if (dtKhachhang.Rows[0]["DiaChi"].ToString() != "...")
+                    dataJson.buyerAddress = Helpers.ConvertVniToUnicode(dtKhachhang.Rows[0]["DiaChi"].ToString());
                 dataJson.totalAmountWithoutVAT = kq3.AsEnumerable().Where(m => m["MaTKTCCo"].ToString() != "14038").Sum(m => Convert.ToDouble(m["SoPS"]));
                 dataJson.totalVATAmount = kq3.AsEnumerable().Where(m => m["MaTKTCCo"].ToString() == "14038").Sum(m => Convert.ToDouble(m["SoPS"]));
                 dataJson.discountAmount = 0;
@@ -1372,7 +1396,8 @@ namespace SaovietTax
               
                 dataJson.invoiceTemplateId = int.Parse(getsplit[3].ToString());
                 dataJson.paymentMethod = 3;
-                dataJson.buyerUnitName = Helpers.ConvertVniToUnicode(dtKhachhang.Rows[0]["Ten"].ToString());
+                if (kqgphieu.Rows[0]["TenCty"].ToString() != "...")
+                    dataJson.buyerUnitName = Helpers.ConvertVniToUnicode(kqgphieu.Rows[0]["TenCty"].ToString());
                 dataJson.paymentMethodName = "TM/CK";
                 dataJson.domain = null;
                 dataJson.autoCreatePdfInstance = 0;

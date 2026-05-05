@@ -40,16 +40,18 @@
             // 
             // simpleButton1
             // 
-            this.simpleButton1.Location = new System.Drawing.Point(43, 12);
+            this.simpleButton1.Location = new System.Drawing.Point(68, 19);
+            this.simpleButton1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(94, 29);
+            this.simpleButton1.Size = new System.Drawing.Size(148, 45);
             this.simpleButton1.TabIndex = 0;
             this.simpleButton1.Text = "simpleButton1";
             this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
             // 
             // lblStatus
             // 
-            this.lblStatus.Location = new System.Drawing.Point(62, 121);
+            this.lblStatus.Location = new System.Drawing.Point(98, 189);
+            this.lblStatus.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(75, 16);
             this.lblStatus.TabIndex = 1;
@@ -57,53 +59,58 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(36, 167);
+            this.richTextBox1.Location = new System.Drawing.Point(34, 222);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(708, 215);
+            this.richTextBox1.Size = new System.Drawing.Size(708, 194);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
             // simpleButton2
             // 
-            this.simpleButton2.Location = new System.Drawing.Point(226, 12);
+            this.simpleButton2.Location = new System.Drawing.Point(352, 19);
+            this.simpleButton2.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.simpleButton2.Name = "simpleButton2";
-            this.simpleButton2.Size = new System.Drawing.Size(94, 29);
+            this.simpleButton2.Size = new System.Drawing.Size(148, 45);
             this.simpleButton2.TabIndex = 3;
             this.simpleButton2.Text = "simpleButton2";
             this.simpleButton2.Click += new System.EventHandler(this.simpleButton2_Click);
             // 
             // simpleButton3
             // 
-            this.simpleButton3.Location = new System.Drawing.Point(485, 12);
+            this.simpleButton3.Location = new System.Drawing.Point(594, 19);
+            this.simpleButton3.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.simpleButton3.Name = "simpleButton3";
-            this.simpleButton3.Size = new System.Drawing.Size(94, 29);
+            this.simpleButton3.Size = new System.Drawing.Size(148, 45);
             this.simpleButton3.TabIndex = 4;
             this.simpleButton3.Text = "simpleButton3";
             this.simpleButton3.Click += new System.EventHandler(this.simpleButton3_Click);
             // 
             // btnGetTemplate
             // 
-            this.btnGetTemplate.Location = new System.Drawing.Point(155, 114);
+            this.btnGetTemplate.Location = new System.Drawing.Point(228, 155);
+            this.btnGetTemplate.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.btnGetTemplate.Name = "btnGetTemplate";
-            this.btnGetTemplate.Size = new System.Drawing.Size(94, 29);
+            this.btnGetTemplate.Size = new System.Drawing.Size(148, 45);
             this.btnGetTemplate.TabIndex = 5;
             this.btnGetTemplate.Text = "Get template";
             this.btnGetTemplate.Click += new System.EventHandler(this.btnGetTemplate_Click);
             // 
             // simpleButton4
             // 
-            this.simpleButton4.Location = new System.Drawing.Point(495, 114);
+            this.simpleButton4.Location = new System.Drawing.Point(403, 131);
+            this.simpleButton4.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.simpleButton4.Name = "simpleButton4";
-            this.simpleButton4.Size = new System.Drawing.Size(94, 29);
+            this.simpleButton4.Size = new System.Drawing.Size(148, 45);
             this.simpleButton4.TabIndex = 6;
             this.simpleButton4.Text = "Delete";
             this.simpleButton4.Click += new System.EventHandler(this.simpleButton4_Click);
             // 
             // simpleButton5
             // 
-            this.simpleButton5.Location = new System.Drawing.Point(671, 121);
+            this.simpleButton5.Location = new System.Drawing.Point(618, 155);
+            this.simpleButton5.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.simpleButton5.Name = "simpleButton5";
-            this.simpleButton5.Size = new System.Drawing.Size(94, 29);
+            this.simpleButton5.Size = new System.Drawing.Size(148, 45);
             this.simpleButton5.TabIndex = 7;
             this.simpleButton5.Text = "Publish Invoice";
             this.simpleButton5.Click += new System.EventHandler(this.simpleButton5_Click);
