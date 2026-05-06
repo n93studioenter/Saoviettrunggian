@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -69,6 +70,13 @@ namespace SaovietTax
         }
         private async void Addinvoice()
         {
+            string qrq = "SELECT * FROM tbInvoiceInfo";
+            var dtInvoiceInfo = ExecuteQuery(qrq, null);
+            var rows = dtInvoiceInfo.Rows[0];
+
+            string username = rows["Username"]?.ToString();
+            string password = rows["Password"]?.ToString();
+
             string query = "SELECT * FROM tbRegister";
             string pathluu = "";
             var kq = ExecuteQuery(query, null);
@@ -108,8 +116,10 @@ namespace SaovietTax
             };
 
             var kq2 = ExecuteQuery(qrTimct, parameterss);
+            DateTime date = DateTime.ParseExact(kq2.Rows[0]["NgayCT"].ToString(), "dd/MM/yy hh:mm:ss tt", CultureInfo.InvariantCulture);
+            string formattedDate = date.ToString("dd/MM/yyyy");
 
-           string sql = "SELECT * FROM ChungTu WHERE MaCT = ?";
+            string sql = "SELECT * FROM ChungTu WHERE MaCT = ?";
             var param = new OleDbParameter[]
             {
                 new OleDbParameter("?", kq2.Rows[0]["MaCT"])
@@ -176,12 +186,12 @@ namespace SaovietTax
                 });
 
                 txtUser.Clear();
-                txtUser.SendKeys("3502305219"); // 👉 username của bạn
+                txtUser.SendKeys(username); // 👉 username của bạn
 
                 // ===== PASSWORD =====
                 var txtPass = driver.FindElement(By.Id("txtPassword"));
                 txtPass.Clear();
-                txtPass.SendKeys("82215357");
+                txtPass.SendKeys(password);
 
                 // ===== CLICK LOGIN =====
                 var btnLogin = driver.FindElement(By.Id("btnLogin"));
@@ -217,24 +227,28 @@ namespace SaovietTax
                 // Switch vào iframe
                 var iframe = dialog.FindElement(By.Id("framedialogInvoiceNewEdit"));
                 driver.SwitchTo().Frame(iframe);
-
+                 
                 // Tìm input và gán giá trị
                 var input = wait.Until(d => d.FindElement(By.Id("txtBuyerSearch")));
                 input.Clear();
-                Thread.Sleep(500);
+                Thread.Sleep(800);
                 input.SendKeys(dtKhachhang.Rows[0]["MST"].ToString());
                 input.Clear();
-                Thread.Sleep(500);
+                Thread.Sleep(800);
                 input.SendKeys(dtKhachhang.Rows[0]["MST"].ToString());
                 input.Clear();
                 input.SendKeys(dtKhachhang.Rows[0]["MST"].ToString());
-                Thread.Sleep(500);
+                Thread.Sleep(800);
+                // Tìm input và nhập ngày mới
+              
                 // Chờ gợi ý xuất hiện
                 var suggestion = wait.Until(d => d.FindElement(By.CssSelector("#eac-container-txtBuyerSearch .eac-item")));
 
                 // Click bằng JavaScript
                 ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", suggestion);
-
+                var txtInvoiceDate = wait.Until(d => d.FindElement(By.Id("txtInvoiceDate")));
+                txtInvoiceDate.Clear();
+                txtInvoiceDate.SendKeys(formattedDate);
 
                 // 1. Đã ở trong dialog chính (iframe framedialogInvoiceNewEdit)
                 // Tìm và click nút "Thêm chi tiết"
@@ -304,20 +318,47 @@ namespace SaovietTax
                     {
                         // Sản phẩm cuối cùng: dùng "Ghi lại"
                         var btnAdd = driver.FindElement(By.Id("btnAdd"));
-                        btnAdd.Click();
+                        btnAdd.Click(); 
                     }
 
                     Console.WriteLine($"Đã thêm sản phẩm {i + 1}/{products.Count}: {product.Name}");
                 }
 
-                // 4. Chờ popup chi tiết đóng
-                wait.Until(d => !d.FindElement(By.CssSelector("div.ui-dialog[aria-describedby='InvoiceDetailsNewEdit']")).Displayed);
-
-                // 5. Quay lại iframe chính
                 driver.SwitchTo().DefaultContent();
-                driver.SwitchTo().Frame("framedialogInvoiceNewEdit");
 
-                Console.WriteLine("Hoàn thành thêm tất cả sản phẩm!");
+                // Bây giờ mới tìm iframe
+                var mainIframe = driver.FindElement(By.Id("framedialogInvoiceNewEdit"));
+                driver.SwitchTo().Frame(mainIframe);
+
+                // 2. Click nút Ghi lại
+                var saveBtn = driver.FindElement(By.Id("btnSave"));
+                saveBtn.Click();
+
+                Console.WriteLine("Đã click Ghi lại - Lưu hóa đơn"); 
+                // 2. Chờ về trang danh sách 
+                // 3. Chờ bảng load xong
+                Thread.Sleep(1000); // Hoặc wait cụ thể
+
+                driver.SwitchTo().DefaultContent();
+
+                // 2. Chờ bảng danh sách load lại
+                wait.Until(d => d.FindElement(By.Id("gg-table-1")).Displayed);
+
+                // 3. Chờ thêm 1 chút để dữ liệu refresh
+                Thread.Sleep(1000);
+
+                // 4. Lấy dòng đầu tiên
+                var firstRow = driver.FindElement(By.CssSelector("#gg-table-1 tbody tr:first-child"));
+                // 5. Lấy GUID từ checkbox
+                var checkbox = firstRow.FindElement(By.CssSelector(".CheckOne input"));
+                string invoiceGuid = checkbox.GetAttribute("data-invoiceguid");
+
+                Console.WriteLine($"Hóa đơn vừa tạo có GUID: {invoiceGuid}");
+
+
+              
+                driver.Quit();  
+                this.Close();   
 
             }
             catch (Exception ex)
@@ -356,9 +397,9 @@ namespace SaovietTax
             //Đọc file txt
             string filePath = Path.Combine(rootDirectory, "Hoadon", "invoice.txt");
             _content = File.ReadAllText(filePath);
-            if (_content.Contains("2_"))
+            if (_content.Contains("PH_"))
             {
-
+                MessageBox.Show("Phát hành hoá đon thành công!");
             }
             else
             {
