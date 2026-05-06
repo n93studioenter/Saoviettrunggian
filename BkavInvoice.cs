@@ -2,11 +2,13 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
+using SaovietTax.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -18,6 +20,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static SaovietTax.BkavInvoice;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace SaovietTax
 {
@@ -233,6 +237,8 @@ namespace SaovietTax
                 input.Clear();
                 Thread.Sleep(800);
                 input.SendKeys(dtKhachhang.Rows[0]["MST"].ToString());
+                //input.SendKeys(OpenQA.Selenium.Keys.Control + "a");
+
                 input.Clear();
                 Thread.Sleep(800);
                 input.SendKeys(dtKhachhang.Rows[0]["MST"].ToString());
@@ -240,7 +246,7 @@ namespace SaovietTax
                 input.SendKeys(dtKhachhang.Rows[0]["MST"].ToString());
                 Thread.Sleep(800);
                 // Tìm input và nhập ngày mới
-              
+
                 // Chờ gợi ý xuất hiện
                 var suggestion = wait.Until(d => d.FindElement(By.CssSelector("#eac-container-txtBuyerSearch .eac-item")));
 
@@ -355,15 +361,117 @@ namespace SaovietTax
 
                 Console.WriteLine($"Hóa đơn vừa tạo có GUID: {invoiceGuid}");
 
+                //Lưu GUID idnhap hoadon
+                var updateQr = @"UPDATE HoaDon  SET IdNhap = ? WHERE MaSo =?";
+                var updateParameters = new OleDbParameter[]
+                {
+        new OleDbParameter("?", invoiceGuid.ToString()), // Cập nhật giá trị TiLe 
+        new OleDbParameter("?", kq2.Rows[0]["HOADON.MaSo"].ToString()),
 
-              
-                driver.Quit();  
-                this.Close();   
+                };
+                var updateRowsAffected = ExecuteQueryResult(updateQr, updateParameters);
+
+
+                string invoiceGuidLower = invoiceGuid.ToLower();
+                // VD: "117e7d0b-9c3e-4997-9254-1d6fcb7ff36f"
+
+                // Tìm nút Xem với GUID viết thường
+                var viewButton = driver.FindElement(By.XPath($"//a[contains(@onclick, '{invoiceGuidLower}') and contains(@class, 'aviewInvoice')]"));
+                viewButton.Click();
+
+                // Chờ dialog xuất hiện
+                wait.Until(d => d.FindElement(By.Id("dialogViewDetail")).Displayed);
+
+                // Switch vào iframe của popup
+                 iframe = driver.FindElement(By.Id("framedialogViewDetail"));
+                driver.SwitchTo().Frame(iframe);
+                Console.WriteLine("Đã switch vào iframe popup");
+
+                // Chờ thẻ object load
+                var objectTag = wait.Until(d => d.FindElement(By.CssSelector("object[data*='.pdf']")));
+
+                // Lấy đường dẫn relative
+                string relativePath = objectTag.GetAttribute("data");
+                Console.WriteLine($"Relative path: {relativePath}");
+
+                // Lấy domain hiện tại (vd: https://van.ehoadon.vn)
+                string currentUrl = driver.Url;
+                Uri baseUri = new Uri(currentUrl);
+                string fullPdfUrl = new Uri(baseUri, relativePath).ToString();
+
+                Console.WriteLine($"PDF URL: {fullPdfUrl}");
+                string savePath = @"C:\hoadon\HoaDon.pdf";
+                string querys = "SELECT * FROM tbRegister";
+                string pathluus = "";
+                string path = "";
+                var kqs = ExecuteQuery(query, null);
+                try
+                {
+                    if (kq.Rows.Count > 0)
+                    {
+                        pathluus = kqs.Rows[0]["Hoadonpath"].ToString();
+                        pathluus = Directory.GetParent(pathluus).FullName;
+                        pathluus = Path.Combine(pathluus, $"HoaDon/HdNhap");
+                        // ✅ kiểm tra tồn tại
+                        if (!Directory.Exists(pathluus))
+                        {
+                            Directory.CreateDirectory(pathluus);
+                             
+                        }
+                        path = Path.Combine(pathluu, $"{kq2.Rows[0]["HOADON.MaSo"].ToString()}.pdf");
+                        //Lấy nam taichinh
+                    }
+                }
+                catch (Exception ex)
+                {
+                    XtraMessageBox.Show(ex.Message);
+                }
+
+                // Mở trực tiếp trong trình duyệt (hoặc dùng WebClient để tải ẩn)
+                driver.Navigate().GoToUrl(fullPdfUrl);
+                using (WebClient client = new WebClient())
+                {
+                    // Nếu cần cookie từ session hiện tại
+                    // client.Headers.Add("Cookie", driver.Manage().Cookies.AllCookies);
+                    client.DownloadFile(fullPdfUrl, path);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = path,
+                        UseShellExecute = true // Dùng shell của Windows để mở
+                    });
+                }
+                 driver.Quit();  
+                 this.Close();   
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine("❌ Lỗi: " + ex.Message);
+            }
+        }
+        public int ExecuteQueryResult(string query, params OleDbParameter[] parameters)
+        {
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                connection.Open();
+                Console.WriteLine("Kết nối đến cơ sở dữ liệu thành công!");
+
+                using (OleDbCommand command = new OleDbCommand(query, connection))
+                {
+                    // Thêm tham số
+                    if (parameters != null)
+                        command.Parameters.AddRange(parameters);
+
+                    // Thực thi INSERT, UPDATE, DELETE
+                    command.ExecuteNonQuery();
+                }
+
+                // Lấy ID vừa thêm bằng @@IDENTITY
+                using (OleDbCommand idCommand = new OleDbCommand("SELECT @@IDENTITY", connection))
+                {
+                    object result = idCommand.ExecuteScalar();
+                    return Convert.ToInt32(result);
+                }
             }
         }
         string password, connectionString;
@@ -399,11 +507,89 @@ namespace SaovietTax
             _content = File.ReadAllText(filePath);
             if (_content.Contains("PH_"))
             {
-                MessageBox.Show("Phát hành hoá đon thành công!");
+                PhatHanhHD();
             }
             else
             {
                 Addinvoice();
+            }
+
+        }
+
+        private void PhatHanhHD()
+        {
+            string qrq = "SELECT * FROM tbInvoiceInfo";
+            var dtInvoiceInfo = ExecuteQuery(qrq, null);
+            var rows = dtInvoiceInfo.Rows[0];
+
+            string username = rows["Username"]?.ToString();
+            string password = rows["Password"]?.ToString();
+             
+
+            var service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;
+
+            var options = new ChromeOptions();
+
+            // 🔥 Ẩn trình duyệt (không hiện UI nhưng vẫn chạy thật)
+            //options.AddArgument("--window-position=-32000,-32000");
+            // options.AddArgument("--window-size=1920,1080");
+
+            IWebDriver driver = new ChromeDriver(service, options);
+
+            try
+            {
+                driver.Navigate().GoToUrl("https://van.ehoadon.vn/");
+
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+
+                // ===== USERNAME =====
+                var txtUser = wait.Until(d =>
+                {
+                    try
+                    {
+                        var el = d.FindElement(By.Id("txtUserName"));
+                        return el.Displayed ? el : null;
+                    }
+                    catch { return null; }
+                });
+
+                txtUser.Clear();
+                txtUser.SendKeys(username); // 👉 username của bạn
+
+                // ===== PASSWORD =====
+                var txtPass = driver.FindElement(By.Id("txtPassword"));
+                txtPass.Clear();
+                txtPass.SendKeys(password);
+
+                // ===== CLICK LOGIN =====
+                var btnLogin = driver.FindElement(By.Id("btnLogin"));
+                btnLogin.Click();
+
+                // ===== CHỜ LOGIN THÀNH CÔNG =====
+                wait.Until(d => d.Url.Contains("QLHD"));
+
+                Console.WriteLine("✅ Login thành công");
+
+                wait.Until(d => d.Url.Contains("QLHD"));
+
+                Console.WriteLine("✅ Đã vào QLHD");
+
+                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                var getsplit = _content.Split('_');
+                string invoiceGuidLower = getsplit[1].ToLower();
+                // VD: "117e7d0b-9c3e-4997-9254-1d6fcb7ff36f"
+                this.Close();
+
+                // Tìm nút Xem với GUID viết thường
+                var viewButton = driver.FindElement(By.XPath($"//a[contains(@onclick, '{invoiceGuidLower}') and contains(@class, 'aeditInvoice')]"));
+                viewButton.Click(); 
+                this.Close();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Lỗi: " + ex.Message);
             }
 
         }
