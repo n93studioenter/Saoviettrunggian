@@ -45,26 +45,29 @@
             // 
             // comboBoxEdit1
             // 
-            this.comboBoxEdit1.Location = new System.Drawing.Point(85, 103);
+            this.comboBoxEdit1.Location = new System.Drawing.Point(106, 129);
+            this.comboBoxEdit1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxEdit1.Name = "comboBoxEdit1";
             this.comboBoxEdit1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.comboBoxEdit1.Size = new System.Drawing.Size(142, 23);
+            this.comboBoxEdit1.Size = new System.Drawing.Size(178, 23);
             this.comboBoxEdit1.TabIndex = 0;
             this.comboBoxEdit1.SelectedIndexChanged += new System.EventHandler(this.comboBoxEdit1_SelectedIndexChanged);
             // 
             // comboBoxEdit2
             // 
-            this.comboBoxEdit2.Location = new System.Drawing.Point(85, 145);
+            this.comboBoxEdit2.Location = new System.Drawing.Point(106, 181);
+            this.comboBoxEdit2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxEdit2.Name = "comboBoxEdit2";
             this.comboBoxEdit2.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.comboBoxEdit2.Size = new System.Drawing.Size(142, 23);
+            this.comboBoxEdit2.Size = new System.Drawing.Size(178, 23);
             this.comboBoxEdit2.TabIndex = 1;
             // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(20, 106);
+            this.labelControl1.Location = new System.Drawing.Point(25, 132);
+            this.labelControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(52, 16);
             this.labelControl1.TabIndex = 2;
@@ -72,7 +75,8 @@
             // 
             // labelControl2
             // 
-            this.labelControl2.Location = new System.Drawing.Point(20, 148);
+            this.labelControl2.Location = new System.Drawing.Point(25, 185);
+            this.labelControl2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(59, 16);
             this.labelControl2.TabIndex = 3;
@@ -80,33 +84,37 @@
             // 
             // checkEdit1
             // 
-            this.checkEdit1.Location = new System.Drawing.Point(24, 8);
+            this.checkEdit1.Location = new System.Drawing.Point(30, 10);
+            this.checkEdit1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkEdit1.Name = "checkEdit1";
             this.checkEdit1.Properties.Caption = "Sổ nhật ký chung";
-            this.checkEdit1.Size = new System.Drawing.Size(141, 20);
+            this.checkEdit1.Size = new System.Drawing.Size(176, 20);
             this.checkEdit1.TabIndex = 4;
             // 
             // checkEdit2
             // 
-            this.checkEdit2.Location = new System.Drawing.Point(24, 34);
+            this.checkEdit2.Location = new System.Drawing.Point(30, 42);
+            this.checkEdit2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkEdit2.Name = "checkEdit2";
             this.checkEdit2.Properties.Caption = "Sổ cái tài khoản";
-            this.checkEdit2.Size = new System.Drawing.Size(124, 20);
+            this.checkEdit2.Size = new System.Drawing.Size(155, 20);
             this.checkEdit2.TabIndex = 5;
             // 
             // checkEdit3
             // 
-            this.checkEdit3.Location = new System.Drawing.Point(24, 60);
+            this.checkEdit3.Location = new System.Drawing.Point(30, 75);
+            this.checkEdit3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkEdit3.Name = "checkEdit3";
             this.checkEdit3.Properties.Caption = "Sổ chi tiết tài khoản";
-            this.checkEdit3.Size = new System.Drawing.Size(141, 20);
+            this.checkEdit3.Size = new System.Drawing.Size(176, 20);
             this.checkEdit3.TabIndex = 6;
             // 
             // btnExoprt
             // 
-            this.btnExoprt.Location = new System.Drawing.Point(85, 185);
+            this.btnExoprt.Location = new System.Drawing.Point(106, 231);
+            this.btnExoprt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnExoprt.Name = "btnExoprt";
-            this.btnExoprt.Size = new System.Drawing.Size(142, 29);
+            this.btnExoprt.Size = new System.Drawing.Size(178, 36);
             this.btnExoprt.TabIndex = 7;
             this.btnExoprt.Text = "Xuất excel";
             this.btnExoprt.Click += new System.EventHandler(this.btnExoprt_Click);
@@ -115,7 +123,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(268, 239);
+            this.ClientSize = new System.Drawing.Size(294, 260);
             this.Controls.Add(this.btnExoprt);
             this.Controls.Add(this.checkEdit3);
             this.Controls.Add(this.checkEdit2);

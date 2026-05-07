@@ -6015,8 +6015,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             return form.ShowDialog() == DialogResult.OK ? textBox.Text : null;
         }
         private async void frmMain_Load(object sender, EventArgs e)
-        {
-           
+        { 
             // var list = AcbPdfReader.Read(@"C:\Users\Admin\Desktop\18687768_SAOKE_TK_202511.pdf");
 
 
@@ -6030,7 +6029,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
 
 
             hoverTimer = new Timer();
-            hoverTimer.Interval = 2000; // 0.5s
+            hoverTimer.Interval = 100; // 0.5s
             hoverTimer.Tick += HoverTimer_Tick;
             searchExpert = true;
             // Code gây lỗi 
@@ -19952,6 +19951,185 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             public double Dongia { get; set; }
         }
         public List<Vattugoiy> lstvtgoiy = new List<Vattugoiy>();
+        public static double CompareProductWeightNames(string product1, string product2)
+        {
+            // Hàm con trích xuất trọng số tên bên trong
+            string ExtractWeightName(string input)
+            {
+                if (string.IsNullOrWhiteSpace(input)) return string.Empty;
+
+                var words = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var result = new List<string>();
+
+                foreach (var w in words)
+                {
+                    // Bỏ qua nếu bắt đầu bằng số, có chứa số, hoặc viết hoa toàn bộ (mã hàng)
+                    if (char.IsDigit(w[0]) || w.Any(char.IsDigit) || (w.Length >= 2 && w.All(char.IsUpper)))
+                        continue;
+
+                    result.Add(w);
+                }
+
+                return string.Join(" ", result).Trim();
+            }
+
+            // Hàm con tính độ tương đồng Jaccard đơn giản
+            double CalcSimilarity(string s1, string s2)
+            {
+                if (string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2)) return 1.0;
+                if (string.IsNullOrEmpty(s1) || string.IsNullOrEmpty(s2)) return 0.0;
+                if (s1.Equals(s2, StringComparison.OrdinalIgnoreCase)) return 1.0;
+
+                var words1 = s1.Split(' ');
+                var words2 = s2.Split(' ');
+
+                int common = words1.Count(w => words2.Contains(w, StringComparer.OrdinalIgnoreCase));
+                int total = words1.Length + words2.Length - common;
+
+                return total == 0 ? 0 : (double)common / total;
+            }
+
+            string weight1 = ExtractWeightName(product1);
+            string weight2 = ExtractWeightName(product2);
+
+            return CalcSimilarity(weight1, weight2);
+        }  
+private static readonly Dictionary<string, string[]> BrandAliases =
+    new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+{
+    { "hảo hảo", new[] { "hao hao", "hảo hảo" } },
+     { "Cà phê", new[] { "ca phe", "cà phê" } },
+     { "trà xanh", new[] { "tra xanh", "trà xanh" } },
+    { "coca cola", new[] { "cocacola", "coca cola" } },
+    { "red bull", new[] { "redbull", "red bull" } },
+    { "head & shoulders", new[] { "head shoulders", "head & shoulders" } },
+    { "chin-su", new[] { "chin su", "chin-su", "chinsu" } },
+};
+
+        private static readonly HashSet<string> ImportantWords =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+    // bánh kẹo
+    "oreo",
+    "kitkat",
+    "twix",
+    "snickers",
+    "m&m",
+    "milka",
+    "cadbury",
+
+    // mì
+    "hảo hảo",
+    "omachi",
+    "kokomi",
+    "gấu đỏ",
+    "samyang",
+
+    // nước ngọt
+    "coca cola",
+    "pepsi",
+    "sting",
+    "red bull",
+    "7up",
+    "sprite",
+    "fanta",
+    "mirinda",
+
+    // bia
+    "tiger",
+    "heineken",
+    "333",
+    "sapporo",
+    "saigon",
+
+    // sữa
+    "vinamilk",
+    "ensure",
+    "milo",
+    "nestle",
+
+    // khác
+    "xmen",
+    "diana",
+    "raid",
+    "knorr",
+    "maggi",
+    "chin-su"
+        };
+
+        private static string Normalize(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return "";
+
+            text = text.ToLowerInvariant();
+
+            // bỏ ký tự đặc biệt
+            text = System.Text.RegularExpressions.Regex
+                .Replace(text, @"[^\p{L}\p{N}\s&]", " ");
+
+            // bỏ số
+            text = System.Text.RegularExpressions.Regex
+                .Replace(text, @"\d+", " ");
+
+            // bỏ khoảng trắng dư
+            text = System.Text.RegularExpressions.Regex
+                .Replace(text, @"\s+", " ")
+                .Trim();
+
+            return text;
+        }
+
+        private static HashSet<string> GetImportantWords(string input)
+        {
+            input = Normalize(input);
+
+            var result = new HashSet<string>(
+                StringComparer.OrdinalIgnoreCase);
+
+            // alias
+            foreach (var pair in BrandAliases)
+            {
+                foreach (var alias in pair.Value)
+                {
+                    if (input.Contains(alias))
+                    {
+                        result.Add(pair.Key);
+                        break;
+                    }
+                }
+            }
+
+            // normal words
+            foreach (var word in ImportantWords)
+            {
+                if (input.Contains(word))
+                {
+                    result.Add(word);
+                }
+            }
+
+            return result;
+        }
+
+        public static double CompareProduct(string p1, string p2)
+        {
+            var set1 = GetImportantWords(p1);
+
+            var set2 = GetImportantWords(p2);
+
+            if (set1.Count == 0 || set2.Count == 0)
+                return 0;
+
+            int common = set1.Intersect(set2).Count();
+
+            int total = set1.Union(set2).Count();
+
+            return total == 0
+                ? 0
+                : (double)common / total;
+        } 
+
         private void XulusohieuvattuSuggest(string name,string dvt,double dongia)
         {
             lstvtgoiy = new List<Vattugoiy>();
@@ -19985,16 +20163,18 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         key = RemoveParentheses(key);
                     } 
                 }
-                if (!string.IsNullOrEmpty(inputQuyCach) && inputQuyCach.ToLower() != item.Value.QuyCach.ToLower() && !kiemtracodong)
-                {
-                    if (item.Value.QuyCach.Contains("800"))
-                    {
-                        int dd = 100;
-                    }
-                    continue;
-                }
+                //if (!string.IsNullOrEmpty(inputQuyCach) && inputQuyCach.ToLower() != item.Value.QuyCach.ToLower() && !kiemtracodong)
+                //{
+                //    if (item.Value.QuyCach.Contains("800"))
+                //    {
+                //        int dd = 100;
+                //    }
+                //    continue;
+                //}
                 double final = CalculateSimilarity(tenhang.ToLower(), key.ToLower());
-                if (Timtheogia && (final >= 60 || tenhang.ToLower().Split(' ')[0] == key.ToLower().Split(' ')[0]))
+                var weightSimilarity = CompareProductWeightNames(tenhang.ToLower(), key.ToLower());
+                var productSimilarity = CompareProduct(tenhang.ToLower(), key.ToLower());
+                if (Timtheogia && (final >= 30 || tenhang.ToLower().Split(' ')[0] == key.ToLower().Split(' ')[0]))
                 {
                     if (dongia != item.Value.Dongia)
                     {
@@ -20011,17 +20191,21 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
                 string dvt1 =Helpers.RemoveVietnameseDiacritics(dvt.ToLower());
                 string dvt2 = Helpers.RemoveVietnameseDiacritics(item.Value.DonVi.ToLower());
-                if (dvt1 != dvt2)
-                {
-                    final = 0;
-                }
+                //if (dvt1 != dvt2)
+                //{
+                //    final = 0;
+                //}
                 if (final < 100 && !string.IsNullOrEmpty(item.Value.TenPhuChuan))
                 {
                     double alt = CalculateSimilarity(item.Value.TenPhuChuan, key);
                      
                     if (alt > final) final = alt;
                 }
-                if (final >= 50)
+                if (productSimilarity == 1)
+                {
+                    int aaa = 10;
+                }
+                if (final >= 80 || productSimilarity==1)
                 {
                     Vattugoiy vattugoiy = new Vattugoiy();
                     if(item.Value.TenChuan.Length>50)
@@ -20038,6 +20222,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             }
         }
         bool kiemtracodong = false;
+       
         private void Xulysohieuvattu(TbImportDetail tbImportDetail)
         { 
             string originalTen = tbImportDetail.Ten?.Trim() ?? "";
@@ -21457,8 +21642,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 XmlNode n = thueNodes[i];
                                 string tsStr = n.SelectSingleNode("TSuat")?.InnerText ?? "";
                                 double ttien = double.Parse(n.SelectSingleNode("ThTien")?.InnerText ?? "0");
-                                double tthue = double.Parse(n.SelectSingleNode("TThue")?.InnerText ?? "0");
-                                double vVal = (tsStr == "KCT" || tsStr == "KKKNT") ? 0 : double.Parse(tsStr.Replace("%", ""));
+                            double tthue = Math.Round(double.Parse(n.SelectSingleNode("TThue")?.InnerText ?? "0"));
+                            double vVal = (tsStr == "KCT" || tsStr == "KKKNT") ? 0 : double.Parse(tsStr.Replace("%", ""));
                             if ((tsStr == "KCT" && ttien == 0) || (tsStr == "KKKNT" && ttien == 0) || (tsStr == "0%" && ttien == 0) || ttien == 0)
                                 continue;
                             if (tbImport.TgTCThue1 == 0)
@@ -23914,7 +24099,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             string[] headers=null;
             //Acb header
             //if (lblTKNganHangTitle.Text.ToLower().Contains("acb") || lblTKNganHangTitle.Text.ToLower().Contains("á châu"))
-            headers = new string[] {"Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co","Phát sinh co", "Số tiền rút", "Số tiền gửi" };
+            headers = new string[] {"Ngay hieu luc","Noi dung giao dich", "Ghi no","Ghi co", "Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co","Phát sinh co", "Số tiền rút", "Số tiền gửi" };
             int countcol = 0;
             bool isHeaderRow = false;
             for (int i = 1; i <= 12; i++)
@@ -23987,10 +24172,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     int TTCoIndex = 0;
                     int BalanceIndex = 0;
                     int DoiungIndex = 0;
-                    string[] lstNgayGD = {"Ngay GD","Ngày giá trị", "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày GD", "Ngày giao dịch","NGÀY GIAO DỊCH", "Ngày giá trị", "Ngay hieu luc", "Ngày Date", "Transaction Date", "Ngày", "Date", "NGÀY GIAO DỊCH", "Transaction date" };
-                    string[] lstNoidung = { "Nội dung", "Nội dung giao dịch", "Diễn giải", "Details", "Description", "Mô tả", "Ghi chú", "Remarks", "Nội dung chi tiết", "Chi tiết giao dịch", "Remark", "Ghi chú Remark", "NỘI DUNG", "Transaction Comment", "Noi dung chi tiet" };
-                    string[] lstNo = { "Phát sinh nợ","So tien ghi no", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Số tiền ghi nợ", "Ghi nợ", "Nợ", "Debt", "dr", "PHÁT SINH NỢ"};
-                    string[] lstCo = { "Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có","So tien ghi co", "Số tiền ghi có", "Ghi có", "Có", "Credit", "Credit amount", "Có", "PHÁT SINH CÓ", "Phát sinh co" };
+                    string[] lstNgayGD = {"Ngay hieu luc","Ngay GD","Ngày giá trị", "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày GD", "Ngày giao dịch","NGÀY GIAO DỊCH", "Ngày giá trị", "Ngay hieu luc", "Ngày Date", "Transaction Date", "Ngày", "Date", "NGÀY GIAO DỊCH", "Transaction date" };
+                    string[] lstNoidung = {"Noi dung giao dich", "Nội dung", "Nội dung giao dịch", "Diễn giải", "Details", "Description", "Mô tả", "Ghi chú", "Remarks", "Nội dung chi tiết", "Chi tiết giao dịch", "Remark", "Ghi chú Remark", "NỘI DUNG", "Transaction Comment", "Noi dung chi tiet" };
+                    string[] lstNo = { "Ghi no","Phát sinh nợ","So tien ghi no", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Số tiền ghi nợ", "Ghi nợ", "Nợ", "Debt", "dr", "PHÁT SINH NỢ"};
+                    string[] lstCo = { "Ghi co","Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có","So tien ghi co", "Số tiền ghi có", "Ghi có", "Có", "Credit", "Credit amount", "Có", "PHÁT SINH CÓ", "Phát sinh co" };
                     string[] lstBalance = { "Số dư", "Balance", "Available Balance", "Số dư khả dụng", "Số dư tài khoản", "Số dư cuối", "Running balance", "SỐ DƯ" };
                     string[] lstDoiung = { "Tên tài khoản đối ứng", "Remitter's account name", "Đơn vị thụ hưởng", "Đơn vị chuyển", "Beneficiary", "Applicant" };
                     foreach (var worksheet in workbook.Worksheets)
@@ -30476,12 +30661,9 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 hoverColumnName = hitInfo.Column.FieldName;
 
                 hoverTimer.Start();
-            }
-
-
+            } 
         }
-
-
+         
 
         private void gridView4_MouseLeave(object sender, EventArgs e)
         {

@@ -80,8 +80,12 @@ namespace SaovietTax
             string query = "";
             if (Maso != -1)
             {
-                gridControl1.DataSource = frmMain.lstvt.Where(m => m.MaPhanLoai == Maso && (string.IsNullOrEmpty(keysearch) || (Helpers.RemoveVietnameseDiacritics(m.TenVattu).ToLower().Contains(Helpers.RemoveVietnameseDiacritics(keysearch).ToLower())) || m.SoHieu.ToLower().Contains(keysearch.ToLower())));
-                GridStripRow(gridView1);
+                if (Typeform == 1)
+                {
+                    gridControl1.DataSource = frmMain.lstvt.Where(m => m.MaPhanLoai == Maso && (string.IsNullOrEmpty(keysearch) || (Helpers.RemoveVietnameseDiacritics(m.TenVattu).ToLower().Contains(Helpers.RemoveVietnameseDiacritics(keysearch).ToLower())) || m.SoHieu.ToLower().Contains(keysearch.ToLower())));
+                    GridStripRow(gridView1);
+                }
+               
             }
             else
             {

@@ -120,6 +120,8 @@ namespace SaovietTax
             };
 
             var kq2 = ExecuteQuery(qrTimct, parameterss);
+
+          
             DateTime date = DateTime.ParseExact(kq2.Rows[0]["NgayCT"].ToString(), "dd/MM/yy hh:mm:ss tt", CultureInfo.InvariantCulture);
             string formattedDate = date.ToString("dd/MM/yyyy");
 
@@ -212,6 +214,32 @@ namespace SaovietTax
 
                 wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 
+
+                //Kiểm tra xem idnhap có hay chưa, nếu có thì xoá đơn cũ để cập nhật hoá đơn mới
+
+                if (!string.IsNullOrEmpty(kq2.Rows[0]["IdNhap"].ToString()))
+                {
+                    string idnhap = kq2.Rows[0]["IdNhap"].ToString();
+                    var editButton = driver.FindElement(By.XPath($"//a[contains(@onclick, '{idnhap.ToLower()}') and contains(@class, 'aeditInvoice')]"));
+                    editButton.Click();
+                    var popups2 = driver.FindElements(By.ClassName("pop"));
+                    var dialog2 = popups2.FirstOrDefault(p => p.Displayed);
+
+                    // Switch vào iframe
+                    var iframe2 = dialog2.FindElement(By.Id("framedialogInvoiceNewEdit"));
+                    driver.SwitchTo().Frame(iframe2);
+                    var deleteButton = driver.FindElement(By.Id("btnDeleteInvoice"));
+                    deleteButton.Click();
+
+                    // Chờ popup xuất hiện
+                    wait.Until(d => d.FindElement(By.XPath("//div[contains(text(), 'Bạn có chắc chắn muốn Xoá')]")));
+
+                    // Tìm và click nút "Xoá khỏi hệ thống"
+                    var deletePermanentBtn = driver.FindElement(By.XPath("//button[contains(text(), 'Xoá khỏi hệ thống')]"));
+                    deletePermanentBtn.Click();
+                    Console.WriteLine("Đã chọn Xoá khỏi hệ thống");
+                }
+                 
                 var btnAddNew = wait.Until(d =>
                 {
                     try
@@ -258,6 +286,7 @@ namespace SaovietTax
 
                 // 1. Đã ở trong dialog chính (iframe framedialogInvoiceNewEdit)
                 // Tìm và click nút "Thêm chi tiết"
+                Thread.Sleep(1000);
                 var btnAddDetail = wait.Until(d => d.FindElement(By.Id("MasterPlaceHolderBlank_btnAddDetails")));
                 btnAddDetail.Click();
 
@@ -431,17 +460,28 @@ namespace SaovietTax
                 driver.Navigate().GoToUrl(fullPdfUrl);
                 using (WebClient client = new WebClient())
                 {
-                    // Nếu cần cookie từ session hiện tại
-                    // client.Headers.Add("Cookie", driver.Manage().Cookies.AllCookies);
+                    // Tải file PDF
                     client.DownloadFile(fullPdfUrl, path);
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = path,
-                        UseShellExecute = true // Dùng shell của Windows để mở
-                    });
+                    Console.WriteLine("Đã tải xong file PDF");
                 }
-                 driver.Quit();  
-                 this.Close();   
+                Thread.Sleep(2000);
+                // Sau khi tải xong, mở file
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = path,
+                    UseShellExecute = true
+                });
+                Console.WriteLine("Đã mở file PDF");
+
+                // Đợi 1-2 giây để file mở xong
+                Thread.Sleep(2000);
+
+                // Đóng WebDriver
+                driver.Quit();
+                Console.WriteLine("Đã đóng WebDriver");
+
+                // Đóng form hiện tại
+                this.Close();
 
             }
             catch (Exception ex)

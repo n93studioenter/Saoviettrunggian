@@ -129,6 +129,8 @@ namespace SaovietTax {
                         case "4": Application.Run(new Form3()); break;
                         case "5": Application.Run(new APIInvoice()); break;
                         case "6": Application.Run(new BkavInvoice()); break;
+                        case "7": Application.Run(new VNPTInvoice()); break;
+                        case "8": Application.Run(new TendoInvoice()); break;
                     }
                 }
             }

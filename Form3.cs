@@ -390,6 +390,9 @@ namespace SaovietTax
 
             DataTable rs = GetHeThongTKData(int.Parse(comboBoxEdit1.Text), int.Parse(comboBoxEdit2.Text));
 
+            rs.DefaultView.Sort = "SoHieu ASC";
+            rs = rs.DefaultView.ToTable();
+
             if (checkEdit1.Checked)
             {
                 List<SoNhatKyChung> lstSonkChung = ConvertToList(Getbc1(int.Parse(comboBoxEdit1.Text), int.Parse(comboBoxEdit2.Text)))
@@ -1154,13 +1157,24 @@ ORDER BY ThangCT, ChungTu.NgayGS, IIF(HethongTK.SoHieu LIKE '111%','0','1')+Cstr
 
                         decimal duco0 = decimal.Parse(ExecuteQuery(queryCheckVatTu, parameterss).Rows[0]["DuCo_0"].ToString());
                         decimal sodu = 0;
-                        if (duno0 > duco0)
+                        //if (duno0 > duco0)
+                        //{
+                        //    sodu = duno0 - duco0;
+                        //}
+                        //else
+                        //{
+                        //    sodu = (duco0 - duno0);
+                        //}
+                        int loainoco = 0;
+                        sodu = duno0 - duco0;
+                        if (sodu > 0)
                         {
-                            sodu = duno0 - duco0;
+                            loainoco = 1;
                         }
-                        else
+                        else if (sodu < 0)
                         {
-                            sodu = (duco0 - duno0);
+                           // sodu= sodu * (-1);  
+                            loainoco = 2;
                         }
                         var datatahngtrc = GetSoNhatKy(1, int.Parse(comboBoxEdit1.Text) - 1, item["SoHieu"].ToString());
                         var totalTPSNotrc = datatahngtrc.Where(m => m.TKNo.StartsWith(item["SoHieu"].ToString())).Sum(m => m.SoPS);
@@ -1179,23 +1193,39 @@ ORDER BY ThangCT, ChungTu.NgayGS, IIF(HethongTK.SoHieu LIKE '111%','0','1')+Cstr
                         }
 
                         //Số dư cuối kỳ = Số dư đầu kỳ + Phát sinh Nợ - Phát sinh Có
-                        if (totalTPSNo > totalTPSCo)
+                        //if (totalTPSNo > totalTPSCo)
+                        //{
+                        //    dunocuiky = sodudauky + totalTPSNo - totalTPSCo;
+                        //}
+                        //else
+                        //{
+                        //    ducocuoiky = sodudauky + totalTPSCo - totalTPSNo;
+                        //}
+                        dunocuiky = sodudauky + totalTPSNo - totalTPSCo;
+                        sheet.Cell("E10").Value = $"Số dư đầu kỳ : ";
+                        sheet.Cell("E10").Style.Font.FontSize = 11;
+                        sheet.Cell("E10").Style.Font.Bold = true; 
+                        if(loainoco==1)
                         {
-                            dunocuiky = sodudauky + totalTPSNo - totalTPSCo;
+                            sheet.Cell("F10").Value = sodudauky.ToString("#,##0").Replace(",", ".");
+                            sheet.Cell("F10").Style.Font.FontSize = 11;
+                            sheet.Cell("F10").Style.Font.Bold = true;
                         }
                         else
                         {
-                            ducocuoiky = sodudauky + totalTPSCo - totalTPSNo;
+                            sheet.Cell("G10").Value =  (sodudauky*-1).ToString("#,##0").Replace(",", ".");
+                            sheet.Cell("G10").Style.Font.FontSize = 11;
+                            sheet.Cell("G10").Style.Font.Bold = true;
                         }
-                        //var soducuoiky = sodudauky + totalTPSNo - totalTPSCo;
+                            //var soducuoiky = sodudauky + totalTPSNo - totalTPSCo;
 
-                        var groupbylistbymonth = data.GroupBy(m => m.ThangCT)
-            .Select(g => new
-            {
-                MaCT = g.Key,
-                Items = g.ToList()
-            })
-            .ToList();
+                            var groupbylistbymonth = data.GroupBy(m => m.ThangCT)
+                .Select(g => new
+                {
+                    MaCT = g.Key,
+                    Items = g.ToList()
+                })
+                .ToList();
 
                         var groupbylist = data.GroupBy(m => m.MaCT)
             .Select(g => new
@@ -1208,7 +1238,7 @@ ORDER BY ThangCT, ChungTu.NgayGS, IIF(HethongTK.SoHieu LIKE '111%','0','1')+Cstr
                         int endrow = 9;
                         int stt = 1;
                         int currentRow = 0;
-                        currentRow = 10;
+                        currentRow = 11;
                         startrow = currentRow;
                         foreach (var gm in groupbylistbymonth)
                         {
@@ -1341,7 +1371,10 @@ ORDER BY ThangCT, ChungTu.NgayGS, IIF(HethongTK.SoHieu LIKE '111%','0','1')+Cstr
                         }
                         else
                         {
-                            sheet.Cell(currentRow, 7).Value = ducocuoiky.ToString("#,##0").Replace(",", ".");
+                            if (dunocuiky != 0)
+                                sheet.Cell(currentRow, 7).Value = (dunocuiky * (-1)).ToString("#,##0").Replace(",", ".");
+                            else
+                                sheet.Cell(currentRow, 7).Value = ducocuoiky.ToString("#,##0").Replace(",", ".");
                         }
                         sheet.Cell($"A{currentRow}").Style.Font.Bold = true;
                         range = sheet.Range($"A{startrow}:G{currentRow}");
