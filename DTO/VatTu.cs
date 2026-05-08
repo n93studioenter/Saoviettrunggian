@@ -22,5 +22,6 @@ namespace SaovietTax.DTO
         public double ThanhTien { get; set; }
         public string PTGB { get; set; }    
         public double Percent { get; set; } 
+        public double Real { get; set; }   
     }
 }

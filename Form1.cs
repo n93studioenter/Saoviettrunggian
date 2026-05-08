@@ -1685,6 +1685,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
 
                         //Add detail
                         var details = kqdt.AsEnumerable().Where(m => m.Field<string>("ParentId") == fileImport.ID.ToString()).ToList();
+                        double tongcon = 0;
                         foreach (DataRow itemDetail in details)
                         {
                             tkCo = itemDetail["TKCo"].ToString();
@@ -1735,10 +1736,81 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                             catch(Exception ex)
                             {
                                 vatdt = 0;
-                            }   
+                            }
+                            tongcon+= double.Parse(itemDetail["TTien"].ToString());
                             FileImportDetail fileImportDetail = new FileImportDetail(int.Parse(itemDetail["ID"].ToString()), Helpers.ConvertVniToUnicode(itemDetail["Ten"].ToString()), int.Parse(itemDetail["ParentId"].ToString()), itemDetail["SoHieu"].ToString(), double.Parse(itemDetail["SoLuong"].ToString()), double.Parse(itemDetail["DonGia"].ToString()), dvt, MaCT, tkNo, tkCo, double.Parse(itemDetail["TTien"].ToString()), itemDetail["Percent"].ToString(), tchat, vatdt);
                             fileImportDetail.ID = int.Parse(itemDetail["ID"].ToString());
                             fileImport.fileImportDetails.Add(fileImportDetail);
+                        }
+                        double sotienlect = tgTCThue - tongcon;
+                        //Kiem tra lech tien
+                        if (tgTCThue != tongcon)
+                        {
+                            if (xulychoall == false)
+                            {
+                                XtraMessageBoxArgs args = new XtraMessageBoxArgs();
+
+                                args.AllowHtmlText = DevExpress.Utils.DefaultBoolean.True;
+
+                                args.Text =
+                                    "<p><size=11><b><color=red>Hóa đơn " + fileImport.SHDon + "</color></b></size></p>" +
+                                    "<p>" +
+                                    "<size=10>Tổng tiền chi tiết:</size><br>" +
+                                    "<size=11><b><color=blue>" + tongcon.ToString("#,##0") + "</color></b></size>" +
+                                    "</p>" +
+
+                                    "<p>" +
+                                    "<size=10>Tổng tiền hóa đơn:</size><br>" +
+                                    "<size=11><b><color=green>" + tgTCThue.ToString("#,##0") + "</color></b></size>" +
+                                    "</p>" +
+
+                                    "<p>" +
+                                    "<size=10><b><color=orange>Lệch:</color></b> " +
+                                    "<b><color=red>" +
+                                    Math.Abs(tongcon - tgTCThue).ToString("#,##0") +
+                                    " đồng</color></b></size>" +
+                                    "</p>";
+                                args.AllowHtmlText = DevExpress.Utils.DefaultBoolean.True;
+
+                                args.Buttons = new DialogResult[]
+                                {
+    DialogResult.Yes,
+    DialogResult.No
+                                };
+
+                                args.Showing += (s, e) =>
+                                {
+                                    e.Buttons[DialogResult.Yes].Text = "Tự động xử lý";
+                                    e.Buttons[DialogResult.No].Text = "Bỏ qua";
+                                };
+
+                                DialogResult rs = XtraMessageBox.Show(args);
+                                if (rs == DialogResult.Yes)
+                                {
+                                    string qrq = "";
+                                    qrq = "UPDATE tbimportdetail SET TTien = TTien + ? WHERE ID = ?";
+                                    var parametersss = new OleDbParameter[]
+                                        {
+                                                new OleDbParameter("?", sotienlect),
+                                                new OleDbParameter("?", fileImport.fileImportDetails.LastOrDefault().ID),
+                                        };
+                                    ExecuteQueryResult(qrq, parametersss);
+                                    xulychoall = true;
+                                }
+                            }
+                            else
+                            {
+                                string qrq = "";
+                                qrq = "UPDATE tbimportdetail SET TTien = TTien + ? WHERE ID = ?";
+                                var parametersss = new OleDbParameter[]
+                                    {
+                                                new OleDbParameter("?", sotienlect),
+                                                new OleDbParameter("?", fileImport.fileImportDetails.LastOrDefault().ID),
+                                    };
+                                ExecuteQueryResult(qrq, parametersss);
+                                xulychoall = true;
+                            }
+                            
                         }
                         if (chkDauvao.Checked)
                         {
@@ -1794,6 +1866,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                
            
         }
+        bool xulychoall = false;
         // Gọi 1 lần duy nhất cho toàn bộ danh sách
         private void ApplyDefaultAndRuleBasedAccountsForAll(
             BindingList<FileImport> lsthoaodn,
@@ -16574,7 +16647,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             //gridControl2.DataSource = lstImportRa;
             //gridControl2.RefreshDataSource();
         }
-
+        public string TenVTMain { get; set; }
         private async void gridView4_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == System.Windows.Forms.Keys.Enter)
@@ -16627,6 +16700,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             DTO.VatTu vatTu = new DTO.VatTu();
                             vatTu.SoHieu = cellValue.ToString();
                             vatTu.TenVattu = gridView.GetRowCellValue(currentRowHandle, "Ten").ToString();
+                            TenVTMain= vatTu.TenVattu;
                             //Kiểm tra xem có phải so hiệu tự tạo 
                             string querydinhdanh = @"SELECT * FROM Vattu WHERE LCase(SoHieu) = LCase(?)";
                             var checkSH = ExecuteQuery(querydinhdanh, new OleDbParameter("?", vatTu.SoHieu.ToLower()));

@@ -82,13 +82,21 @@ namespace SaovietTax
             {
                 if (Typeform == 1)
                 {
-                    gridControl1.DataSource = frmMain.lstvt.Where(m => m.MaPhanLoai == Maso && (string.IsNullOrEmpty(keysearch) || (Helpers.RemoveVietnameseDiacritics(m.TenVattu).ToLower().Contains(Helpers.RemoveVietnameseDiacritics(keysearch).ToLower())) || m.SoHieu.ToLower().Contains(keysearch.ToLower())));
+                    var mylstvt= frmMain.lstvt.Where(m => m.MaPhanLoai == Maso && (string.IsNullOrEmpty(keysearch) || (Helpers.RemoveVietnameseDiacritics(m.TenVattu).ToLower().Contains(Helpers.RemoveVietnameseDiacritics(keysearch).ToLower())) || m.SoHieu.ToLower().Contains(keysearch.ToLower())));
+                    //Chỉ lọc khi không có filter
+                    foreach(var vt in mylstvt)
+                    { 
+                        var productSimilarity = frmMain.CompareProduct(vt.TenVattu.ToLower(), frmMain.TenVTMain.ToLower());
+                        vt.Real = productSimilarity;
+                    }
+                    gridControl1.DataSource = mylstvt.OrderByDescending(m=>m.Percent).OrderByDescending(m => m.Real).ToList();
                     GridStripRow(gridView1);
                 }
                
             }
             else
             {
+
                 var datasource = frmMain.lstvt.Where(m => (m.TenVattu.ToLower().Contains(keysearch.ToLower())) || m.SoHieu.ToLower().Contains(keysearch.ToLower()));
                 var ddd = comboBoxEdit1.Text;
                 if (frmMain.lstvtgoiy!=null && frmMain.lstvtgoiy.Count>0 && Typeform==2 && ddd!= "Tất cả")
@@ -96,9 +104,20 @@ namespace SaovietTax
                     datasource = datasource.Where(m =>
         frmMain.lstvtgoiy.Any(n => n.SoHieu == m.SoHieu)
     );
+                    gridControl1.DataSource = datasource;
                 }
-                gridControl1.DataSource = datasource; 
-                GridStripRow(gridView1);
+                else
+                {
+                    var mylstvt = frmMain.lstvt.Where(m => (m.TenVattu.ToLower().Contains(keysearch.ToLower())) || m.SoHieu.ToLower().Contains(keysearch.ToLower()));
+
+                    foreach (var vt in mylstvt)
+                    {
+                        var productSimilarity = frmMain.CompareProduct(vt.TenVattu.ToLower(), frmMain.TenVTMain.ToLower());
+                        vt.Real = productSimilarity;
+                    }
+                    gridControl1.DataSource = mylstvt.OrderByDescending(m => m.Percent).OrderByDescending(m => m.Real).ToList();
+                }
+                    GridStripRow(gridView1);
             }
            
         }
