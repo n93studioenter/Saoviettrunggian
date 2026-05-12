@@ -576,6 +576,8 @@ namespace SaovietTax
                 txtTenvattu.Text = dtoVatTu.TenVattu;
                 textEdit2.Text = dtoVatTu.TenVattu;
                 txtDonvi.Text = dtoVatTu.DonVi;
+                txtdongia.Text = dtoVatTu.Dongia != 0 ? dtoVatTu.Dongia.ToString() : "";    
+                txtsoluong.Text = dtoVatTu.SoLuong != 0 ? dtoVatTu.SoLuong.ToString() : ""; 
                 comboBoxEdit1.Properties.NullText = "Chọn Tài khoản";
                 comboBoxEdit1.Properties.TextEditStyle = TextEditStyles.DisableTextEditor; // Ngăn người dùng nhập trực tiếp
                 int idsl = 0;
@@ -612,7 +614,11 @@ namespace SaovietTax
                             break;
                         }
                     }
-                    comboBoxEdit1.SelectedIndex = idsl; // Chọn phần tử đầu tiên
+                    //Tạm thời đóng cho chọn tất ca
+                    if (Typeform == 2)
+                        comboBoxEdit1.SelectedIndex = idsl; // Chọn phần tử đầu
+                    else
+                        comboBoxEdit1.SelectedIndex = 0; // Chọn phần tử đầu tiên
                     var selectedItem = comboBoxEdit1.SelectedItem as Item;
                     firstload = false;
                     LoadData(selectedItem.Id, txtSearch.Text);
@@ -647,7 +653,7 @@ namespace SaovietTax
                 //comboBoxEdit1.SelectedItem=
                 foreach (Item item in comboBoxEdit1.Properties.Items)
                 {
-                    if (item.Id == mapl)
+                    if (item.Id == mapl && Typeform==2)
                     {
                         comboBoxEdit1.EditValue = item; // Chọn mục theo ID
                         break; // Thoát khỏi vòng lặp
@@ -741,6 +747,11 @@ namespace SaovietTax
                 gridControl1_DoubleClick(sender, e);
 
             }
+        }
+
+        private void frmHangHoa_Activated(object sender, EventArgs e)
+        {
+            
         }
     }
 }

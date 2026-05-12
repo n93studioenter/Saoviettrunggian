@@ -1744,7 +1744,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                         }
                         double sotienlect = tgTCThue - tongcon;
                         //Kiem tra lech tien
-                        if (tgTCThue != tongcon)
+                        if (tgTCThue != tongcon && tgTCThue!=0 && tongcon!=0)
                         {
                             if (xulychoall == false)
                             {
@@ -5600,12 +5600,10 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
         {
             try
             {
-                // 1. Khách hàng
-
+                // 1. Khách hàng 
                 // 2. Import header
                 LoadTbImportData();
-                BuildLookupTbImport();
-
+                BuildLookupTbImport(); 
 
                 // 3. Import detail
                 tbImportDt = await Task.Run(() =>
@@ -5625,17 +5623,14 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                     if (!dicListvt.ContainsKey(ten))
                         dicListvt.Add(ten, soHieu);
                 }
-
                 // 4. Ngân hàng
                 tbNganhang = await Task.Run(() =>
                     ExecuteQuery("SELECT * FROM tbNganhang", null)
                 );
-
                 // 5. Chứng từ (DÙNG TUPLE)
                 existingTbChungtu = await Task.Run(() =>
                     ExecuteQuery("SELECT * FROM ChungTu inner join HoaDon on ChungTu.MaSo = HoaDon.MaSo", null)
                 );
-
                 //_chungtuLookup = existingTbChungtu.AsEnumerable()
                 //    .ToLookup(r => (
                 //        SoHieu: r.Field<string>("SoHieu"),
@@ -5646,16 +5641,14 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 PhanLoaiVattu = await Task.Run(() =>
                     ExecuteQuery("SELECT * FROM PhanLoaiVattu", null)
                 );
-
                 DataRow plRow = PhanLoaiVattu.AsEnumerable()
                     .FirstOrDefault(r => r.Field<string>("SoHieu") == "NHT");
                 if (plRow != null)
                     maPhanLoai = plRow["MaSo"].ToString();
-
                 // 7. Nhập kho nguyên liệu
 
                 // 11. Register
-              
+
                 // 12. License
                 tbLicense = await Task.Run(() =>
                     ExecuteQuery("SELECT * FROM License", null)
@@ -5665,7 +5658,6 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 existingTbHeThongTK = await Task.Run(() =>
                     ExecuteQuery("SELECT * FROM HeThongTK", null)
                 );
-
                 // 14. alias
                 tbimportdetail = tbImportDt;
 
@@ -5709,12 +5701,14 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                     // 3. Khởi tạo DB + đọc License
                     ShowProgress("Kết nối database...");
                     InitDB();
+                   
                     SetVietnameseCulture();
                     ControlsSetup();
                     // 4. Migrate database (chạy background)
                     ShowProgress("Kiểm tra cấu trúc dữ liệu...");
                     await Task.Run(() => MigrateDatabase());
 
+                    
                     // 5. Load config người dùng
                     ShowProgress("Nạp cấu hìnhs...");
                     InitDatanew();
@@ -5724,18 +5718,16 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                     ShowProgress("Nạp dữ liệu hệ thống...");
                     tbKhachhang = await Task.Run(() =>
              ExecuteQuery("SELECT * FROM KhachHang", null)
-         );
+         ); 
                     lstKhachhangs = tbKhachhang.ToList<KhachHang>();
                     _ = LoadMasterDataAsync();   // ⬅️ CHUẨN
                     string queryct = "SELECT * FROM ChungTu inner join HoaDon on ChungTu.MaSo = HoaDon.MaSo"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
                     existingTbChungtu = ExecuteQuery(queryct);
                     await LoadVT();
-
                     await Task.Run(() => LoadHoadonCT()); // phụ thuộc lstKhachhangs
 
                     // 7. Build lookup
                     ShowProgress("Khởi tạo lookup...");
-                  
 
                     // 8. Hoàn tất
                     ShowProgress("Hoàn tất");
@@ -6096,13 +6088,13 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             //    "Bánh tráng nhỏ",
             //    "Bánh tráng loại nhỏ"
             //);
-            BonusSkins.Register();
-            SkinManager.EnableFormSkins();
+           // BonusSkins.Register();
+           // SkinManager.EnableFormSkins();
             //ChangeSkin("Office 2019 Dark Gray");
 
 
             hoverTimer = new Timer();
-            hoverTimer.Interval = 100; // 0.5s
+            hoverTimer.Interval = 10; // 0.5s
             hoverTimer.Tick += HoverTimer_Tick;
             searchExpert = true;
             // Code gây lỗi 
@@ -6177,7 +6169,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             }
             catch (Exception ex)
             {
-                //XtraMessageBox.Show(ex.Message, "Lỗi khởi động");
+                XtraMessageBox.Show(ex.Message, "Lỗi khởi động");
             }
             //if(serverMode=="2")
             //{
@@ -7068,9 +7060,10 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                     {
                         vatdt = int.Parse(kq.Rows[0]["VAT"].ToString());
                     }
-                    FileImportDetail fidt = new FileImportDetail(kq.Rows[0].Field<int>("ID"), Helpers.ConvertUnicodeToVni(kq.Rows[0].Field<string>("Ten")), parentid, kq.Rows[0].Field<string>("SoHieu"), kq.Rows[0].Field<double>("SoLuong"), kq.Rows[0].Field<double>("DonGia"), Helpers.ConvertUnicodeToVni(kq.Rows[0].Field<string>("DVT")), kq.Rows[0].Field<string>("MaCT"), kq.Rows[0].Field<string>("TKNo"), kq.Rows[0].Field<string>("TKCo"), double.Parse(kq.Rows[0].Field<string>("TTien")), kq.Rows[0].Field<string>("Percent"), int.Parse(kq.Rows[0]["Tchat"].ToString()), vatdt);
-                    parent.fileImportDetails.Add(selectedRow);
-
+                    FileImportDetail fidt = new FileImportDetail(kq.Rows[0].Field<int>("ID"), Helpers.ConvertVniToUnicode(kq.Rows[0].Field<string>("Ten")), parentid, kq.Rows[0].Field<string>("SoHieu"), kq.Rows[0].Field<double>("SoLuong"), kq.Rows[0].Field<double>("DonGia"), Helpers.ConvertVniToUnicode(kq.Rows[0].Field<string>("DVT")), kq.Rows[0].Field<string>("MaCT"), kq.Rows[0].Field<string>("TKNo"), kq.Rows[0].Field<string>("TKCo"), double.Parse(kq.Rows[0].Field<string>("TTien")), kq.Rows[0].Field<string>("Percent"), int.Parse(kq.Rows[0]["Tchat"].ToString()), vatdt);
+                    // parent.fileImportDetails.Add(selectedRow);
+                    
+                    parent.fileImportDetails.Add(fidt);
                     BindingList<FileImport> fileImports = gridView == gridView2 ? lstImportVao : lstImportRa;
                     if (gridView == gridView2)
                     {
@@ -7079,8 +7072,25 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                     }
                     else
                     {
-                        gridControl2.DataSource = fileImports;
-                        gridControl2.RefreshDataSource();
+                        // gridControl2.DataSource = fileImports;
+                        // gridView4.RefreshRow(parent.fileImportDetails.Count);
+                        gridView3.ExpandMasterRow(gridView3.FocusedRowHandle);
+
+                        GridView detailView =
+                            gridView3.GetDetailView(
+                                gridView3.FocusedRowHandle,
+                                0
+                            ) as GridView;
+
+                        detailView.AddNewRow();
+                        detailView.PostEditor();
+
+                        int rh = detailView.FocusedRowHandle;
+                        var currentindex = parent.fileImportDetails.Count()-1;
+                        detailView.SetRowCellValue(currentindex, "ID", fidt.ID);
+
+                        detailView.UpdateCurrentRow();
+                        gridView4.UpdateCurrentRow();
                     }
                 }
 
@@ -9723,11 +9733,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
             if (invoiceType == 4 || invoiceType == 6 || invoiceType == 8)
             {
-                url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
+                url = $"https://hoadondientu.gdt.gov.vn/query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
             }
             else if (invoiceType == 5 || invoiceType == 10)
             {
-                url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
+                url = $"https://hoadondientu.gdt.gov.vn/sco-query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
             }
             else
             {
@@ -9740,10 +9750,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         {
             string url = "";
             if (invoiceType == 4 || invoiceType == 6 || invoiceType == 8)
-                url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
+                url = $"https://hoadondientu.gdt.gov.vn/query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
             if (invoiceType == 5 || invoiceType == 10)
-                url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
-            //https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst=3500728427&khhdon=C25THD&shdon=2181&khmshdon=1
+                url = $"https://hoadondientu.gdt.gov.vn/sco-query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
+            //https://hoadondientu.gdt.gov.vn/query/invoices/export-xml?nbmst=3500728427&khhdon=C25THD&shdon=2181&khmshdon=1
 
             string zipFilePath = @"C:\hoadon\invoice.zip"; // Đường dẫn lưu file ZIP
             string pathravao = "";
@@ -9977,11 +9987,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             string url = "";
             if (invoiceType == 4 || invoiceType == 6 || invoiceType == 8)
             {
-                url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
+                url = $"https://hoadondientu.gdt.gov.vn/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
             }
             else if (invoiceType == 5 || invoiceType == 10)
             {
-                url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/detail?nbmst={mst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
+                url = $"https://hoadondientu.gdt.gov.vn/sco-query/invoices/detail?nbmst={mst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
             }
             else
             {
@@ -10363,11 +10373,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 // 2. Tạo URL theo loại hóa đơn
                 if (invoiceType == 4 || invoiceType == 6 || invoiceType == 8)
                 {
-                    url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
+                    url = $"https://hoadondientu.gdt.gov.vn/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
                 }
                 else if (invoiceType == 5 || invoiceType == 10)
                 {
-                    url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/detail?nbmst={mst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
+                    url = $"https://hoadondientu.gdt.gov.vn/sco-query/invoices/detail?nbmst={mst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
                 }
                 else
                 {
@@ -10613,9 +10623,9 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             }
             string url = "";
             if (invoiceType == 4 || invoiceType == 6 || invoiceType == 8)
-                url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
+                url = $"https://hoadondientu.gdt.gov.vn/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
             if (invoiceType == 5 || invoiceType == 10)
-                url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/detail?nbmst={mst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
+                url = $"https://hoadondientu.gdt.gov.vn/sco-query/invoices/detail?nbmst={mst}&khhdon={khhdon}&shdon={shdon}&khmshdon={khmshdon}";
             using (var client = new WebClient())
             {
                 client.Encoding = Encoding.UTF8;
@@ -11011,7 +11021,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         }
         public async void GetdetailXML(string nbmst, string khhdon, string shdon, string tokken)
         {
-            string url = @"https://hoadondientu.gdt.gov.vn:30000/query/invoices/detail?nbmst=" + nbmst + "&khhdon=" + khhdon + "&shdon=" + shdon + "&khmshdon=1";
+            string url = @"https://hoadondientu.gdt.gov.vn/query/invoices/detail?nbmst=" + nbmst + "&khhdon=" + khhdon + "&shdon=" + shdon + "&khmshdon=1";
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokken);
@@ -16451,6 +16461,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             DTO.VatTu vatTu = new DTO.VatTu();
                             vatTu.SoHieu = cellValue.ToString();
                             vatTu.TenVattu = gridView.GetRowCellValue(currentRowHandle, "Ten").ToString();
+                            TenVTMain = vatTu.TenVattu;
                             //Kiểm tra xem có phải so hiệu tự tạo 
                             string querydinhdanh = @"SELECT * FROM Vattu WHERE SoHieu = ?";
                             var checkSH = ExecuteQuery(querydinhdanh, new OleDbParameter("?", vatTu.SoHieu));
@@ -18315,7 +18326,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             FileImportDetail dt = gridView2.GetRow(e.RowHandle) as FileImportDetail;
             // Lấy chỉ số dòng của gridView1
             int rowIndex = gridView1.FocusedRowHandle; // Thay vì CurrentRow.Index
-            int rowIndex2 = gridView2.FocusedRowHandle; // Thay vì CurrentRow.Index 
+            int rowIndex2 = e.RowHandle; // Thay vì CurrentRow.Index 
             // Hoặc nếu bạn muốn sử dụng FieldName
             string fieldName = e.Column.FieldName;
             double soluong = (double)gridView2.GetRowCellValue(rowIndex2, "Soluong"); // Thay "ColumnName" bằng tên cột thực tế
@@ -18425,7 +18436,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
             // Lấy chỉ số dòng của gridView1
             int rowIndex = gridView1.FocusedRowHandle; // Thay vì CurrentRow.Index
-            int rowIndex2 = gridView2.FocusedRowHandle; // Thay vì CurrentRow.Index
+            int rowIndex2 = e.RowHandle; // Thay vì CurrentRow.Index
             // Kiểm tra nếu chỉ số dòng hợp lệ
             if (rowIndex >= 0)
             {
@@ -18911,7 +18922,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     try
                     {
 
-                        string url = "https://hoadondientu.gdt.gov.vn:30000/captcha";
+                        string url = "https://hoadondientu.gdt.gov.vn/captcha";
                         HttpResponseMessage response = null;
 
                         int retry = 0;
@@ -18980,7 +18991,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         SvgCaptchaSolver solver = new SvgCaptchaSolver();
                         string result = solver.SolveCaptcha(filePath);
 
-                        url = "https://hoadondientu.gdt.gov.vn:30000/security-taxpayer/authenticate";
+                        url = "https://hoadondientu.gdt.gov.vn/security-taxpayer/authenticate";
                         var payload = new
                         {
                             username = txtuser.Text,
@@ -19198,7 +19209,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         if (chkDaura.Checked) progressPanel2.Caption = "Đang tải captcha...";
                         Application.DoEvents();
 
-                        string capUrl = "https://hoadondientu.gdt.gov.vn:30000/captcha";
+                        string capUrl = "https://hoadondientu.gdt.gov.vn/api/captcha";
                         var resCap = await client.GetAsync(capUrl);
 
                         if (!resCap.IsSuccessStatusCode)
@@ -19237,7 +19248,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         if (chkDaura.Checked) progressPanel2.Caption = "Đang đăng nhập hệ thống Thuế...";
                         Application.DoEvents();
 
-                        string loginUrl = "https://hoadondientu.gdt.gov.vn:30000/security-taxpayer/authenticate";
+                        string loginUrl = "https://hoadondientu.gdt.gov.vn/api/security-taxpayer/authenticate";
 
                         var payload = new
                         {
@@ -19262,7 +19273,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             return;
                         }
 
-                        loginRes.EnsureSuccessStatusCode();
+                      //  loginRes.EnsureSuccessStatusCode();
 
                         string loginBody = await loginRes.Content.ReadAsStringAsync();
                         var tokenData = JsonConvert.DeserializeObject<TokenResponse>(loginBody);
@@ -19273,7 +19284,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         {
                             var req = new HttpRequestMessage(
                                 HttpMethod.Get,
-                                "https://hoadondientu.gdt.gov.vn:30000/security-taxpayer/profile"
+                                "https://hoadondientu.gdt.gov.vn/api/security-taxpayer/profile"
                             );
 
                             req.Headers.Authorization =
@@ -20071,10 +20082,26 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 private static readonly Dictionary<string, string[]> BrandAliases =
     new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
 {
+        { "nước giặt xả", new[] { "nước giặt xả" } },
+        { "bột canh", new[] { "bột canh" } },
+        { "nam vang", new[] { "nam vang" } },
+          { "hủ tiếu", new[] { "hủ tiếu" } },
+        { "sa tế", new[] { "sate", "sa tế" } },
+    { "thực phẩm dinh dưỡng", new[] { "thực phẩm dinh dưỡng" } },
+    { "nước chấm", new[] { "nước chấm" } },
+    { "dầu hào", new[] { "dầu hào" } },
+    { "găng tay", new[] { "găng tay", "găng tay" } },
+    { "bột giặt", new[] { "bột giặt", "bột giặt" } },
+    { "bảo tín", new[] { "bảo tín", "bảo tín" } },
+    { "giấy vệ sinh", new[] { "giấy vệ sinh", "giấy vệ sinh" } },
+     { "lăn khử mùi", new[] { "lăn khử mùi", "lăn khử mùi" } },
+     { "thuốc lá", new[] { "thuoc la", "thuốc lá" } },
+     { "Dr Thanh", new[] { "Dr Thanh", "Dr Thanh" } },
     { "hảo hảo", new[] { "hao hao", "hảo hảo" } },
+     { "nước tinh khiết", new[] { "nuoc tinh khiet", "nước tinh khiết" } },
+      { "trà xanh", new[] { "tra xanh", "trà xanh" } },
      { "Cà phê", new[] { "ca phe", "cà phê" } },
-     { "trà xanh", new[] { "tra xanh", "trà xanh" } },
-    { "coca cola", new[] { "cocacola", "coca cola" } },
+    { "coca cola", new[] { "cocacola", "coca cola", "coca" } },
     { "red bull", new[] { "redbull", "red bull" } },
     { "head & shoulders", new[] { "head shoulders", "head & shoulders" } },
     { "chin-su", new[] { "chin su", "chin-su", "chinsu" } },
@@ -20083,6 +20110,20 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         private static readonly HashSet<string> ImportantWords =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
+     //Thuốc lá
+     "yet",
+     "saigon",
+     //Nuoc rua chen
+     "surf", 
+    "sunlight",
+     //Kem đánh răng
+     "closeup",
+
+     //Bình xịt muỗi
+     "super",
+     "falcon",
+     "mosfly",
+     "lix",
     // bánh kẹo
     "oreo",
     "kitkat",
@@ -20098,8 +20139,12 @@ private static readonly Dictionary<string, string[]> BrandAliases =
     "kokomi",
     "gấu đỏ",
     "samyang",
-
+    "lifoon",
+    "kokomi",
+    "3m",
+    "modern",
     // nước ngọt
+     "C2",
     "coca cola",
     "pepsi",
     "sting",
@@ -20108,19 +20153,41 @@ private static readonly Dictionary<string, string[]> BrandAliases =
     "sprite",
     "fanta",
     "mirinda",
+    "coke",
+    "pet",
+    "ntl",
+    "aquafina",
+    "warrior",
+    "3in1",
+    "coca",
 
     // bia
     "tiger",
     "heineken",
     "333",
     "sapporo",
-    "saigon",
+    "saigon", 
+    "lager",
 
     // sữa
     "vinamilk",
     "ensure",
     "milo",
     "nestle",
+    "nutriboost",
+    
+    //dầu gôi
+    "romano",
+    "intense",
+    "xmen",
+    "sunsilk",
+    "pal",
+    "clear",
+    "tresemme",
+    "lifebuoy",
+    "dove",
+    "johnsons",
+    "wood",
 
     // khác
     "xmen",
@@ -20128,7 +20195,14 @@ private static readonly Dictionary<string, string[]> BrandAliases =
     "raid",
     "knorr",
     "maggi",
-    "chin-su"
+    "chin-su",
+    "scutt",
+    "tpbs",
+    "sudd",
+    "sđcđ",
+    "jumpo"
+     ,"bơ",
+    "đường"
         };
 
         private static string Normalize(string text)
@@ -20156,6 +20230,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private static HashSet<string> GetImportantWords(string input)
         {
+          
             input = Normalize(input);
 
             var result = new HashSet<string>(
@@ -20164,6 +20239,10 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             // alias
             foreach (var pair in BrandAliases)
             {
+                if (pair.Value.ToString() == "C2")
+                {
+                    int a = 10;
+                }
                 foreach (var alias in pair.Value)
                 {
                     if (input.Contains(alias))
@@ -20279,7 +20358,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 {
                     int aaa = 10;
                 }
-                if (final >= 80 || productSimilarity==1)
+                if (final >= 55 || productSimilarity==1)
                 {
                     Vattugoiy vattugoiy = new Vattugoiy();
                     if(item.Value.TenChuan.Length>50)
@@ -20544,15 +20623,15 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             switch (_type)
             {
                 case 1:
-                    url = $@"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-excel-sold?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge={formattedDate1};tdlap=le={formattedDate2};ttxly==5%20%20%20%20&type=purchase";
+                    url = $@"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-excel-sold?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge={formattedDate1};tdlap=le={formattedDate2};ttxly==5%20%20%20%20&type=purchase";
                     filename = $"{mstcongty}_HDDienTuDaCapMa.xlsx";
                     break;
                 case 2:
-                    url = $@"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-excel-sold?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge={formattedDate1};tdlap=le={formattedDate2};ttxly==6%20%20%20%20&type=purchase";
+                    url = $@"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-excel-sold?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge={formattedDate1};tdlap=le={formattedDate2};ttxly==6%20%20%20%20&type=purchase";
                     filename = $"{mstcongty}_HDDienTuKhongMa.xlsx";
                     break;
                 case 3:
-                    url = $@"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-excel-sold?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge={formattedDate1};tdlap=le={formattedDate2};ttxly==8%20%20%20%20&type=purchase";
+                    url = $@"https://hoadondientu.gdt.gov.vn/api/sco-query/invoices/export-excel-sold?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge={formattedDate1};tdlap=le={formattedDate2};ttxly==8%20%20%20%20&type=purchase";
                     filename = $"{mstcongty}_HDDienTuMayTinhTien.xlsx";
                     break;
                 default:
@@ -20689,11 +20768,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             switch (_type)
             {
                 case 1:
-                    url = @"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-excel?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge=" + formattedDate1 + ";tdlap=le=" + formattedDate2;
+                    url = @"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-excel?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge=" + formattedDate1 + ";tdlap=le=" + formattedDate2;
                     filename = $"{mstcongty}_Hoadondientu.xlsx";
                     break; 
                 case 2:
-                    url = @"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-excel?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge=" + formattedDate1 + ";tdlap=le=" + formattedDate2;
+                    url = @"https://hoadondientu.gdt.gov.vn/api/sco-query/invoices/export-excel?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge=" + formattedDate1 + ";tdlap=le=" + formattedDate2;
                     filename = $"{mstcongty}_HDDienTuMayTinhTien.xlsx";
                     break;
                 default:
@@ -20784,7 +20863,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                         if (attempt == maxRetries)
                         {
-                            throw;
+                            continue;
                         }
                     }
 
@@ -20835,11 +20914,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         //Tải file xml
                         string url = "";
                         if (i == 1 || i==2)
-                            url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
+                            url = $"https://hoadondientu.gdt.gov.vn/query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
                         if (i == 3)
                         {
-                            url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
-                            //https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst=0316158113-006&khhdon=C25MVX&shdon=660264&khmshdon=1
+                            url = $"https://hoadondientu.gdt.gov.vn/sco-query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
+                            //https://hoadondientu.gdt.gov.vn/sco-query/invoices/export-xml?nbmst=0316158113-006&khhdon=C25MVX&shdon=660264&khmshdon=1
 
                         }
                         string pathravao = "HDVao";
@@ -20975,11 +21054,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                         string url = "";
                         if (i == 1 || i == 2)
-                            url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
+                            url = $"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
                         if (i == 3)
                         {
-                            url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
-                            //https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst=0316158113-006&khhdon=C25MVX&shdon=660264&khmshdon=1
+                            url = $"https://hoadondientu.gdt.gov.vn/api/sco-query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
+                            //https://hoadondientu.gdt.gov.vn/sco-query/invoices/export-xml?nbmst=0316158113-006&khhdon=C25MVX&shdon=660264&khmshdon=1
 
                         }
                         string pathravao = "HDVao";
@@ -22890,7 +22969,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         public void GetKNMXML(string nbmst, string khhdon, string shdon, string tokken,DateTime GetNLap,string path,string filename)
         {
             GDTClient.UpdateToken(tokken);
-            string url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon=1";
+            string url = $"https://hoadondientu.gdt.gov.vn/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon=1";
              
             using (var client = new HttpClient())
             {
@@ -23121,11 +23200,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         //Tải file xml
                         string url = "";
                         if (i == 1)
-                            url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst={mstcongty}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
+                            url = $"https://hoadondientu.gdt.gov.vn/sco-query/invoices/export-xml?nbmst={mstcongty}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
                         if (i ==2)
                         {
-                            url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst={mstcongty}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
-                            //https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst=0316158113-006&khhdon=C25MVX&shdon=660264&khmshdon=1
+                            url = $"https://hoadondientu.gdt.gov.vn/query/invoices/export-xml?nbmst={mstcongty}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
+                            //https://hoadondientu.gdt.gov.vn/sco-query/invoices/export-xml?nbmst=0316158113-006&khhdon=C25MVX&shdon=660264&khmshdon=1
 
                         }
                         string pathravao = "HDRa";
@@ -23299,11 +23378,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         //Tải file xml
                         string url = "";
                         if (i == 1)
-                            url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst={mstcongty}&khhdon={getSHHD}&shdon={getsohoadon}&khmshdon={khhd}";
+                            url = $"https://hoadondientu.gdt.gov.vn/api/sco-query/invoices/export-xml?nbmst={mstcongty}&khhdon={getSHHD}&shdon={getsohoadon}&khmshdon={khhd}";
                         if (i == 2)
                         {
-                            url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst={mstcongty}&khhdon={getSHHD}&shdon={getsohoadon}&khmshdon={khhd}";
-                            //https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst=0316158113-006&khhdon=C25MVX&shdon=660264&khmshdon=1
+                            url = $"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-xml?nbmst={mstcongty}&khhdon={getSHHD}&shdon={getsohoadon}&khmshdon={khhd}";
+                            //https://hoadondientu.gdt.gov.vn/sco-query/invoices/export-xml?nbmst=0316158113-006&khhdon=C25MVX&shdon=660264&khmshdon=1
 
                         }
                         string pathravao = "HDRa";
@@ -30578,6 +30657,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 VatTu.SoHieu = gv.GetRowCellValue(hoverRowHandle, "SoHieu")?.ToString();
                 VatTu.TenVattu = gv.GetRowCellValue(hoverRowHandle, "Ten")?.ToString();
                 VatTu.DonVi = gv.GetRowCellValue(hoverRowHandle, "DVT")?.ToString();
+              //  VatTu.Dongia = gv.GetRowCellValue(hoverRowHandle, "Dongia") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Dongia").ToString()) : 0 ;
+               // VatTu.SoLuong = gv.GetRowCellValue(hoverRowHandle, "Soluong") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Soluong").ToString()) : 0 ;
                 frmhh.dtoVatTu = VatTu;
                 frmhh.hoverRowHandle = hoverRowHandle;
                 frmhh.Typeform = 2;
@@ -30606,6 +30687,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 VatTu.SoHieu = gv.GetRowCellValue(hoverRowHandle, "SoHieu")?.ToString();
                 VatTu.TenVattu = gv.GetRowCellValue(hoverRowHandle, "Ten")?.ToString();
                 VatTu.DonVi = gv.GetRowCellValue(hoverRowHandle, "DVT")?.ToString();
+               // VatTu.Dongia = gv.GetRowCellValue(hoverRowHandle, "Dongia") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Dongia").ToString()) : 0;
+                //VatTu.SoLuong = gv.GetRowCellValue(hoverRowHandle, "Soluong") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Soluong").ToString()) : 0;
                 frmhh.dtoVatTu = VatTu;
                 frmhh.hoverRowHandle = hoverRowHandle;
                 frmhh.Typeform = 2;

@@ -14,6 +14,7 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -38,11 +39,11 @@ namespace SaovietTax
 
             if (invoiceType == 4 || invoiceType == 6 || invoiceType == 8)
             {
-                url = $"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
+                url = $"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
             }
             else if (invoiceType == 5 || invoiceType == 10)
             {
-                url = $"https://hoadondientu.gdt.gov.vn:30000/sco-query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
+                url = $"https://hoadondientu.gdt.gov.vn/api/sco-query/invoices/export-xml?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon={Khmshdon}";
             }
             else
             {
@@ -88,7 +89,8 @@ namespace SaovietTax
             return dataTable; // Trả về DataTable chứa dữ liệu
         }
         string mytokken = "";
-        private void Getttoken()
+        public string tokken { get; set; } = "";
+        private async void Getttoken()
         {
             string querykh = @" SELECT *  FROM tbRegister"; // Sử dụng ? thay cho @mst trong OleDb
 
@@ -105,67 +107,115 @@ namespace SaovietTax
             }
             if (needlogin)
             {
-
-                using (var client = new HttpClient())
+                try
                 {
-                    HttpResponseMessage response = new HttpResponseMessage();
-                    string url = "https://hoadondientu.gdt.gov.vn:30000/captcha";
-                    try
+                    // ===== HttpClient + CookieContainer (BẮT BUỘC) =====
+                    var handler = new HttpClientHandler()
                     {
-                        response = client.GetAsync(url).Result;
-                        response.EnsureSuccessStatusCode();
-                    }
-                    catch (Exception ex)
-                    {
-                        XtraMessageBox.Show(ex.Message);
-                        return;
-                    }
-
-                    string responseBody = response.Content.ReadAsStringAsync().Result;
-                    MyJson myJson = JsonConvert.DeserializeObject<MyJson>(responseBody);
-                    //string filePath = "output.svg";
-                    string filePath = AppDomain.CurrentDomain.BaseDirectory + "output.svg"; // Đảm bảo tệp ở cùng thư mục với chương trình
-                                                                                            //Lưu chuỗi SVG vào tệp
-                    File.WriteAllText(filePath, myJson.Content);
-                    Thread.Sleep(2000);
-                    SvgCaptchaSolver solver = new SvgCaptchaSolver();
-                    string result = solver.SolveCaptcha(filePath);
-
-                    url = "https://hoadondientu.gdt.gov.vn:30000/security-taxpayer/authenticate";
-                    var payload = new
-                    {
-                        username = user,
-                        password = password,
-                        cvalue = result,
-                        ckey = myJson.Key
+                        UseCookies = true,
+                        CookieContainer = new CookieContainer(),
+                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
                     };
-                    try
+
+                    using (var client = new HttpClient(handler))
                     {
-                        string json = JsonConvert.SerializeObject(payload);
-                        var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        response = client.PostAsync(url, content).Result;
-                        response.EnsureSuccessStatusCode();
-                        Thread.Sleep(1000);
-                        responseBody = response.Content.ReadAsStringAsync().Result;
-                        var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseBody);
-                        mytokken = tokenResponse.token;
-                        string query = @"UPDATE tbRegister SET TimeTokken=?, tokken=? ";
+                        // ===== Header giống trình duyệt =====
+                        client.DefaultRequestHeaders.Clear();
+                        client.DefaultRequestHeaders.Add("User-Agent",
+                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0");
+                        client.DefaultRequestHeaders.Add("Accept", "application/json, text/plain, */*");
+                        client.DefaultRequestHeaders.Add("Accept-Language", "vi-VN,vi;q=0.9");
+                        client.DefaultRequestHeaders.Add("Origin", "https://hoadondientu.gdt.gov.vn");
+                        client.DefaultRequestHeaders.Add("Referer", "https://hoadondientu.gdt.gov.vn/");
+                        client.DefaultRequestHeaders.ExpectContinue = false;
 
-                        var parameters = new OleDbParameter[]
-                 {
-               new OleDbParameter("?", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
-                 new OleDbParameter("?",mytokken)
-                 };
-                        int rowsAffected = ExecuteQueryResult(query, parameters);
+                        Application.DoEvents();
+
+                        string capUrl = "https://hoadondientu.gdt.gov.vn/api/captcha";
+                        var resCap = await client.GetAsync(capUrl);
+
+                        if (!resCap.IsSuccessStatusCode)
+                        {
+                            XtraMessageBox.Show("Không lấy được captcha");
+                            return;
+                        }
+
+                        string capBody = await resCap.Content.ReadAsStringAsync();
+                        MyJson capJson = JsonConvert.DeserializeObject<MyJson>(capBody);
+
+                        string svgPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "captcha.svg");
+                        File.WriteAllText(svgPath, capJson.Content);
+
+                        // ===== LẤY XSRF-TOKEN (RẤT QUAN TRỌNG) =====
+                        var cookies = handler.CookieContainer
+                            .GetCookies(new Uri("https://hoadondientu.gdt.gov.vn"));
+
+                        var xsrfToken = cookies["XSRF-TOKEN"]?.Value;
+                        if (!string.IsNullOrEmpty(xsrfToken))
+                        {
+                            client.DefaultRequestHeaders.Remove("X-XSRF-TOKEN");
+                            client.DefaultRequestHeaders.Add("X-XSRF-TOKEN", xsrfToken);
+                        }
+
+                        // ================= STEP 2: SOLVE CAPTCHA ================= 
+                        Application.DoEvents();
+
+                        SvgCaptchaSolver solver = new SvgCaptchaSolver();
+                        string cvalue = solver.SolveCaptcha(svgPath);
+
+                        // ================= STEP 3: LOGIN ================= 
+                        Application.DoEvents();
+
+                        string loginUrl = "https://hoadondientu.gdt.gov.vn/api/security-taxpayer/authenticate";
+
+                        var payload = new
+                        {
+                            username = tbRegister.Rows[0]["Username"].ToString(),
+                            password = tbRegister.Rows[0]["Password"].ToString(),
+                            cvalue = cvalue,
+                            ckey = capJson.Key
+                        };
+
+                        var content = new StringContent(
+                            JsonConvert.SerializeObject(payload),
+                            Encoding.UTF8,
+                            "application/json"
+                        );
+
+                        var loginRes = await client.PostAsync(loginUrl, content);
+
+                        if (loginRes.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            string err = await loginRes.Content.ReadAsStringAsync();
+                            XtraMessageBox.Show("Đăng nhập thất bại (401): " + err);
+                            return;
+                        }
+
+                        //  loginRes.EnsureSuccessStatusCode();
+
+                        string loginBody = await loginRes.Content.ReadAsStringAsync();
+                        var tokenData = JsonConvert.DeserializeObject<TokenResponse>(loginBody);
+                        this.tokken = tokenData.token;
+                        mytokken = this.tokken; 
+                        // ================= STEP 4: PROFILE (KHÔNG TẠO CLIENT MỚI) ================= 
+
+                        // ================= SAVE TOKEN TIME =================
+                        ExecuteQueryResult(
+                            "UPDATE tbRegister SET TimeTokken=?",
+                            new OleDbParameter[]
+                            {
+                new OleDbParameter("?", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                            }
+                        );
+
+                        Application.DoEvents();
                     }
-                    catch (Exception ex)
-                    {
-                        Thread.Sleep(200);
-                        Getttoken();
-                    }
-
-
                 }
+                catch (Exception ex)
+                {
+                    XtraMessageBox.Show("Lỗi đăng nhập hệ thống thuế: " + ex.Message);
+                }
+
             }
         }
         string dbPath = "";

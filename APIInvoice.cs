@@ -1561,6 +1561,14 @@ namespace SaovietTax
 
                    };
                             var updateRowsAffected = ExecuteQueryResult(sqlInsert, updateParameters);
+
+
+                            var updateQr = @"UPDATE tbResponse  SET Status = ?";
+                            var paas = new OleDbParameter[]
+                            {
+        new OleDbParameter("?", "1") 
+                            };
+                            var rrs = ExecuteQueryResult(updateQr, paas);
                         }
                         // richTextBox1.AppendText($"ID: {item.Id}, TemplateCode: {item.TemplateCode}, InvoiceName: {item.InvoiceName}\n");
                     }
