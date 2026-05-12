@@ -1744,7 +1744,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                         }
                         double sotienlect = tgTCThue - tongcon;
                         //Kiem tra lech tien
-                        if (tgTCThue != tongcon && tgTCThue!=0 && tongcon!=0)
+                        if (tgTCThue != tongcon && tgTCThue!=0 && tongcon!=0 && 1>2)
                         {
                             if (xulychoall == false)
                             {
@@ -6094,7 +6094,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
 
 
             hoverTimer = new Timer();
-            hoverTimer.Interval = 10; // 0.5s
+            hoverTimer.Interval = 500; // 0.5s
             hoverTimer.Tick += HoverTimer_Tick;
             searchExpert = true;
             // Code gây lỗi 
@@ -7024,7 +7024,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                         parent = lstImportRa.Where(m => m.ID == selectedRow.ParentId).FirstOrDefault();
                     }
                     //Insert datatbae trước
-                    string query = "INSERT INTO tbimportdetail(ParentId, SoHieu, SoLuong, DonGia, DVT, Ten, MaCT, TKNo, TKCo, TTien)  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    string query = "INSERT INTO tbimportdetail(ParentId, SoHieu, SoLuong, DonGia, DVT, Ten, MaCT, TKNo, TKCo, TTien,VAT)  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 
                     var parameters = new OleDbParameter[]
                     {
@@ -7038,6 +7038,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                         new OleDbParameter("?",selectedRow.TKNo ),
                         new OleDbParameter("?", selectedRow.TKCo),
                         new OleDbParameter("?", selectedRow.TTien),
+                         new OleDbParameter("?", selectedRow.VAT),
                     };
                     try
                     {
@@ -7058,7 +7059,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                     int vatdt = 0;
                     if (!string.IsNullOrEmpty(kq.Rows[0]["VAT"].ToString()))
                     {
-                        vatdt = int.Parse(kq.Rows[0]["VAT"].ToString());
+                        vatdt = selectedRow.VAT;
                     }
                     FileImportDetail fidt = new FileImportDetail(kq.Rows[0].Field<int>("ID"), Helpers.ConvertVniToUnicode(kq.Rows[0].Field<string>("Ten")), parentid, kq.Rows[0].Field<string>("SoHieu"), kq.Rows[0].Field<double>("SoLuong"), kq.Rows[0].Field<double>("DonGia"), Helpers.ConvertVniToUnicode(kq.Rows[0].Field<string>("DVT")), kq.Rows[0].Field<string>("MaCT"), kq.Rows[0].Field<string>("TKNo"), kq.Rows[0].Field<string>("TKCo"), double.Parse(kq.Rows[0].Field<string>("TTien")), kq.Rows[0].Field<string>("Percent"), int.Parse(kq.Rows[0]["Tchat"].ToString()), vatdt);
                     // parent.fileImportDetails.Add(selectedRow);
@@ -7067,8 +7068,26 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                     BindingList<FileImport> fileImports = gridView == gridView2 ? lstImportVao : lstImportRa;
                     if (gridView == gridView2)
                     {
-                        gridControl1.DataSource = fileImports;
-                        gridControl1.RefreshDataSource();
+                        gridView1.ExpandMasterRow(gridView1.FocusedRowHandle);
+
+                        GridView detailView =
+                            gridView1.GetDetailView(
+                                gridView1.FocusedRowHandle,
+                                0
+                            ) as GridView;
+
+                        detailView.AddNewRow();
+                        detailView.PostEditor();
+
+                        int rh = detailView.FocusedRowHandle;
+                        var currentindex = parent.fileImportDetails.Count() - 1;
+                        detailView.SetRowCellValue(currentindex, "ID", fidt.ID);
+
+                        detailView.UpdateCurrentRow();
+                        gridView2.UpdateCurrentRow();
+                        detailView.LayoutChanged();
+                        gridView2.LayoutChanged();
+                        gridView2.RefreshData();
                     }
                     else
                     {
@@ -7091,6 +7110,9 @@ Chỉ trả lời: CÓ hoặc KHÔNG
 
                         detailView.UpdateCurrentRow();
                         gridView4.UpdateCurrentRow();
+                        detailView.LayoutChanged();
+                        gridView4.LayoutChanged();
+                        gridView4.RefreshData();
                     }
                 }
 
@@ -11600,7 +11622,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             return lookupHoaDonCT.Contains((Mst, SoHD, KyHieu, NLap, tpye));
         }
         private Dictionary<string, string> _lookupByTenChinh;
-        private Dictionary<string, string> _lookupByTenPhu;
+        public Dictionary<string, string> _lookupByTenPhu;
         private string NormalizeForLookup(string s)
         {
             if (string.IsNullOrWhiteSpace(s)) return null;
@@ -13871,7 +13893,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
                 connection.Open();
-                Console.WriteLine("Kết nối đến cơ sở dữ liệu thành công!");
+                Console.WriteLine("Kết nối đến cơ sở dữ liệu thành công! " + query);
 
                 using (OleDbCommand command = new OleDbCommand(query, connection))
                 {
@@ -13899,7 +13921,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
                 connection.Open();
-                Console.WriteLine("Kết nối đến cơ sở dữ liệu thành công!");
+                Console.WriteLine("Kết nối đến cơ sở dữ liệu thành công!" + query);
 
                 using (OleDbCommand command = new OleDbCommand(query, connection))
                 {
@@ -30607,7 +30629,32 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         private void HoverTimer_Tick(object sender, EventArgs e)
         {
             hoverTimer.Stop();
+            bool inPopup = false;
+            if (frmhh != null)
+            {
+                Point p = System.Windows.Forms.Control.MousePosition;
 
+                try
+                {
+                    Rectangle gridRect =
+                   gridControl1.RectangleToScreen(gridControl1.ClientRectangle);
+
+                    Rectangle popupRect =
+                        frmhh.RectangleToScreen(frmhh.ClientRectangle);
+
+                    bool inGrid = gridRect.Contains(p);
+                    inPopup = popupRect.Contains(p);
+                    if (inPopup == true && frmhh.Typeform == 2)
+                    {
+                        return;
+                    }
+                    Console.WriteLine(inPopup);
+                }
+                catch (Exception ex)
+                {
+                }
+
+            }   
             // ⛔ KHÔNG return sớm → phải có cơ hội đóng form
             //if (hoverRowHandle < 0)
             //{
@@ -30630,7 +30677,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             }
 
             // 👉 sai column → đóng
-            if (hoverColumnName != "SoHieu")
+            if (hoverColumnName != "SoHieu" && !inPopup)
             {
                 frmhh?.Hide();
                 return;
@@ -30638,15 +30685,15 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             if (hoverRowHandle < 0)
                 return;
             string cellValue = gv.GetRowCellValue(hoverRowHandle, "Ten")?.ToString();
-            string dvt= gv.GetRowCellValue(hoverRowHandle, "DVT")?.ToString();
+            string dvt = gv.GetRowCellValue(hoverRowHandle, "DVT")?.ToString();
             double dongia = double.Parse(gv.GetRowCellValue(hoverRowHandle, "Dongia").ToString());
             if (string.IsNullOrEmpty(cellValue)) return;
 
             // 🔒 đóng băng context
             activeSuggestRowHandle = hoverRowHandle;
             activeParentRowHandle = gv.SourceRowHandle;
-     
-            XulusohieuvattuSuggest(cellValue, dvt,dongia);
+
+            XulusohieuvattuSuggest(cellValue, dvt, dongia);
             lstrowSohieu = new List<int>();
 
 
@@ -30657,8 +30704,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 VatTu.SoHieu = gv.GetRowCellValue(hoverRowHandle, "SoHieu")?.ToString();
                 VatTu.TenVattu = gv.GetRowCellValue(hoverRowHandle, "Ten")?.ToString();
                 VatTu.DonVi = gv.GetRowCellValue(hoverRowHandle, "DVT")?.ToString();
-              //  VatTu.Dongia = gv.GetRowCellValue(hoverRowHandle, "Dongia") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Dongia").ToString()) : 0 ;
-               // VatTu.SoLuong = gv.GetRowCellValue(hoverRowHandle, "Soluong") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Soluong").ToString()) : 0 ;
+                //  VatTu.Dongia = gv.GetRowCellValue(hoverRowHandle, "Dongia") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Dongia").ToString()) : 0 ;
+                // VatTu.SoLuong = gv.GetRowCellValue(hoverRowHandle, "Soluong") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Soluong").ToString()) : 0 ;
                 frmhh.dtoVatTu = VatTu;
                 frmhh.hoverRowHandle = hoverRowHandle;
                 frmhh.Typeform = 2;
@@ -30687,7 +30734,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 VatTu.SoHieu = gv.GetRowCellValue(hoverRowHandle, "SoHieu")?.ToString();
                 VatTu.TenVattu = gv.GetRowCellValue(hoverRowHandle, "Ten")?.ToString();
                 VatTu.DonVi = gv.GetRowCellValue(hoverRowHandle, "DVT")?.ToString();
-               // VatTu.Dongia = gv.GetRowCellValue(hoverRowHandle, "Dongia") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Dongia").ToString()) : 0;
+                // VatTu.Dongia = gv.GetRowCellValue(hoverRowHandle, "Dongia") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Dongia").ToString()) : 0;
                 //VatTu.SoLuong = gv.GetRowCellValue(hoverRowHandle, "Soluong") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Soluong").ToString()) : 0;
                 frmhh.dtoVatTu = VatTu;
                 frmhh.hoverRowHandle = hoverRowHandle;
@@ -30712,7 +30759,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 }
                 frmhh.Reload();
             }
-           
+
 
             // ================== 🎯 ĐỊNH VỊ FORM ==================
             var viewInfo = gv.GetViewInfo() as GridViewInfo;
@@ -30727,26 +30774,31 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 if (cellInfo != null)
                 {
                     Point cellScreen = gv.GridControl
-                        .PointToScreen(cellInfo.Bounds.Location);
+    .PointToScreen(cellInfo.Bounds.Location);
 
                     int x = cellScreen.X + cellInfo.Bounds.Width + 2;
 
-                    // 👉 Y: khóa theo HEADER
-                    var headerInfo = viewInfo.ColumnsInfo[gv.Columns["SoHieu"]];
-                    Rectangle headerRect = headerInfo.Bounds;
+                    // vị trí mặc định: dưới row
+                    int y = cellScreen.Y + cellInfo.Bounds.Height;
 
-                    Point headerScreen = gv.GridControl
-                        .PointToScreen(headerRect.Location);
-
-                    int fixedY = headerScreen.Y + headerRect.Height;
-
-                    // 🧷 chống tràn màn hình
+                    // màn hình làm việc
                     Rectangle screen = Screen.FromControl(this).WorkingArea;
-                    if (fixedY + frmhh.Height > screen.Bottom)
-                        fixedY = screen.Bottom - frmhh.Height;
+
+                    // nếu popup bị tràn đáy màn hình
+                    if (y + frmhh.Height > screen.Bottom)
+                    {
+                        // chuyển popup lên trên row
+                        y = cellScreen.Y - frmhh.Height;
+                    }
+
+                    // chống tràn phía trên
+                    if (y < screen.Top)
+                    {
+                        y = screen.Top;
+                    }
 
                     frmhh.StartPosition = FormStartPosition.Manual;
-                    frmhh.Location = new Point(x, fixedY);
+                    frmhh.Location = new Point(x, y);
                 }
             }
             // ====================================================
@@ -30754,6 +30806,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             frmhh.Show();
             frmhh.BringToFront();
         }
+
 
 
 
@@ -30849,7 +30902,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
      hitInfo.Column != null &&
     (hitInfo.RowHandle != hoverRowHandle ||
      hitInfo.Column.FieldName != hoverColumnName))
-            {
+            { 
                 hoverTimer.Stop();
 
                 hoverRowHandle = hitInfo.RowHandle;

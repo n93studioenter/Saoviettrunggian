@@ -307,49 +307,7 @@ namespace SaovietTax
         public bool isChange = false;
         private void gridControl1_DoubleClick(object sender, EventArgs e)
         {
-            DevExpress.XtraGrid.Views.Grid.GridView gridView = gridControl1.MainView as DevExpress.XtraGrid.Views.Grid.GridView;
-            var hitInfo = gridView.CalcHitInfo(gridView.GridControl.PointToClient(MousePosition));
-
-
-            // Kiểm tra nếu nhấp vào một ô
-            if (hitInfo.InRowCell)
-            {
-                int columnIndex = hitInfo.Column.VisibleIndex; // Chỉ số cột
-
-                // Lấy giá trị trong ô đã nhấp
-                var hiddenValue = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["SoHieu"]);
-                var hiddenValue2 = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["DonVi"]);
-                var hiddenValue3 = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["TenVattu"]);
-                frmMain.hiddenValue = hiddenValue.ToString();
-                frmMain.hiddenValue2 = hiddenValue2.ToString();
-                frmMain.hiddenValue3 = hiddenValue3.ToString();
-                isChange = true;
-                //
-                if (Typeform == 2)
-                {
-                    var gv =frmMain.Typechon==1?frmMain.gv2: frmMain.gv4;
-                     
-                    gv.SetRowCellValue(hoverRowHandle, "SoHieu", hiddenValue);
-                    gv.SetRowCellValue(hoverRowHandle, "DVT", hiddenValue2);
-                    gv.SetRowCellValue(hoverRowHandle, "Ten", hiddenValue3);
-                    gv.UpdateCurrentRow();
-                    gv.RefreshData();
-                    var ddd = frmMain.lstrowSohieu;
-                    if (ddd.Count > 0)
-                    {
-                        DialogResult result = XtraMessageBox.Show("Có " + ddd.Count + " sản phẩm khác đang trùng tên với sản phẩm đang sửa, bạn có muốn cập nhật luôn mã mới?",
-                                        "Xác nhận",
-                                        MessageBoxButtons.YesNo,
-                                        MessageBoxIcon.Question);
-                        if (result == DialogResult.Yes)
-                        {
-                            frmMain.lstrowSohieu = ddd; 
-                            frmMain.CapnhatlistSoHieu(ddd);
-                        }
-                    }
-                }
-                this.Close();
-            }
+            
         }
 
         private void btnGhi_Click(object sender, EventArgs e)
@@ -676,7 +634,7 @@ namespace SaovietTax
                             gridView1.SelectRow(i); // Chọn dòng
                             textEdit1.Text = gridView1.GetRowCellValue(i, "TenVattu").ToString();
                             sohieuvt = gridView1.GetRowCellValue(i, "SoHieu").ToString();
-                            txtSearch.Focus();
+                           // txtSearch.Focus();
                         }
                     });
                     return;
@@ -716,22 +674,7 @@ namespace SaovietTax
 
         private void simpleButton1_Click(object sender, EventArgs e)
         {
-            DialogResult result = XtraMessageBox.Show(
-       "Bạn có chắc 2 sản phẩm này là 1?",
-       "Xác Nhận",
-       MessageBoxButtons.YesNo,
-       MessageBoxIcon.Question);
-
-            if (result == DialogResult.Yes)
-            {
-                string query = @"UPDATE Vattu SET TenVattu2=?  WHERE SoHieu=?";
-                var parameters = new OleDbParameter[]
-                 {
-            new OleDbParameter("?", Helpers.ConvertUnicodeToVni(textEdit2.Text)),
-            new OleDbParameter("?", sohieuvt)
-                 };
-                int rowsAffected = ExecuteQueryResult(query, parameters);
-            }
+          
         }
 
         private void gridControl1_MouseDown(object sender, MouseEventArgs e)
@@ -744,12 +687,110 @@ namespace SaovietTax
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
             {
                 EventArgs args = new EventArgs();
-                gridControl1_DoubleClick(sender, e);
+                gridControl1_DoubleClick_1(sender, e);
 
             }
         }
 
         private void frmHangHoa_Activated(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void gridControl1_DoubleClick_1(object sender, EventArgs e)
+        {
+            DevExpress.XtraGrid.Views.Grid.GridView gridView = gridControl1.MainView as DevExpress.XtraGrid.Views.Grid.GridView;
+            var hitInfo = gridView.CalcHitInfo(gridView.GridControl.PointToClient(MousePosition));
+
+
+            // Kiểm tra nếu nhấp vào một ô
+            if (hitInfo.InRowCell)
+            {
+                int columnIndex = hitInfo.Column.VisibleIndex; // Chỉ số cột
+
+                // Lấy giá trị trong ô đã nhấp
+                var hiddenValue = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["SoHieu"]);
+                var hiddenValue2 = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["DonVi"]);
+                var hiddenValue3 = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["TenVattu"]);
+                frmMain.hiddenValue = hiddenValue.ToString();
+                frmMain.hiddenValue2 = hiddenValue2.ToString();
+                frmMain.hiddenValue3 = hiddenValue3.ToString();
+                isChange = true;
+                //
+                if (Typeform == 2)
+                {
+                    var gv = frmMain.Typechon == 1 ? frmMain.gv2 : frmMain.gv4;
+
+                    gv.SetRowCellValue(hoverRowHandle, "SoHieu", hiddenValue);
+                    gv.SetRowCellValue(hoverRowHandle, "DVT", hiddenValue2);
+                    gv.SetRowCellValue(hoverRowHandle, "Ten", hiddenValue3);
+                    gv.UpdateCurrentRow();
+                    gv.RefreshData();
+                    var ddd = frmMain.lstrowSohieu;
+                    if (ddd.Count > 0)
+                    {
+                        DialogResult result = XtraMessageBox.Show("Có " + ddd.Count + " sản phẩm khác đang trùng tên với sản phẩm đang sửa, bạn có muốn cập nhật luôn mã mới?",
+                                        "Xác nhận",
+                                        MessageBoxButtons.YesNo,
+                                        MessageBoxIcon.Question);
+                        if (result == DialogResult.Yes)
+                        {
+                            frmMain.lstrowSohieu = ddd;
+                            frmMain.CapnhatlistSoHieu(ddd);
+                        }
+                    }
+                }
+                this.Close();
+            }
+        }
+
+        private void btnThoat_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void simpleButton1_Click_1(object sender, EventArgs e)
+        {
+            DialogResult result = XtraMessageBox.Show(
+     "Bạn có chắc 2 sản phẩm này là 1?",
+     "Xác Nhận",
+     MessageBoxButtons.YesNo,
+     MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                string query = @"UPDATE Vattu SET TenVattu2=?  WHERE SoHieu=?";
+                var parameters = new OleDbParameter[]
+                 {
+            new OleDbParameter("?", Helpers.ConvertUnicodeToVni(textEdit2.Text)),
+            new OleDbParameter("?", sohieuvt)
+                 };
+                int rowsAffected = ExecuteQueryResult(query, parameters);
+                frmMain._lookupByTenPhu[textEdit2.Text] = sohieuvt;
+            }
+        }
+
+        private void frmHangHoa_MouseHover(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gridView1_MouseEnter(object sender, EventArgs e)
+        {
+
+        }
+        public int mouseState = 0;  
+        private void frmHangHoa_MouseEnter(object sender, EventArgs e)
+        {
+            mouseState = 1;
+        }
+
+        private void panelControl1_MouseEnter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frmHangHoa_MouseLeave(object sender, EventArgs e)
         {
             
         }

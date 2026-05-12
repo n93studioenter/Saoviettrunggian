@@ -752,6 +752,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Hoadon\invoice.txt" />
+    <None Include="Resources\lookup&amp;reference_16x16.png" />
+    <None Include="Resources\add_16x16.png" />
+    <None Include="Resources\saveto_16x16.png" />
+    <None Include="Resources\loadfrom_16x16.png" />
+    <None Include="Resources\cancel_16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.135.0.7049.8400\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.135.0.7049.8400\build\Selenium.WebDriver.ChromeDriver.targets')" />
