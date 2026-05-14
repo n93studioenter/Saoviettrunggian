@@ -588,6 +588,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Quản lý danh sách vật tư";
             this.Activated += new System.EventHandler(this.frmHangHoa_Activated);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmHangHoa_FormClosing);
             this.Load += new System.EventHandler(this.frmHangHoa_Load_1);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmHangHoa_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmHangHoa_KeyPress);

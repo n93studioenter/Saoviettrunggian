@@ -5592,7 +5592,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                      row["Type"] == DBNull.Value ? 0 : int.Parse(row["Type"].ToString())
                 );
                 lookupTbImportCQT.Add(keys);
-            }
+            } 
         }
 
 
@@ -5602,77 +5602,75 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             {
                 // 1. Khách hàng 
                 // 2. Import header
-                LoadTbImportData();
-                BuildLookupTbImport(); 
+                try
+                {
+                    LoadTbImportData();
+                    BuildLookupTbImport();
 
+                }
+                catch(Exception ex)
+                {
+                    XtraMessageBox.Show("Lỗi nạp tbimport: " + ex.Message);
+                }
                 // 3. Import detail
-                tbImportDt = await Task.Run(() =>
-                    ExecuteQuery("SELECT * FROM tbimportdetail", null)
-                );
-
+                //tbImportDt = await Task.Run(() =>
+                //    ExecuteQuery("SELECT * FROM tbimportdetail", null)
+                //);
+                tbImportDt = ExecuteQuery("SELECT * FROM tbimportdetail", null); 
                 // dicListvt
                 dicListvt.Clear();
-                foreach (DataRow it in tbImportDt.Rows)
-                {
-                    if (it["Ten"] == DBNull.Value || it["SoHieu"] == DBNull.Value)
-                        continue;
+                
+                try
+                { 
+                    foreach (DataRow it in tbImportDt.Rows)
+                    {
+                        if (it["Ten"] == DBNull.Value || it["SoHieu"] == DBNull.Value)
+                            continue;
 
-                    string ten = Helpers.ConvertVniToUnicode(it["Ten"].ToString()).ToLower();
-                    string soHieu = it["SoHieu"].ToString();
+                        string ten = Helpers.ConvertVniToUnicode(it["Ten"].ToString()).ToLower();
+                      
+                        string soHieu = it["SoHieu"].ToString();
 
-                    if (!dicListvt.ContainsKey(ten))
-                        dicListvt.Add(ten, soHieu);
+                        if (!dicListvt.ContainsKey(ten))
+                            dicListvt.Add(ten, soHieu);
+                    }
                 }
+                catch(Exception ex)
+                {
+                    XtraMessageBox.Show("Lỗi xử lý dicListvt: " + ex.Message);
+                } 
                 // 4. Ngân hàng
-                tbNganhang = await Task.Run(() =>
-                    ExecuteQuery("SELECT * FROM tbNganhang", null)
-                );
+                tbNganhang = ExecuteQuery("SELECT * FROM tbNganhang", null); 
                 // 5. Chứng từ (DÙNG TUPLE)
-                existingTbChungtu = await Task.Run(() =>
-                    ExecuteQuery("SELECT * FROM ChungTu inner join HoaDon on ChungTu.MaSo = HoaDon.MaSo", null)
-                );
+                existingTbChungtu = ExecuteQuery("SELECT * FROM ChungTu inner join HoaDon on ChungTu.MaSo = HoaDon.MaSo", null); 
                 //_chungtuLookup = existingTbChungtu.AsEnumerable()
                 //    .ToLookup(r => (
                 //        SoHieu: r.Field<string>("SoHieu"),
                 //        NgayCT: r.Field<DateTime>("NgayCT").Date
                 //    ));
 
+
                 // 6. Phân loại vật tư
-                PhanLoaiVattu = await Task.Run(() =>
-                    ExecuteQuery("SELECT * FROM PhanLoaiVattu", null)
-                );
+                PhanLoaiVattu = ExecuteQuery("SELECT * FROM PhanLoaiVattu", null); 
                 DataRow plRow = PhanLoaiVattu.AsEnumerable()
                     .FirstOrDefault(r => r.Field<string>("SoHieu") == "NHT");
                 if (plRow != null)
                     maPhanLoai = plRow["MaSo"].ToString();
                 // 7. Nhập kho nguyên liệu
 
-                // 11. Register
-
+                // 11. Register 
                 // 12. License
-                tbLicense = await Task.Run(() =>
-                    ExecuteQuery("SELECT * FROM License", null)
-                );
-
+                tbLicense = ExecuteQuery("SELECT * FROM License", null);
                 // 13. Hệ thống tài khoản
-                existingTbHeThongTK = await Task.Run(() =>
-                    ExecuteQuery("SELECT * FROM HeThongTK", null)
-                );
+                existingTbHeThongTK = ExecuteQuery("SELECT * FROM HeThongTK", null  ); 
                 // 14. alias
                 tbimportdetail = tbImportDt;
-
                 // 15. Load vật tư
 
-
                 // 16. Định danh tài khoản
-                tbDinhDanhtaikhoan = await Task.Run(() =>
-                    LoadDinhDanhTaiKhoan()
-                );
-
+                tbDinhDanhtaikhoan = LoadDinhDanhTaiKhoan(); 
                 // 17. Định danh tài khoản ưu tiên (theo type)
-                tbDinhDanhtaikhoanUuTien = await Task.Run(() =>
-                    LoadDinhDanhTaiKhoanUuTien(type)
-                );
+                tbDinhDanhtaikhoanUuTien = LoadDinhDanhTaiKhoanUuTien(type);
             }
             catch(Exception ex)
             {
@@ -5701,12 +5699,11 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                     // 3. Khởi tạo DB + đọc License
                     ShowProgress("Kết nối database...");
                     InitDB();
-                   
                     SetVietnameseCulture();
                     ControlsSetup();
                     // 4. Migrate database (chạy background)
                     ShowProgress("Kiểm tra cấu trúc dữ liệu...");
-                    await Task.Run(() => MigrateDatabase());
+                     MigrateDatabase();
 
                     
                     // 5. Load config người dùng
@@ -5716,15 +5713,13 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                     // 6. Load dữ liệu nền (ĐÚNG ASYNC)
 
                     ShowProgress("Nạp dữ liệu hệ thống...");
-                    tbKhachhang = await Task.Run(() =>
-             ExecuteQuery("SELECT * FROM KhachHang", null)
-         ); 
+                    tbKhachhang = ExecuteQuery("SELECT * FROM KhachHang", null);
                     lstKhachhangs = tbKhachhang.ToList<KhachHang>();
-                    _ = LoadMasterDataAsync();   // ⬅️ CHUẨN
+                     LoadMasterDataAsync();   // ⬅️ CHUẨN
                     string queryct = "SELECT * FROM ChungTu inner join HoaDon on ChungTu.MaSo = HoaDon.MaSo"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
                     existingTbChungtu = ExecuteQuery(queryct);
-                    await LoadVT();
-                    await Task.Run(() => LoadHoadonCT()); // phụ thuộc lstKhachhangs
+                     LoadVT();
+                    LoadHoadonCT(); // phụ thuộc lstKhachhangs
 
                     // 7. Build lookup
                     ShowProgress("Khởi tạo lookup...");
@@ -5744,7 +5739,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             }
             catch (Exception ex)
             {
-                //XtraMessageBox.Show("Lỗi khởi động: " + ex.Message);
+                XtraMessageBox.Show("Lỗi khởi động: " + ex.Message);
             }
             finally
             {
@@ -6104,8 +6099,9 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             xtraTabPage7.PageVisible = false;
             // TestPython();
             try
-            { 
-                await LoadApplicationAsync();
+            {
+                //await LoadApplicationAsync();
+                 LoadApplicationAsync();
                 int screenWidth = Screen.PrimaryScreen.Bounds.Width;
 
                 // Tính 10% chiều rộng màn hình
@@ -6969,7 +6965,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
         {
 
             DevExpress.XtraGrid.Columns.GridColumn deleteColumn = new DevExpress.XtraGrid.Columns.GridColumn();
-            deleteColumn.Caption = "Tính năng";
+            deleteColumn.Caption = "Tính năng dòng";
             deleteColumn.FieldName = "Delete";
             deleteColumn.UnboundType = DevExpress.Data.UnboundColumnType.Object;
             deleteColumn.Visible = true;
@@ -6979,12 +6975,46 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             gridView.Columns.Add(deleteColumn);
 
             // Tạo RepositoryItemButtonEdit
-            RepositoryItemButtonEdit buttonEdit = new RepositoryItemButtonEdit();
-            buttonEdit.Buttons[0].Kind = DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph;
-            buttonEdit.Buttons[0].Caption = "Xoá";
-            buttonEdit.Buttons.Add(new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph));
-            buttonEdit.Buttons[1].Caption = "Thêm"; 
 
+            // Tạo RepositoryItemButtonEdit
+            RepositoryItemButtonEdit buttonEdit = new RepositoryItemButtonEdit();
+
+            buttonEdit.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
+            buttonEdit.Buttons.Clear();
+
+
+            // BUTTON XOÁ
+            EditorButton btnDelete = new EditorButton(ButtonPredefines.Glyph);
+            btnDelete.Caption = "Xoá";
+            btnDelete.Kind = ButtonPredefines.Glyph;
+            btnDelete.IsLeft = true;
+
+            btnDelete.Appearance.BackColor = Color.Red;
+            btnDelete.Appearance.ForeColor = Color.White;
+
+            btnDelete.Appearance.Options.UseBackColor = true;
+            btnDelete.Appearance.Options.UseForeColor = true;
+
+
+            // BUTTON THÊM
+            EditorButton btnAdd = new EditorButton(ButtonPredefines.Glyph);
+            btnAdd.Caption = "Thêm";
+            btnAdd.IsLeft = true;
+
+            btnAdd.Appearance.BackColor = Color.Green;
+            btnAdd.Appearance.ForeColor = Color.White;
+
+            btnAdd.Appearance.Options.UseBackColor = true;
+            btnAdd.Appearance.Options.UseForeColor = true;
+
+
+            buttonEdit.Buttons.Add(btnDelete);
+            buttonEdit.Buttons.Add(btnAdd);
+
+
+            // QUAN TRỌNG
+            buttonEdit.LookAndFeel.UseDefaultLookAndFeel = false;
+            buttonEdit.LookAndFeel.Style = DevExpress.LookAndFeel.LookAndFeelStyle.Flat;
             buttonEdit.ButtonClick += (sender2, e2) =>
             {
                 GridView grv = gridControl1.MainView as GridView;
@@ -16477,6 +16507,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                         if (currentColumnName.ToString() == "SoHieu")
                         {
+                            isHHPopupOpen = true;
+                            if (frmhh != null)
+                                frmhh.Close();
+                            hoverTimer.Stop();
                             frmHangHoa frmHangHoa = new frmHangHoa();
                             frmHangHoa.frmMain = this;
                             frmHangHoa.Typeform = 1;
@@ -16511,7 +16545,56 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 currentselectId = int.Parse(checkSH.Rows[0]["MaPhanLoai"].ToString());
                             else
                                 currentselectId = 0;
-                            frmHangHoa.ShowDialog();
+                            var viewInfo = gridView.GetViewInfo() as GridViewInfo;
+
+                            if (viewInfo != null)
+                            {
+                                var cellInfo = viewInfo.GetGridCellInfo(
+                                    currentRowHandle,
+                                    gridView.Columns["SoHieu"]
+                                );
+
+                                if (cellInfo != null)
+                                {
+                                    Point cellScreen =
+                                        gridView.GridControl.PointToScreen(
+                                            cellInfo.Bounds.Location);
+
+                                    int x =
+                                        cellScreen.X +
+                                        cellInfo.Bounds.Width + 2;
+
+                                    int y = cellScreen.Y+35;
+
+                                    frmHangHoa.StartPosition =
+                                        FormStartPosition.Manual;
+
+                                    Rectangle screen =
+                                        Screen.FromControl(this).WorkingArea;
+
+                                    // tràn phải -> nhảy sang trái
+                                    if (x + frmHangHoa.Width > screen.Right)
+                                    {
+                                        x = cellScreen.X - frmHangHoa.Width - 2;
+                                    }
+
+                                    // tràn dưới -> nhảy lên trên
+                                    if (y + frmHangHoa.Height > screen.Bottom)
+                                    {
+                                        y = cellScreen.Y - frmHangHoa.Height;
+                                    }
+
+                                    // chống tràn top
+                                    if (y < screen.Top)
+                                    {
+                                        y = screen.Top;
+                                    }
+
+                                    frmHangHoa.Location = new Point(x, y);
+
+                                    frmHangHoa.Show(this);
+                                }
+                            }
 
 
 
@@ -16682,9 +16765,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         }
         public string TenVTMain { get; set; }
         private async void gridView4_KeyDown(object sender, KeyEventArgs e)
-        {
+        { 
             if (e.KeyCode == System.Windows.Forms.Keys.Enter)
             {
+
                 getMessage = true;
                 DevExpress.XtraGrid.Views.Grid.GridView gridView = sender as DevExpress.XtraGrid.Views.Grid.GridView;
 
@@ -16727,6 +16811,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         //}
                         if (currentColumnName.ToString() == "SoHieu")
                         {
+                            isHHPopupOpen = true;
+                            if (frmhh != null)
+                                frmhh.Close();
+                            hoverTimer.Stop();
                             frmHangHoa frmHangHoa = new frmHangHoa();
                             frmHangHoa.frmMain = this;
                             frmHangHoa.Typeform = 1;
@@ -16761,7 +16849,56 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 currentselectId = int.Parse(checkSH.Rows[0]["MaPhanLoai"].ToString());
                             else
                                 currentselectId = 0;
-                            frmHangHoa.ShowDialog();
+                            var viewInfo = gridView.GetViewInfo() as GridViewInfo;
+
+                            if (viewInfo != null)
+                            {
+                                var cellInfo = viewInfo.GetGridCellInfo(
+                                    currentRowHandle,
+                                    gridView.Columns["SoHieu"]
+                                );
+
+                                if (cellInfo != null)
+                                {
+                                    Point cellScreen =
+                                        gridView.GridControl.PointToScreen(
+                                            cellInfo.Bounds.Location);
+
+                                    int x =
+                                        cellScreen.X +
+                                        cellInfo.Bounds.Width + 2;
+
+                                    int y = cellScreen.Y + 30;
+
+                                    frmHangHoa.StartPosition =
+                                        FormStartPosition.Manual;
+
+                                    Rectangle screen =
+                                        Screen.FromControl(this).WorkingArea;
+
+                                    // tràn phải -> nhảy sang trái
+                                    if (x + frmHangHoa.Width > screen.Right)
+                                    {
+                                        x = cellScreen.X - frmHangHoa.Width - 2;
+                                    }
+
+                                    // tràn dưới -> nhảy lên trên
+                                    if (y + frmHangHoa.Height > screen.Bottom)
+                                    {
+                                        y = cellScreen.Y - frmHangHoa.Height;
+                                    }
+
+                                    // chống tràn top
+                                    if (y < screen.Top)
+                                    {
+                                        y = screen.Top;
+                                    }
+
+                                    frmHangHoa.Location = new Point(x, y);
+
+                                    frmHangHoa.Show(this);
+                                }
+                            }
 
 
                             if (!string.IsNullOrEmpty(hiddenValue) && frmHangHoa.isChange)
@@ -20104,6 +20241,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 private static readonly Dictionary<string, string[]> BrandAliases =
     new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
 {
+     { "st25", new[] { "st25","st 25"} },
+     { "st21", new[] { "st21", "st 21"  } },
         { "nước giặt xả", new[] { "nước giặt xả" } },
         { "bột canh", new[] { "bột canh" } },
         { "nam vang", new[] { "nam vang" } },
@@ -20224,7 +20363,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
     "sđcđ",
     "jumpo"
      ,"bơ",
-    "đường"
+    "đường", 
         };
 
         private static string Normalize(string text)
@@ -20380,7 +20519,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 {
                     int aaa = 10;
                 }
-                if (final >= 55 || productSimilarity==1)
+                if (final >= 10 || productSimilarity==1)
                 {
                     Vattugoiy vattugoiy = new Vattugoiy();
                     if(item.Value.TenChuan.Length>50)
@@ -30625,9 +30764,15 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         private Timer hoverTimer;
         public int hoverRowHandle = GridControl.InvalidRowHandle;
         public string hoverColumnName = "";
+        public bool isHHPopupOpen = false; 
         frmHangHoa frmhh;
         private void HoverTimer_Tick(object sender, EventArgs e)
         {
+            if(isHHPopupOpen)
+            {
+                hoverTimer.Stop();
+                return;
+            }
             hoverTimer.Stop();
             bool inPopup = false;
             if (frmhh != null)
@@ -30636,19 +30781,38 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                 try
                 {
-                    Rectangle gridRect =
-                   gridControl1.RectangleToScreen(gridControl1.ClientRectangle);
-
-                    Rectangle popupRect =
-                        frmhh.RectangleToScreen(frmhh.ClientRectangle);
-
-                    bool inGrid = gridRect.Contains(p);
-                    inPopup = popupRect.Contains(p);
-                    if (inPopup == true && frmhh.Typeform == 2)
+                    if (chkDauvao.Checked)
                     {
-                        return;
+                        Rectangle gridRect =
+                  gridControl1.RectangleToScreen(gridControl1.ClientRectangle);
+
+                        Rectangle popupRect =
+                            frmhh.RectangleToScreen(frmhh.ClientRectangle);
+
+                        bool inGrid = gridRect.Contains(p);
+                        inPopup = popupRect.Contains(p);
+                        if (inPopup == true && frmhh.Typeform == 2)
+                        {
+                            return;
+                        }
+                        Console.WriteLine(inPopup);
                     }
-                    Console.WriteLine(inPopup);
+                    if (chkDaura.Checked)
+                    {
+                        Rectangle gridRect =
+                  gridControl2.RectangleToScreen(gridControl2.ClientRectangle);
+
+                        Rectangle popupRect =
+                            frmhh.RectangleToScreen(frmhh.ClientRectangle);
+
+                        bool inGrid = gridRect.Contains(p);
+                        inPopup = popupRect.Contains(p);
+                        if (inPopup == true && frmhh.Typeform == 2)
+                        {
+                            return;
+                        }
+                        Console.WriteLine(inPopup);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -30716,16 +30880,33 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 //Nếu chưa có, tìm hết danh sách
                 if (checkSH.Rows.Count == 0)
                 {
-                    foreach (var item in lstImportRa)
+                    if (chkDauvao.Checked)
                     {
-                        foreach (var it in item.fileImportDetails)
+                        foreach (var item in lstImportVao)
                         {
-                            if (it.Ten == VatTu.TenVattu)
+                            foreach (var it in item.fileImportDetails)
                             {
-                                lstrowSohieu.Add(it.ID);
+                                if (it.Ten == VatTu.TenVattu)
+                                {
+                                    lstrowSohieu.Add(it.ID);
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        foreach (var item in lstImportRa)
+                        {
+                            foreach (var it in item.fileImportDetails)
+                            {
+                                if (it.Ten == VatTu.TenVattu)
+                                {
+                                    lstrowSohieu.Add(it.ID);
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
             else
@@ -30746,16 +30927,33 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 //Nếu chưa có, tìm hết danh sách
                 if (checkSH.Rows.Count == 0)
                 {
-                    foreach (var item in lstImportRa)
+                    if(chkDauvao.Checked)
                     {
-                        foreach (var it in item.fileImportDetails)
+                         foreach (var item in lstImportVao)
                         {
-                            if (it.Ten == VatTu.TenVattu)
+                            foreach (var it in item.fileImportDetails)
                             {
-                                lstrowSohieu.Add(it.ID);
+                                if (it.Ten == VatTu.TenVattu)
+                                {
+                                    lstrowSohieu.Add(it.ID);
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        foreach (var item in lstImportRa)
+                        {
+                            foreach (var it in item.fileImportDetails)
+                            {
+                                if (it.Ten == VatTu.TenVattu)
+                                {
+                                    lstrowSohieu.Add(it.ID);
+                                }
+                            }
+                        }
+                    }
+                       
                 }
                 frmhh.Reload();
             }

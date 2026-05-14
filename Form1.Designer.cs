@@ -977,8 +977,6 @@
             this.colIDs.FieldName = "ID";
             this.colIDs.MinWidth = 25;
             this.colIDs.Name = "colIDs";
-            this.colIDs.Visible = true;
-            this.colIDs.VisibleIndex = 9;
             this.colIDs.Width = 80;
             // 
             // gridControl2
@@ -1373,8 +1371,6 @@
             this.gridColumn12.FieldName = "ID";
             this.gridColumn12.MinWidth = 29;
             this.gridColumn12.Name = "gridColumn12";
-            this.gridColumn12.Visible = true;
-            this.gridColumn12.VisibleIndex = 9;
             this.gridColumn12.Width = 106;
             // 
             // gridControl1

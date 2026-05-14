@@ -112,8 +112,12 @@ namespace SaovietTax
 
                     foreach (var vt in mylstvt)
                     {
-                        var productSimilarity = frmMain.CompareProduct(vt.TenVattu.ToLower(), frmMain.TenVTMain.ToLower());
-                        vt.Real = productSimilarity;
+                        if (frmMain.TenVTMain != null)
+                        {
+                            var productSimilarity = frmMain.CompareProduct(vt.TenVattu.ToLower(), frmMain.TenVTMain.ToLower());
+                            vt.Real = productSimilarity;
+                        }
+                     
                     }
                     gridControl1.DataSource = mylstvt.OrderByDescending(m => m.Percent).OrderByDescending(m => m.Real).ToList();
                 }
@@ -717,7 +721,7 @@ namespace SaovietTax
                 frmMain.hiddenValue3 = hiddenValue3.ToString();
                 isChange = true;
                 //
-                if (Typeform == 2)
+                if (Typeform == 2 || Typeform==1)
                 {
                     var gv = frmMain.Typechon == 1 ? frmMain.gv2 : frmMain.gv4;
 
@@ -792,6 +796,15 @@ namespace SaovietTax
 
         private void frmHangHoa_MouseLeave(object sender, EventArgs e)
         {
+            
+        }
+
+        private void frmHangHoa_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Typeform == 1)
+            {
+                frmMain.isHHPopupOpen = false;
+            }
             
         }
     }

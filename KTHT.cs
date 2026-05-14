@@ -1866,11 +1866,30 @@ namespace SaovietTax
                     {
                          //Tìm tiếp danh sách chungtu từ masao
                          var getMaCT=tbChungtu.AsEnumerable().Where(m => m["MaSo"].ToString() == getmst["MaSo"].ToString()).FirstOrDefault();
+                         var getMaCTGV= tbChungtu.AsEnumerable().Where(m => m["SoHieu"].ToString() == $"{getMaCT["SoHieu"].ToString()}GV" && m["NgayCT"].ToString()== getMaCT["NgayCT"].ToString()).FirstOrDefault();
                         if (getMaCT != null)
                         {
                             //Lấy danh sách chungtu liên quan từ MaCT
                             var getListCT = tbChungtu.AsEnumerable().Where(m => m["MaCT"].ToString() == getMaCT["MaCT"].ToString()).ToList();
                             foreach(var item in getListCT)
+                            {
+                                string query = @"UPDATE ChungTu SET NgayCT=?, NgayGS=? where MaSo=? ";
+
+                                var parameters = new OleDbParameter[]
+                         {
+               new OleDbParameter("?", it.NgayLap),
+                 new OleDbParameter("?", it.NgayLap),
+                   new OleDbParameter("?", item["MaSo"].ToString()),
+                         };
+                                int rowsAffected = ExecuteQueryResult(query, parameters);
+                            }
+                        }
+
+                        if (getMaCTGV != null)
+                        {
+                            //Lấy danh sách chungtu liên quan từ MaCT
+                            var getListCT = tbChungtu.AsEnumerable().Where(m => m["MaCT"].ToString() == getMaCTGV["MaCT"].ToString()).ToList();
+                            foreach (var item in getListCT)
                             {
                                 string query = @"UPDATE ChungTu SET NgayCT=?, NgayGS=? where MaSo=? ";
 

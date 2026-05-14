@@ -134,6 +134,10 @@ namespace SaovietTax {
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             finally
             {
                 if (isAutoStart)
