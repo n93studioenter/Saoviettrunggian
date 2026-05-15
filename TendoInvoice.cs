@@ -1,4 +1,5 @@
-﻿using FuzzySharp;
+﻿using DevExpress.XtraEditors;
+using FuzzySharp;
 using Microsoft.Web.WebView2.Core;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
@@ -21,6 +22,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Tensorflow.tensorflow;
 
 namespace SaovietTax
 {
@@ -161,93 +163,147 @@ namespace SaovietTax
                 // driver.Quit();
             }
         }
-
-        private async Task AddInvoice()
+        string businessId;
+        string buyerName;
+        string buyerPhone;
+        string buyerId ;
+        string buyerAddress;
+        private async Task LayThongTinInfo()
         {
-            string businessId = "9065ebd6-4c83-4c9c-a6d4-4937e3fda49b";
-            string buyerName = "Nghiệp_KTTest";
-            string buyerPhone = "0345766543";
-            string buyerId = "0aba7e74-e3ac-4a7e-84e9-daef86b6e2e2";
+            //https://apiv2.tendoo.vn/user/api/v2/auth/info
+            string apiUrl = "https://apiv2.tendoo.vn/user/api/v2/auth/info";
+            HttpResponseMessage response =
+                     await httpClient.GetAsync(apiUrl);
 
+            string content =
+                await response.Content.ReadAsStringAsync();
+            JObject obj = JObject.Parse(content);
+
+            string userId =
+    obj["data"]?["user_info"]?["id"]?.ToString();
+
+            businessId =
+                obj["data"]?["business_info"]?["current_business"]?["id"]?.ToString();
+            LayThongTinHoaDon();
+        } 
+        private async Task LayThongTinKhachHang()
+        {
+            buyerId = dtKhachhang.Rows[0]["contact_id"].ToString();   
+            string apiUrl = $"https://apiv2.tendoo.vn/business/api/v2/contact/get-detail/{buyerId}?business_id={businessId}";
+            HttpResponseMessage response =
+                     await httpClient.GetAsync(apiUrl);
+
+            string content =
+                await response.Content.ReadAsStringAsync();
+            JObject obj = JObject.Parse(content);
+            buyerName = obj["data"]?["name"]?.ToString();
+            buyerPhone = obj["data"]?["phone_number"]?.ToString();
+            string address_info = obj["data"]?["address_info"].ToString();
+            string avatar = obj["data"]?["avatar"]?.ToString();
+            string debt_amount = obj["data"]?["debt_amount"]?.ToString();
+            string option ="";
+            buyerAddress = obj["data"]?["address"]?.ToString();
+            string invoice_contact_info =null;
+            string address_version = "0";
+            Thuchienhoadon();
+        }
+        private async Task Thuchienhoadon()
+        {
             // Build list_order_item - sản phẩm có sẵn trong hệ thống
             var listOrderItem = new JsonArray();
             decimal grandTotal = 0;
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
             // SP 1
-            decimal price1 = 260000m;
-            int qty1 = 1;
-            decimal total1 = price1 * qty1;
-            grandTotal += total1;
+           
 
-            listOrderItem.Add(new JsonObject
+            foreach(DataRow item in dtHangHoa.Rows)
             {
-                ["product_id"] = "b3493f90-3ac6-4146-b6ac-374d306e6957",
-                ["product_name"] = "Michelob ULTRA Sleek CAN 24x250ml",
-                ["product_images"] = new JsonArray(),
-                ["product_type"] = "stock_non_varriant",
-                ["sku_id"] = "862f0c94-4bde-4a48-bc72-ec669366dac6",
-                ["sku_type"] = "stock",
-                ["sku_name"] = "",
-                ["sku_code"] = "SP0073",
-                ["range_wholesale_price"] = new JsonArray(),
-                ["product_normal_price"] = price1,
-                ["product_selling_price"] = 0,
-                ["price"] = price1,
-                ["wholesale_price"] = 0,
-                ["quantity"] = qty1,
-                ["note"] = "",
-                ["uom"] = "Thùng",
-                ["order_item_add_on"] = new JsonArray(),
-                ["category_ids"] = new JsonArray(),
-                ["order_item_rate"] = new JsonArray(),
-                ["using_product_rate"] = true,
-                ["current_product_rate"] = null,
-                ["price_info"] = new JsonObject
+                decimal price1 = 0;
+                int qty1 = Convert.ToInt32(item["Quantity"].ToString()); 
+                string hhid=item["TendoId"].ToString();
+                string api = $"https://apiv2.tendoo.vn/product/api/v2/product/seller/get-detail/{hhid}";
+                var    responses =  await httpClient.GetAsync(api);
+                string content =
+                    await responses.Content.ReadAsStringAsync();
+                JObject obj = JObject.Parse(content);
+                price1 = Convert.ToDecimal(item["Amount"].ToString());
+                decimal total1 = price1 * qty1;
+                grandTotal += total1;
+                string random =
+    Guid.NewGuid().ToString("N").Substring(0, 9);
+                string lineId =
+    $"{Guid.NewGuid()}-{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}-{random}";
+                listOrderItem.Add(new JsonObject
                 {
+                    ["product_id"] = hhid,
+                    ["product_name"] = obj["data"]?["name"]?.ToString(),
+                    ["product_images"] = new JsonArray(),
+                    ["product_type"] = obj["data"]?["type"]?.ToString(),
+                    ["sku_id"] = obj["data"]?["list_sku"]?[0]?["id"]?.ToString(),
+                    ["sku_type"] = obj["data"]?["list_sku"]?[0]?["sku_type"]?.ToString(),
+                    ["sku_name"] = obj["data"]?["list_sku"]?[0]?["name"]?.ToString(),
+                    ["sku_code"] = obj["data"]?["list_sku"]?[0]?["sku_code"]?.ToString(),
+                    ["range_wholesale_price"] = new JsonArray(),
+                    ["product_normal_price"] = price1,
+                    ["product_selling_price"] = 0,
+                    ["price"] = price1,
+                    ["wholesale_price"] = 0,
                     ["quantity"] = qty1,
-                    ["init_discount_percent"] = 0,
-                    ["unit_price_initial"] = price1,
-                    ["unit_price_discount"] = 0,
-                    ["unit_price_before_tax"] = price1,
-                    ["unit_price_after_tax"] = price1,
-                    ["unit_tax_amount"] = 0,
-                    ["total_amount_initial"] = total1,
-                    ["total_amount_before_tax"] = total1,
-                    ["total_amount_after_tax"] = total1,
-                    ["total_amount_tax_reduce"] = 0,
-                    ["total_amount_after_tax_reduce"] = total1,
-                    ["tax_percent"] = -2,
-                    ["tax_amount_after_discount"] = 0,
-                    ["tax_amount"] = 0,
-                    ["item_discount"] = 0,
-                    ["discount_allocated_before_tax"] = 0,
-                    ["discount_allocated_tax"] = 0,
-                    ["discount_allocated_after_tax"] = 0,
-                    ["discount_allocated_tax_reduce"] = 0,
-                    ["discount_allocated_after_tax_reduce"] = 0,
-                    ["unit_refund_amount"] = price1,
-                    ["unit_tax_refund_amount"] = 0,
-                    ["customer_discount_allocated_before_tax"] = 0,
-                    ["customer_discount_allocated_tax"] = 0,
-                    ["customer_discount_allocated_after_tax"] = 0,
-                    ["customer_discount_allocated_tax_reduce"] = 0,
-                    ["customer_discount_allocated_after_tax_reduce"] = 0,
-                    ["order_discount_allocated_before_tax"] = 0,
-                    ["order_discount_allocated_tax"] = 0,
-                    ["order_discount_allocated_after_tax"] = 0,
-                    ["order_discount_allocated_after_tax_reduce"] = 0,
-                    ["order_discount_allocated_tax_reduce"] = 0,
-                    ["tax_reduce_percent"] = 0
-                },
-                ["historical_cost"] = 250000,
-                ["price_non_discount"] = price1,
-                ["product_version"] = 1,
-                ["total_amount"] = total1,
-                ["show_edit_note"] = false,
-                ["product_rate"] = new JsonArray(),
-                ["lineId"] = "b3493f90-3ac6-4146-b6ac-374d306e6957-1778661197656-kdljat6uo"
-            });
+                    ["note"] = "",
+                    ["uom"] = obj["data"]?["uom"]?.ToString(),
+                    ["order_item_add_on"] = new JsonArray(),
+                    ["category_ids"] = new JsonArray(),
+                    ["order_item_rate"] = new JsonArray(),
+                    ["using_product_rate"] = true,
+                    ["current_product_rate"] = null,
+                    ["price_info"] = new JsonObject
+                    {
+                        ["quantity"] = qty1,
+                        ["init_discount_percent"] = 0,
+                        ["unit_price_initial"] = price1,
+                        ["unit_price_discount"] = 0,
+                        ["unit_price_before_tax"] = price1,
+                        ["unit_price_after_tax"] = price1,
+                        ["unit_tax_amount"] = 0,
+                        ["total_amount_initial"] = total1,
+                        ["total_amount_before_tax"] = total1,
+                        ["total_amount_after_tax"] = total1,
+                        ["total_amount_tax_reduce"] = 0,
+                        ["total_amount_after_tax_reduce"] = total1,
+                        ["tax_percent"] = -2,
+                        ["tax_amount_after_discount"] = 0,
+                        ["tax_amount"] = 0,
+                        ["item_discount"] = 0,
+                        ["discount_allocated_before_tax"] = 0,
+                        ["discount_allocated_tax"] = 0,
+                        ["discount_allocated_after_tax"] = 0,
+                        ["discount_allocated_tax_reduce"] = 0,
+                        ["discount_allocated_after_tax_reduce"] = 0,
+                        ["unit_refund_amount"] = price1,
+                        ["unit_tax_refund_amount"] = 0,
+                        ["customer_discount_allocated_before_tax"] = 0,
+                        ["customer_discount_allocated_tax"] = 0,
+                        ["customer_discount_allocated_after_tax"] = 0,
+                        ["customer_discount_allocated_tax_reduce"] = 0,
+                        ["customer_discount_allocated_after_tax_reduce"] = 0,
+                        ["order_discount_allocated_before_tax"] = 0,
+                        ["order_discount_allocated_tax"] = 0,
+                        ["order_discount_allocated_after_tax"] = 0,
+                        ["order_discount_allocated_after_tax_reduce"] = 0,
+                        ["order_discount_allocated_tax_reduce"] = 0,
+                        ["tax_reduce_percent"] = 0
+                    },
+                    ["historical_cost"] = int.Parse(obj["data"]?["list_sku"]?[0]?["historical_cost"]?.ToString()),
+                    ["price_non_discount"] = price1,
+                    ["product_version"] = obj["data"]?["version"]?.Value<int>() ?? 0,
+                    ["total_amount"] = total1,
+                    ["show_edit_note"] = false,
+                    ["product_rate"] = new JsonArray(),
+                    ["lineId"] = lineId
+                });
+            }
+            
             var calculateId = Guid.NewGuid().ToString();
             // Build payload y hệt mẫu
             var payload = new JsonObject
@@ -260,7 +316,7 @@ namespace SaovietTax
                 ["payment_method"] = "cash",
                 ["payment_source_id"] = "bb9385b1-5450-4a16-83ce-1b5b69a3aa13",
                 ["payment_source_name"] = "Tiền mặt",
-                [" "] = new JsonArray(),
+                ["payment_order_history"] = new JsonArray(),
                 ["email"] = "",
                 ["note"] = "",
                 ["images"] = new JsonArray(),
@@ -273,7 +329,7 @@ namespace SaovietTax
                     ["avatar"] = "",
                     ["debt_amount"] = 0,
                     ["option"] = "",
-                    ["address"] = "",
+                    ["address"] = buyerAddress,
                     ["invoice_contact_info"] = null,
                     ["address_version"] = 0
                 },
@@ -388,7 +444,7 @@ namespace SaovietTax
             var http = new HttpClient();
             http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9fd2ViIiwiZXhwIjoxNzgxMzEzMjg2LCJzdWIiOiIwNmEyYjg3Mi04MmJmLTQ5MzYtODUyYy0wMjhmNzk3Mzc5MjJ8Mjk4NjQ1NmEtZTlhYy00MGYxLWJjYTUtM2FkMTRkMTFkNzgwfDI5ODY0NTZhLWU5YWMtNDBmMS1iY2E1LTNhZDE0ZDExZDc4MCIsImRldmljZV9pZCI6IjI5ODY0NTZhLWU5YWMtNDBmMS1iY2E1LTNhZDE0ZDExZDc4MCIsImJ1c2luZXNzX2lkIjoiOTA2NWViZDYtNGM4My00YzljLWE2ZDQtNDkzN2UzZmRhNDliIiwicGVybWlzc2lvbl9rZXlzIjoic2hvcF9vd25lciIsInJlZnJlc2hfdG9rZW5faWQiOiI2YjI5NTcxYy1jOTNjLTRjZTgtYWFkOC03MjVhMTIzZDEyNGUiLCJzZWN1cml0eV9yb2xlcyI6MCwiYXBwX3ZlcnNpb24iOiIiLCJ1c2VyX2lkIjoiMDZhMmI4NzItODJiZi00OTM2LTg1MmMtMDI4Zjc5NzM3OTIyIn0.5Ggdl3jmwuG8fdKyM7BDJhi-G8b3xTkwnzKXpbfPF60");
 
-             var request = new HttpRequestMessage(HttpMethod.Post, "https://apiv2.tendoo.vn/order/api/v13/seller/create-order");
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://apiv2.tendoo.vn/order/api/v13/seller/create-order");
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Thêm header X-Idempotency-Key - phải là GUID
@@ -405,10 +461,105 @@ namespace SaovietTax
             Console.WriteLine($"Status: {response.StatusCode}");
             Console.WriteLine($"Response: {result}");
         }
-        private async void TendoInvoice_Load(object sender, EventArgs e)
+        DataTable dtKhachhang;
+        DataTable dtHoaDon;
+        DataTable dtChungTu;
+        DataTable dtHangHoa = new DataTable();
+        private async Task LayThongTinHoaDon()
         {
-            await AddInvoice();
-            return;
+            string appPath = Assembly.GetExecutingAssembly().Location;
+
+            // Lấy thư mục chứa ứng dụng
+            string directoryPath = Path.GetDirectoryName(appPath);
+            string rootDirectory = Path.GetFullPath(Path.Combine(directoryPath, @"..\.."));
+
+            string filePath = Path.Combine(rootDirectory, "Hoadon", "invoice.txt");
+            _content = File.ReadAllText(filePath);
+            var getsplit = _content.Split('_');
+
+            // Có thể bạn nên JOIN theo ID, không phải MaSo
+            var qrTimct = @"
+    SELECT ChungTu.*,HOADON.*
+    FROM ChungTu 
+    INNER JOIN HOADON ON HOADON.MaSo = ChungTu.MaSo 
+    WHERE ChungTu.SoHieu = ? AND KyHieu = ? AND NgayCT=? ";
+
+            var parameterss = new OleDbParameter[]
+            {
+    new OleDbParameter("?", getsplit[0]),
+    new OleDbParameter("?", getsplit[1]),
+    new OleDbParameter("?", getsplit[2])
+            };
+
+            dtHoaDon  = ExecuteQuery(qrTimct, parameterss);
+
+            //Lấy danh sách chứng từ từ MaCT
+            var sql = "SELECT * FROM KhachHang WHERE MaSo = ?";
+            parameterss = new OleDbParameter[]
+          {
+    new OleDbParameter("?",  dtHoaDon.Rows[0]["MaKhachHang"]),
+          };
+            dtKhachhang = ExecuteQuery(sql, parameterss);
+
+            sql = "SELECT * FROM ChungTu WHERE MaCT = ?";
+            var param = new OleDbParameter[]
+            {
+                new OleDbParameter("?", dtHoaDon.Rows[0]["MaCT"])
+            };
+            dtChungTu = ExecuteQuery(sql, param);
+          
+            dtHangHoa.Columns.Add("ItemCode", typeof(string));
+            dtHangHoa.Columns.Add("ItemName", typeof(string));
+            dtHangHoa.Columns.Add("UnitName", typeof(string));
+            dtHangHoa.Columns.Add("UnitPrice", typeof(decimal));
+            dtHangHoa.Columns.Add("Quantity", typeof(double));
+            dtHangHoa.Columns.Add("Amount", typeof(decimal));
+            dtHangHoa.Columns.Add("TendoName", typeof(string));
+            dtHangHoa.Columns.Add("TendoSKU", typeof(string));
+            dtHangHoa.Columns.Add("TendoUom", typeof(string));
+            dtHangHoa.Columns.Add("TendoId", typeof(string));
+            dtHangHoa.Columns.Add("TendoPrice", typeof(double));
+            foreach (DataRow row in dtChungTu.Rows)
+            {
+                try
+                {
+                    if (row["MaVattu"].ToString().Trim() == "0")
+                    {
+                        continue; // Bỏ qua nếu MaVattu trống
+                    }
+                    string sqlHangHoa = "SELECT * FROM Vattu WHERE MaSo = ?";
+                    var paramHangHoa = new OleDbParameter[]
+                    {
+                    new OleDbParameter("?", row["MaVattu"])
+                    };
+                    var kqHangHoa = ExecuteQuery(sqlHangHoa, paramHangHoa);
+                    double sops = row["SoPS"].ToString() == "" ? 0 : Convert.ToDouble(row["SoPS"]); 
+                    double soluong = row["SoPS2Co"].ToString() == "" ? 0 : Convert.ToDouble(row["SoPS2Co"]);
+                    string tenhh = kqHangHoa.Rows[0]["TenVattu"].ToString();
+                    string donvitinh = kqHangHoa.Rows[0]["DonVi"].ToString();
+                    string TendoName = kqHangHoa.Rows[0]["TendoName"].ToString();
+                    string TendoSku = kqHangHoa.Rows[0]["TendoSku"].ToString();
+                    string TendoUom = kqHangHoa.Rows[0]["TendoUom"].ToString();
+                    string TendoId = kqHangHoa.Rows[0]["TendoId"].ToString();
+                    double price = kqHangHoa.Rows[0]["TendoPrice"].ToString() == "" ? 0 : Convert.ToDouble(kqHangHoa.Rows[0]["TendoPrice"]);
+                    dtHangHoa.Rows.Add("", tenhh, donvitinh, 0, soluong, sops, TendoName, TendoSku, TendoUom, TendoId, price);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lấy thông tin hàng hóa: " + ex.Message);
+                }
+            }
+
+            LayThongTinKhachHang();
+        }
+        private async Task AddInvoice()
+        { 
+             LayThongTinInfo(); 
+            
+        }
+        public string tokken { get; set; }
+        private async void TendoInvoice_Load(object sender, EventArgs e)
+        { 
             string dbPath = "";
             string password = "1@35^7*9)1";
             string appPath = Assembly.GetExecutingAssembly().Location;
@@ -561,16 +712,110 @@ namespace SaovietTax
                 {
                     bearerToken = token;
                     _content = token;
-                    MessageBox.Show($"Đã lấy được Bearer Token!", "Thành công");
-
+                    tokken = token;
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
+                    httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
                     // Lưu token
                     File.WriteAllText("token.txt", token);
 
                     // Đóng WebView2 vì không cần nữa
                     webView21.Visible = false;
+                    string appPath = Assembly.GetExecutingAssembly().Location;
 
+                    // Lấy thư mục chứa ứng dụng
+                    string directoryPath = Path.GetDirectoryName(appPath);
+                    string rootDirectory = Path.GetFullPath(Path.Combine(directoryPath, @"..\.."));
+
+                    string filePath = Path.Combine(rootDirectory, "Hoadon", "invoice.txt");
+                    string  ctents = File.ReadAllText(filePath);
+                    var getsplit = ctents.Split('_');
+                    if (ctents.Contains("KH_"))
+                    {
+                        var sql = "SELECT * FROM KhachHang WHERE MaSo = ?";
+                        var parameterss = new OleDbParameter[]
+                      {
+    new OleDbParameter("?",  getsplit[1].ToString()),
+                      };
+                        var datakh = ExecuteQuery(sql, parameterss);
+                        //Sau khi có thông tin khách hàng thì đồng bộ lên tendo, add khách hàng vao tendo rồi mới add hóa đơn vào tendo
+                        string urlapi = "https://apiv2.tendoo.vn/business/api/v2/contact/create";
+                        var payload = new
+                        {
+                            is_has_invoice_contact_info = false, 
+                            invoice_contact_info = new
+                            {
+                                dvqhns_code = "",
+                                bank_account = "",
+                                bank_name = "",
+                                identification_no = "",
+                                email ="",
+                                phone_number ="",
+                                name = "",
+                                full_address = "",
+                                business_name = "",
+                                tax_number = "",
+                                province_id = "",
+                                province_name = "",
+                                district_id = "",
+                                district_name = "",
+                                ward_id = "",
+                                ward_name = "",
+                                address = ""
+                            }, 
+                            has_old_debt = false,
+                            debt_type = "receivable",
+                            group_of_contact_ids = new List<string>(),
+
+                            email = datakh.Rows[0]["EMail"].ToString(),
+                            phone_number = datakh.Rows[0]["Tel"].ToString(),
+                            name = datakh.Rows[0]["Ten"].ToString(),
+                            role = "customer",
+                            contact_code = datakh.Rows[0]["SoHieu"].ToString(),
+                            birthday = "",
+                            tags = new List<string>(),
+
+                            address_info = new
+                            {
+                                province_id = "HCM",
+                                province_name = "Thành phố Hồ Chí Minh",
+                                district_id = "",
+                                district_name = "",
+                                ward_id = "HCM001",
+                                ward_name = "Phường Vũng Tàu",
+                                address_version = 1,
+                                address = datakh.Rows[0]["DiaChi"].ToString()
+                            },
+
+                            debt_record_date = (string)null,
+                            is_record_transaction = false,
+                            full_address1 = "Phường Vũng Tàu, Thành phố Hồ Chí Minh"
+                        };
+                        // Chuyển đổi payload thành JSON
+                        string jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
+
+                        // Tạo nội dung request
+                        var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                        // Gửi request
+                        HttpResponseMessage response = await httpClient.PostAsync(urlapi, content);
+                        string result = await response.Content.ReadAsStringAsync();
+
+                        // Kiểm tra kết quả
+                        if (response.IsSuccessStatusCode)
+                        {
+                            Console.WriteLine("Thành công: " + result);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Lỗi: " + result);
+                        }
+                    }
+                    //await Dongbokhachhang();
+                    // await Dongbosanpham();
+                    // await AddInvoice();
                     // Gọi API
-                    await GoiApiVoiToken();
+                    // await GoiApiVoiToken();
                 }
                 else
                 {
@@ -725,10 +970,14 @@ namespace SaovietTax
 
             public string Uom { get; set; }
             public Guid Id { get; set; } = Guid.NewGuid();
+            public double Normalprice { get; set; } 
         }
         public class CustomerSimple
         {
             public string Name { get; set; } 
+            public string BusinessName { get; set; }    
+            public string MST { get; set; } 
+            public string Identity { get; set; }
             public Guid contact_id { get; set; } = Guid.NewGuid();
         }
         private async Task Dongbokhachhang()
@@ -764,13 +1013,22 @@ namespace SaovietTax
 
                     // lấy sản phẩm
                     List<CustomerSimple> customers =
-                        obj["data"]
-                        .Select(x => new CustomerSimple
-                        {
-                            Name = x["name"]?.ToString(), 
-                            contact_id = x["id"] != null ? Guid.Parse(x["id"].ToString()) : Guid.NewGuid()
-                        })
-                        .ToList();
+                     obj["data"]
+                     .Select(x => new CustomerSimple
+                     {
+                         Name = x["name"]?.ToString(),
+
+                         contact_id = x["id"] != null
+                             ? Guid.Parse(x["id"].ToString())
+                             : Guid.NewGuid(),
+
+                         BusinessName = x["invoice_contact_info"]?["business_name"]?.ToString(),
+
+                         MST = x["invoice_contact_info"]?["tax_number"]?.ToString(),
+
+                         Identity = x["invoice_contact_info"]?["identification_no"]?.ToString()
+                     })
+                     .ToList();
 
                     // add vào list tổng
                     allCustomers.AddRange(customers);
@@ -787,7 +1045,72 @@ namespace SaovietTax
                 MessageBox.Show(
                     $"Lấy thành công {allCustomers.Count} khách hàng",
                     "Thành công");
+                string qrq = "SELECT * FROM KhachHang";
+                var dtkhachhang = ExecuteQuery(qrq, null);
+                int stepdo = 0;
+                List<string> matchedCustomers = new List<string>();
+                foreach (DataRow row in dtkhachhang.Rows)
+                {
+                    string tenkh = Helpers.RemoveVietnameseDiacritics(
+                        Helpers.ConvertVniToUnicode(
+                            row["Ten"]?.ToString() ?? ""
+                        )
+                        .Normalize(NormalizationForm.FormC)
+                        .ToLower()
+                        .Trim()
+                    );
 
+                    string mst = row["MST"]?.ToString()?.Trim() ?? "";
+
+
+                    foreach (var kh in allCustomers)
+                    {
+                        string khName = Helpers.RemoveVietnameseDiacritics(
+                            (kh.Name ?? "")
+                            .Normalize(NormalizationForm.FormC)
+                            .ToLower()
+                            .Trim()
+                        );
+
+                        string businessName = Helpers.RemoveVietnameseDiacritics(
+                          (kh.BusinessName ?? "")
+                            .Normalize(NormalizationForm.FormC)
+                            .ToLower()
+                            .Trim()
+                        );
+                        if (!string.IsNullOrEmpty(businessName) && !matchedCustomers.Contains(businessName))
+                            matchedCustomers.Add(businessName);
+                        
+                        string khMst = kh.MST?.Trim() ?? "";
+                        string khIdentity = kh.Identity?.Trim() ?? "";
+
+                        bool isMatch =
+                               tenkh == khName
+                            || tenkh == businessName
+                            || (!string.IsNullOrWhiteSpace(mst) && mst == khMst)
+                            || (!string.IsNullOrWhiteSpace(mst) && mst == khIdentity);
+
+                        if (isMatch)
+                        {
+                            string query = @"UPDATE KhachHang 
+                             SET contact_id = ? 
+                             WHERE MaSo = ?";
+
+                            var parameters = new OleDbParameter[]
+                            {
+                new OleDbParameter("?", kh.contact_id.ToString() ?? ""),
+                new OleDbParameter("?", row["MaSo"]?.ToString() ?? "")
+                            };
+
+                            int rowsAffected = ExecuteQueryResult(query, parameters);
+
+                            stepdo++;
+
+                            break; // tránh update nhiều lần
+                        }
+                    }
+                }
+                XtraMessageBox.Show("Đồng bộ khách hàng hoàn tất!", "Thông báo" + stepdo, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -795,25 +1118,7 @@ namespace SaovietTax
 
             }
 
-            string qrq = "SELECT * FROM KhachHang";
-            var dtkhachhang = ExecuteQuery(qrq, null);
-            foreach(DataRow row in dtkhachhang.Rows)
-            {
-                foreach(var kh in allCustomers)
-                {
-                    string tenkh= Helpers.ConvertVniToUnicode(row["Ten"]?.ToString() ?? "").ToLower().Trim();
-                    if(tenkh.ToLower()==kh.Name.ToLower().Trim())
-                    {
-                        string query = @"UPDATE KhachHang SET  contact_id =? WHERE MaSo = ?";
-                        var parameters = new OleDbParameter[]
-                         {
-                        new OleDbParameter("?", kh.contact_id.ToString()),
-                        new OleDbParameter("?", row["MaSo"].ToString())
-                         };
-                        int rowsAffected = ExecuteQueryResult(query, parameters);
-                    }
-                }
-            }
+           
         }
         // Lấy danh sách hóa đơn
         private async Task Dongbosanpham()
@@ -865,7 +1170,10 @@ namespace SaovietTax
                                         .ToString(),
 
                             Uom = x["uom"]?.ToString(),
-                            Id = x["id"] != null ? Guid.Parse(x["id"].ToString()) : Guid.NewGuid()
+                            Id = x["id"] != null ? Guid.Parse(x["id"].ToString()) : Guid.NewGuid(),
+                            Normalprice= x["list_sku"]?
+                                        .FirstOrDefault()?["normal_price"]?
+                                        .ToObject<double>() ?? 0
                         })
                         .ToList();
 
@@ -926,6 +1234,11 @@ namespace SaovietTax
                     string tedoName =
                         getTen.ToLower().Trim();
 
+                    if( tedoName.Contains(localName))
+                    {
+                        bestProduct = sp;
+                        break; // nếu đã chứa thì không cần so sánh nữa
+                    }
                     double score1 =
                         CalculateSimilarity(
                             localName,
@@ -963,20 +1276,21 @@ namespace SaovietTax
                     //    $"\nScore cao nhất: {bestScore}%");
                     if (bestScore > 80)
                     {
-                        string query = @"UPDATE Vattu SET  TendoName =?, TendoSku=?, TendoUom=?,TendoId=? WHERE MaSo = ?";
+                        string query = @"UPDATE Vattu SET  TendoName =?, TendoSku=?, TendoUom=?,TendoId=?,TendoPrice=? WHERE MaSo = ?";
                         var parameters = new OleDbParameter[]
                          {
                         new OleDbParameter("?", bestProduct.Name),
                         new OleDbParameter("?", bestProduct.SKU),
                         new OleDbParameter("?", bestProduct.Uom),
                         new OleDbParameter("?", bestProduct.Id.ToString()),
-                        new OleDbParameter("?", row["MaSo"].ToString())
+                        new OleDbParameter("?", bestProduct.Normalprice),
+                        new OleDbParameter("?", row["MaSo"].ToString()),
                          };
                         int rowsAffected = ExecuteQueryResult(query, parameters);
                     }
                 }
             }
-            this.Close();
+            
         }
         public int ExecuteQueryResult(string query, params OleDbParameter[] parameters)
         {
