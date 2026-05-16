@@ -1744,7 +1744,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                         }
                         double sotienlect = tgTCThue - tongcon;
                         //Kiem tra lech tien
-                        if (tgTCThue != tongcon && tgTCThue!=0 && tongcon!=0 && 1>2)
+                        if (tgTCThue != tongcon && tgTCThue!=0 && tongcon!=0 && sotienlect> -5000 && sotienlect <5000)
                         {
                             if (xulychoall == false)
                             {
@@ -16896,7 +16896,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                                     frmHangHoa.Location = new Point(x, y);
 
-                                    frmHangHoa.Show(this);
+                                    frmHangHoa.ShowDialog(this);
                                 }
                             }
 
@@ -18594,7 +18594,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             GridView gridView1 = gridControl.MainView as GridView;
 
             // Lấy chỉ số dòng của gridView1
-            int rowIndex = gridView1.FocusedRowHandle; // Thay vì CurrentRow.Index
+            int rowIndex = gridView2.FocusedRowHandle; // Thay vì CurrentRow.Index
             int rowIndex2 = e.RowHandle; // Thay vì CurrentRow.Index
             // Kiểm tra nếu chỉ số dòng hợp lệ
             if (rowIndex >= 0)

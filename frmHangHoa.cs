@@ -725,11 +725,15 @@ namespace SaovietTax
                 {
                     var gv = frmMain.Typechon == 1 ? frmMain.gv2 : frmMain.gv4;
 
-                    gv.SetRowCellValue(hoverRowHandle, "SoHieu", hiddenValue);
-                    gv.SetRowCellValue(hoverRowHandle, "DVT", hiddenValue2);
-                    gv.SetRowCellValue(hoverRowHandle, "Ten", hiddenValue3);
-                    gv.UpdateCurrentRow();
-                    gv.RefreshData();
+                    if (Typeform == 2)
+                    {
+                        gv.SetRowCellValue(hoverRowHandle, "SoHieu", hiddenValue);
+                        gv.SetRowCellValue(hoverRowHandle, "DVT", hiddenValue2);
+                        gv.SetRowCellValue(hoverRowHandle, "Ten", hiddenValue3);
+                        gv.UpdateCurrentRow();
+                        gv.RefreshData();
+                    }
+                   
                     var ddd = frmMain.lstrowSohieu;
                     if (ddd.Count > 0)
                     {
