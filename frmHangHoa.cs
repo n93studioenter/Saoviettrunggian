@@ -473,7 +473,7 @@ namespace SaovietTax
                 }
                 catch (Exception ex)
                 {
-
+                    XtraMessageBox.Show(ex.Message);
                 }
 
             }
@@ -727,11 +727,28 @@ namespace SaovietTax
 
                     if (Typeform == 2)
                     {
-                        gv.SetRowCellValue(hoverRowHandle, "SoHieu", hiddenValue);
-                        gv.SetRowCellValue(hoverRowHandle, "DVT", hiddenValue2);
-                        gv.SetRowCellValue(hoverRowHandle, "Ten", hiddenValue3);
-                        gv.UpdateCurrentRow();
-                        gv.RefreshData();
+                        int rowHandle = hoverRowHandle;
+
+                        if (rowHandle >= 0 && !gv.IsGroupRow(rowHandle))
+                        {
+                            var rowObj = gv.GetRow(rowHandle);
+
+                            if (rowObj != null)
+                            {
+                                var type = rowObj.GetType();
+
+                                type.GetProperty("SoHieu")
+                                    ?.SetValue(rowObj, hiddenValue);
+
+                                type.GetProperty("DVT")
+                                    ?.SetValue(rowObj, hiddenValue2);
+
+                                type.GetProperty("Ten")
+                                    ?.SetValue(rowObj, hiddenValue3);
+
+                                gv.RefreshRow(rowHandle);
+                            }
+                        }
                     }
                    
                     var ddd = frmMain.lstrowSohieu;

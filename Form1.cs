@@ -16592,7 +16592,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                                     frmHangHoa.Location = new Point(x, y);
 
-                                    frmHangHoa.Show(this);
+                                    frmHangHoa.ShowDialog(this);
                                 }
                             }
 
@@ -16600,9 +16600,32 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                             if (!string.IsNullOrEmpty(hiddenValue) && frmHangHoa.isChange)
                             {
-                                gridView.SetRowCellValue(currentRowHandle, currentColumnName, hiddenValue);
-                                gridView.SetRowCellValue(currentRowHandle, "DVT", hiddenValue2);
-                                gridView.SetRowCellValue(currentRowHandle, "Ten", hiddenValue3);
+                                gridView.CloseEditor();
+                                gridView.PostEditor();
+                                gridView.UpdateCurrentRow();
+
+                                int rowHandle = gridView.FocusedRowHandle;
+
+                                if (rowHandle >= 0)
+                                {
+                                    var rowObj = gridView.GetRow(rowHandle);
+
+                                    if (rowObj != null)
+                                    {
+                                        var type = rowObj.GetType();
+
+                                        type.GetProperty(currentColumnName)
+                                            ?.SetValue(rowObj, hiddenValue);
+
+                                        type.GetProperty("DVT")
+                                            ?.SetValue(rowObj, hiddenValue2);
+
+                                        type.GetProperty("Ten")
+                                            ?.SetValue(rowObj, hiddenValue3);
+
+                                        gridView.RefreshRow(rowHandle);
+                                    }
+                                }
                                 DTO.VatTu vt = new DTO.VatTu();
                                 vt.SoHieu = hiddenValue;
                                 vt.TenVattu = hiddenValue3;
@@ -16768,6 +16791,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         { 
             if (e.KeyCode == System.Windows.Forms.Keys.Enter)
             {
+                e.Handled = true;
 
                 getMessage = true;
                 DevExpress.XtraGrid.Views.Grid.GridView gridView = sender as DevExpress.XtraGrid.Views.Grid.GridView;
@@ -16903,9 +16927,39 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                             if (!string.IsNullOrEmpty(hiddenValue) && frmHangHoa.isChange)
                             {
-                                gridView.SetRowCellValue(currentRowHandle, currentColumnName, hiddenValue);
-                                gridView.SetRowCellValue(currentRowHandle, "DVT", hiddenValue2);
-                                gridView.SetRowCellValue(currentRowHandle, "Ten", hiddenValue3);
+                                try
+                                {
+                                    gridView.CloseEditor();
+                                    gridView.PostEditor();
+                                    gridView.UpdateCurrentRow();
+
+                                    int rowHandle = gridView.FocusedRowHandle;
+
+                                    if (rowHandle >= 0)
+                                    {
+                                        var rowObj = gridView.GetRow(rowHandle);
+
+                                        if (rowObj != null)
+                                        {
+                                            var type = rowObj.GetType();
+
+                                            type.GetProperty(currentColumnName)
+                                                ?.SetValue(rowObj, hiddenValue);
+
+                                            type.GetProperty("DVT")
+                                                ?.SetValue(rowObj, hiddenValue2);
+
+                                            type.GetProperty("Ten")
+                                                ?.SetValue(rowObj, hiddenValue3);
+
+                                            gridView.RefreshRow(rowHandle);
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    XtraMessageBox.Show("Lỗi cập nhật mã vật tư: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
                                 DTO.VatTu vt = new DTO.VatTu();
                                 vt.SoHieu = hiddenValue;
                                 vt.TenVattu = hiddenValue3;
@@ -16952,7 +17006,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     }
                                     lstrowSohieu = new List<int>();
                                 }
-                                lstvt = await LoadDataVattuAsync();
+                               // lstvt = await LoadDataVattuAsync();
                             }
 
                         }

@@ -1,5 +1,6 @@
 ﻿using DevExpress.XtraEditors;
 using FuzzySharp;
+using Microsoft.ML.OnnxRuntime;
 using Microsoft.Web.WebView2.Core;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
@@ -20,8 +21,10 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Windows.ApplicationModel.Contacts;
 using static Tensorflow.tensorflow;
 
 namespace SaovietTax
@@ -44,7 +47,17 @@ namespace SaovietTax
         public TendoInvoice()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.Manual;
+
+            // Đặt kích thước form (tuỳ chỉnh) 
+
+            // Đặt form ở góc phải dưới
+            this.Location = new Point(
+                Screen.PrimaryScreen.WorkingArea.Right - this.Width,
+                Screen.PrimaryScreen.WorkingArea.Bottom - this.Height
+            );
         }
+        
         string password, connectionString;
         string _content;
         string bearerToken;
@@ -170,6 +183,7 @@ namespace SaovietTax
         string buyerAddress;
         private async Task LayThongTinInfo()
         {
+            progressPanel1.Caption="Đang lấy thông tin hệ thống...";
             //https://apiv2.tendoo.vn/user/api/v2/auth/info
             string apiUrl = "https://apiv2.tendoo.vn/user/api/v2/auth/info";
             HttpResponseMessage response =
@@ -192,6 +206,7 @@ namespace SaovietTax
             //Đồng bộ khách hàng trước khi tạo hóa đơn, nếu chưa có contact_id thì tạo contact rồi mới tạo hóa đơn  
             if (string.IsNullOrEmpty(buyerId))
             {
+                progressPanel1.Caption = "Đang đồng bộ khách hàng mới lên tendoo...";
                 string urlapi = "https://apiv2.tendoo.vn/business/api/v2/contact/create";
                 var payload = new
                 {
@@ -285,10 +300,226 @@ namespace SaovietTax
             buyerAddress = obj["data"]?["address"]?.ToString();
             string invoice_contact_info =null;
             string address_version = "0";
-            Thuchienhoadon();
+            //Truóc khi thực hiện hoá đơn thì sẽ kiểm tra số lượng tồn sản phẩm với số lượng đơn đặt hàng
+            progressPanel1.Caption = "Đang kiểm tra số lượng tồn kho...";
+            foreach (DataRow item in dtHangHoa.Rows)
+            {
+                int qty1 = Convert.ToInt32(item["Quantity"].ToString());
+                int quantity = string.IsNullOrEmpty(item["TendoQuality"]?.ToString())
+      ? 0
+      : Convert.ToInt32(item["TendoQuality"].ToString());
+                if (quantity < qty1)
+                {
+                    progressPanel1.Caption = $"Sản phẩm {Helpers.ConvertVniToUnicode(item["ItemName"].ToString())} không đủ tồn kho ({quantity} < {qty1}), đang thực hiện việc tự động nhập kho!";
+
+                    var payload = new
+                    {
+                        po_type = "in",
+                        note = "",
+                        po_details = new[]
+    {
+        new
+        {
+            business_id = "9065ebd6-4c83-4c9c-a6d4-4937e3fda49b",
+            product_id = item["TendoId"].ToString(),
+            product_type = "non_variant",
+            product_name = item["TendoName"].ToString(),
+            sku_name = "",
+            sku_code = item["TendoSku"].ToString(),
+            sku_type = "stock",
+            media = new object[] { },
+            total_quantity = 0,
+            historical_cost = 0,
+            barcode = "",
+            uom = item["TendoUom"].ToString(),
+            sku_uom_name = item["TendoUom"].ToString(),
+            sku_uom_quantity = 1,
+            normal_price = 0,
+            selling_price = 0,
+            total_value = 0,
+            unique_id = item["TendoSkuId"].ToString(),
+            quantity = qty1 - quantity,  // ← Động
+            new_price = 0,
+            price_after_discount = 0,
+            additional_item_info = new { discount_value = 0, type = "value" },
+            price_info = new
+            {
+                pricing_original = 0,
+                pricing_display = 0,
+                pricing_calculated = 0,
+                item_discount_amount = 0,
+                allocated_discount_amount = 0,
+                allocated_discount_amount_total = 0,
+                internal_allocated_discount_amount = 0,
+                total_amount_before_tax = 0,
+                total_amount_after_tax = 0,
+                total_amount = 0
+            },
+            pricing = 0,
+            total_amount = 0,
+            tax_info = new { amount = (object)null },
+            sku_id = item["TendoSkuId"].ToString(),
+            pricing_original = 0
+        }
+    },
+                        po_detail_ingredient = new object[] { },
+                        total_discount = 0,
+                        sur_charge = 0,
+                        buyer_pay = 0,
+                        option = "create_po",
+                        media = new object[] { },
+                        payment_state = "un_paid",
+                        is_debit = false,
+                        invoice_type = "vat",
+                        created_po_at = (object)null,
+                        additional_info = new
+                        {
+                            discount_value = 0,
+                            type = "",
+                            total_tax_reduction = (object)null,
+                            skip_notify_negative_stock = false
+                        },
+                        roundingDecimal = true,
+                        price_info = new
+                        {
+                            tax_breakdowns = new object[] { },
+                            total_amount = 0,
+                            total_amount_final = 0,
+                            total_tax_reduction = 0,
+                            total_tax_amount = 0,
+                            total_discount_amount = 0,
+                            surcharge = 0
+                        },
+                        product_changed_lines = new object { },
+                        ingredient_changed_lines = new object { },
+                        status = "processing",
+                        skip_verify_price_info = false,
+                        purchase_price_source = "tendoo",
+                        business_id = "9065ebd6-4c83-4c9c-a6d4-4937e3fda49b"
+                    };
+                    string jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
+                    string urlapi= "https://apiv2.tendoo.vn/warehouse/api/v2/po/create-inbound";
+                    // Tạo nội dung request
+                    var contents = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                    // Gửi request
+                    HttpResponseMessage responses = await httpClient.PostAsync(urlapi, contents);
+                    string result = await responses.Content.ReadAsStringAsync();
+                    JObject jsonResponse = JObject.Parse(result);
+                    string contactId = jsonResponse["data"]?["id"]?.ToString();
+                   var  payload2 = new
+                    {
+                        id = contactId,  // Tạo mới nếu cần
+                        po_type = "in",
+                        contact_info = new
+                        {
+                            id = "00000000-0000-0000-0000-000000000000",
+                            phone_number = "",
+                            name = "",
+                            avatar = "",
+                            social_avatar = "",
+                            address = "",
+                            role = "",
+                            tax_number = ""
+                        },
+                        note = "",
+                        po_details = new[]
+    {
+        new
+        {
+            product_id = item["TendoId"]?.ToString() ?? "",
+            sku_name = "",
+            media = new object[] { },
+            sku_code = item["TendoSku"]?.ToString() ?? "",
+            barcode = "",
+            product_name = item["TendoName"]?.ToString() ?? "",
+            type = "stock_non_varriant",
+            product_type = "non_variant",
+            selling_price = 0,
+            normal_price = 0,
+            uom = item["TendoUom"]?.ToString() ?? "",
+            uom_id = "00000000-0000-0000-0000-000000000000",
+            pricing = 0,
+            quantity =qty1- quantity,  // ← Động
+            total_quantity = 0,
+            transaction_type = "in",
+            before_change_quantity = 0,
+            tax_info = new { },
+            additional_item_info = new { type = "value", discount_value = 0 },
+            price_info = new
+            {
+                pricing_original = 0,
+                pricing_display = 0,
+                pricing_calculated = 0,
+                item_discount_amount = 0,
+                allocated_discount_amount = 0,
+                allocated_discount_amount_total = 0,
+                internal_allocated_discount_amount = 0,
+                total_amount_before_tax = 0,
+                total_amount_after_tax = 0,
+                total_amount = 0
+            },
+            historical_cost = 0,
+            total_value = 0,
+            old_sku_code = item["TendoSku"]?.ToString() ?? "",
+            old_product_name = item["TendoName"]?.ToString() ?? "",
+            new_price = 0,
+            price_after_discount = 0,
+            unique_id = $"{item["TendoSkuId"]?.ToString() ?? ""}_0",
+            sku_id = item["TendoSkuId"]?.ToString() ?? "",
+            pricing_original = 0
+        }
+    },
+                        po_detail_ingredient = new object[] { },
+                        total_discount = 0,
+                        sur_charge = 0,
+                        buyer_pay = 0,
+                        option = "create_po",
+                        media = new object[] { },
+                        payment_state = "un_paid",
+                        is_debit = false,
+                        invoice_type = "vat",
+                        created_po_at = DateTime.UtcNow.ToString("o"),  // ISO 8601 format
+                        additional_info = new
+                        {
+                            discount_value = 0,
+                            type = "",
+                            total_tax_reduction = (object)null,
+                            skip_notify_negative_stock = false
+                        },
+                        roundingDecimal = true,
+                        price_info = new
+                        {
+                            tax_breakdowns = new object[] { },
+                            total_amount = 0,
+                            total_amount_final = 0,
+                            total_tax_reduction = 0,
+                            total_tax_amount = 0,
+                            total_discount_amount = 0,
+                            surcharge = 0
+                        },
+                        status = "completed",
+                        payment_source_id = "bb9385b1-5450-4a16-83ce-1b5b69a3aa13",
+                        payment_source_name = "Tiền mặt",
+                        business_id = "9065ebd6-4c83-4c9c-a6d4-4937e3fda49b"
+                    };
+
+                    string jsonData2 = Newtonsoft.Json.JsonConvert.SerializeObject(payload2);
+                    string urlapi2 = $"https://apiv2.tendoo.vn/warehouse/api/v2/po/update-inbound/{contactId}";
+                    // Tạo nội dung request
+                    var contents2 = new StringContent(jsonData2, Encoding.UTF8, "application/json");
+
+                    // Gửi request
+                    HttpResponseMessage responses2 = await httpClient.PutAsync(urlapi2, contents2);
+                    string result2 = await responses2.Content.ReadAsStringAsync();
+                    JObject jsonResponse2 = JObject.Parse(result2);
+                }
+            } 
+                Thuchienhoadon();
         }
         private async Task Thuchienhoadon()
         {
+            progressPanel1.Caption = "Đang thực hiện đồng bộ hoá đơn lên tendoo...";
             // Build list_order_item - sản phẩm có sẵn trong hệ thống
             var listOrderItem = new JsonArray();
             decimal grandTotal = 0;
@@ -517,29 +748,58 @@ namespace SaovietTax
                 },
                 ["buyer_id"] = buyerId
             };
+            try
+            {
+                string json = payload.ToJsonString();
+                Console.WriteLine(json);
+                // 3. GỌI API TẠO ĐƠN
+                var http = new HttpClient();
+                http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9fd2ViIiwiZXhwIjoxNzgxMzEzMjg2LCJzdWIiOiIwNmEyYjg3Mi04MmJmLTQ5MzYtODUyYy0wMjhmNzk3Mzc5MjJ8Mjk4NjQ1NmEtZTlhYy00MGYxLWJjYTUtM2FkMTRkMTFkNzgwfDI5ODY0NTZhLWU5YWMtNDBmMS1iY2E1LTNhZDE0ZDExZDc4MCIsImRldmljZV9pZCI6IjI5ODY0NTZhLWU5YWMtNDBmMS1iY2E1LTNhZDE0ZDExZDc4MCIsImJ1c2luZXNzX2lkIjoiOTA2NWViZDYtNGM4My00YzljLWE2ZDQtNDkzN2UzZmRhNDliIiwicGVybWlzc2lvbl9rZXlzIjoic2hvcF9vd25lciIsInJlZnJlc2hfdG9rZW5faWQiOiI2YjI5NTcxYy1jOTNjLTRjZTgtYWFkOC03MjVhMTIzZDEyNGUiLCJzZWN1cml0eV9yb2xlcyI6MCwiYXBwX3ZlcnNpb24iOiIiLCJ1c2VyX2lkIjoiMDZhMmI4NzItODJiZi00OTM2LTg1MmMtMDI4Zjc5NzM3OTIyIn0.5Ggdl3jmwuG8fdKyM7BDJhi-G8b3xTkwnzKXpbfPF60");
 
-            string json = payload.ToJsonString();
-            Console.WriteLine(json);
-            // 3. GỌI API TẠO ĐƠN
-            var http = new HttpClient();
-            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9fd2ViIiwiZXhwIjoxNzgxMzEzMjg2LCJzdWIiOiIwNmEyYjg3Mi04MmJmLTQ5MzYtODUyYy0wMjhmNzk3Mzc5MjJ8Mjk4NjQ1NmEtZTlhYy00MGYxLWJjYTUtM2FkMTRkMTFkNzgwfDI5ODY0NTZhLWU5YWMtNDBmMS1iY2E1LTNhZDE0ZDExZDc4MCIsImRldmljZV9pZCI6IjI5ODY0NTZhLWU5YWMtNDBmMS1iY2E1LTNhZDE0ZDExZDc4MCIsImJ1c2luZXNzX2lkIjoiOTA2NWViZDYtNGM4My00YzljLWE2ZDQtNDkzN2UzZmRhNDliIiwicGVybWlzc2lvbl9rZXlzIjoic2hvcF9vd25lciIsInJlZnJlc2hfdG9rZW5faWQiOiI2YjI5NTcxYy1jOTNjLTRjZTgtYWFkOC03MjVhMTIzZDEyNGUiLCJzZWN1cml0eV9yb2xlcyI6MCwiYXBwX3ZlcnNpb24iOiIiLCJ1c2VyX2lkIjoiMDZhMmI4NzItODJiZi00OTM2LTg1MmMtMDI4Zjc5NzM3OTIyIn0.5Ggdl3jmwuG8fdKyM7BDJhi-G8b3xTkwnzKXpbfPF60");
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://apiv2.tendoo.vn/order/api/v13/seller/create-order");
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://apiv2.tendoo.vn/order/api/v13/seller/create-order");
-            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                // Thêm header X-Idempotency-Key - phải là GUID
+                request.Headers.Add("X-Idempotency-Key", Guid.NewGuid().ToString());
+                // Hoặc dùng key cố định: request.Headers.Add("X-Idempotency-Key", "b34b12c1-8f3c-462b-92df-4675c2cc566d");
 
-            // Thêm header X-Idempotency-Key - phải là GUID
-            request.Headers.Add("X-Idempotency-Key", Guid.NewGuid().ToString());
-            // Hoặc dùng key cố định: request.Headers.Add("X-Idempotency-Key", "b34b12c1-8f3c-462b-92df-4675c2cc566d");
+                var response = await http.SendAsync(request);
+                var result = await response.Content.ReadAsStringAsync();
 
-            var response = await http.SendAsync(request);
-            var result = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception($"API Error {(int)response.StatusCode}: {result}");
+                JObject obj = JObject.Parse(result);
+                string id = obj["data"]?["id"]?.ToString();
+                string state= obj["data"]?["state"]?.ToString();
 
-            if (!response.IsSuccessStatusCode)
-                throw new Exception($"API Error {(int)response.StatusCode}: {result}");
+                string query = @"UPDATE HoaDon 
+                             SET TendoHDid = ? ,
+                             TendoHDState = ?
+                             WHERE MaSo = ?";
 
-            Console.WriteLine(result);
-            Console.WriteLine($"Status: {response.StatusCode}");
-            Console.WriteLine($"Response: {result}");
+                var parameters = new OleDbParameter[]
+                {
+                new OleDbParameter("?", id ?? ""),
+                new OleDbParameter("?", state ?? ""),
+                new OleDbParameter("?", dtHoaDon.Rows[0]["HOADON.MaSo"]?.ToString() ?? "")
+                };
+
+                int rowsAffected = ExecuteQueryResult(query, parameters);
+
+
+                Console.WriteLine(result);
+                Console.WriteLine($"Status: {response.StatusCode}");
+                Console.WriteLine($"Response: {result}");
+                progressPanel1.Caption = "Tao hoá đơn thành công trên Tendoo!";
+                Thread.Sleep(500);
+            }
+            catch (Exception ex)
+            {
+                progressPanel1.Caption = "Lỗi khi tạo payload: " + ex.Message; 
+                return;
+            }
+           
+            this.Close();
         }
         DataTable dtKhachhang;
         DataTable dtHoaDon;
@@ -547,6 +807,7 @@ namespace SaovietTax
         DataTable dtHangHoa = new DataTable();
         private async Task LayThongTinHoaDon()
         {
+            progressPanel1.Caption = "Đang lấy thông tin hoá đơn...";
             string appPath = Assembly.GetExecutingAssembly().Location;
 
             // Lấy thư mục chứa ứng dụng
@@ -586,19 +847,28 @@ namespace SaovietTax
             {
                 new OleDbParameter("?", dtHoaDon.Rows[0]["MaCT"])
             };
-            dtChungTu = ExecuteQuery(sql, param);
-          
-            dtHangHoa.Columns.Add("ItemCode", typeof(string));
-            dtHangHoa.Columns.Add("ItemName", typeof(string));
-            dtHangHoa.Columns.Add("UnitName", typeof(string));
-            dtHangHoa.Columns.Add("UnitPrice", typeof(decimal));
-            dtHangHoa.Columns.Add("Quantity", typeof(double));
-            dtHangHoa.Columns.Add("Amount", typeof(decimal));
-            dtHangHoa.Columns.Add("TendoName", typeof(string));
-            dtHangHoa.Columns.Add("TendoSKU", typeof(string));
-            dtHangHoa.Columns.Add("TendoUom", typeof(string));
-            dtHangHoa.Columns.Add("TendoId", typeof(string));
-            dtHangHoa.Columns.Add("TendoPrice", typeof(double));
+            try
+            {
+                dtChungTu = ExecuteQuery(sql, param);
+                dtHangHoa.Columns.Add("ItemCode", typeof(string));
+                dtHangHoa.Columns.Add("ItemName", typeof(string));
+                dtHangHoa.Columns.Add("UnitName", typeof(string));
+                dtHangHoa.Columns.Add("UnitPrice", typeof(decimal));
+                dtHangHoa.Columns.Add("Quantity", typeof(double));
+                dtHangHoa.Columns.Add("Amount", typeof(decimal));
+                dtHangHoa.Columns.Add("TendoName", typeof(string));
+                dtHangHoa.Columns.Add("TendoSKU", typeof(string));
+                dtHangHoa.Columns.Add("TendoUom", typeof(string));
+                dtHangHoa.Columns.Add("TendoId", typeof(string));
+                dtHangHoa.Columns.Add("TendoPrice", typeof(double));
+                dtHangHoa.Columns.Add("TendoQuality", typeof(int));
+                dtHangHoa.Columns.Add("TendoSkuId", typeof(string));
+            }  
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lấy thông tin chứng từ: " + ex.Message);
+                return;
+            }
             foreach (DataRow row in dtChungTu.Rows)
             {
                 try
@@ -622,7 +892,9 @@ namespace SaovietTax
                     string TendoUom = kqHangHoa.Rows[0]["TendoUom"].ToString();
                     string TendoId = kqHangHoa.Rows[0]["TendoId"].ToString();
                     double price = kqHangHoa.Rows[0]["TendoPrice"].ToString() == "" ? 0 : Convert.ToDouble(kqHangHoa.Rows[0]["TendoPrice"]);
-                    dtHangHoa.Rows.Add("", tenhh, donvitinh, 0, soluong, sops, TendoName, TendoSku, TendoUom, TendoId, price);
+                    int tendoQuality = kqHangHoa.Rows[0]["TendoQuality"].ToString() == "" ? 0 : Convert.ToInt32(kqHangHoa.Rows[0]["TendoQuality"]); 
+                    string TendoSkuId = kqHangHoa.Rows[0]["TendoSkuId"].ToString();
+                    dtHangHoa.Rows.Add("", tenhh, donvitinh, 0, soluong, sops, TendoName, TendoSku, TendoUom, TendoId, price, tendoQuality, TendoSkuId);
                 }
                 catch (Exception ex)
                 {
@@ -639,7 +911,8 @@ namespace SaovietTax
         }
         public string tokken { get; set; }
         private async void TendoInvoice_Load(object sender, EventArgs e)
-        { 
+        {
+            progressPanel1.Caption="Đang kết nối với hệ thống Tendoo...";
             string dbPath = "";
             string password = "1@35^7*9)1";
             string appPath = Assembly.GetExecutingAssembly().Location;
@@ -685,6 +958,7 @@ namespace SaovietTax
       object sender,
       CoreWebView2NavigationCompletedEventArgs e)
         {
+            progressPanel1.Caption = "Đang đăng nhập hệ thống Tendoo...";
             string url = webView21.Source.ToString();
 
             // Nếu đã ở POS thì lấy token và gọi API
@@ -797,10 +1071,11 @@ namespace SaovietTax
                     httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
                     httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
                     // Lưu token
-                   // File.WriteAllText("token.txt", token);
+                    // File.WriteAllText("token.txt", token);
 
                     // Đóng WebView2 vì không cần nữa
-                    webView21.Visible = false;
+                    progressPanel1.Caption = "Đã lấy được token...";
+                    webView21.Visible = false; 
                     string appPath = Assembly.GetExecutingAssembly().Location;
 
                     // Lấy thư mục chứa ứng dụng
@@ -809,9 +1084,10 @@ namespace SaovietTax
 
                     string filePath = Path.Combine(rootDirectory, "Hoadon", "invoice.txt");
                     string  ctents = File.ReadAllText(filePath);
-                    var getsplit = ctents.Split('_');
+                    var getsplit = ctents.Split('_'); 
                     if (ctents.Contains("KH_"))
                     {
+                        progressPanel1.Caption = "Đang thực hiện đồng bộ khách hàng mới...";
                         var sql = "SELECT * FROM KhachHang WHERE MaSo = ?";
                         var parameterss = new OleDbParameter[]
                       {
@@ -899,12 +1175,14 @@ namespace SaovietTax
                         // Kiểm tra kết quả
                         if (response.IsSuccessStatusCode)
                         {
+                            progressPanel1.Caption = "Thực hiện thành công...";
                             Console.WriteLine("Thành công: " + result);
 
                         }
                         else
                         {
-                            Console.WriteLine("Lỗi: " + result);
+                            progressPanel1.Caption = "Có lỗi...";
+                            //Console.WriteLine("Lỗi: " + result);
                         }
                         this.Close();
                     }
@@ -912,6 +1190,7 @@ namespace SaovietTax
                     {
                         if (ctents.Contains("SP_"))
                         {
+                            progressPanel1.Caption = "Đang thực hiện đồng bộ sản phẩm mới...";
                             var sql = "SELECT * FROM Vattu WHERE MaSo = ?";
                             var parameterss = new OleDbParameter[]
                           {
@@ -953,7 +1232,7 @@ namespace SaovietTax
                                         {
                                             id = "00000000-0000-0000-0000-000000000000",
                                             range_wholesale_price = Array.Empty<string>(),
-                                            sku_type = "non_stock",
+                                            sku_type =datavattu.Rows[0]["DonVi"].ToString()=="1" ? "stock" : "non_stock",
                                             selling_price = 0,
                                             recipe = Array.Empty<string>(),
                                             historical_cost = 0,
@@ -1010,6 +1289,7 @@ namespace SaovietTax
                             };
 
                             int rowsAffected = ExecuteQueryResult(query, parameters);
+                            progressPanel1.Caption = "Sucess...";
                             this.Close();
                         }
                         else
@@ -1177,6 +1457,8 @@ namespace SaovietTax
             public string Uom { get; set; }
             public Guid Id { get; set; } = Guid.NewGuid();
             public double Normalprice { get; set; } 
+            public int quantity { get; set; }
+            public string SkuId { get; set; }
         }
         public class CustomerSimple
         {
@@ -1247,10 +1529,10 @@ namespace SaovietTax
 
                 }
                 while (currentPage <= totalPages);
-
-                MessageBox.Show(
-                    $"Lấy thành công {allCustomers.Count} khách hàng",
-                    "Thành công");
+                progressPanel1.Caption = $"Lấy thành công {allCustomers.Count} khách hàng";
+                //MessageBox.Show(
+                //    $"Lấy thành công {allCustomers.Count} khách hàng",
+                //    "Thành công");
                 string qrq = "SELECT * FROM KhachHang";
                 var dtkhachhang = ExecuteQuery(qrq, null);
                 int stepdo = 0;
@@ -1382,7 +1664,15 @@ namespace SaovietTax
                             Id = x["id"] != null ? Guid.Parse(x["id"].ToString()) : Guid.NewGuid(),
                             Normalprice= x["list_sku"]?
                                         .FirstOrDefault()?["normal_price"]?
-                                        .ToObject<double>() ?? 0
+                                        .ToObject<double>() ?? 0,
+                             quantity = x["list_sku"]?
+                            .FirstOrDefault()?["po_details"]?
+                            ["quantity"]?
+                            .ToObject<int>() ?? 0,
+                                SkuId = x["list_sku"]?
+                            .FirstOrDefault()?["po_details"]?
+                            ["sku_id"]?
+                            .ToString() ?? "0"
                         })
                         .ToList();
 
@@ -1397,10 +1687,10 @@ namespace SaovietTax
 
                 }
                 while (currentPage <= totalPages);
-
-                MessageBox.Show(
-                    $"Lấy thành công {allProducts.Count} sản phẩm",
-                    "Thành công");
+                progressPanel1.Caption = $"Lấy thành công {allProducts.Count} sản phẩm";
+                //MessageBox.Show(
+                //    $"Lấy thành công {allProducts.Count} sản phẩm",
+                //    "Thành công");
                  
             }
             catch (Exception ex)
@@ -1489,7 +1779,7 @@ namespace SaovietTax
                     //    $"\nScore cao nhất: {bestScore}%");
                     if (bestScore > 80)
                     {
-                        string query = @"UPDATE Vattu SET  TendoName =?, TendoSku=?, TendoUom=?,TendoId=?,TendoPrice=? WHERE MaSo = ?";
+                        string query = @"UPDATE Vattu SET  TendoName =?, TendoSku=?, TendoUom=?,TendoId=?,TendoPrice=?,TendoQuality=?,TendoSkuId=? WHERE MaSo = ?";
                         var parameters = new OleDbParameter[]
                          {
                         new OleDbParameter("?", bestProduct.Name),
@@ -1497,7 +1787,10 @@ namespace SaovietTax
                         new OleDbParameter("?", bestProduct.Uom),
                         new OleDbParameter("?", bestProduct.Id.ToString()),
                         new OleDbParameter("?", bestProduct.Normalprice),
+                        new OleDbParameter("?", bestProduct.quantity),
+                        new OleDbParameter("?", bestProduct.SkuId), 
                         new OleDbParameter("?", row["MaSo"].ToString()),
+
                          };
                         int rowsAffected = ExecuteQueryResult(query, parameters);
                     }
@@ -1649,6 +1942,11 @@ namespace SaovietTax
             {
                 MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi");
             }
+        }
+
+        private void progressPanel1_Click(object sender, EventArgs e)
+        {
+
         }
 
         // Hàm GET dữ liệu (tổng quát)
