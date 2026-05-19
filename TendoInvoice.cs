@@ -2,6 +2,7 @@
 using FuzzySharp;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.Web.WebView2.Core;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.BiDi.Network;
@@ -1294,7 +1295,48 @@ namespace SaovietTax
                         }
                         else
                         {
-                            await Dongbokhachhang();
+                            if (ctents.Contains("TT_"))
+                            {
+                                progressPanel1.Caption = "Đang thực hiện cập nhật trạng thái hoá đơn...";
+                                string urlapi =$"https://apiv2.tendoo.vn/order/api/v1/seller/check-cancel-order-precondition/{getsplit[1]}";
+
+                                // Option A: Explicitly send empty content
+                                var emptyContent = new StringContent("", Encoding.UTF8, "application/json");
+                                HttpResponseMessage response = await httpClient.PostAsync(urlapi, emptyContent);
+
+                                // Option B: Send empty JSON object
+                                var emptyJson = new StringContent("{}", Encoding.UTF8, "application/json");
+                                HttpResponseMessage responses = await httpClient.PostAsync(urlapi, emptyJson);
+
+                                string result = await responses.Content.ReadAsStringAsync();
+                                 urlapi = $"https://apiv2.tendoo.vn/order/api/v8/seller/update-order/{getsplit[1]}";
+                                var payload = new
+                                {
+                                    state = "complete",
+                                    payment_method = "Tiền mặt",
+                                    payment_source_id = "bb9385b1-5450-4a16-83ce-1b5b69a3aa13",
+                                    payment_source_name = "Tiền mặt",
+                                    debit = new
+                                    {
+                                        buyer_pay = getsplit[2],
+                                        description = "",
+                                        is_debit = false
+                                    }
+                                };
+                                 
+                                string jsonPayload = JsonConvert.SerializeObject(payload);
+                                var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                                // Gửi request
+                                 response = await httpClient.PutAsync(urlapi, content);
+                                 result = await response.Content.ReadAsStringAsync();
+
+                                JObject jsonResponse = JObject.Parse(result);
+                                progressPanel1.Caption = "Đã cập nhật trạng thái hoá đơn...";
+                                this.Close();   
+                            }
+                            else
+                                await Dongbokhachhang();
                         } 
                     }
                     //await Dongbokhachhang();
@@ -1897,7 +1939,7 @@ namespace SaovietTax
                     total = 200000
                 };
 
-                string jsonData = JsonSerializer.Serialize(invoiceData);
+                string jsonData = System.Text.Json.JsonSerializer.Serialize(invoiceData);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await httpClient.PostAsync(apiUrl, content);
@@ -1923,7 +1965,7 @@ namespace SaovietTax
         {
             try
             {
-                string jsonData = JsonSerializer.Serialize(data);
+                string jsonData = System.Text.Json.JsonSerializer.Serialize(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await httpClient.PostAsync(url, content);
@@ -1960,7 +2002,7 @@ namespace SaovietTax
                 if (response.IsSuccessStatusCode)
                 {
                     // Parse JSON ở đây
-                    var data = JsonSerializer.Deserialize<object>(content);
+                    var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
                     MessageBox.Show($"Dữ liệu: {content}", "Thành công");
                 }
                 else
