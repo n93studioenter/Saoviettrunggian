@@ -19397,22 +19397,28 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             {
                 try
                 {
-                    // ===== HttpClient + CookieContainer (BẮT BUỘC) =====
+                    // ===== HttpClient + CookieContainer =====
+                    var cookieContainer = new CookieContainer();
                     var handler = new HttpClientHandler()
                     {
                         UseCookies = true,
-                        CookieContainer = new CookieContainer(),
-                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                        CookieContainer = cookieContainer,
+                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                        AllowAutoRedirect = true
                     };
 
                     using (var client = new HttpClient(handler))
                     {
+                        // Set timeout
+                        client.Timeout = TimeSpan.FromSeconds(30);
+
                         // ===== Header giống trình duyệt =====
                         client.DefaultRequestHeaders.Clear();
-                        client.DefaultRequestHeaders.Add("User-Agent",
-                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0");
+                        client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
                         client.DefaultRequestHeaders.Add("Accept", "application/json, text/plain, */*");
-                        client.DefaultRequestHeaders.Add("Accept-Language", "vi-VN,vi;q=0.9");
+                        client.DefaultRequestHeaders.Add("Accept-Language", "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7");
+                        client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+                        client.DefaultRequestHeaders.Add("Connection", "keep-alive");
                         client.DefaultRequestHeaders.Add("Origin", "https://hoadondientu.gdt.gov.vn");
                         client.DefaultRequestHeaders.Add("Referer", "https://hoadondientu.gdt.gov.vn/");
                         client.DefaultRequestHeaders.ExpectContinue = false;
@@ -19437,11 +19443,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         string svgPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "captcha.svg");
                         File.WriteAllText(svgPath, capJson.Content);
 
-                        // ===== LẤY XSRF-TOKEN (RẤT QUAN TRỌNG) =====
-                        var cookies = handler.CookieContainer
-                            .GetCookies(new Uri("https://hoadondientu.gdt.gov.vn"));
+                        // ===== LẤY XSRF-TOKEN (NẾU CÓ) =====
+                        string xsrfToken = null;
 
-                        var xsrfToken = cookies["XSRF-TOKEN"]?.Value;
+                        // Lấy từ CookieContainer
+                        var cookies = cookieContainer.GetCookies(new Uri("https://hoadondientu.gdt.gov.vn"));
+                        xsrfToken = cookies["XSRF-TOKEN"]?.Value;
+
+                        // Nếu có thì thêm vào header, không có thì bỏ qua
                         if (!string.IsNullOrEmpty(xsrfToken))
                         {
                             client.DefaultRequestHeaders.Remove("X-XSRF-TOKEN");
@@ -19455,6 +19464,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                         SvgCaptchaSolver solver = new SvgCaptchaSolver();
                         string cvalue = solver.SolveCaptcha(svgPath);
+
+                        if (string.IsNullOrEmpty(cvalue))
+                        {
+                            ToastMeaasge("Không giải được captcha");
+                            return;
+                        }
 
                         // ================= STEP 3: LOGIN =================
                         if (chkDauvao.Checked) progressPanel1.Caption = "Đang đăng nhập hệ thống Thuế...";
@@ -19477,6 +19492,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             "application/json"
                         );
 
+                        // GỬI REQUEST LOGIN
                         var loginRes = await client.PostAsync(loginUrl, content);
 
                         if (loginRes.StatusCode == HttpStatusCode.Unauthorized)
@@ -19486,13 +19502,13 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             return;
                         }
 
-                      //  loginRes.EnsureSuccessStatusCode();
+                        loginRes.EnsureSuccessStatusCode();
 
                         string loginBody = await loginRes.Content.ReadAsStringAsync();
                         var tokenData = JsonConvert.DeserializeObject<TokenResponse>(loginBody);
                         this.tokken = tokenData.token;
 
-                        // ================= STEP 4: PROFILE (KHÔNG TẠO CLIENT MỚI) =================
+                        // ================= STEP 4: PROFILE =================
                         try
                         {
                             var req = new HttpRequestMessage(
@@ -19500,9 +19516,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 "https://hoadondientu.gdt.gov.vn/api/security-taxpayer/profile"
                             );
 
-                            req.Headers.Authorization =
-                                new AuthenticationHeaderValue("Bearer", this.tokken);
-
+                            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.tokken);
                             var profRes = await client.SendAsync(req);
 
                             if (profRes.IsSuccessStatusCode)
@@ -19536,9 +19550,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     }
                                     else if (remain.TotalDays <= 7)
                                     {
-                                        ToastMeaasge(
-                                            $"Mật khẩu sắp hết hạn {expireDate:dd/MM/yyyy} (còn {remain.Days} ngày)"
-                                        );
+                                        ToastMeaasge($"Mật khẩu sắp hết hạn {expireDate:dd/MM/yyyy} (còn {remain.Days} ngày)");
                                     }
                                 }
                             }
@@ -19553,7 +19565,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             "UPDATE tbRegister SET TimeTokken=?",
                             new OleDbParameter[]
                             {
-                new OleDbParameter("?", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                    new OleDbParameter("?", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
                             }
                         );
 
@@ -19566,7 +19578,6 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 {
                     XtraMessageBox.Show("Lỗi đăng nhập hệ thống thuế: " + ex.Message);
                 }
-
             }
 
             // ========== DOWNLOAD & PROCESS EXCEL ==========

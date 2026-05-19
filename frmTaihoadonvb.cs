@@ -31,6 +31,15 @@ namespace SaovietTax
         public frmTaihoadonvb()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.Manual;
+
+            // Đặt kích thước form (tuỳ chỉnh) 
+
+            // Đặt form ở góc phải dưới
+            this.Location = new Point(
+                Screen.PrimaryScreen.WorkingArea.Right - this.Width,
+                Screen.PrimaryScreen.WorkingArea.Bottom - this.Height
+            );
         }
        
         public string GetInvoiceUrl(int invoiceType, string nbmst, string khhdon, string shdon, string Khmshdon)
@@ -90,7 +99,7 @@ namespace SaovietTax
         }
         string mytokken = "";
         public string tokken { get; set; } = "";
-        private async void Getttoken()
+        private async Task Getttoken()
         {
             string querykh = @" SELECT *  FROM tbRegister"; // Sử dụng ? thay cho @mst trong OleDb
 
@@ -105,30 +114,37 @@ namespace SaovietTax
                     mytokken = tbRegister.AsEnumerable().FirstOrDefault().Field<string>("tokken");
                 }
             }
-            if (needlogin)
+            if (needlogin || 1<2)
             {
                 try
                 {
-                    // ===== HttpClient + CookieContainer (BẮT BUỘC) =====
+                    // ===== HttpClient + CookieContainer =====
+                    var cookieContainer = new CookieContainer();
                     var handler = new HttpClientHandler()
                     {
                         UseCookies = true,
-                        CookieContainer = new CookieContainer(),
-                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                        CookieContainer = cookieContainer,
+                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                        AllowAutoRedirect = true
                     };
 
                     using (var client = new HttpClient(handler))
                     {
+                        // Set timeout
+                        client.Timeout = TimeSpan.FromSeconds(30);
+
                         // ===== Header giống trình duyệt =====
                         client.DefaultRequestHeaders.Clear();
-                        client.DefaultRequestHeaders.Add("User-Agent",
-                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0");
+                        client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
                         client.DefaultRequestHeaders.Add("Accept", "application/json, text/plain, */*");
-                        client.DefaultRequestHeaders.Add("Accept-Language", "vi-VN,vi;q=0.9");
+                        client.DefaultRequestHeaders.Add("Accept-Language", "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7");
+                        client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+                        client.DefaultRequestHeaders.Add("Connection", "keep-alive");
                         client.DefaultRequestHeaders.Add("Origin", "https://hoadondientu.gdt.gov.vn");
                         client.DefaultRequestHeaders.Add("Referer", "https://hoadondientu.gdt.gov.vn/");
                         client.DefaultRequestHeaders.ExpectContinue = false;
 
+                        // ================= STEP 1: GET CAPTCHA ================= 
                         Application.DoEvents();
 
                         string capUrl = "https://hoadondientu.gdt.gov.vn/api/captcha";
@@ -146,11 +162,14 @@ namespace SaovietTax
                         string svgPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "captcha.svg");
                         File.WriteAllText(svgPath, capJson.Content);
 
-                        // ===== LẤY XSRF-TOKEN (RẤT QUAN TRỌNG) =====
-                        var cookies = handler.CookieContainer
-                            .GetCookies(new Uri("https://hoadondientu.gdt.gov.vn"));
+                        // ===== LẤY XSRF-TOKEN (NẾU CÓ) =====
+                        string xsrfToken = null;
 
-                        var xsrfToken = cookies["XSRF-TOKEN"]?.Value;
+                        // Lấy từ CookieContainer
+                        var cookies = cookieContainer.GetCookies(new Uri("https://hoadondientu.gdt.gov.vn"));
+                        xsrfToken = cookies["XSRF-TOKEN"]?.Value;
+
+                        // Nếu có thì thêm vào header, không có thì bỏ qua
                         if (!string.IsNullOrEmpty(xsrfToken))
                         {
                             client.DefaultRequestHeaders.Remove("X-XSRF-TOKEN");
@@ -163,6 +182,12 @@ namespace SaovietTax
                         SvgCaptchaSolver solver = new SvgCaptchaSolver();
                         string cvalue = solver.SolveCaptcha(svgPath);
 
+                        if (string.IsNullOrEmpty(cvalue))
+                        {
+                            XtraMessageBox.Show("Không giải được captcha");
+                            return;
+                        }
+
                         // ================= STEP 3: LOGIN ================= 
                         Application.DoEvents();
 
@@ -170,8 +195,8 @@ namespace SaovietTax
 
                         var payload = new
                         {
-                            username = tbRegister.Rows[0]["Username"].ToString(),
-                            password = tbRegister.Rows[0]["Password"].ToString(),
+                            username = "3502550210",
+                            password = "3i###@6H",
                             cvalue = cvalue,
                             ckey = capJson.Key
                         };
@@ -182,40 +207,90 @@ namespace SaovietTax
                             "application/json"
                         );
 
+                        // GỬI REQUEST LOGIN
                         var loginRes = await client.PostAsync(loginUrl, content);
 
                         if (loginRes.StatusCode == HttpStatusCode.Unauthorized)
                         {
                             string err = await loginRes.Content.ReadAsStringAsync();
-                            XtraMessageBox.Show("Đăng nhập thất bại (401): " + err);
+                            progressPanel1.Caption= $"Đăng nhập thất bại (401): {err}";
                             return;
                         }
 
-                        //  loginRes.EnsureSuccessStatusCode();
+                        loginRes.EnsureSuccessStatusCode();
 
                         string loginBody = await loginRes.Content.ReadAsStringAsync();
                         var tokenData = JsonConvert.DeserializeObject<TokenResponse>(loginBody);
                         this.tokken = tokenData.token;
-                        mytokken = this.tokken; 
-                        // ================= STEP 4: PROFILE (KHÔNG TẠO CLIENT MỚI) ================= 
+                        mytokken = this.tokken;
+                        // ================= STEP 4: PROFILE =================
+                        try
+                        {
+                            var req = new HttpRequestMessage(
+                                HttpMethod.Get,
+                                "https://hoadondientu.gdt.gov.vn/api/security-taxpayer/profile"
+                            );
+
+                            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.tokken);
+                            var profRes = await client.SendAsync(req);
+
+                            if (profRes.IsSuccessStatusCode)
+                            {
+                                string profBody = await profRes.Content.ReadAsStringAsync();
+                                var prof = JsonConvert.DeserializeObject<ProfileResponse>(profBody);
+
+                                if (!string.IsNullOrEmpty(prof.password_expire))
+                                {
+                                    DateTime expireDate = DateTime.Parse(prof.password_expire);
+                                    TimeSpan remain = expireDate - DateTime.Now;
+
+                                    if (remain.TotalDays <= 0)
+                                    {
+                                        XtraMessageBox.Show(
+                                            $"Mật khẩu đã hết hạn ngày {expireDate:dd/MM/yyyy}.",
+                                            "Hết hạn!",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Warning
+                                        );
+                                        return;
+                                    }
+                                    else if (remain.TotalDays <= 3)
+                                    {
+                                        XtraMessageBox.Show(
+                                            $"⚠ Mật khẩu sẽ hết hạn sau {remain.Days} ngày!\nNgày: {expireDate:dd/MM/yyyy}",
+                                            "Cảnh báo",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Warning
+                                        );
+                                    }
+                                    else if (remain.TotalDays <= 7)
+                                    {
+                                        XtraMessageBox.Show($"Mật khẩu sắp hết hạn {expireDate:dd/MM/yyyy} (còn {remain.Days} ngày)");
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            XtraMessageBox.Show("Không kiểm tra được ngày hết hạn: " + ex.Message);
+                        }
 
                         // ================= SAVE TOKEN TIME =================
                         ExecuteQueryResult(
                             "UPDATE tbRegister SET TimeTokken=?",
                             new OleDbParameter[]
                             {
-                new OleDbParameter("?", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                    new OleDbParameter("?", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
                             }
                         );
-
+                         
                         Application.DoEvents();
                     }
                 }
                 catch (Exception ex)
                 {
-                    XtraMessageBox.Show("Lỗi đăng nhập hệ thống thuế: " + ex.Message);
+                    progressPanel1.Caption =  $"Lỗi đăng nhập hệ thống thuế:  { ex.Message}";
                 }
-
             }
         }
         string dbPath = "";
@@ -275,16 +350,26 @@ namespace SaovietTax
         string namtc = "";
         private async void frmTaihoadonvb_Load(object sender, EventArgs e)
         {
-            this.Hide();
+            progressPanel1.Caption = "Đang tải hoá đơn...";
+           simpleButton1.PerformClick();
+        }
+
+        private void frmTaihoadonvb_FormClosed(object sender, FormClosedEventArgs e)
+        {
+           
+        }
+
+        private async void simpleButton1_Click(object sender, EventArgs e)
+        { 
             LoadData();
-         
+
             string query = "SELECT * FROM License";
 
             // Tạo mảng tham số với giá trị cho câu lệnh SQL
 
             var kq = ExecuteQuery(query, null);
             mstcongty = kq.Rows[0]["MaSoThue"].ToString();
-            namtc= kq.Rows[0]["NamTC"].ToString();
+            namtc = kq.Rows[0]["NamTC"].ToString();
             query = "SELECT * FROM tbRegister";
             // Tạo mảng tham số với giá trị cho câu lệnh SQL
 
@@ -293,7 +378,7 @@ namespace SaovietTax
             user = kq.Rows[0]["Username"].ToString();
             password = kq.Rows[0]["Password"].ToString();
 
-            Getttoken();
+             await Getttoken();
 
             string qr = "SELECT * FROM HoaDon";
             DataTable tbHoadon = ExecuteQuery(qr, null);
@@ -316,8 +401,8 @@ namespace SaovietTax
                     else
                     {
                         mst = getsplit[0];
-                        var findmauhd= tbHoadon.AsEnumerable().Where(m=>m.Field<string>("KyHieu") == khhd && Helpers.RemoveLeadingZeros(m.Field<string>("SoHD")) ==sohd).FirstOrDefault();
-                        if(findmauhd!=null)
+                        var findmauhd = tbHoadon.AsEnumerable().Where(m => m.Field<string>("KyHieu") == khhd && Helpers.RemoveLeadingZeros(m.Field<string>("SoHD")) == sohd).FirstOrDefault();
+                        if (findmauhd != null)
                         {
                             double tt = findmauhd.Field<double>("ThanhTien");
                             if (tt == 0)
@@ -326,7 +411,7 @@ namespace SaovietTax
                             }
                         }
 
-                    } 
+                    }
 
                     //
                     string pathravao = getsplit[1] != "8" ? "HDVao" : "HDRa";
@@ -334,8 +419,8 @@ namespace SaovietTax
                     int tuthang = int.Parse(getsplit[4]);
                     string yearpath = $"HD{namtc}";
                     string path = Path.Combine(savedPath, yearpath, pathravao, tuthang.ToString(), fn);
-                    string url1 = GetInvoiceUrl(4, mst, khhd, sohd, sokh);
-                    string url2 = GetInvoiceUrl(5, mst, khhd, sohd, sokh);
+                    string url2 = GetInvoiceUrl(4, mst, khhd, sohd, sokh);
+                    string url1 = GetInvoiceUrl(5, mst, khhd, sohd, sokh);
                     using (var client = new HttpClient())
                     {
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", mytokken);
@@ -371,11 +456,11 @@ namespace SaovietTax
                                 Console.WriteLine($"File ZIP đã được lưu tại: {path}");
 
                                 try
-                                { 
+                                {
 
                                     ZipFile.ExtractToDirectory(path, directoryPath);
                                     var files = Directory.GetFiles(directoryPath, "invoice.html", SearchOption.AllDirectories);
-                                  
+
 
                                     if (files.Length > 0)
                                     {
@@ -418,9 +503,9 @@ namespace SaovietTax
             this.Close();
         }
 
-        private void frmTaihoadonvb_FormClosed(object sender, FormClosedEventArgs e)
+        private void progressPanel1_Click(object sender, EventArgs e)
         {
-           
+
         }
     }
 }

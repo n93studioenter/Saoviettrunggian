@@ -1333,6 +1333,20 @@ namespace SaovietTax
 
                                 JObject jsonResponse = JObject.Parse(result);
                                 progressPanel1.Caption = "Đã cập nhật trạng thái hoá đơn...";
+
+
+                                string query = @"UPDATE HoaDon  
+                             TendoHDState = ?
+                             WHERE MaSo = ?";
+
+                                var parameters = new OleDbParameter[]
+                                {
+                new OleDbParameter("?", "complete"), 
+                new OleDbParameter("?", dtHoaDon.Rows[0]["HOADON.MaSo"]?.ToString() ?? "")
+                                };
+
+                                int rowsAffected = ExecuteQueryResult(query, parameters);
+
                                 this.Close();   
                             }
                             else
