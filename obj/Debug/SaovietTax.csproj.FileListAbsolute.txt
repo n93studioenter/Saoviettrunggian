@@ -1451,3 +1451,6 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.application
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.csproj.Up2Date
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.exe
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.pdb
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Bcl.Memory.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.ML.Tokenizers.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.IO.Pipelines.dll

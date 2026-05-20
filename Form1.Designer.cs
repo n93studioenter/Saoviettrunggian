@@ -477,8 +477,8 @@
             // 
             // gridControl4
             // 
-            this.gridControl4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.gridControl4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl4.DataSource = this.nhapkhotpBindingSource1;
             this.gridControl4.Font = new System.Drawing.Font("Tahoma", 7.8F);
@@ -1394,7 +1394,7 @@
             this.gridControl1.Name = "gridControl1";
             this.gridControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemButtonEdit1});
-            this.gridControl1.Size = new System.Drawing.Size(1638, 469);
+            this.gridControl1.Size = new System.Drawing.Size(1648, 479);
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1,
@@ -1675,14 +1675,14 @@
             // 
             // xtraTabControl1
             // 
-            this.xtraTabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.xtraTabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 2);
             this.xtraTabControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(1660, 760);
+            this.xtraTabControl1.Size = new System.Drawing.Size(1660, 756);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -1698,20 +1698,20 @@
             this.xtraTabPage1.Controls.Add(this.comboBoxEdit1);
             this.xtraTabPage1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(1651, 725);
+            this.xtraTabPage1.Size = new System.Drawing.Size(1656, 728);
             this.xtraTabPage1.Text = "Sao việt tải hóa đơn";
             this.xtraTabPage1.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
             // 
             // xtraTabControl2
             // 
-            this.xtraTabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.xtraTabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.xtraTabControl2.Location = new System.Drawing.Point(8, 153);
             this.xtraTabControl2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabControl2.Name = "xtraTabControl2";
             this.xtraTabControl2.SelectedTabPage = this.xtraTabPage3;
-            this.xtraTabControl2.Size = new System.Drawing.Size(1647, 504);
+            this.xtraTabControl2.Size = new System.Drawing.Size(1652, 507);
             this.xtraTabControl2.TabIndex = 8;
             this.xtraTabControl2.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage3,
@@ -1731,7 +1731,7 @@
             this.xtraTabPage3.Controls.Add(this.btnReadPDF);
             this.xtraTabPage3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(1638, 469);
+            this.xtraTabPage3.Size = new System.Drawing.Size(1648, 479);
             this.xtraTabPage3.Text = "HĐ đầu vào";
             // 
             // progressPanel1
@@ -1792,7 +1792,7 @@
             // 
             this.btnReadPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReadPDF.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnReadPDF.ImageOptions.Image")));
-            this.btnReadPDF.Location = new System.Drawing.Point(1596, 217);
+            this.btnReadPDF.Location = new System.Drawing.Point(1606, 227);
             this.btnReadPDF.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnReadPDF.Name = "btnReadPDF";
             this.btnReadPDF.Size = new System.Drawing.Size(162, 39);
@@ -1977,8 +1977,8 @@
             // 
             // gridControl7
             // 
-            this.gridControl7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.gridControl7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl7.DataSource = this.nganhangBindingSource1;
             this.gridControl7.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -2540,8 +2540,8 @@
             // 
             // panleGrid
             // 
-            this.panleGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.panleGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panleGrid.Controls.Add(this.chkBoquatondauky);
             this.panleGrid.Controls.Add(this.panelControl5);
@@ -2932,7 +2932,7 @@
             // 
             // panelControl6
             // 
-            this.panelControl6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.panelControl6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelControl6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelControl6.Controls.Add(this.txtDVTMacdinh);
@@ -2956,15 +2956,15 @@
             this.panelControl6.Controls.Add(this.btnTaicoquanthue);
             this.panelControl6.Controls.Add(this.simpleButton2);
             this.panelControl6.Controls.Add(this.lblThongbao);
-            this.panelControl6.Location = new System.Drawing.Point(3, 663);
+            this.panelControl6.Location = new System.Drawing.Point(3, 666);
             this.panelControl6.Name = "panelControl6";
-            this.panelControl6.Size = new System.Drawing.Size(1652, 59);
+            this.panelControl6.Size = new System.Drawing.Size(1657, 59);
             this.panelControl6.TabIndex = 20;
             // 
             // txtDVTMacdinh
             // 
             this.txtDVTMacdinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDVTMacdinh.Location = new System.Drawing.Point(1423, 22);
+            this.txtDVTMacdinh.Location = new System.Drawing.Point(1428, 22);
             this.txtDVTMacdinh.Name = "txtDVTMacdinh";
             this.txtDVTMacdinh.Size = new System.Drawing.Size(83, 23);
             this.txtDVTMacdinh.TabIndex = 27;
@@ -2972,7 +2972,7 @@
             // chkDVTMacdinh
             // 
             this.chkDVTMacdinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkDVTMacdinh.Location = new System.Drawing.Point(1231, 25);
+            this.chkDVTMacdinh.Location = new System.Drawing.Point(1236, 25);
             this.chkDVTMacdinh.Name = "chkDVTMacdinh";
             this.chkDVTMacdinh.Properties.Caption = "Đơn vị tính mặc định";
             this.chkDVTMacdinh.Size = new System.Drawing.Size(160, 20);
@@ -3000,11 +3000,11 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox1.Location = new System.Drawing.Point(273, 11);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(102, 40);
+            this.richTextBox1.Size = new System.Drawing.Size(107, 40);
             this.richTextBox1.TabIndex = 21;
             this.richTextBox1.Text = "";
             this.richTextBox1.Visible = false;
@@ -3031,7 +3031,7 @@
             // 
             this.chkHienthimau.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkHienthimau.EditValue = true;
-            this.chkHienthimau.Location = new System.Drawing.Point(638, 19);
+            this.chkHienthimau.Location = new System.Drawing.Point(643, 19);
             this.chkHienthimau.Name = "chkHienthimau";
             this.chkHienthimau.Properties.Caption = "Hiển thị màu";
             this.chkHienthimau.Size = new System.Drawing.Size(94, 20);
@@ -3043,7 +3043,7 @@
             // 
             this.btnExportExcelVao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportExcelVao.ImageOptions.Image = global::SaovietTax.Properties.Resources.exporttoxlsx_16x16;
-            this.btnExportExcelVao.Location = new System.Drawing.Point(798, 10);
+            this.btnExportExcelVao.Location = new System.Drawing.Point(803, 10);
             this.btnExportExcelVao.Name = "btnExportExcelVao";
             this.btnExportExcelVao.Size = new System.Drawing.Size(116, 29);
             this.btnExportExcelVao.TabIndex = 12;
@@ -3064,7 +3064,7 @@
             // btnXoaDSRa
             // 
             this.btnXoaDSRa.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnXoaDSRa.Location = new System.Drawing.Point(670, 22);
+            this.btnXoaDSRa.Location = new System.Drawing.Point(675, 22);
             this.btnXoaDSRa.Name = "btnXoaDSRa";
             this.btnXoaDSRa.Size = new System.Drawing.Size(65, 26);
             this.btnXoaDSRa.TabIndex = 12;
@@ -3089,7 +3089,7 @@
             // btnXoaDSVao
             // 
             this.btnXoaDSVao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnXoaDSVao.Location = new System.Drawing.Point(610, 12);
+            this.btnXoaDSVao.Location = new System.Drawing.Point(615, 12);
             this.btnXoaDSVao.Name = "btnXoaDSVao";
             this.btnXoaDSVao.Size = new System.Drawing.Size(64, 28);
             this.btnXoaDSVao.TabIndex = 11;
@@ -3100,7 +3100,7 @@
             // lblThongbaos
             // 
             this.lblThongbaos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblThongbaos.Location = new System.Drawing.Point(551, 24);
+            this.lblThongbaos.Location = new System.Drawing.Point(556, 24);
             this.lblThongbaos.Name = "lblThongbaos";
             this.lblThongbaos.Size = new System.Drawing.Size(75, 16);
             this.lblThongbaos.TabIndex = 18;
@@ -3111,7 +3111,7 @@
             // 
             this.simpleButton7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton7.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton7.ImageOptions.Image")));
-            this.simpleButton7.Location = new System.Drawing.Point(575, 11);
+            this.simpleButton7.Location = new System.Drawing.Point(580, 11);
             this.simpleButton7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton7.Name = "simpleButton7";
             this.simpleButton7.Size = new System.Drawing.Size(51, 33);
@@ -3123,7 +3123,7 @@
             // 
             this.simpleButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton1.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton1.ImageOptions.Image")));
-            this.simpleButton1.Location = new System.Drawing.Point(670, 7);
+            this.simpleButton1.Location = new System.Drawing.Point(675, 7);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(35, 31);
@@ -3134,7 +3134,7 @@
             // btnKTTen
             // 
             this.btnKTTen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnKTTen.Location = new System.Drawing.Point(1551, 18);
+            this.btnKTTen.Location = new System.Drawing.Point(1556, 18);
             this.btnKTTen.Name = "btnKTTen";
             this.btnKTTen.Size = new System.Drawing.Size(91, 29);
             this.btnKTTen.TabIndex = 7;
@@ -3145,7 +3145,7 @@
             // 
             this.btnLichsuimport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLichsuimport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnLichsuimport.ImageOptions.Image")));
-            this.btnLichsuimport.Location = new System.Drawing.Point(341, 9);
+            this.btnLichsuimport.Location = new System.Drawing.Point(346, 9);
             this.btnLichsuimport.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnLichsuimport.Name = "btnLichsuimport";
             this.btnLichsuimport.Size = new System.Drawing.Size(199, 33);
@@ -3156,13 +3156,13 @@
             // 
             // DocfilePDF
             // 
-            this.DocfilePDF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.DocfilePDF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DocfilePDF.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("DocfilePDF.ImageOptions.Image")));
             this.DocfilePDF.Location = new System.Drawing.Point(412, 15);
             this.DocfilePDF.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.DocfilePDF.Name = "DocfilePDF";
-            this.DocfilePDF.Size = new System.Drawing.Size(341, 33);
+            this.DocfilePDF.Size = new System.Drawing.Size(346, 33);
             this.DocfilePDF.TabIndex = 16;
             this.DocfilePDF.Text = "Đọc file PDF";
             this.DocfilePDF.Visible = false;
@@ -3195,7 +3195,7 @@
             // 
             this.lblThongbao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblThongbao.AutoSize = true;
-            this.lblThongbao.Location = new System.Drawing.Point(649, 18);
+            this.lblThongbao.Location = new System.Drawing.Point(654, 18);
             this.lblThongbao.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblThongbao.Name = "lblThongbao";
             this.lblThongbao.Size = new System.Drawing.Size(41, 16);
@@ -3205,7 +3205,7 @@
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.Controls.Add(this.panleLeft);
             this.flowLayoutPanel1.Controls.Add(this.panleMiddle);
@@ -3213,7 +3213,7 @@
             this.flowLayoutPanel1.Controls.Add(this.panleFinal);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 8);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1649, 139);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(1654, 139);
             this.flowLayoutPanel1.TabIndex = 17;
             // 
             // panleLeft
@@ -3250,7 +3250,7 @@
             // 
             // dtDenngay
             // 
-            this.dtDenngay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.dtDenngay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtDenngay.EditValue = null;
             this.dtDenngay.Location = new System.Drawing.Point(342, 66);
@@ -3296,7 +3296,7 @@
             // 
             // labelControl3
             // 
-            this.labelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.labelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl3.Location = new System.Drawing.Point(269, 69);
             this.labelControl3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -3324,7 +3324,7 @@
             // 
             // txtpass
             // 
-            this.txtpass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.txtpass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtpass.Location = new System.Drawing.Point(276, 31);
             this.txtpass.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -3402,7 +3402,7 @@
             // 
             // simpleButton6
             // 
-            this.simpleButton6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.simpleButton6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton6.ImageOptions.Image = global::SaovietTax.Properties.Resources.sendxls_32x321;
             this.simpleButton6.Location = new System.Drawing.Point(203, 44);
@@ -3446,7 +3446,7 @@
             // 
             // simpleButton5
             // 
-            this.simpleButton5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.simpleButton5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton5.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton5.ImageOptions.Image")));
             this.simpleButton5.Location = new System.Drawing.Point(5, 44);
@@ -3459,7 +3459,7 @@
             // 
             // btnChonthang
             // 
-            this.btnChonthang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.btnChonthang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnChonthang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnChonthang.ImageOptions.Image")));
             this.btnChonthang.Location = new System.Drawing.Point(203, 3);
@@ -3484,8 +3484,8 @@
             // 
             // simpleButton3
             // 
-            this.simpleButton3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.simpleButton3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton3.ImageOptions.Image = global::SaovietTax.Properties.Resources.drilldownonseries_chart_32x32;
             this.simpleButton3.Location = new System.Drawing.Point(5, 4);
@@ -3526,7 +3526,7 @@
             // 
             // btnLocdulieuNganhang
             // 
-            this.btnLocdulieuNganhang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.btnLocdulieuNganhang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLocdulieuNganhang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnLocdulieuNganhang.ImageOptions.Image")));
             this.btnLocdulieuNganhang.Location = new System.Drawing.Point(265, 47);
@@ -3549,7 +3549,7 @@
             // 
             // btnMatdinhnganhang
             // 
-            this.btnMatdinhnganhang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.btnMatdinhnganhang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMatdinhnganhang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnMatdinhnganhang.ImageOptions.Image")));
             this.btnMatdinhnganhang.Location = new System.Drawing.Point(6, 44);
@@ -3562,7 +3562,7 @@
             // 
             // btnDocfileExcel
             // 
-            this.btnDocfileExcel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.btnDocfileExcel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDocfileExcel.AutoWidthInLayoutControl = true;
             this.btnDocfileExcel.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("btnDocfileExcel.ImageOptions.SvgImage")));
@@ -3576,7 +3576,7 @@
             // 
             // btnImportChungtunganhang
             // 
-            this.btnImportChungtunganhang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.btnImportChungtunganhang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnImportChungtunganhang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnImportChungtunganhang.ImageOptions.Image")));
             this.btnImportChungtunganhang.Location = new System.Drawing.Point(7, 81);
@@ -3589,7 +3589,7 @@
             // 
             // simpleButton4
             // 
-            this.simpleButton4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.simpleButton4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton4.AutoWidthInLayoutControl = true;
             this.simpleButton4.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton4.ImageOptions.Image")));
@@ -3634,27 +3634,27 @@
             // 
             // comboBoxEdit2
             // 
-            this.comboBoxEdit2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.comboBoxEdit2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxEdit2.Location = new System.Drawing.Point(813, 418);
             this.comboBoxEdit2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.comboBoxEdit2.Name = "comboBoxEdit2";
             this.comboBoxEdit2.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.comboBoxEdit2.Size = new System.Drawing.Size(396, 23);
+            this.comboBoxEdit2.Size = new System.Drawing.Size(401, 23);
             this.comboBoxEdit2.TabIndex = 6;
             this.comboBoxEdit2.Visible = false;
             // 
             // comboBoxEdit1
             // 
-            this.comboBoxEdit1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.comboBoxEdit1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxEdit1.Location = new System.Drawing.Point(714, 418);
             this.comboBoxEdit1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.comboBoxEdit1.Name = "comboBoxEdit1";
             this.comboBoxEdit1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.comboBoxEdit1.Size = new System.Drawing.Size(404, 23);
+            this.comboBoxEdit1.Size = new System.Drawing.Size(409, 23);
             this.comboBoxEdit1.TabIndex = 1;
             this.comboBoxEdit1.Visible = false;
             // 
@@ -3668,8 +3668,8 @@
             // 
             // gridControl5
             // 
-            this.gridControl5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.gridControl5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl5.Location = new System.Drawing.Point(-1, 56);
             this.gridControl5.MainView = this.gridView9;
@@ -3721,8 +3721,8 @@
             // 
             // panelControl3
             // 
-            this.panelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.panelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelControl3.Controls.Add(this.simpleButton10);
             this.panelControl3.Controls.Add(this.labelControl16);
@@ -3794,7 +3794,7 @@
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1671, 763);
+            this.ClientSize = new System.Drawing.Size(1671, 759);
             this.Controls.Add(this.xtraTabControl1);
             this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
             this.IconOptions.Image = ((System.Drawing.Image)(resources.GetObject("frmMain.IconOptions.Image")));

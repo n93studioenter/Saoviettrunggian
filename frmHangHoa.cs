@@ -1,4 +1,5 @@
 ﻿using DevExpress.Utils;
+using DevExpress.Utils.Extensions;
 using DevExpress.Xpo.DB.Helpers;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
@@ -313,9 +314,33 @@ namespace SaovietTax
         {
             
         }
-
+        public class TbImportDetail
+        {
+            public int ID { get; set; }
+            public int ParentId { get; set; }
+            public string SoHieu { get; set; }
+            public double Soluong { get; set; }
+            public double Dongia { get; set; }
+            public string DVT { get; set; }
+            public string Ten { get; set; }
+            public string MaCT { get; set; }
+            public string TKNo { get; set; }
+            public string TKCo { get; set; }
+            public double TTien { get; set; }
+            public double SoPSGoc { get; set; }
+            public double Percent { get; set; }
+            public int Tchat { get; set; }
+            public double Vat { get; set; }
+        }
         private void btnGhi_Click(object sender, EventArgs e)
         {
+            //Kiểm tra mã này đã thêm chưa
+            if (frmMain.lstvt.Any(m => m.SoHieu.ToLower().Trim() == txtSohieu.Text.ToLower().Trim()))
+            {
+                XtraMessageBox.Show("Mã đã được thêm trong hệ thống, vui lòng nhập mã khác!");
+                return;
+            }
+
             int selectedId = 0;
             var selectedItem = comboBoxEdit1.SelectedItem as Item;
           
@@ -327,7 +352,7 @@ namespace SaovietTax
 
             if (isInsert)
             {
-                if (selectedItem.Id == 0)
+                if (selectedItem.Id == 0 || selectedItem.Id == -1)
                 {
                     XtraMessageBox.Show("Vui lòng chọn danh mục");
                     return;
@@ -369,23 +394,74 @@ namespace SaovietTax
             }
 
             // Thực hiện truy vấn
-            int rowsAffected = ExecuteQueryResult(query, parameters);
+            int rowsAffected = 0;
+            try
+            {
+                 rowsAffected = ExecuteQueryResult(query, parameters);
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show(ex.Message);
+                return;
+            }
 
             // [Optional] Xử lý kết quả trả về (ví dụ: thông báo thành công/thất bại)
             if (rowsAffected > 0)
             {
 
-                //var hiddenValue = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["SoHieu"]);
-                //var hiddenValue2 = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["DonVi"]);
-                //var hiddenValue3 = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["TenVattu"]);
-                frmMain.hiddenValue = txtSohieu.Text;
-                frmMain.hiddenValue2 = txtDonvi.Text;
-                frmMain.hiddenValue3 = txtTenvattu.Text;
-                isChange = true;
-                this.Close();
+                if (Typeform == 2)
+                {
+                    var gv = frmMain.Typechon == 1 ? frmMain.gv2 : frmMain.gv4;
+                    int rowHandle = hoverRowHandle;
+
+                    if (rowHandle >= 0 && !gv.IsGroupRow(rowHandle))
+                    {
+                      
+                        var rowObj = gv.GetRow(rowHandle);
+                   
+                        if (rowObj != null)
+                        {
+                            var type = rowObj.GetType();
+                            string ten = (string)type.GetProperty("Ten").GetValue(rowObj);
+                            string sohieu= (string)type.GetProperty("SoHieu").GetValue(rowObj);
+                            int ID= (int)type.GetProperty("ID").GetValue(rowObj);
+                            string DVT = (string)type.GetProperty("DVT").GetValue(rowObj);
+                            TbImportDetail TbImportDetail = rowObj as TbImportDetail;
+
+                            type.GetProperty("SoHieu")
+                                ?.SetValue(rowObj, txtSohieu.Text);
+
+                            type.GetProperty("DVT")
+                                ?.SetValue(rowObj, txtDonvi.Text);
+
+                            type.GetProperty("Ten")
+                                ?.SetValue(rowObj, txtTenvattu.Text);
+
+                            gv.RefreshRow(rowHandle);
+
+                            string query2 = @"UPDATE tbimportdetail SET Ten=?,SoHieu=?,DVT=?  WHERE ID=?";
+                            var parameters2 = new OleDbParameter[]
+                             {
+                                 new OleDbParameter("?", Helpers.ConvertUnicodeToVni(txtTenvattu.Text)),
+                                 new OleDbParameter("?", txtSohieu.Text),
+                                 new OleDbParameter("?", Helpers.ConvertUnicodeToVni(txtDonvi.Text)),
+                                 new OleDbParameter("?", ID)
+                             };
+                            rowsAffected = ExecuteQueryResult(query2, parameters2);
+                        }
+                    }
+                }
+                else
+                {
+                    frmMain.hiddenValue = txtSohieu.Text;
+                    frmMain.hiddenValue2 = txtDonvi.Text;
+                    frmMain.hiddenValue3 = txtTenvattu.Text;
+                    isChange = true;
+                }
+                    this.Close();
 
                 LoadData(selectedItem.Id, txtSearch.Text);
-                // RefreshData();
+                 RefreshData();
                 DevExpress.XtraGrid.Views.Grid.GridView view = gridControl1.MainView as DevExpress.XtraGrid.Views.Grid.GridView; // Lấy GridView
                 //for (int i = 0; i < view.RowCount; i++)
                 //{
@@ -473,7 +549,7 @@ namespace SaovietTax
                 }
                 catch (Exception ex)
                 {
-                    XtraMessageBox.Show(ex.Message);
+                   // XtraMessageBox.Show(ex.Message);
                 }
 
             }
@@ -502,9 +578,10 @@ namespace SaovietTax
                 if (selectedItem != null)
                 {
                     int selectedId = selectedItem.Id; // Lấy giá trị Id 
+                    frmMain.lstvt.Remove(frmMain.lstvt.FirstOrDefault(m => m.MaSo.ToString() == txtMaSo.Text));
                     frmMain.LoadVT();
                     LoadData(selectedId, txtSearch.Text);
-
+                    gridView1.RefreshData();
                 }
             }
 

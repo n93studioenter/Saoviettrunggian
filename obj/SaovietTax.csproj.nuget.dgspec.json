@@ -97,7 +97,11 @@
             },
             "Microsoft.ML.OnnxRuntime": {
               "target": "Package",
-              "version": "[1.22.1, )"
+              "version": "[1.26.0, )"
+            },
+            "Microsoft.ML.Tokenizers": {
+              "target": "Package",
+              "version": "[2.0.0, )"
             },
             "Microsoft.Playwright": {
               "target": "Package",
