@@ -569,8 +569,9 @@ C:\TCP\Saoviet\DAP3\SaovietTax\SaovietTax\bin\Debug\ja\DevExpress.Map.v22.1.Core
 C:\TCP\Saoviet\DAP3\SaovietTax\SaovietTax\bin\Debug\de\DevExpress.XtraGauges.v22.1.Presets.resources.dll
 C:\TCP\Saoviet\DAP3\SaovietTax\SaovietTax\bin\Debug\es\DevExpress.XtraGauges.v22.1.Presets.resources.dll
 C:\TCP\Saoviet\DAP3\SaovietTax\SaovietTax\bin\Debug\ja\DevExpress.XtraGauges.v22.1.Presets.resources.dll
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraLayout.v22.1.dll
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraSpreadsheet.v22.1.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraReports.v22.1.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraRichEdit.v22.1.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Extensions.Primitives.xml
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\LdaNative.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\onnxruntime.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\onnxruntime_providers_shared.dll
@@ -1096,6 +1097,7 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\itext.commons.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\MethodBoundaryAspect.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Bcl.HashCode.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Bcl.Memory.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Bcl.Numerics.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Bcl.TimeProvider.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Extensions.DependencyInjection.dll
@@ -1120,6 +1122,7 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\onnxruntime.lib
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\onnxruntime_providers_shared.lib
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.ML.OnnxRuntime.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.ML.OnnxRuntime.pdb
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.ML.Tokenizers.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Playwright.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Toolkit.Uwp.Notifications.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Toolkit.Uwp.Notifications.pdb
@@ -1181,6 +1184,7 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.Collections.Imm
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.ComponentModel.Annotations.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.Data.SQLite.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.IO.Pipelines.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.Memory.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.Numerics.Tensors.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.Numerics.Vectors.dll
@@ -1237,13 +1241,13 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraGauges.
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraGauges.v22.1.Presets.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraGauges.v22.1.Win.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraGrid.v22.1.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraLayout.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraMap.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraNavBar.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraPivotGrid.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraPrinting.v22.1.dll
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraReports.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraReports.v22.1.Extensions.dll
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraRichEdit.v22.1.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraSpreadsheet.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraTreeList.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraTreeMap.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraTreeMap.v22.1.UI.dll
@@ -1299,7 +1303,6 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraTreeMap
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraVerticalGrid.v22.1.xml
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Extensions.Configuration.xml
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.xml
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Extensions.Primitives.xml
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\de\DevExpress.Dashboard.v22.1.Core.resources.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\es\DevExpress.Dashboard.v22.1.Core.resources.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\ja\DevExpress.Dashboard.v22.1.Core.resources.dll
@@ -1451,6 +1454,3 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.application
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.csproj.Up2Date
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.exe
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.pdb
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Bcl.Memory.dll
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.ML.Tokenizers.dll
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\System.IO.Pipelines.dll

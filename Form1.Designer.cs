@@ -866,6 +866,7 @@
             this.gridView4.RowCellClick += new DevExpress.XtraGrid.Views.Grid.RowCellClickEventHandler(this.gridView4_RowCellClick);
             this.gridView4.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.gridView4_CustomDrawCell);
             this.gridView4.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.gridView4_RowCellStyle);
+            this.gridView4.ShownEditor += new System.EventHandler(this.gridView4_ShownEditor);
             this.gridView4.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView4_CellValueChanged);
             this.gridView4.CellValueChanging += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.gridView4_CellValueChanging);
             this.gridView4.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridView4_KeyDown);
@@ -874,6 +875,7 @@
             this.gridView4.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridView4_MouseMove);
             this.gridView4.MouseEnter += new System.EventHandler(this.gridView4_MouseEnter);
             this.gridView4.MouseLeave += new System.EventHandler(this.gridView4_MouseLeave);
+            this.gridView4.DoubleClick += new System.EventHandler(this.gridView4_DoubleClick);
             // 
             // gridColumn22
             // 
@@ -977,6 +979,7 @@
             this.colIDs.FieldName = "ID";
             this.colIDs.MinWidth = 25;
             this.colIDs.Name = "colIDs";
+            this.colIDs.OptionsColumn.AllowEdit = false;
             this.colIDs.Visible = true;
             this.colIDs.VisibleIndex = 9;
             this.colIDs.Width = 80;
@@ -996,7 +999,7 @@
             this.gridControl2.MainView = this.gridView3;
             this.gridControl2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gridControl2.Name = "gridControl2";
-            this.gridControl2.Size = new System.Drawing.Size(1638, 469);
+            this.gridControl2.Size = new System.Drawing.Size(1648, 479);
             this.gridControl2.TabIndex = 1;
             this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView3,
@@ -1809,7 +1812,7 @@
             this.xtraTabPage4.Controls.Add(this.gridControl2);
             this.xtraTabPage4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(1638, 469);
+            this.xtraTabPage4.Size = new System.Drawing.Size(1648, 479);
             this.xtraTabPage4.Text = "HĐ Đầu ra";
             // 
             // progressPanel2
@@ -1879,7 +1882,7 @@
             this.xtraTabPage7.Controls.Add(this.simpleButton11);
             this.xtraTabPage7.Controls.Add(this.gridControl7);
             this.xtraTabPage7.Name = "xtraTabPage7";
-            this.xtraTabPage7.Size = new System.Drawing.Size(1638, 469);
+            this.xtraTabPage7.Size = new System.Drawing.Size(1648, 479);
             this.xtraTabPage7.Text = "Ngân hàng";
             // 
             // labelControl23
@@ -2166,7 +2169,7 @@
             this.xtraTabPage2.Controls.Add(this.gridControl3);
             this.xtraTabPage2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(1638, 469);
+            this.xtraTabPage2.Size = new System.Drawing.Size(1648, 479);
             this.xtraTabPage2.Text = "Ngân hàng";
             // 
             // lblTKNganHangTitle
@@ -2271,7 +2274,7 @@
             this.gridControl3.MainView = this.gridView5;
             this.gridControl3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gridControl3.Name = "gridControl3";
-            this.gridControl3.Size = new System.Drawing.Size(1638, 469);
+            this.gridControl3.Size = new System.Drawing.Size(1648, 479);
             this.gridControl3.TabIndex = 0;
             this.gridControl3.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView5});
@@ -2453,7 +2456,7 @@
             this.xtraTabPage5.Controls.Add(this.panleGrid);
             this.xtraTabPage5.Controls.Add(this.panelControl1);
             this.xtraTabPage5.Name = "xtraTabPage5";
-            this.xtraTabPage5.Size = new System.Drawing.Size(1638, 469);
+            this.xtraTabPage5.Size = new System.Drawing.Size(1648, 479);
             this.xtraTabPage5.Text = "Nhập kho thành phẩm";
             // 
             // panelControl2
@@ -3663,7 +3666,7 @@
             this.xtraTabPage6.Controls.Add(this.gridControl5);
             this.xtraTabPage6.Controls.Add(this.panelControl3);
             this.xtraTabPage6.Name = "xtraTabPage6";
-            this.xtraTabPage6.Size = new System.Drawing.Size(1651, 725);
+            this.xtraTabPage6.Size = new System.Drawing.Size(1656, 728);
             this.xtraTabPage6.Text = "Tìm hoá đơn";
             // 
             // gridControl5

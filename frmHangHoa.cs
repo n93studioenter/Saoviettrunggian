@@ -26,6 +26,7 @@ using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using Windows.UI.Xaml.Controls;
 using static iText.IO.Image.Jpeg2000ImageData;
+using static SaovietTax.frmMain;
 
 namespace SaovietTax
 {
@@ -152,9 +153,11 @@ namespace SaovietTax
             foreach(var item in frmMain.lstvt.AsEnumerable())
             {
                var vt= frmMain.lstvtgoiy.Where(m => m.SoHieu == item.SoHieu).FirstOrDefault();
+
                 if(vt!=null)
                 {
-                    item.Percent = vt.Percent;
+                    var percent= frmMain.CompareProductNew(item.TenVattu.ToLower(), txtTenvattu.Text.ToLower());
+                    item.Percent = percent;
                 }
             }
             if (frmMain.lstvtgoiy != null && frmMain.lstvtgoiy.Count > 0)
@@ -179,8 +182,28 @@ namespace SaovietTax
             }
             else
                 gridControl1.DataSource = null;
-           
-                GridStripRow(gridView1);
+            DevExpress.XtraGrid.Views.Grid.GridView view = gridControl1.MainView as DevExpress.XtraGrid.Views.Grid.GridView;
+            for (int i = 0; i < view.RowCount; i++)
+            {
+                // Lấy giá trị của cột STT
+                if (view.GetRowCellValue(i, "SoHieu").ToString().ToLower() == txtSohieu.Text.ToLower())
+                {
+                    this.BeginInvoke((MethodInvoker)delegate
+                    {
+                        if (gridView1.RowCount > i) // Kiểm tra số lượng dòng
+                        {
+                            gridView1.FocusedRowHandle = i; // Đặt focus
+                            gridView1.MakeRowVisible(i); // Cuộn đến dòng
+                            gridView1.SelectRow(i); // Chọn dòng
+                            textEdit1.Text = gridView1.GetRowCellValue(i, "TenVattu").ToString();
+                            sohieuvt = gridView1.GetRowCellValue(i, "SoHieu").ToString();
+                            // txtSearch.Focus();
+                        }
+                    });
+                    return;
+                }
+            }
+            GridStripRow(gridView1);
         }
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -783,12 +806,12 @@ namespace SaovietTax
             DevExpress.XtraGrid.Views.Grid.GridView gridView = gridControl1.MainView as DevExpress.XtraGrid.Views.Grid.GridView;
             var hitInfo = gridView.CalcHitInfo(gridView.GridControl.PointToClient(MousePosition));
 
-
+            
             // Kiểm tra nếu nhấp vào một ô
             if (hitInfo.InRowCell)
             {
                 int columnIndex = hitInfo.Column.VisibleIndex; // Chỉ số cột
-
+                FileImportDetail rowData = gridView.GetRow(hitInfo.RowHandle) as FileImportDetail;
                 // Lấy giá trị trong ô đã nhấp
                 var hiddenValue = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["SoHieu"]);
                 var hiddenValue2 = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["DonVi"]);
@@ -796,6 +819,15 @@ namespace SaovietTax
                 frmMain.hiddenValue = hiddenValue.ToString();
                 frmMain.hiddenValue2 = hiddenValue2.ToString();
                 frmMain.hiddenValue3 = hiddenValue3.ToString();
+                var query = @"UPDATE tbimportdetail SET  SoHieu=?,DVT=?,Ten=? where ID=? ";
+                var parameters = new OleDbParameter[]
+                {
+                                        new OleDbParameter("?", hiddenValue),
+                                        new OleDbParameter("?",  Helpers.ConvertUnicodeToVni(hiddenValue2.ToString())) ,
+                                        new OleDbParameter("?", Helpers.ConvertUnicodeToVni(hiddenValue3.ToString())),
+                                        new OleDbParameter("?", frmMain.tbimportDetailID)
+                };
+                var rowsAffected = ExecuteQueryResult(query, parameters);
                 isChange = true;
                 //
                 if (Typeform == 2 || Typeform==1)

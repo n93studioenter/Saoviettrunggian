@@ -17208,6 +17208,22 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     }
                                     lstrowSohieu = new List<int>();
                                 }
+                                else
+                                {
+                                    FileImportDetail rowData = gridView.GetRow(currentRowHandle) as FileImportDetail;
+                                    if (rowData != null)
+                                    {
+                                        var query = @"UPDATE tbimportdetail SET  SoHieu=?,DVT=?,Ten=? where ID=? ";
+                                        var parameters = new OleDbParameter[]
+                                        {
+                                        new OleDbParameter("?", hiddenValue),
+                                        new OleDbParameter("?",  Helpers.ConvertUnicodeToVni(hiddenValue2)) ,
+                                        new OleDbParameter("?", Helpers.ConvertUnicodeToVni(hiddenValue3)),
+                                        new OleDbParameter("?", rowData.ID)
+                                        };
+                                        var rowsAffected = ExecuteQueryResult(query, parameters);
+                                    }
+                                }
                                // lstvt = await LoadDataVattuAsync();
                             }
 
@@ -17941,27 +17957,21 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 string currentText = e.DisplayText;
                 if (!string.IsNullOrEmpty(currentText))
                 {
-                    // Lấy giá trị phần trăm từ hàng hiện tại
                     var percentValue = grv.GetRowCellValue(e.RowHandle, "Percent") !=null? double.Parse(grv.GetRowCellValue(e.RowHandle, "Percent").ToString()):0;
 
-                    // Tạo văn bản mới với phần trăm
                     string newText = $"{currentText}";
 
-                    // Kiểm tra giá trị phần trăm để quyết định màu sắc và kiểu chữ
                     if (percentValue < 100)
                     {
-                        // Đặt màu đỏ và chữ đậm
                         e.Appearance.ForeColor = Color.Red;
                         e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Bold);
                     }
                     else
                     {
-                        // Đặt màu đen và chữ thường
                         e.Appearance.ForeColor = Color.Black;
                         e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Regular);
                     }
 
-                    // Vẽ văn bản mới
                     e.Graphics.DrawString(newText, e.Appearance.Font, new SolidBrush(e.Appearance.ForeColor), e.Bounds, StringFormat.GenericDefault);
 
                     e.Handled = true; // Ngăn không cho vẽ mặc định
@@ -19087,7 +19097,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                 }
             }
-            
+        
         }
 
         private void gridView2_MouseDown(object sender, MouseEventArgs e)
@@ -24277,20 +24287,14 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                         {
                                             findmpl= ffindmpl.Field<int>("MaSo");
                                         }
-                                        //if(dt.Field<int>("MaSo")!= findmpl)
-                                        //{
-                                        //    e.Appearance.ForeColor = Color.Blue; // Tô màu chữ đỏ
-                                        //    cellColors[(rowHandle, e.Column.FieldName)] = Color.Blue; // Lưu màu
-                                        //    return;
-                                        //}
-                                      
+                                        
                                     }
                                 }
                                
                             }
                         }
-                        e.Appearance.ForeColor = Color.Red; // Tô màu chữ đỏ
-                        cellColors[(rowHandle, e.Column.FieldName)] = Color.Red; // Lưu màu 
+                       // e.Appearance.ForeColor = Color.Red; // Tô màu chữ đỏ
+                      //  cellColors[(rowHandle, e.Column.FieldName)] = Color.Red; // Lưu màu 
                         return;
                     }
                      
@@ -24380,24 +24384,17 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 //}
                    
             }
-            if(e.Column.FieldName== "InvoiceType" && hienthimau)
+            if(e.Column.FieldName== "Ten" && hienthimau)
             {
-                //var cellValue = grid.GetRowCellValue(rowHandle, "InvoiceType").ToString();
-                //if (cellValue == "6")
-                //{
-                //    e.Appearance.BackColor = Color.Green; 
-                //    e.Appearance.ForeColor = Color.Green; 
-                //}
-                //if (cellValue == "8")
-                //{
-                //    e.Appearance.BackColor = Color.Yellow;
-                //    e.Appearance.ForeColor = Color.Yellow;
-                //}
-                //if (cellValue == "10")
-                //{
-                //    e.Appearance.BackColor = Color.Blue;
-                //    e.Appearance.ForeColor = Color.Blue;
-                //}
+                var cellValue = grid.GetRowCellValue(rowHandle, "ID");
+                if (cellValue == null)
+                    return;
+                var filteredRows = tbImportDt.AsEnumerable()
+           .Where(m => m.Field<string>("ParentId") == cellValue.ToString());
+                if (filteredRows.Any(m => double.Parse(m["Percent"].ToString()) < 100))
+                { 
+                    e.Appearance.ForeColor = Color.Red;
+                } 
             }
         }
         private void gridView3_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
@@ -31283,7 +31280,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         private Timer hoverTimer;
         public int hoverRowHandle = GridControl.InvalidRowHandle;
         public string hoverColumnName = "";
-        public bool isHHPopupOpen = false; 
+        public bool isHHPopupOpen = false;
+        public int tbimportDetailID = 0;
         frmHangHoa frmhh;
         private void HoverTimer_Tick(object sender, EventArgs e)
         {
@@ -31390,6 +31388,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 //  VatTu.Dongia = gv.GetRowCellValue(hoverRowHandle, "Dongia") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Dongia").ToString()) : 0 ;
                 // VatTu.SoLuong = gv.GetRowCellValue(hoverRowHandle, "Soluong") != null ? double.Parse(gv.GetRowCellValue(hoverRowHandle, "Soluong").ToString()) : 0 ;
                 frmhh.dtoVatTu = VatTu;
+                tbimportDetailID = int.Parse(gv.GetRowCellValue(hoverRowHandle, "ID")?.ToString());
                 frmhh.hoverRowHandle = hoverRowHandle;
                 frmhh.Typeform = 2;
                 frmhh.frmMain = this;
@@ -31644,6 +31643,33 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                     new OleDbParameter("?",comboBoxEdit7.Text),
      };
             int rowsAffected = ExecuteQueryResult(query, parameters);
+        }
+
+        private void gridView4_DoubleClick(object sender, EventArgs e)
+        {
+           
+        }
+        int focusrowhle;
+        private void ActiveEditor_DoubleClick2(object sender, EventArgs e)
+        { 
+            string cellValue = view4.ActiveEditor.EditValue?.ToString();
+            var getten = view4.GetRowCellValue(focusrowhle, "Ten")?.ToString();
+            string getcode = GenerateResultString(NormalizeVietnameseString(getten.Trim()));
+            view4.SetRowCellValue(focusrowhle, "SoHieu", getcode); 
+        }
+        GridView view4;
+        private void gridView4_ShownEditor(object sender, EventArgs e)
+        {
+             view4 = sender as GridView;
+            focusrowhle = view4.FocusedRowHandle;
+            var editor = view4.ActiveEditor;
+            if (editor != null)
+            {
+                var getten = view4.GetRowCellValue(focusrowhle, "Ten")?.ToString();
+                // Gỡ trước để tránh gắn nhiều lần
+                editor.DoubleClick -= ActiveEditor_DoubleClick2;
+                editor.DoubleClick += ActiveEditor_DoubleClick2;
+            }
         }
 
         //private void btnScanCmera_Click(object sender, EventArgs e)
