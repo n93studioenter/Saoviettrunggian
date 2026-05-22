@@ -8322,6 +8322,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
             _lookupByTenChinh = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _lookupByTenPhu = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _lookupByTenChinhs = new Dictionary<string, VatTuInfo>(StringComparer.OrdinalIgnoreCase);
+
             vatTuLookup = lstVattu
            .ToDictionary(v => v.SoHieu, v => (v.TenVattu, v.TenVattu2, v.DonVi,v.Dongia));
             foreach (var kvp in vatTuLookup)
@@ -8339,7 +8341,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 key1 = vietnameseProductMatcher.NormalizeVietnameseProduct(key1);
                 
                 if (!string.IsNullOrEmpty(key1))
-                    _lookupByTenChinh[key1] = sohieu; 
+                {
+                    _lookupByTenChinh[key1] = sohieu;
+                    _lookupByTenChinhs[key1] = new VatTuInfo
+                    {
+                        Ma = sohieu,
+                        DonViTinh = kvp.Value.DonVi
+                    };
+                }
 
                 if (!string.IsNullOrEmpty(kvp.Value.TenVattu2))
                 {
@@ -11853,7 +11862,13 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 return lookupHoaDonCT.Any(m => m.SoHD == SoHD && m.KyHieu==KyHieu && m.NLap == NLap && m.Type==type);
             return lookupHoaDonCT.Contains((Mst, SoHD, KyHieu, NLap, tpye));
         }
+        public class VatTuInfo
+        {
+            public string Ma { get; set; }
+            public string DonViTinh { get; set; }
+        }
         private Dictionary<string, string> _lookupByTenChinh;
+        private Dictionary<string, VatTuInfo> _lookupByTenChinhs;
         public Dictionary<string, string> _lookupByTenPhu;
         private string NormalizeForLookup(string s)
         {
@@ -11872,6 +11887,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         private void BuildFastLookup()
         {
             _lookupByTenChinh = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _lookupByTenChinhs = new Dictionary<string, VatTuInfo>();
+
             _lookupByTenPhu = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             vatTuLookup = lstvt
            .ToDictionary(v => v.SoHieu, v => (v.TenVattu, v.TenVattu2, v.DonVi,v.Dongia));
@@ -11885,7 +11902,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 VietnameseProductMatcher vietnameseProductMatcher = new VietnameseProductMatcher();
                 key1 = vietnameseProductMatcher.NormalizeVietnameseProduct(key1);
                 if (!string.IsNullOrEmpty(key1))
+                {
                     _lookupByTenChinh[key1] = sohieu;
+                    _lookupByTenChinhs[key1] = new VatTuInfo
+                    {
+                        Ma = sohieu,
+                        DonViTinh = kvp.Value.DonVi
+                    };
+                }
 
                 if (!string.IsNullOrEmpty(kvp.Value.TenVattu2))
                 {
@@ -16719,6 +16743,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             DTO.VatTu vatTu = new DTO.VatTu();
                             vatTu.SoHieu = cellValue.ToString();
                             vatTu.TenVattu = gridView.GetRowCellValue(currentRowHandle, "Ten").ToString();
+                            tbimportDetailID = int.Parse(gridView.GetRowCellValue(currentRowHandle, "ID")?.ToString());
                             TenVTMain = vatTu.TenVattu;
                             //Kiểm tra xem có phải so hiệu tự tạo 
                             string querydinhdanh = @"SELECT * FROM Vattu WHERE SoHieu = ?";
@@ -17047,7 +17072,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             DTO.VatTu vatTu = new DTO.VatTu();
                             vatTu.SoHieu = cellValue.ToString();
                             vatTu.TenVattu = gridView.GetRowCellValue(currentRowHandle, "Ten").ToString();
-                            TenVTMain= vatTu.TenVattu;
+                            tbimportDetailID = int.Parse(gridView.GetRowCellValue(currentRowHandle, "ID")?.ToString());
+                            TenVTMain = vatTu.TenVattu;
                             //Kiểm tra xem có phải so hiệu tự tạo 
                             string querydinhdanh = @"SELECT * FROM Vattu WHERE LCase(SoHieu) = LCase(?)";
                             var checkSH = ExecuteQuery(querydinhdanh, new OleDbParameter("?", vatTu.SoHieu.ToLower()));
@@ -20900,7 +20926,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 istestted = true;
             }
             if (string.IsNullOrEmpty(originalTen)) return;
-
+            bool thoadvt = true;
             // 1. Chuẩn hóa tên Input 1 lần duy nhất (có cache)
             VietnameseProductMatcher matcher = new VietnameseProductMatcher();
             string normalizedTen = matcher.NormalizeVietnameseProduct(originalTen);
@@ -20919,6 +20945,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     string dvt2 = findvts.Value.DonVi.ToLower();
                     if (dvt1 == dvt2)
                         return;
+                    else
+                        thoadvt = false;
                 }
             }
 
@@ -20939,7 +20967,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 {
                     // Lấy kết quả tốt nhất từ cache
                     var bestCached = cachedFuzzyResults.First();
-                    if (bestCached.Score >= 90)
+                    if (bestCached.Score >= 90 && thoadvt)
                     {
                         SetVatTuResult(tbImportDetail, key, bestCached.SoHieu, Math.Round((double)bestCached.Score));
                         return;
@@ -21001,7 +21029,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     }
 
                     //Sunlight
-                    if (tenhang.ToLower().Contains("sunlight") && tenhang.ToLower().Contains("750g") && key.ToLower().Contains("750g") && key.ToLower().Contains("sunlight"))
+                    if (tenhang.ToLower().Contains("sunlight")  && key.ToLower().Contains("sunlight"))
                     {
                         int test = 10;
                     }
@@ -21020,31 +21048,32 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         final = 99;
 
                     //Kiểm tra đơn vị tính
-                    if (final >= 95)
+                    if (final >= 90)
                     {
                         string dvt1 = Helpers.ConvertVniToUnicode(tbImportDetail.DVT).ToLower();
                         string dvt2 = item.Value.DonVi.ToLower();
                         if (dvt1 != dvt2)
                         {
-                            if (dvt1.ToLower() == "thùng" && (dvt2.ToLower().Contains("chai") || dvt2.ToLower().Contains("lon")))
-                            {
-                                var checkgia = Kiemtragia(item.Key, tbImportDetail.Dongia / 24);
-                                if (checkgia)
-                                {
-                                    tbImportDetail.Dongia = tbImportDetail.Dongia / 24;
-                                    if (dvt2.ToLower().Contains("chai"))
-                                        tbImportDetail.DVT = "Chai";
-                                    if (dvt2.ToLower().Contains("lon"))
-                                        tbImportDetail.DVT = "Lon";
-                                    tbImportDetail.Soluong = 24 * tbImportDetail.Soluong;
-                                }
-                                else
-                                {
-                                    final = 0;
-                                }
-                            }
-                            else
-                                final -= 1; // Giảm 10% điểm nếu đơn vị khác
+                            final -= 50;
+                            bestPercent -= 50;
+                            //if (dvt1.ToLower() == "thùng" && (dvt2.ToLower().Contains("chai") || dvt2.ToLower().Contains("lon")))
+                            //{
+                            //    var checkgia = Kiemtragia(item.Key, tbImportDetail.Dongia / 24);
+                            //    if (checkgia)
+                            //    {
+                            //        tbImportDetail.Dongia = tbImportDetail.Dongia / 24;
+                            //        if (dvt2.ToLower().Contains("chai"))
+                            //            tbImportDetail.DVT = "Chai";
+                            //        if (dvt2.ToLower().Contains("lon"))
+                            //            tbImportDetail.DVT = "Lon";
+                            //        tbImportDetail.Soluong = 24 * tbImportDetail.Soluong;
+                            //    }
+                            //    else
+                            //    {
+                            //        final = 0;
+                            //    }
+                            //} 
+
                         }
                     }
 
@@ -21076,7 +21105,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             }
 
             // === XỬ LÝ KẾT QUẢ (GIỮ NGUYÊN CODE CỦA BẠN) ===
-            if (bestSoHieu != null && bestPercent >= 90) // Chỉ lấy nếu độ chính xác > 85%
+            if (bestSoHieu != null && bestPercent >= 90 ) // Chỉ lấy nếu độ chính xác > 85%
             {
                 SetVatTuResult(tbImportDetail, key, bestSoHieu, Math.Round(bestPercent));
             }
@@ -23659,7 +23688,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         public void GetKNMXML(string nbmst, string khhdon, string shdon, string tokken,DateTime GetNLap,string path,string filename)
         {
             GDTClient.UpdateToken(tokken);
-            string url = $"https://hoadondientu.gdt.gov.vn/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon=1";
+            string url = $"https://hoadondientu.gdt.gov.vn/api/query/invoices/detail?nbmst={nbmst}&khhdon={khhdon}&shdon={shdon}&khmshdon=1";
              
             using (var client = new HttpClient())
             {
