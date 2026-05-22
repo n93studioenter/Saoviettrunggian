@@ -546,74 +546,85 @@ namespace SaovietTax
     Guid.NewGuid().ToString("N").Substring(0, 9);
                 string lineId =
     $"{Guid.NewGuid()}-{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}-{random}";
-                listOrderItem.Add(new JsonObject
+                try
                 {
-                    ["product_id"] = hhid,
-                    ["product_name"] = obj["data"]?["name"]?.ToString(),
-                    ["product_images"] = new JsonArray(),
-                    ["product_type"] = obj["data"]?["type"]?.ToString(),
-                    ["sku_id"] = obj["data"]?["list_sku"]?[0]?["id"]?.ToString(),
-                    ["sku_type"] = obj["data"]?["list_sku"]?[0]?["sku_type"]?.ToString(),
-                    ["sku_name"] = obj["data"]?["list_sku"]?[0]?["name"]?.ToString(),
-                    ["sku_code"] = obj["data"]?["list_sku"]?[0]?["sku_code"]?.ToString(),
-                    ["range_wholesale_price"] = new JsonArray(),
-                    ["product_normal_price"] = price1,
-                    ["product_selling_price"] = 0,
-                    ["price"] = price1,
-                    ["wholesale_price"] = 0,
-                    ["quantity"] = qty1,
-                    ["note"] = "",
-                    ["uom"] = obj["data"]?["uom"]?.ToString(),
-                    ["order_item_add_on"] = new JsonArray(),
-                    ["category_ids"] = new JsonArray(),
-                    ["order_item_rate"] = new JsonArray(),
-                    ["using_product_rate"] = true,
-                    ["current_product_rate"] = null,
-                    ["price_info"] = new JsonObject
+                    listOrderItem.Add(new JsonObject
                     {
+                        ["product_id"] = hhid,
+                        ["product_name"] = obj["data"]?["name"]?.ToString(),
+                        ["product_images"] = new JsonArray(),
+                        ["product_type"] = obj["data"]?["type"]?.ToString(),
+                        ["sku_id"] = obj["data"]?["list_sku"]?[0]?["id"]?.ToString(),
+                        ["sku_type"] = obj["data"]?["list_sku"]?[0]?["sku_type"]?.ToString(),
+                        ["sku_name"] = obj["data"]?["list_sku"]?[0]?["name"]?.ToString(),
+                        ["sku_code"] = obj["data"]?["list_sku"]?[0]?["sku_code"]?.ToString(),
+                        ["range_wholesale_price"] = new JsonArray(),
+                        ["product_normal_price"] = price1,
+                        ["product_selling_price"] = 0,
+                        ["price"] = price1,
+                        ["wholesale_price"] = 0,
                         ["quantity"] = qty1,
-                        ["init_discount_percent"] = 0,
-                        ["unit_price_initial"] = price1,
-                        ["unit_price_discount"] = 0,
-                        ["unit_price_before_tax"] = price1,
-                        ["unit_price_after_tax"] = price1,
-                        ["unit_tax_amount"] = 0,
-                        ["total_amount_initial"] = total1,
-                        ["total_amount_before_tax"] = total1,
-                        ["total_amount_after_tax"] = total1,
-                        ["total_amount_tax_reduce"] = 0,
-                        ["total_amount_after_tax_reduce"] = total1,
-                        ["tax_percent"] = -2,
-                        ["tax_amount_after_discount"] = 0,
-                        ["tax_amount"] = 0,
-                        ["item_discount"] = 0,
-                        ["discount_allocated_before_tax"] = 0,
-                        ["discount_allocated_tax"] = 0,
-                        ["discount_allocated_after_tax"] = 0,
-                        ["discount_allocated_tax_reduce"] = 0,
-                        ["discount_allocated_after_tax_reduce"] = 0,
-                        ["unit_refund_amount"] = price1,
-                        ["unit_tax_refund_amount"] = 0,
-                        ["customer_discount_allocated_before_tax"] = 0,
-                        ["customer_discount_allocated_tax"] = 0,
-                        ["customer_discount_allocated_after_tax"] = 0,
-                        ["customer_discount_allocated_tax_reduce"] = 0,
-                        ["customer_discount_allocated_after_tax_reduce"] = 0,
-                        ["order_discount_allocated_before_tax"] = 0,
-                        ["order_discount_allocated_tax"] = 0,
-                        ["order_discount_allocated_after_tax"] = 0,
-                        ["order_discount_allocated_after_tax_reduce"] = 0,
-                        ["order_discount_allocated_tax_reduce"] = 0,
-                        ["tax_reduce_percent"] = 0
-                    },
-                    ["historical_cost"] = int.Parse(obj["data"]?["list_sku"]?[0]?["historical_cost"]?.ToString()),
-                    ["price_non_discount"] = price1,
-                    ["product_version"] = obj["data"]?["version"]?.Value<int>() ?? 0,
-                    ["total_amount"] = total1,
-                    ["show_edit_note"] = false,
-                    ["product_rate"] = new JsonArray(),
-                    ["lineId"] = lineId
-                });
+                        ["note"] = "",
+                        ["uom"] = obj["data"]?["uom"]?.ToString(),
+                        ["order_item_add_on"] = new JsonArray(),
+                        ["category_ids"] = new JsonArray(),
+                        ["order_item_rate"] = new JsonArray(),
+                        ["using_product_rate"] = true,
+                        ["current_product_rate"] = null,
+                        ["price_info"] = new JsonObject
+                        {
+                            ["quantity"] = qty1,
+                            ["init_discount_percent"] = 0,
+                            ["unit_price_initial"] = price1,
+                            ["unit_price_discount"] = 0,
+                            ["unit_price_before_tax"] = price1,
+                            ["unit_price_after_tax"] = price1,
+                            ["unit_tax_amount"] = 0,
+                            ["total_amount_initial"] = total1,
+                            ["total_amount_before_tax"] = total1,
+                            ["total_amount_after_tax"] = total1,
+                            ["total_amount_tax_reduce"] = 0,
+                            ["total_amount_after_tax_reduce"] = total1,
+                            ["tax_percent"] = -2,
+                            ["tax_amount_after_discount"] = 0,
+                            ["tax_amount"] = 0,
+                            ["item_discount"] = 0,
+                            ["discount_allocated_before_tax"] = 0,
+                            ["discount_allocated_tax"] = 0,
+                            ["discount_allocated_after_tax"] = 0,
+                            ["discount_allocated_tax_reduce"] = 0,
+                            ["discount_allocated_after_tax_reduce"] = 0,
+                            ["unit_refund_amount"] = price1,
+                            ["unit_tax_refund_amount"] = 0,
+                            ["customer_discount_allocated_before_tax"] = 0,
+                            ["customer_discount_allocated_tax"] = 0,
+                            ["customer_discount_allocated_after_tax"] = 0,
+                            ["customer_discount_allocated_tax_reduce"] = 0,
+                            ["customer_discount_allocated_after_tax_reduce"] = 0,
+                            ["order_discount_allocated_before_tax"] = 0,
+                            ["order_discount_allocated_tax"] = 0,
+                            ["order_discount_allocated_after_tax"] = 0,
+                            ["order_discount_allocated_after_tax_reduce"] = 0,
+                            ["order_discount_allocated_tax_reduce"] = 0,
+                            ["tax_reduce_percent"] = 0
+                        },
+                        ["historical_cost"] = int.TryParse(
+    obj["data"]?["list_sku"]?[0]?["historical_cost"]?.ToString(),
+    out int historicalCost
+) ? historicalCost : 0,
+                        ["price_non_discount"] = price1,
+                        ["product_version"] = obj["data"]?["version"]?.Value<int>() ?? 0,
+                        ["total_amount"] = total1,
+                        ["show_edit_note"] = false,
+                        ["product_rate"] = new JsonArray(),
+                        ["lineId"] = lineId
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error at Add OrderItem: {ex}");
+                    // Hoặc log vào file, hoặc breakpoint ở đây
+                }
             }
             
             var calculateId = Guid.NewGuid().ToString();
@@ -1335,18 +1346,27 @@ namespace SaovietTax
                                 progressPanel1.Caption = "Đã cập nhật trạng thái hoá đơn...";
 
 
-                                string query = @"UPDATE HoaDon  
-                             TendoHDState = ?
-                             WHERE MaSo = ?";
-
-                                var parameters = new OleDbParameter[]
+                                try
                                 {
-                new OleDbParameter("?", "complete"), 
-                new OleDbParameter("?", dtHoaDon.Rows[0]["HOADON.MaSo"]?.ToString() ?? "")
-                                };
 
-                                int rowsAffected = ExecuteQueryResult(query, parameters);
 
+                                    string query = @"UPDATE HoaDon  
+                            SET  TendoHDState = ?
+                             WHERE TendoHDid = ?";
+
+                                    var parameters = new OleDbParameter[]
+                                    {
+                new OleDbParameter("?", "complete"),
+                new OleDbParameter("?",getsplit[1])
+                                    };
+
+                                    int rowsAffected = ExecuteQueryResult(query, parameters);
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("Lỗi khi cập nhật trạng thái hoá đơn: " + ex.Message);
+                                }   
                                 this.Close();   
                             }
                             else

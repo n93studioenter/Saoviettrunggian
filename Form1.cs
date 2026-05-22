@@ -31671,7 +31671,27 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 editor.DoubleClick += ActiveEditor_DoubleClick2;
             }
         }
-
+        GridView view2;
+        private void gridView2_ShownEditor(object sender, EventArgs e)
+        {
+            view2 = sender as GridView;
+            focusrowhle = view2.FocusedRowHandle;
+            var editor = view2.ActiveEditor;
+            if (editor != null)
+            {
+                var getten = view2.GetRowCellValue(focusrowhle, "Ten")?.ToString();
+                // Gỡ trước để tránh gắn nhiều lần
+                editor.DoubleClick -= ActiveEditor_DoubleClick3;
+                editor.DoubleClick += ActiveEditor_DoubleClick3;
+            }
+        }
+        private void ActiveEditor_DoubleClick3(object sender, EventArgs e)
+        {
+            string cellValue = view2.ActiveEditor.EditValue?.ToString();
+            var getten = view2.GetRowCellValue(focusrowhle, "Ten")?.ToString();
+            string getcode = GenerateResultString(NormalizeVietnameseString(getten.Trim()));
+            view2.SetRowCellValue(focusrowhle, "SoHieu", getcode);
+        }
         //private void btnScanCmera_Click(object sender, EventArgs e)
         //{
         //    frmCamera camera = new frmCamera();
