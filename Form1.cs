@@ -13028,12 +13028,13 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 return true;
             }
         }
-        private bool hddvcoma { get; set; }
-        private bool hddvknm { get; set; }    
-        private bool hddvmtt { get; set; }
+        private bool hddvcoma { get; set; } = true;
+        private bool hddvknm { get; set; } = true;
+        private bool hddvmtt { get; set; } = true;
         private void Xulysaudangnhap(DateTime fromdate, DateTime todate)
         {
-            hddvcoma = false;
+            //hddvcoma = false;
+            //hddvknm=false;
             Sohoadoncuathan = 0;
             //if (DoTask > Endtask)
             //{
@@ -13159,7 +13160,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                         return null; // Trả về null nếu không tìm thấy
                                     }
                                 });
-                                var cellmst = row.FindElement(By.XPath("./td[2]/span")).Text; // C25TYY
+                                    // scroll tới row
+                                    ((IJavaScriptExecutor)Driver).ExecuteScript(@"
+    arguments[0].scrollIntoView({block:'center'});
+", row);
+                                    var cellmst = row.FindElement(By.XPath("./td[2]/span")).Text; // C25TYY
                                 var cellC25TYY = row.FindElement(By.XPath("./td[4]/span")).Text; // C25TYY
                                 var cell22252 = row.FindElement(By.XPath("./td[5]")).Text; // 22252
                                                                                            //Kiểm tra xem  trong folder đã có chưa
@@ -13489,14 +13494,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
             // Lấy phần tử gốc
             XmlNode root = xmlDoc.DocumentElement;
-
+            
             // Lấy phần tử <NDHDon>
             XmlNode ndhDonNode = root.SelectSingleNode("//NDHDon");
             XmlNode nTTChungNode = root.SelectSingleNode("//TTChung");
             XmlNode nBanNode = nTTChungNode.SelectSingleNode("Ten");
             XmlNode NgaylapNode = root.SelectSingleNode("//NLap");
             XmlNode NguoiBannode = root.SelectSingleNode("//NBan"); 
-            string SHDon = nTTChungNode.SelectSingleNode("SHDon")?.InnerText;
+            string SHDon = Helpers.RemoveLeadingZeros(nTTChungNode.SelectSingleNode("SHDon")?.InnerText); 
             string KHHDon = nTTChungNode.SelectSingleNode("KHHDon")?.InnerText;
             string mst = "";
             if(path.Contains("HDVao"))
@@ -13709,8 +13714,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             // Kiểm tra nếu phần tử được tìm thấy và nhấp vào nó
             if (listItem != null)
             {
-                listItem.Click();
-                Console.WriteLine("Đã nhấp vào phần tử.");
+                // Cuộn đến phần tử
+                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView(true);", listItem);
+                Thread.Sleep(300);
+
+                // Click bằng JavaScript để tránh lỗi element not interactable
+                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", listItem);
+
+                Console.WriteLine("Cục Thuế đã nhận hóa đơn có mã khởi tạo từ máy tính tiền");
             }
             else
             {
@@ -13731,32 +13742,119 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
             waitLoading(wait);
 
-            int currentRow = 1;
+
+            divElement = wait.Until(d => d.FindElements(By.XPath("//div[@class='ant-select-selection-selected-value' and @title='15']")));
+            int index = 0;
+            if (divElement.Count == 2)
+            {
+                index = 1;
+            }
+            else
+            {
+                index = 0;
+            }
+            // Nếu tìm thấy ít nhất một phần tử
+            if(hddvcoma==false && hddvknm == false)
+            {
+                 if (divElement[index] != null)
+            {
+                // Thực hiện cuộn đến phần tử với thời gian
+                var jsExecutor = (IJavaScriptExecutor)Driver;
+                int scrollDuration = 1000; // Thời gian cuộn (ms)
+                int scrollStep = 20; // Bước cuộn (px)
+
+                for (int i = 0; i < scrollDuration; i += scrollStep)
+                {
+                    jsExecutor.ExecuteScript("window.scrollBy(0, arguments[0]);", scrollStep);
+                    Thread.Sleep(scrollStep); // Thời gian nghỉ giữa các lần cuộn
+                }
+
+                // Cuộn đến phần tử cuối cùng
+                jsExecutor.ExecuteScript("arguments[0].scrollIntoView(true);", divElement[index]);
+            }
+            else
+            {
+                Console.WriteLine("Không tìm thấy phần tử");
+            }
+            // Kiểm tra nếu phần tử được tìm thấy và nhấp vào nó
+            if (divElement != null && divElement[index].Displayed)
+            {
+                divElement[index].Click();
+                Console.WriteLine("Đã nhấp vào phần tử.");
+            }
+            Thread.Sleep(500);
+            var dropdownMenu = wait.Until(d => d.FindElement(By.ClassName("ant-select-dropdown-menu")));
+            Thread.Sleep(500);
+            // Tìm phần tử <li> có nội dung là "50" và nhấp vào nó
+            var option50 = wait.Until(d =>
+            {
+                return d.FindElements(By.XPath("//li[contains(@class,'ant-select-dropdown-menu-item')]"))
+                    .FirstOrDefault(x =>
+                        x.Displayed &&
+                        x.Text.Trim() == "50");
+            });
+
+            ((IJavaScriptExecutor)Driver)
+                .ExecuteScript("arguments[0].click();", option50);
+            }
+            
             bool hasMoreRows = true;
             List<string> lstHas = new List<string>();
             int hasdata = 0;
             bool isnext = true;
+            currentRow -= 1;
             //while ((currentRow) <= rowCount)
             while (isnext)
             {
                 try
                 {
-                    wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(1));
+                    wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
+
                     // Tìm dòng hiện tại
                     var row = wait.Until(d =>
                     {
                         try
                         {
-                            return d.FindElement(By.XPath($"(//tbody[@class='ant-table-tbody']/tr[contains(@class,'ant-table-row')])[{currentRow}]"));
+                            return d.FindElement(By.XPath(
+                                $"(//tbody[contains(@class,'ant-table-tbody')]/tr[contains(@class,'ant-table-row')])[{currentRow}]"));
                         }
-                        catch (NoSuchElementException)
+                        catch
                         {
-
-                            return null; // Trả về null nếu không tìm thấy
+                            return null;
                         }
                     });
-                    var cellC25TYY = row.FindElement(By.XPath("./td[3]/span")).Text; // C25TYY
-                    var cell22252 = row.FindElement(By.XPath("./td[4]")).Text; // 22252
+
+                    if (row == null)
+                    {
+                        hasMoreRows = false;
+                        break;
+                    }
+
+// scroll tới row
+((IJavaScriptExecutor)Driver).ExecuteScript(@"
+    arguments[0].scrollIntoView({block:'center'});
+", row);
+
+                    Thread.Sleep(500);
+                    var cellC25TYY = row.FindElement(By.XPath("./td[4]/span")).Text; // C25TYY
+                    var cell22252 = row.FindElement(By.XPath("./td[5]")).Text; // 22252
+                    var text = row.FindElement(By.XPath("./td[7]")).Text;
+                    if(cell22252== "5619")
+                    {
+                        int a = 10;
+                    }
+                    var match = Regex.Match(text, @"MST người bán:\s*([\d-]+)");
+
+                    string mst = match.Success ? match.Groups[1].Value : "";
+
+                    string pathkt = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + $"\\{mst}" + "_" + cell22252 + "_" + cellC25TYY + ".xml";
+                    if (File.Exists(pathkt))
+                    {
+                        currentRow++;
+                        hasdata++;
+                        Thread.Sleep(200);
+                        continue;
+                    }
 
                     // Click vào dòng
                     while (TryClick(row)) ;
@@ -13767,15 +13865,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(20));
                     waitLoading(wait);
                     string fp = "";
-                    if (currentRow == 15)
-                    {
-                        int aas = 10;
-                    }
+
                     if (currentRow == 1)
-                        fp = savedPath + "\\HDVao\\" + "invoice.zip";
+                        fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
                     else
-                        // fp = savedPath +"\\HDVao\\" + "invoice (" + (currentRow - 1 - hasdata) + ").zip";
-                        fp = savedPath + "\\HDVao\\" + "invoice.zip";
+                        // fp = savedPath + "\\HDVao\\" + "invoice (" + (currentRow - 1 - hasdata) + ").zip";
+                        fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
                     wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(3));
                     wait.Until(d => File.Exists(fp));
                     lstHas.Add(fp);
@@ -13837,232 +13932,248 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             }
 
         }
+        int currentRow = 1;
         private void Cucthuekhngnhanma(WebDriverWait wait, DateTime fromdate, DateTime todate)
         {
-            var divElement = wait.Until(d => d.FindElements(By.Id("ttxly")));
-            if (divElement[1] != null)
+            if (hddvknm)
             {
-                var jsExecutor = (IJavaScriptExecutor)Driver;
-                int scrollDuration = 2000; // Thời gian cuộn (ms)
-                int scrollStep = 50; // Bước cuộn (px)
-
-                for (int i = 0; i < scrollDuration; i += scrollStep)
+                var divElement = wait.Until(d => d.FindElements(By.Id("ttxly")));
+                if (divElement[1] != null)
                 {
-                    jsExecutor.ExecuteScript("window.scrollBy(0, arguments[0]);", scrollStep);
-                    Thread.Sleep(scrollStep); // Thời gian nghỉ giữa các lần cuộn
-                }
+                    var jsExecutor = (IJavaScriptExecutor)Driver;
+                    int scrollDuration = 2000; // Thời gian cuộn (ms)
+                    int scrollStep = 50; // Bước cuộn (px)
 
-                // Cuộn đến phần tử cuối cùng
-                jsExecutor.ExecuteScript("arguments[0].scrollIntoView(true);", divElement[1]);
-            }
-            Thread.Sleep(500); // Hoặc sử dụng WebDriverWait để chờ điều kiện phù hợp
-            // Nhấp vào phần tử đó
-
-            divElement[1].Click();
-            wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(100));
-            var listItem = wait.Until(d => d.FindElements(By.XPath("//li[@role='option' and contains(@class, 'ant-select-dropdown-menu-item')]"))
-    .FirstOrDefault(e => e.Text.Trim() == "Cục Thuế đã nhận không mã"));
-
-            if (listItem != null)
-            {
-                // Cuộn đến phần tử
-                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView(true);", listItem);
-                Thread.Sleep(300);
-
-                // Click bằng JavaScript để tránh lỗi element not interactable
-                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", listItem);
-
-                Console.WriteLine("Đã click chọn: Cục Thuế đã nhận không mã");
-            }
-            else
-            {
-                Console.WriteLine("Không tìm thấy phần tử với văn bản cụ thể.");
-            }
-            wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(30));
-            var tabElement = wait.Until(d => d.FindElements(By.XPath("//div[@role='tab']"))
-              .FirstOrDefault(e => e.Text.Trim() == "Hóa đơn điện tử"));
-            if (tabElement != null)
-            {
-                tabElement.Click();
-                Console.WriteLine("Đã nhấp vào tab.");
-            }
-            var button = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn') and .//span[text()='Tìm kiếm']])[2]")));
-
-            while (TryClick(button)) ;
-            // 
-            waitLoading(wait);
-            wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(200));
-
-
-             divElement = wait.Until(d => d.FindElements(By.XPath("//div[@class='ant-select-selection-selected-value' and @title='15']")));
-            // Nếu tìm thấy ít nhất một phần tử
-            if (divElement[1] != null)
-            {
-                // Thực hiện cuộn đến phần tử với thời gian
-                var jsExecutor = (IJavaScriptExecutor)Driver;
-                int scrollDuration = 1000; // Thời gian cuộn (ms)
-                int scrollStep = 20; // Bước cuộn (px)
-
-                for (int i = 0; i < scrollDuration; i += scrollStep)
-                {
-                    jsExecutor.ExecuteScript("window.scrollBy(0, arguments[0]);", scrollStep);
-                    Thread.Sleep(scrollStep); // Thời gian nghỉ giữa các lần cuộn
-                }
-
-                // Cuộn đến phần tử cuối cùng
-                jsExecutor.ExecuteScript("arguments[0].scrollIntoView(true);", divElement[1]);
-            }
-            else
-            {
-                Console.WriteLine("Không tìm thấy phần tử");
-            }
-            // Kiểm tra nếu phần tử được tìm thấy và nhấp vào nó
-            if (divElement != null && divElement[1].Displayed)
-            {
-                divElement[1].Click();
-                Console.WriteLine("Đã nhấp vào phần tử.");
-            }
-            Thread.Sleep(500);
-            var dropdownMenu = wait.Until(d => d.FindElement(By.ClassName("ant-select-dropdown-menu")));
-            Thread.Sleep(500);
-            // Tìm phần tử <li> có nội dung là "50" và nhấp vào nó
-            var option50 = wait.Until(d =>
-            {
-                return d.FindElements(By.XPath("//li[contains(@class,'ant-select-dropdown-menu-item')]"))
-                    .FirstOrDefault(x =>
-                        x.Displayed &&
-                        x.Text.Trim() == "50");
-            });
-
-            ((IJavaScriptExecutor)Driver)
-                .ExecuteScript("arguments[0].click();", option50);
-           // option50.Click();
-          //  while (TryClick(option50[0])) ;
-
-            waitLoading(wait);
-            Thread.Sleep(1000);
-            bool isPhantrang = false;
-            try
-            {
-                while (isPhantrang == false)
-                {
-                    int currentRow = 1;
-                    bool hasMoreRows = true;
-                    List<string> lstHas = new List<string>();
-                    int hasdata = 0;
-                    bool isnext = true;
-                    while (isnext)
+                    for (int i = 0; i < scrollDuration; i += scrollStep)
                     {
-                        try
+                        jsExecutor.ExecuteScript("window.scrollBy(0, arguments[0]);", scrollStep);
+                        Thread.Sleep(scrollStep); // Thời gian nghỉ giữa các lần cuộn
+                    }
+
+                    // Cuộn đến phần tử cuối cùng
+                    jsExecutor.ExecuteScript("arguments[0].scrollIntoView(true);", divElement[1]);
+                }
+                Thread.Sleep(500); // Hoặc sử dụng WebDriverWait để chờ điều kiện phù hợp
+                                   // Nhấp vào phần tử đó
+
+                divElement[1].Click();
+                wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(100));
+                var listItem = wait.Until(d => d.FindElements(By.XPath("//li[@role='option' and contains(@class, 'ant-select-dropdown-menu-item')]"))
+        .FirstOrDefault(e => e.Text.Trim() == "Cục Thuế đã nhận không mã"));
+
+                if (listItem != null)
+                {
+                    // Cuộn đến phần tử
+                    ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView(true);", listItem);
+                    Thread.Sleep(300);
+
+                    // Click bằng JavaScript để tránh lỗi element not interactable
+                    ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", listItem);
+
+                    Console.WriteLine("Đã click chọn: Cục Thuế đã nhận không mã");
+                }
+                else
+                {
+                    Console.WriteLine("Không tìm thấy phần tử với văn bản cụ thể.");
+                }
+                wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(30));
+                var tabElement = wait.Until(d => d.FindElements(By.XPath("//div[@role='tab']"))
+                  .FirstOrDefault(e => e.Text.Trim() == "Hóa đơn điện tử"));
+                if (tabElement != null)
+                {
+                    tabElement.Click();
+                    Console.WriteLine("Đã nhấp vào tab.");
+                }
+                var button = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn') and .//span[text()='Tìm kiếm']])[2]")));
+
+                while (TryClick(button)) ;
+                // 
+                waitLoading(wait);
+                wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(200));
+
+                int index = 0;
+                if (hddvcoma)
+                    index = 0;
+                divElement = wait.Until(d => d.FindElements(By.XPath("//div[@class='ant-select-selection-selected-value' and @title='15']"))); 
+                // Nếu tìm thấy ít nhất một phần tử
+                if (divElement[index] != null)
+                {
+                    // Thực hiện cuộn đến phần tử với thời gian
+                    var jsExecutor = (IJavaScriptExecutor)Driver;
+                    int scrollDuration = 1000; // Thời gian cuộn (ms)
+                    int scrollStep = 20; // Bước cuộn (px)
+
+                    for (int i = 0; i < scrollDuration; i += scrollStep)
+                    {
+                        jsExecutor.ExecuteScript("window.scrollBy(0, arguments[0]);", scrollStep);
+                        Thread.Sleep(scrollStep); // Thời gian nghỉ giữa các lần cuộn
+                    }
+
+                    // Cuộn đến phần tử cuối cùng
+                    jsExecutor.ExecuteScript("arguments[0].scrollIntoView(true);", divElement[index]);
+                }
+                else
+                {
+                    Console.WriteLine("Không tìm thấy phần tử");
+                }
+                if (hddvcoma == false)
+                {
+                    if (divElement != null && divElement[index].Displayed)
+                    {
+                        divElement[index].Click();
+                        Console.WriteLine("Đã nhấp vào phần tử.");
+                    }
+                    Thread.Sleep(500);
+                    var dropdownMenu = wait.Until(d => d.FindElement(By.ClassName("ant-select-dropdown-menu")));
+                    Thread.Sleep(500);
+                    // Tìm phần tử <li> có nội dung là "50" và nhấp vào nó
+                    var option50 = wait.Until(d =>
+                    {
+                        return d.FindElements(By.XPath("//li[contains(@class,'ant-select-dropdown-menu-item')]"))
+                            .FirstOrDefault(x =>
+                                x.Displayed &&
+                                x.Text.Trim() == "50");
+                    });
+
+                    ((IJavaScriptExecutor)Driver)
+                        .ExecuteScript("arguments[0].click();", option50);
+                    // option50.Click();
+                    //  while (TryClick(option50[0])) ;
+
+                    waitLoading(wait);
+
+                }
+                // Kiểm tra nếu phần tử được tìm thấy và nhấp vào nó
+        
+                Thread.Sleep(1000);
+                bool isPhantrang = false;
+                try
+                {
+                    while (isPhantrang == false)
+                    {
+                        
+                        bool hasMoreRows = true;
+                        List<string> lstHas = new List<string>();
+                        int hasdata = 0;
+                        bool isnext = true;
+                        while (isnext)
                         {
-                            // wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-                            // var checkerror= wait.Until(d=>d.FindElement(By.ClassName("ant-notification-notice-message")));
-                            wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
-                            // Tìm dòng hiện tại
-                            var row = wait.Until(d =>
-                            {
-                                try
-                                {
-                                    return d.FindElement(By.XPath($"(//tbody[@class='ant-table-tbody']/tr[contains(@class,'ant-table-row')])[{currentRow}]"));
-                                }
-                                catch (NoSuchElementException)
-                                {
-
-                                    return null; // Trả về null nếu không tìm thấy
-                                }
-                            });
-                            var cellC25TYY = row.FindElement(By.XPath("./td[4]/span")).Text; // C25TYY
-                            var cell22252 = row.FindElement(By.XPath("./td[5]")).Text; // 22252
-                            var text = row.FindElement(By.XPath("./td[7]")).Text;
-
-                            var match = Regex.Match(text, @"MST người bán:\s*([\d-]+)");
-
-                            string mst = match.Success ? match.Groups[1].Value : "";
-                            //Kiểm tra xem  trong folder đã có chưa
-                            string pathkt = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + $"\\{mst}" + "_" + cell22252 + "_" + cellC25TYY + ".xml";
-                            if (File.Exists(pathkt))
-                            {
-                                currentRow++;
-                                hasdata++;
-                                Thread.Sleep(200);
-                                continue;
-                            }
-                            cell22252 = Helpers.InsertZero(cell22252);
-                           
-                            if (File.Exists(pathkt))
-                            {
-                                currentRow++;
-                                hasdata++;
-                                Thread.Sleep(200);
-                                continue;
-                            }
-                            // var a=
-                            string query = "SELECT * FROM HoaDon WHERE KyHieu = ? AND SoHD LIKE ?";
-
-                            // Click vào dòng
-                            while (TryClick(row)) ;
-                            wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(15));
-                            Thread.Sleep(200);
-                            button = wait.Until(d =>
-                             d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[19]")));
-                            while (TryClick(button)) ;
-                            // Xử lý sau khi click (đợi tải, đóng popup,...)
-                            wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(20));
-                            waitLoading(wait);
-                            string fp = "";
-                            if (currentRow == 1)
-                                fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
-                            else
-                                // fp = savedPath + "\\HDVao\\" + "invoice (" + (currentRow - 1 - hasdata) + ").zip";
-                                fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
                             try
                             {
-                                wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(2));
-                                wait.Until(d => File.Exists(fp));
-                                lstHas.Add(fp);
-                                GiaiNenhoadon(1);
+                                // wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
+                                // var checkerror= wait.Until(d=>d.FindElement(By.ClassName("ant-notification-notice-message")));
+                                wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
+                                // Tìm dòng hiện tại
+                                var row = wait.Until(d =>
+                                {
+                                    try
+                                    {
+                                        return d.FindElement(By.XPath($"(//tbody[@class='ant-table-tbody']/tr[contains(@class,'ant-table-row')])[{currentRow}]"));
+                                    }
+                                    catch (NoSuchElementException)
+                                    {
+
+                                        return null; // Trả về null nếu không tìm thấy
+                                    }
+                                });
+                                // scroll tới row
+                                ((IJavaScriptExecutor)Driver).ExecuteScript(@"
+    arguments[0].scrollIntoView({block:'center'});
+", row);
+                                var cellC25TYY = row.FindElement(By.XPath("./td[4]/span")).Text; // C25TYY
+                                var cell22252 = row.FindElement(By.XPath("./td[5]")).Text; // 22252
+                                var text = row.FindElement(By.XPath("./td[7]")).Text;
+
+                                var match = Regex.Match(text, @"MST người bán:\s*([\d-]+)");
+
+                                string mst = match.Success ? match.Groups[1].Value : "";
+                                //Kiểm tra xem  trong folder đã có chưa
+                                string pathkt = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + $"\\{mst}" + "_" + cell22252 + "_" + cellC25TYY + ".xml";
+                                if (File.Exists(pathkt))
+                                {
+                                    currentRow++;
+                                    hasdata++;
+                                    Thread.Sleep(200);
+                                    continue;
+                                }
+                                cell22252 = Helpers.InsertZero(cell22252);
+
+                                if (File.Exists(pathkt))
+                                {
+                                    currentRow++;
+                                    hasdata++;
+                                    Thread.Sleep(200);
+                                    continue;
+                                }
+                                // var a=
+                                string query = "SELECT * FROM HoaDon WHERE KyHieu = ? AND SoHD LIKE ?";
+
+                                // Click vào dòng
+                                while (TryClick(row)) ;
+                                wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(15));
+                                Thread.Sleep(200);
+                                button = wait.Until(d =>
+                                 d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[19]")));
+                                while (TryClick(button)) ;
+                                // Xử lý sau khi click (đợi tải, đóng popup,...)
+                                wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(20));
+                                waitLoading(wait);
+                                string fp = "";
+                                if (currentRow == 1)
+                                    fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
+                                else
+                                    // fp = savedPath + "\\HDVao\\" + "invoice (" + (currentRow - 1 - hasdata) + ").zip";
+                                    fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
+                                try
+                                {
+                                    wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(2));
+                                    wait.Until(d => File.Exists(fp));
+                                    lstHas.Add(fp);
+                                    GiaiNenhoadon(1);
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
+                                currentRow++; // Chuyển sang dòng tiếp theo
+                            }
+                            catch (NoSuchElementException)
+                            {
+                                hasMoreRows = false; // Không còn dòng nào nữa
+
+
+                                Console.WriteLine($"Đã xử lý hết {currentRow - 1} dòng");
                             }
                             catch (Exception ex)
                             {
-
+                                Console.WriteLine($"Lỗi khi xử lý dòng {currentRow}: {ex.Message}");
+                                isnext = false;
+                                currentRow++; // Vẫn tiếp tục với dòng tiếp theo
                             }
-                            currentRow++; // Chuyển sang dòng tiếp theo
                         }
-                        catch (NoSuchElementException)
+
+                        //Xử lý phần trang 
+                        var buttonElement = Driver.FindElements(By.ClassName("ant-btn-primary"));
+
+                        // Kiểm tra xem button có bị vô hiệu hóa không
+                        bool isDisabled = !buttonElement[7].Enabled;
+                        if (isDisabled == false)
                         {
-                            hasMoreRows = false; // Không còn dòng nào nữa
-
-
-                            Console.WriteLine($"Đã xử lý hết {currentRow - 1} dòng");
+                            while (TryClick(buttonElement[7])) ;
+                            Thread.Sleep(1000);
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            Console.WriteLine($"Lỗi khi xử lý dòng {currentRow}: {ex.Message}");
-                            isnext = false;
-                            currentRow++; // Vẫn tiếp tục với dòng tiếp theo
+                            isPhantrang = true;
                         }
-                    }
-
-                    //Xử lý phần trang 
-                    var buttonElement = Driver.FindElements(By.ClassName("ant-btn-primary"));
-
-                    // Kiểm tra xem button có bị vô hiệu hóa không
-                    bool isDisabled = !buttonElement[7].Enabled;
-                    if (isDisabled == false)
-                    {
-                        while (TryClick(buttonElement[7])) ;
-                        Thread.Sleep(1000);
-                    }
-                    else
-                    {
-                        isPhantrang = true;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
 
+                }
             }
+          
             Xulymaytinhtien(wait);
 
         }
@@ -31756,6 +31867,12 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             string getcode = GenerateResultString(NormalizeVietnameseString(getten.Trim()));
             view2.SetRowCellValue(focusrowhle, "SoHieu", getcode);
         }
+
+        private void gridControl1_Click(object sender, EventArgs e)
+        {
+
+        }
+
         //private void btnScanCmera_Click(object sender, EventArgs e)
         //{
         //    frmCamera camera = new frmCamera();
