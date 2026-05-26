@@ -12662,9 +12662,9 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 //
                 string downloadPath = "";
                 if (type == 1)
-                    downloadPath = savedPath + "\\HDVao";
+                    downloadPath = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month;
                 if (type == 2)
-                    downloadPath = savedPath + "\\HDRa";
+                    downloadPath = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDRa\\" + dtTungay.DateTime.Month;
                 options.AddUserProfilePreference("download.default_directory", downloadPath);
                 options.AddUserProfilePreference("download.prompt_for_download", false);
                 options.AddUserProfilePreference("disable-popup-blocking", "true");
@@ -12783,7 +12783,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             monthItem.Click();
 
             var elements = Driver.FindElements(By.CssSelector("div.ant-calendar-date"));
-            string xpath = $"//td[@role='gridcell' and @title='{fd.Day} tháng {fd.Month} năm 2025']";
+            string xpath = $"//td[@role='gridcell' and @title='{fd.Day} tháng {fd.Month} năm {DateTime.Now.Year}']";
             var tdElement = Driver.FindElement(By.XPath(xpath));
 
             // Cuộn tới phần tử
@@ -12810,9 +12810,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             elements = Driver.FindElements(By.CssSelector("div.ant-calendar-date"));
             int day = td.Day;
             int month = td.Month;
-
+            if (month == DateTime.Now.Month)
+            {
+                day = DateTime.Now.Day;
+            }
             // Tạo XPath động dựa trên ngày và tháng
-            xpath = $"//td[@role='gridcell' and @title='{day} tháng {month} năm 2025']";
+            xpath = $"//td[@role='gridcell' and @title='{day} tháng {month} năm {DateTime.Now.Year}']";
             tdElement = Driver.FindElement(By.XPath(xpath));
 
             // Cuộn tới phần tử
@@ -13025,8 +13028,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 return true;
             }
         }
+        private bool hddvcoma { get; set; }
+        private bool hddvknm { get; set; }    
+        private bool hddvmtt { get; set; }
         private void Xulysaudangnhap(DateTime fromdate, DateTime todate)
         {
+            hddvcoma = false;
             Sohoadoncuathan = 0;
             //if (DoTask > Endtask)
             //{
@@ -13062,10 +13069,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 Thread.Sleep(200);
                 Xulychonngay(wait, 1, fromdate, todate);
                 Thread.Sleep(200);
-                new Actions(Driver)
-.SendKeys(Keys.Enter) // Tab lần 2
-.Perform();
-                var button = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn') and .//span[text()='Tìm kiếm']])[2]")));
+                //                new Actions(Driver)
+                //.SendKeys(Keys.Enter) // Tab lần 2
+                //.Perform();
+                if (hddvcoma)
+                {
+                     var button = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn') and .//span[text()='Tìm kiếm']])[2]")));
                 while (TryClick(button)) ;
                 // button.Click();
 
@@ -13150,10 +13159,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                         return null; // Trả về null nếu không tìm thấy
                                     }
                                 });
-                                var cellC25TYY = row.FindElement(By.XPath("./td[3]/span")).Text; // C25TYY
-                                var cell22252 = row.FindElement(By.XPath("./td[4]")).Text; // 22252
+                                var cellmst = row.FindElement(By.XPath("./td[2]/span")).Text; // C25TYY
+                                var cellC25TYY = row.FindElement(By.XPath("./td[4]/span")).Text; // C25TYY
+                                var cell22252 = row.FindElement(By.XPath("./td[5]")).Text; // 22252
                                                                                            //Kiểm tra xem  trong folder đã có chưa
-                                string pathkt = savedPath + "\\HDVao\\" + dtTungay.DateTime.Month + "\\HD__" + dtTungay.DateTime.Month + "_" + cell22252 + "_" + cellC25TYY + ".xml";
+                                string pathkt = savedPath+ $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + $"\\{cellmst}" +  "_" + cell22252 + "_" + cellC25TYY + ".xml";
                                 if (File.Exists(pathkt))
                                 {
                                     currentRow++;
@@ -13162,7 +13172,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     continue;
                                 }
                                 cell22252 = Helpers.InsertZero(cell22252);
-                                pathkt = savedPath + "\\HDVao\\" + dtTungay.DateTime.Month + "\\HD__" + dtTungay.DateTime.Month + "_" + cell22252 + "_" + cellC25TYY + ".xml";
+                                //pathkt = savedPath + "\\HDVao\\" + dtTungay.DateTime.Month + "\\HD__" + dtTungay.DateTime.Month + "_" + cell22252 + "_" + cellC25TYY + ".xml";
                                 if (File.Exists(pathkt))
                                 {
                                     currentRow++;
@@ -13185,10 +13195,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 waitLoading(wait);
                                 string fp = "";
                                 if (currentRow == 1)
-                                    fp = savedPath + "\\HDVao\\" + "invoice.zip";
+                                    fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
                                 else
                                     // fp = savedPath + "\\HDVao\\" + "invoice (" + (currentRow - 1 - hasdata) + ").zip";
-                                    fp = savedPath + "\\HDVao\\" + "invoice.zip";
+                                    fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
                                 try
                                 {
                                     wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(2));
@@ -13244,6 +13254,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 {
                     throw ex;
                 }
+                }
+               
                 Thread.Sleep(500);
                 Cucthuekhngnhanma(wait, fromdate, todate);
             }
@@ -13258,7 +13270,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             {
                 string typepath = "";
                 if (type == 1)
-                    typepath = "\\HDVao";
+                    typepath =$"\\HD{DateTime.Now.Year}" + "\\HDVao"+$"\\{DateTime.Now.Month}";
                 if (type == 2)
                     typepath = "\\HDRa";
                 string pah = savedPath + typepath;
@@ -13415,14 +13427,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 var getsplit = (newname.Split('_'))[2];
                 var getsplithtml = (newnamehtml.Split('_'))[2];
 
-                string targetDirXml = Path.Combine(path, getsplit);
-                string targetDirHtml = Path.Combine(path, getsplithtml);
+                string targetDirXml = path;
+                string targetDirHtml = path;
 
                 Directory.CreateDirectory(targetDirXml); // Tạo thư mục đích cho file XML
                 Directory.CreateDirectory(targetDirHtml); // Tạo thư mục đích cho file HTML
 
-                newname = Path.Combine(getsplit, newname); // Correctly build the path
-                newnamehtml = Path.Combine(getsplithtml, newnamehtml); // Correctly build the path
+                newname = Path.Combine(targetDirXml, newname); // Correctly build the path
+                newnamehtml = Path.Combine(targetDirHtml, newnamehtml); // Correctly build the path
 
                 string newFilePath = Path.Combine(path, newname);
                 string newFilePathhtml = Path.Combine(path, newnamehtml);
@@ -13483,9 +13495,19 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             XmlNode nTTChungNode = root.SelectSingleNode("//TTChung");
             XmlNode nBanNode = nTTChungNode.SelectSingleNode("Ten");
             XmlNode NgaylapNode = root.SelectSingleNode("//NLap");
+            XmlNode NguoiBannode = root.SelectSingleNode("//NBan"); 
             string SHDon = nTTChungNode.SelectSingleNode("SHDon")?.InnerText;
             string KHHDon = nTTChungNode.SelectSingleNode("KHHDon")?.InnerText;
-            int month = 0;
+            string mst = "";
+            if(path.Contains("HDVao"))
+            {
+                mst = NguoiBannode.SelectSingleNode("MST")?.InnerText;
+            }
+            else
+            {
+                mst = NguoiBannode.SelectSingleNode("MST")?.InnerText;
+            }
+                int month = 0;
             if (DateTime.TryParse(NgaylapNode.InnerText, out DateTime date))
             {
                 // Lấy tháng từ DateTime
@@ -13496,7 +13518,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 filename = ".xml";
             if (type == 2)
                 filename = ".html";
-            return "HD_" + "_" + month + "_" + SHDon + "_" + KHHDon + filename;
+            return $"{mst}_{SHDon}_{KHHDon}{filename}";
         }
         private void Xulymaytinhtien2(WebDriverWait wait)
         {
@@ -13838,13 +13860,19 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
             divElement[1].Click();
             wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(100));
-            var listItem = wait.Until(d => d.FindElements(By.XPath("//li[@role='option' and @class='ant-select-dropdown-menu-item']"))
-            .FirstOrDefault(e => e.Text.Trim() == "Cục Thuế đã nhận không mã"));
+            var listItem = wait.Until(d => d.FindElements(By.XPath("//li[@role='option' and contains(@class, 'ant-select-dropdown-menu-item')]"))
+    .FirstOrDefault(e => e.Text.Trim() == "Cục Thuế đã nhận không mã"));
 
-            // Kiểm tra nếu phần tử được tìm thấy và nhấp vào nó
             if (listItem != null)
             {
-                listItem.Click();
+                // Cuộn đến phần tử
+                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView(true);", listItem);
+                Thread.Sleep(300);
+
+                // Click bằng JavaScript để tránh lỗi element not interactable
+                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", listItem);
+
+                Console.WriteLine("Đã click chọn: Cục Thuế đã nhận không mã");
             }
             else
             {
@@ -13863,26 +13891,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             while (TryClick(button)) ;
             // 
             waitLoading(wait);
-            //Thread.Sleep(2000);
-            //button = wait.Until(d =>
-            //    d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[18]")));
+            wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(200));
 
-            //((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView({behavior: 'smooth'});", button);
-            //Thread.Sleep(2000);
-            ////button.Click();
-            ////// Hover rồi mới click
-            //new Actions(Driver)
-            //    .MoveToElement(button)
-            //    .Pause(TimeSpan.FromSeconds(2))
-            //    .Click()
-            //    .Perform();
-            //Thread.Sleep(1000); 
-            // XulyxoaExcel(fromdate, todate);
-            waitLoading(wait);
-            //Lick 15 sang 50
-            divElement = wait.Until(d => d.FindElements(By.XPath("//div[@class='ant-select-selection-selected-value' and @title='15']")));
+
+             divElement = wait.Until(d => d.FindElements(By.XPath("//div[@class='ant-select-selection-selected-value' and @title='15']")));
             // Nếu tìm thấy ít nhất một phần tử
-            if (divElement[0] != null)
+            if (divElement[1] != null)
             {
                 // Thực hiện cuộn đến phần tử với thời gian
                 var jsExecutor = (IJavaScriptExecutor)Driver;
@@ -13896,24 +13910,35 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
 
                 // Cuộn đến phần tử cuối cùng
-                jsExecutor.ExecuteScript("arguments[0].scrollIntoView(true);", divElement[0]);
+                jsExecutor.ExecuteScript("arguments[0].scrollIntoView(true);", divElement[1]);
             }
             else
             {
                 Console.WriteLine("Không tìm thấy phần tử");
             }
             // Kiểm tra nếu phần tử được tìm thấy và nhấp vào nó
-            if (divElement != null && divElement[0].Displayed)
+            if (divElement != null && divElement[1].Displayed)
             {
                 divElement[1].Click();
                 Console.WriteLine("Đã nhấp vào phần tử.");
             }
             Thread.Sleep(500);
             var dropdownMenu = wait.Until(d => d.FindElement(By.ClassName("ant-select-dropdown-menu")));
-
+            Thread.Sleep(500);
             // Tìm phần tử <li> có nội dung là "50" và nhấp vào nó
-            var option50 = wait.Until(d => dropdownMenu.FindElements(By.XPath(".//li[text()='50']")));
-            while (TryClick(option50[0])) ;
+            var option50 = wait.Until(d =>
+            {
+                return d.FindElements(By.XPath("//li[contains(@class,'ant-select-dropdown-menu-item')]"))
+                    .FirstOrDefault(x =>
+                        x.Displayed &&
+                        x.Text.Trim() == "50");
+            });
+
+            ((IJavaScriptExecutor)Driver)
+                .ExecuteScript("arguments[0].click();", option50);
+           // option50.Click();
+          //  while (TryClick(option50[0])) ;
+
             waitLoading(wait);
             Thread.Sleep(1000);
             bool isPhantrang = false;
@@ -13946,10 +13971,15 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     return null; // Trả về null nếu không tìm thấy
                                 }
                             });
-                            var cellC25TYY = row.FindElement(By.XPath("./td[3]/span")).Text; // C25TYY
-                            var cell22252 = row.FindElement(By.XPath("./td[4]")).Text; // 22252
-                                                                                       //Kiểm tra xem  trong folder đã có chưa
-                            string pathkt = savedPath + "\\HDVao\\" + dtTungay.DateTime.Month + "\\HD__" + dtTungay.DateTime.Month + "_" + cell22252 + "_" + cellC25TYY + ".xml";
+                            var cellC25TYY = row.FindElement(By.XPath("./td[4]/span")).Text; // C25TYY
+                            var cell22252 = row.FindElement(By.XPath("./td[5]")).Text; // 22252
+                            var text = row.FindElement(By.XPath("./td[7]")).Text;
+
+                            var match = Regex.Match(text, @"MST người bán:\s*([\d-]+)");
+
+                            string mst = match.Success ? match.Groups[1].Value : "";
+                            //Kiểm tra xem  trong folder đã có chưa
+                            string pathkt = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + $"\\{mst}" + "_" + cell22252 + "_" + cellC25TYY + ".xml";
                             if (File.Exists(pathkt))
                             {
                                 currentRow++;
@@ -13958,7 +13988,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 continue;
                             }
                             cell22252 = Helpers.InsertZero(cell22252);
-                            pathkt = savedPath + "\\HDVao\\" + dtTungay.DateTime.Month + "\\HD__" + dtTungay.DateTime.Month + "_" + cell22252 + "_" + cellC25TYY + ".xml";
+                           
                             if (File.Exists(pathkt))
                             {
                                 currentRow++;
@@ -13981,10 +14011,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             waitLoading(wait);
                             string fp = "";
                             if (currentRow == 1)
-                                fp = savedPath + "\\HDVao\\" + "invoice.zip";
+                                fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
                             else
                                 // fp = savedPath + "\\HDVao\\" + "invoice (" + (currentRow - 1 - hasdata) + ").zip";
-                                fp = savedPath + "\\HDVao\\" + "invoice.zip";
+                                fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
                             try
                             {
                                 wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(2));
@@ -19587,6 +19617,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         }
         private async void simpleButton3_Click(object sender, EventArgs e)
         {
+            if (chktaituweb.Checked)
+            {
+                btnTaicoquanthue.PerformClick();
+                return;
+            }
             progressPanel1.Show();
             progressPanel1.Caption = "Đang bắt đầu tiến hành tải dữ liệu...";
             Application.DoEvents();

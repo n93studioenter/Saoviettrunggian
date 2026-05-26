@@ -621,7 +621,7 @@ namespace SaovietTax
                     });
                 }
                 catch (Exception ex)
-                {
+                {   
                     Console.WriteLine($"Error at Add OrderItem: {ex}");
                     // Hoặc log vào file, hoặc breakpoint ở đây
                 }
@@ -681,7 +681,7 @@ namespace SaovietTax
                 ["reservation_meta"] = null,
                 ["is_open_delivery"] = true,
                 ["reservation_info"] = null,
-                ["has_e_invoice"] = false,
+                ["has_e_invoice"] = ctents[3] == '1' ? true:false,
                 ["order_invoice_body"] = new JsonObject
                 {
                     ["template_code"] = null,
@@ -807,8 +807,8 @@ namespace SaovietTax
             }
             catch (Exception ex)
             {
-                progressPanel1.Caption = "Lỗi khi tạo payload: " + ex.Message; 
-                return;
+                progressPanel1.Caption = "Lỗi khi tạo payload: " + ex.Message;
+                this.Close();
             }
            
             this.Close();
@@ -1095,7 +1095,7 @@ namespace SaovietTax
                     string rootDirectory = Path.GetFullPath(Path.Combine(directoryPath, @"..\.."));
 
                     string filePath = Path.Combine(rootDirectory, "Hoadon", "invoice.txt");
-                    string  ctents = File.ReadAllText(filePath);
+                      ctents = File.ReadAllText(filePath);
                     var getsplit = ctents.Split('_'); 
                     if (ctents.Contains("KH_"))
                     {
@@ -1309,7 +1309,7 @@ namespace SaovietTax
                             if (ctents.Contains("TT_"))
                             {
                                 progressPanel1.Caption = "Đang thực hiện cập nhật trạng thái hoá đơn...";
-                                string urlapi =$"https://apiv2.tendoo.vn/order/api/v1/seller/check-cancel-order-precondition/{getsplit[1]}";
+                                string urlapi = $"https://apiv2.tendoo.vn/order/api/v1/seller/check-cancel-order-precondition/{getsplit[1]}";
 
                                 // Option A: Explicitly send empty content
                                 var emptyContent = new StringContent("", Encoding.UTF8, "application/json");
@@ -1320,7 +1320,7 @@ namespace SaovietTax
                                 HttpResponseMessage responses = await httpClient.PostAsync(urlapi, emptyJson);
 
                                 string result = await responses.Content.ReadAsStringAsync();
-                                 urlapi = $"https://apiv2.tendoo.vn/order/api/v8/seller/update-order/{getsplit[1]}";
+                                urlapi = $"https://apiv2.tendoo.vn/order/api/v8/seller/update-order/{getsplit[1]}";
                                 var payload = new
                                 {
                                     state = "complete",
@@ -1334,13 +1334,13 @@ namespace SaovietTax
                                         is_debit = false
                                     }
                                 };
-                                 
+
                                 string jsonPayload = JsonConvert.SerializeObject(payload);
                                 var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
                                 // Gửi request
-                                 response = await httpClient.PutAsync(urlapi, content);
-                                 result = await response.Content.ReadAsStringAsync();
+                                response = await httpClient.PutAsync(urlapi, content);
+                                result = await response.Content.ReadAsStringAsync();
 
                                 JObject jsonResponse = JObject.Parse(result);
                                 progressPanel1.Caption = "Đã cập nhật trạng thái hoá đơn...";
@@ -1366,11 +1366,43 @@ namespace SaovietTax
                                 catch (Exception ex)
                                 {
                                     MessageBox.Show("Lỗi khi cập nhật trạng thái hoá đơn: " + ex.Message);
-                                }   
-                                this.Close();   
+                                }
+                                this.Close();
                             }
                             else
-                                await Dongbokhachhang();
+                            {
+                                if (ctents.Contains("Huy_"))
+                                { 
+                                    string urlapi = $"https://apiv2.tendoo.vn/order/api/v8/seller/update-order/{getsplit[1]}";
+
+                                    // Tạo payload object
+                                    var payload = new
+                                    {
+                                        state = "cancel",
+                                        debit = (object)null,
+                                        additional_info = new { },
+                                        payment_source_id = (object)null,
+                                        payment_source_name = (object)null,
+                                        reservation_info = (object)null,
+                                        is_customer_point = false,
+                                        cancel_transaction = new[] { "business_transaction" },
+                                        is_remove_transaction_when_cancel = true
+                                    };
+
+                                    // Serialize thành JSON
+                                    string jsonPayload = JsonConvert.SerializeObject(payload);
+                                    var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                                    // Gửi request
+                                    HttpResponseMessage response = await httpClient.PutAsync(urlapi, content);
+                                    string result = await response.Content.ReadAsStringAsync();
+                                    this.Close();
+                                }
+                                else
+                                {
+                                    await Dongbokhachhang();
+                                }
+                            }
                         } 
                     }
                     //await Dongbokhachhang();
@@ -1389,7 +1421,7 @@ namespace SaovietTax
                 MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi");
             }
         }
-
+        string ctents;
         // Hàm gọi API với Bearer Token
         private async Task GoiApiVoiToken()
         {
