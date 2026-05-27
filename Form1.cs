@@ -12580,8 +12580,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         #region Xu ly co quan thue
         int DoTask = 0;
         int Endtask = 0;
+        string mstCongtyhd="";
         private void btnTaicoquanthue_Click(object sender, EventArgs e)
         {
+            string quer = "SELECT * FROM License";
+            tbLicense = ExecuteQuery(quer, null);
+            mstCongtyhd = tbLicense.Rows[0]["MaSoThue"].ToString();
             //frmTaiCoQuanThue frmTaiCoQuanThue = new frmTaiCoQuanThue();
             //username = txtuser.Text;
             //pasword = txtpass.Text;
@@ -13032,8 +13036,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         private bool hddvknm { get; set; } = true;
         private bool hddvmtt { get; set; } = true;
         private void Xulysaudangnhap(DateTime fromdate, DateTime todate)
-        {
-            //hddvcoma = false;
+        { 
             //hddvknm=false;
             Sohoadoncuathan = 0;
             //if (DoTask > Endtask)
@@ -13164,60 +13167,105 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     ((IJavaScriptExecutor)Driver).ExecuteScript(@"
     arguments[0].scrollIntoView({block:'center'});
 ", row);
-                                    var cellmst = row.FindElement(By.XPath("./td[2]/span")).Text; // C25TYY
-                                var cellC25TYY = row.FindElement(By.XPath("./td[4]/span")).Text; // C25TYY
-                                var cell22252 = row.FindElement(By.XPath("./td[5]")).Text; // 22252
-                                                                                           //Kiểm tra xem  trong folder đã có chưa
-                                string pathkt = savedPath+ $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + $"\\{cellmst}" +  "_" + cell22252 + "_" + cellC25TYY + ".xml";
-                                if (File.Exists(pathkt))
-                                {
-                                    currentRow++;
-                                    hasdata++;
-                                    Thread.Sleep(200);
-                                    continue;
-                                }
-                                cell22252 = Helpers.InsertZero(cell22252);
-                                //pathkt = savedPath + "\\HDVao\\" + dtTungay.DateTime.Month + "\\HD__" + dtTungay.DateTime.Month + "_" + cell22252 + "_" + cellC25TYY + ".xml";
-                                if (File.Exists(pathkt))
-                                {
-                                    currentRow++;
-                                    hasdata++;
-                                    Thread.Sleep(200);
-                                    continue;
-                                }
-                                // var a=
-                                string query = "SELECT * FROM HoaDon WHERE KyHieu = ? AND SoHD LIKE ?";
 
-                                // Click vào dòng
-                                while (TryClick(row)) ;
-                                wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(15));
-                                Thread.Sleep(200);
-                                button = wait.Until(d =>
-                                 d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[19]")));
-                                while (TryClick(button)) ;
-                                // Xử lý sau khi click (đợi tải, đóng popup,...)
-                                wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(20));
-                                waitLoading(wait);
-                                string fp = "";
-                                if (currentRow == 1)
-                                    fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
-                                else
-                                    // fp = savedPath + "\\HDVao\\" + "invoice (" + (currentRow - 1 - hasdata) + ").zip";
-                                    fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
-                                try
-                                {
-                                    wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(2));
-                                    wait.Until(d => File.Exists(fp));
-                                    lstHas.Add(fp);
-                                    GiaiNenhoadon(1);
-                                }
-                                catch (Exception ex)
-                                {
+                                    var cellC25TYY = row.FindElement(By.XPath("./td[4]/span")).Text; // C25TYY
+                                    var cell22252 = row.FindElement(By.XPath("./td[5]")).Text; // 22252
+                                    var text = row.FindElement(By.XPath("./td[7]")).Text;
 
+                                    var match = Regex.Match(text, @"MST người bán:\s*([\d-]+)");
+
+                                    string mst = match.Success ? match.Groups[1].Value : "";                  //Kiểm tra xem  trong folder đã có chưa
+                                    string pathkt = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + $"\\{mst}" + "_" + cell22252 + "_" + cellC25TYY + ".xml";
+                                    if (File.Exists(pathkt))
+                                    {
+                                        currentRow++;
+                                        hasdata++;
+                                        Thread.Sleep(200);
+                                        continue;
+                                    }
+                                    cell22252 = Helpers.InsertZero(cell22252);
+                                    //pathkt = savedPath + "\\HDVao\\" + dtTungay.DateTime.Month + "\\HD__" + dtTungay.DateTime.Month + "_" + cell22252 + "_" + cellC25TYY + ".xml";
+                                    if (File.Exists(pathkt))
+                                    {
+                                        currentRow++;
+                                        hasdata++;
+                                        Thread.Sleep(200);
+                                        continue;
+                                    }
+                                    // var a=
+                                    string query = "SELECT * FROM HoaDon WHERE KyHieu = ? AND SoHD LIKE ?";
+
+                                    // Click vào dòng
+                                    while (TryClick(row)) ;
+                                    wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(15));
+                                    Thread.Sleep(200);
+                                    string downloadPath = @"D:\Download";
+
+                                    //Tải excel trước
+                                    button = wait.Until(d =>
+                                   d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[18]")));
+                                    while (TryClick(button)) ;
+                                    string file = "";
+
+                                    if (istaiexcel == false)
+                                    {
+                                        string path = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month;
+
+                                        string newFile = Path.Combine(path,
+                                            $"{mstCongtyhd}_HDDienTuDaCapMa.xlsx");
+
+                                        // nếu đã có file cũ thì xóa
+                                        if (File.Exists(newFile))
+                                            File.Delete(newFile);
+
+                                        for (int i = 0; i < 60; i++)
+                                        {
+                                            file = Directory.GetFiles(path)
+                                                .FirstOrDefault(f =>
+                                                    Path.GetFileName(f).Contains("DANH SÁCH HÓA ĐƠN") &&
+                                                    !f.EndsWith(".crdownload"));
+
+                                            if (!string.IsNullOrEmpty(file))
+                                                break;
+
+                                            Thread.Sleep(1000);
+                                        }
+
+                                        if (!string.IsNullOrEmpty(file))
+                                        {
+                                            File.Move(file, newFile);
+                                        }
+                                        istaiexcel=true;    
+                                    }
+                                    
+
+
+                                    button = wait.Until(d =>
+                                    d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[19]")));
+                                    while (TryClick(button)) ;
+                                    // Xử lý sau khi click (đợi tải, đóng popup,...)
+                                    wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(20));
+                                    waitLoading(wait);
+                                    string fp = "";
+                                    if (currentRow == 1)
+                                        fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
+                                    else
+                                        // fp = savedPath + "\\HDVao\\" + "invoice (" + (currentRow - 1 - hasdata) + ").zip";
+                                        fp = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month + "\\invoice.zip";
+                                    try
+                                    {
+                                        wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(2));
+                                        wait.Until(d => File.Exists(fp));
+                                        lstHas.Add(fp);
+                                        GiaiNenhoadon(1);
+                                    }
+                                    catch (Exception ex)
+                                    {
+
+                                    }
+                                    currentRow++; // Chuyển sang dòng tiếp theo
                                 }
-                                currentRow++; // Chuyển sang dòng tiếp theo
-                            }
-                            catch (NoSuchElementException)
+                                catch (NoSuchElementException)
                             {
                                 hasMoreRows = false; // Không còn dòng nào nữa
 
@@ -13262,6 +13310,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
                
                 Thread.Sleep(500);
+                istaiexcel=false;
                 Cucthuekhngnhanma(wait, fromdate, todate);
             }
             catch (Exception ex)
@@ -13534,8 +13583,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 tabElement.Click();
                 Console.WriteLine("Đã nhấp vào tab.");
             }
-            //var button = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn') and .//span[text()='Tìm kiếm']])[2]")));
-            //button.Click();
+            var buttons = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn') and .//span[text()='Tìm kiếm']])[1]")));
+            buttons.Click();
             //
             bool isPhantrang = false;
 
@@ -13858,6 +13907,45 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                     // Click vào dòng
                     while (TryClick(row)) ;
+
+
+                    if (istaiexcel == false)
+                    {
+                        //Tải excel trước
+                        button = wait.Until(d =>
+                       d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[18]")));
+                        while (TryClick(button)) ;
+                        string file = "";
+                        string path = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month;
+
+                        string newFile = Path.Combine(path,
+                         $"{mstCongtyhd}_HDDienTuMayTinhTien.xlsx");
+
+                        // nếu đã có file cũ thì xóa
+                        if (File.Exists(newFile))
+                            File.Delete(newFile);
+
+                        for (int i = 0; i < 60; i++)
+                        {
+                            file = Directory.GetFiles(path)
+                                .FirstOrDefault(f =>
+                                    Path.GetFileName(f).Contains("DANH SÁCH HÓA ĐƠN") &&
+                                    !f.EndsWith(".crdownload"));
+
+                            if (!string.IsNullOrEmpty(file))
+                                break;
+
+                            Thread.Sleep(1000);
+                        }
+
+                        if (!string.IsNullOrEmpty(file))
+                        {
+                            File.Move(file, newFile);
+                        }
+                        istaiexcel= true;   
+                    }
+
+
                     button = wait.Until(d =>
                      d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[19]")));
                     while (TryClick(button)) ;
@@ -13933,6 +14021,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         }
         int currentRow = 1;
+        bool istaiexcel = false;
         private void Cucthuekhngnhanma(WebDriverWait wait, DateTime fromdate, DateTime todate)
         {
             if (hddvknm)
@@ -14112,6 +14201,47 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 while (TryClick(row)) ;
                                 wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(15));
                                 Thread.Sleep(200);
+                                //Tải excel trước
+                                button = wait.Until(d =>
+                                d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[18]")));
+                                while (TryClick(button)) ;
+                                string file = "";
+
+
+                                if(istaiexcel==false)
+                                {
+                                    string path = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDVao\\" + dtTungay.DateTime.Month;
+
+                                    string newFile = Path.Combine(path,
+                                        $"{mstCongtyhd}_HDDienTuKhongMa.xlsx");
+
+                                    // nếu đã có file cũ thì xóa
+                                    if (File.Exists(newFile))
+                                        File.Delete(newFile);
+
+                                    for (int i = 0; i < 60; i++)
+                                    {
+                                        file = Directory.GetFiles(path)
+                                            .FirstOrDefault(f =>
+                                                Path.GetFileName(f).Contains("DANH SÁCH HÓA ĐƠN") &&
+                                                !f.EndsWith(".crdownload"));
+
+                                        if (!string.IsNullOrEmpty(file))
+                                            break;
+
+                                        Thread.Sleep(1000);
+                                    }
+
+                                    if (!string.IsNullOrEmpty(file))
+                                    {
+                                        File.Move(file, newFile);
+                                    }
+                                    istaiexcel = true;
+                                }
+                               
+
+
+
                                 button = wait.Until(d =>
                                  d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[19]")));
                                 while (TryClick(button)) ;
@@ -14173,7 +14303,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                 }
             }
-          
+          istaiexcel = false;
             Xulymaytinhtien(wait);
 
         }

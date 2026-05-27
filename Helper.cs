@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ClosedXML.Excel.XLPredefinedFormat;
@@ -18,7 +19,35 @@ namespace SaovietTax
 
     public static class Helpers
     {
+        static string WaitFile(string folder, string fileNameContains)
+        {
+            for (int i = 0; i < 60; i++)
+            {
+                var file = Directory.GetFiles(folder)
+                    .FirstOrDefault(f =>
+                        Path.GetFileName(f).Contains(fileNameContains)
+                        && !f.EndsWith(".crdownload"));
 
+                if (file != null)
+                {
+                    // thử mở để chắc chắn file đã tải xong
+                    try
+                    {
+                        using (FileStream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.None))
+                        {
+                            return file;
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                Thread.Sleep(1000);
+            }
+
+            throw new Exception("Không tìm thấy file tải về");
+        }
         public static string RemoveLeadingZeros(string invoiceNumber)
         {
             if (string.IsNullOrEmpty(invoiceNumber))
