@@ -12849,10 +12849,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             Driver.Navigate().GoToUrl(targetUrl);
             Thread.Sleep(1000);
             Xulychonngay(wait, 2, fromdate, todate);
-            Thread.Sleep(2000);
-            new Actions(Driver)
-                .SendKeys(Keys.Enter) // Tab lần 2
-                .Perform();
+            Thread.Sleep(400);
+            //new Actions(Driver)
+            //    .SendKeys(Keys.Enter) // Tab lần 2
+            //    .Perform();
 
             var button = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn') and .//span[text()='Tìm kiếm']])[1]")));
             while (TryClick(button)) ;
@@ -12882,6 +12882,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             waitLoading(wait);
             bool isPhantrang = false;
             Thread.Sleep(1000);
+            Xulymaytinhtien2(wait);
+            return;
             while (!isPhantrang)
             {
                 wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(200));
@@ -12944,6 +12946,43 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             oldRow += 1;
                             // Click vào dòng
                             while (TryClick(row)) ;
+
+                            if (istaiexcel == false)
+                            {
+                                //Tải excel trước
+                                button = wait.Until(d =>
+                               d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[18]")));
+                                while (TryClick(button)) ;
+                                string file = "";
+                                string path = savedPath + $"\\HD{DateTime.Now.Year}" + "\\HDRa\\" + dtTungay.DateTime.Month;
+
+                                string newFile = Path.Combine(path,
+                                $"{mstCongtyhd}_Hoadondientu.xlsx");
+
+                                // nếu đã có file cũ thì xóa
+                                if (File.Exists(newFile))
+                                    File.Delete(newFile);
+
+                                for (int i = 0; i < 60; i++)
+                                {
+                                    file = Directory.GetFiles(path)
+                                        .FirstOrDefault(f =>
+                                            Path.GetFileName(f).Contains("DANH SÁCH HÓA ĐƠN") &&
+                                            !f.EndsWith(".crdownload"));
+
+                                    if (!string.IsNullOrEmpty(file))
+                                        break;
+
+                                    Thread.Sleep(1000);
+                                }
+
+                                if (!string.IsNullOrEmpty(file))
+                                {
+                                    File.Move(file, newFile);
+                                }
+                            }
+
+
                             button = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[13]")));
                             while (TryClick(button)) ;
                             waitLoading(wait);
@@ -12999,7 +13038,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
             }
             Thread.Sleep(1000);
-            Xulymaytinhtien2(wait);
+           
             dictionMonth.Add(DoTask, Sohoadoncuathan);
             //DoTask += 1;
             //Xulysaudangnhap2(); 
@@ -13326,7 +13365,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 if (type == 1)
                     typepath =$"\\HD{DateTime.Now.Year}" + "\\HDVao"+$"\\{DateTime.Now.Month}";
                 if (type == 2)
-                    typepath = "\\HDRa";
+                    typepath = $"\\HD{dtTungay.DateTime.Year}" + "\\HDRa" + $"\\{dtTungay.DateTime.Month}";
                 string pah = savedPath + typepath;
 
                 // Kiểm tra xem thư mục có tồn tại không trước khi lấy danh sách file
@@ -13587,7 +13626,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             buttons.Click();
             //
             bool isPhantrang = false;
-
+            Thread.Sleep(1000);
             while (isPhantrang == false)
             {
                 // wait.Until(d => d.FindElements(By.CssSelector("tr.ant-table-row")).Count > 0);
@@ -13646,6 +13685,44 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         // Click vào dòng
 
                         while (TryClick(row[0])) ;
+                        Thread.Sleep(1000);
+                        if (istaiexcel == false)
+                        {
+                            //Tải excel trước
+                          var  buttonss = wait.Until(d =>
+                           d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[12]")));
+                            while (TryClick(buttonss)) ;
+                            string file = "";
+                            string path = savedPath + $"\\HD{dtTungay.DateTime.Year}" + "\\HDRa\\" + dtTungay.DateTime.Month;
+
+                            string newFile = Path.Combine(path,
+                                $"{mstCongtyhd}_HDDienTuMayTinhTien.xlsx");
+
+                            // nếu đã có file cũ thì xóa
+                            if (File.Exists(newFile))
+                                File.Delete(newFile);
+
+                            for (int i = 0; i < 60; i++)
+                            {
+                                file = Directory.GetFiles(path)
+                                    .FirstOrDefault(f =>
+                                        Path.GetFileName(f).Contains("DANH SÁCH HÓA ĐƠN") &&
+                                        !f.EndsWith(".crdownload"));
+
+                                if (!string.IsNullOrEmpty(file))
+                                    break;
+
+                                Thread.Sleep(1000);
+                            }
+
+                            if (!string.IsNullOrEmpty(file))
+                            {
+                                File.Move(file, newFile);
+                            }
+                            istaiexcel = true;
+                        }
+
+                        Thread.Sleep(1000);
                         var button = wait.Until(d =>
                           d.FindElement(By.XPath("(//button[contains(@class, 'ant-btn-icon-only')])[13]")));
                         while (TryClick(button)) ;
@@ -13655,13 +13732,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         string fp = "";
                         if (isfirst)
                         {
-                            fp = savedPath + "\\HDRa\\" + "invoice.zip";
+                            fp = savedPath + $"\\HD{dtTungay.DateTime.Year}\\HDRa\\" +$"{dtTungay.DateTime.Month}\\" + "invoice.zip";
                             isfirst = false;
                         }
-                        else
-                            //fp = savedPath + "\\HDRa\\" + "invoice (" + (currentRow - 1 - hasdata) + ").zip";
-                            fp = savedPath + "\\HDRa\\" + "invoice.zip";
-
+                        else 
+                            fp = savedPath + $"\\HD{dtTungay.DateTime.Year}\\HDRa\\" +$"{dtTungay.DateTime.Month}\\" + "invoice.zip";
                         wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(120));
                         wait.Until(d => File.Exists(fp));
                         lstHas.Add(fp);
