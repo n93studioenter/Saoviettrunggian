@@ -483,6 +483,12 @@
     <Compile Include="Saoviet_main.Designer.cs">
       <DependentUpon>Saoviet_main.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingTaiCQT.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingTaiCQT.Designer.cs">
+      <DependentUpon>SettingTaiCQT.cs</DependentUpon>
+    </Compile>
     <Compile Include="SmartPDFReader.cs" />
     <Compile Include="SuggestionControl.cs">
       <SubType>UserControl</SubType>
@@ -618,6 +624,9 @@
     </Compile>
     <EmbeddedResource Include="Saoviet_main.resx">
       <DependentUpon>Saoviet_main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingTaiCQT.resx">
+      <DependentUpon>SettingTaiCQT.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SuggestionControl.resx">
       <DependentUpon>SuggestionControl.cs</DependentUpon>
@@ -755,6 +764,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Hoadon\invoice.txt" />
+    <None Include="Resources\69d8e99d154e94b3b5dcedb68edbcaa6.png" />
+    <None Include="Resources\properties_16x16.png" />
     <None Include="Resources\lookup&amp;reference_16x16.png" />
     <None Include="Resources\add_16x16.png" />
     <None Include="Resources\saveto_16x16.png" />

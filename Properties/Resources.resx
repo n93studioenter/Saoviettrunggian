@@ -121,14 +121,14 @@
   <data name="sendpdf_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sendpdf_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="actions_zoom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\actions_zoom.svg;DevExpress.Utils.Svg.SvgImage, DevExpress.Data.v22.1, Version=22.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a</value>
+  </data>
   <data name="download_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\download_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="removesheetrows_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\removesheetrows_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="add_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\add_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="properties_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\properties_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="find_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\find_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -142,8 +142,8 @@
   <data name="sendxls_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sendxls_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="drilldownonseries_chart_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\drilldownonseries_chart_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="allowuserstoeditranges_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\allowuserstoeditranges_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="copy_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\copy_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -154,11 +154,17 @@
   <data name="next_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\next_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="sendxls_32x321" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\sendxls_32x321.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lookup&amp;reference_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lookup&amp;reference_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="loadfrom_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\loadfrom_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sendxls_32x321" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sendxls_32x321.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="cancel_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cancel_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -166,14 +172,14 @@
   <data name="tag_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tag_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="actions_zoom" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\actions_zoom.svg;DevExpress.Utils.Svg.SvgImage, DevExpress.Data.v22.1, Version=22.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a</value>
-  </data>
   <data name="saveto_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\saveto_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="allowuserstoeditranges_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\allowuserstoeditranges_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="drilldownonseries_chart_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\drilldownonseries_chart_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refresh_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refresh_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="actions_zoom1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\actions_zoom1.svg;DevExpress.Utils.Svg.SvgImage, DevExpress.Data.v22.1, Version=22.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a</value>
@@ -184,13 +190,13 @@
   <data name="exporttoxlsx_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\exporttoxlsx_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="refresh_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\refresh_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="removesheetrows_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\removesheetrows_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="exporttoxls" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\exporttoxls.svg;DevExpress.Utils.Svg.SvgImage, DevExpress.Data.v22.1, Version=22.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a</value>
   </data>
-  <data name="lookup&amp;reference_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\lookup&amp;reference_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="69d8e99d154e94b3b5dcedb68edbcaa6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\69d8e99d154e94b3b5dcedb68edbcaa6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

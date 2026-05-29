@@ -569,9 +569,6 @@ C:\TCP\Saoviet\DAP3\SaovietTax\SaovietTax\bin\Debug\ja\DevExpress.Map.v22.1.Core
 C:\TCP\Saoviet\DAP3\SaovietTax\SaovietTax\bin\Debug\de\DevExpress.XtraGauges.v22.1.Presets.resources.dll
 C:\TCP\Saoviet\DAP3\SaovietTax\SaovietTax\bin\Debug\es\DevExpress.XtraGauges.v22.1.Presets.resources.dll
 C:\TCP\Saoviet\DAP3\SaovietTax\SaovietTax\bin\Debug\ja\DevExpress.XtraGauges.v22.1.Presets.resources.dll
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraReports.v22.1.dll
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraRichEdit.v22.1.dll
-D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Extensions.Primitives.xml
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\LdaNative.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\onnxruntime.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\onnxruntime_providers_shared.dll
@@ -1246,7 +1243,9 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraMap.v22
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraNavBar.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraPivotGrid.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraPrinting.v22.1.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraReports.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraReports.v22.1.Extensions.dll
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraRichEdit.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraSpreadsheet.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraTreeList.v22.1.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraTreeMap.v22.1.dll
@@ -1303,6 +1302,7 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraTreeMap
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\DevExpress.XtraVerticalGrid.v22.1.xml
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Extensions.Configuration.xml
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.xml
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\Microsoft.Extensions.Primitives.xml
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\de\DevExpress.Dashboard.v22.1.Core.resources.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\es\DevExpress.Dashboard.v22.1.Core.resources.dll
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\bin\Debug\ja\DevExpress.Dashboard.v22.1.Core.resources.dll
@@ -1440,6 +1440,7 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.NhapFileExc
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.PopupTaikhoan.resources
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.Properties.Resources.resources
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.Saoviet_main.resources
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.SettingTaiCQT.resources
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.SuggestionControl.resources
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.SuggestVattu.resources
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.TendoInvoice.resources

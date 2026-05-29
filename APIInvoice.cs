@@ -37,6 +37,15 @@ namespace SaovietTax
         public APIInvoice()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.Manual;
+
+            // Đặt kích thước form (tuỳ chỉnh) 
+
+            // Đặt form ở góc phải dưới
+            this.Location = new Point(
+                Screen.PrimaryScreen.WorkingArea.Right - this.Width,
+                Screen.PrimaryScreen.WorkingArea.Bottom - this.Height
+            );
         }
         public class LoginResponse
         {
@@ -89,11 +98,17 @@ namespace SaovietTax
                         ""rememberMe"": false,
                         ""captcha"": """"
                     }}";
-
+                    progressPanel1.Caption = "Thực hiện đăng nhập...";
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     var response = await client.PostAsync(url, content);
-
+                    if(response.StatusCode== System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        progressPanel1.Caption = "Thông tin đăng nhập không chính xác...";
+                        Application.DoEvents();
+                        Thread.Sleep(3000);
+                        Application.Exit();
+                    }
                     // *** CÁCH LẤY COOKIE ***
                     // Lấy tất cả cookies từ response
                     var cookies = handler.CookieContainer.GetCookies(new Uri(url));
@@ -129,26 +144,34 @@ namespace SaovietTax
                     loginResponse = JsonConvert.DeserializeObject<LoginResponse>(result);
                     if (loginResponse != null)
                     {
+                        progressPanel1.Caption = "Đăng nhập hệ thống thành công...";
+                        Application.DoEvents();
                         //TestChukyso(); 
-                        if (_content == "1")
+                        switch (_content)
                         {
-                            btnGetTemplate.PerformClick();
-                            return;
-                        }
-                        else
-                        {
-                            if (_content.Contains("PH_"))
-                            {
-                                int idinvoice= int.Parse(_content.Split('_')[1]);   
-                                getcardid=idinvoice.ToString();
-                                //TestChukyso(idinvoice);
-                                simpleButton5.PerformClick();   
-                                return;
-                            }
-                            else
-                            {
+                            case "1":
+                                btnGetTemplate.PerformClick();
+                                break;
+
+                            case string s when s.StartsWith("PH_"):
+
+                                int idinvoice = int.Parse(s.Split('_')[1]);
+
+                                getcardid = idinvoice.ToString();
+
+                                simpleButton5.PerformClick();
+
+                                break;
+
+                            case string s when s.StartsWith("Huy_"):
+
+                                break;
+
+                            default:
+
                                 simpleButton3.PerformClick();
-                            }
+
+                                break;
                         }
                     }
                 }
@@ -699,15 +722,16 @@ namespace SaovietTax
             Environment.Exit(0);
         }
         private async  void APIInvoice_Load(object sender, EventArgs e)
-        { 
+        {
             //LoadCertificateInfo("Viettel-CASHA2,MIIEdTCCA12gAwIBAgIQVAT//rcDP7MktyjTwv3hEjANBgkqhkiG9w0BAQsFADA/MRgwFgYDVQQDDA9WaWV0dGVsLUNBIFNIQTIxFjAUBgNVBAoMDVZpZXR0ZWwgR3JvdXAxCzAJBgNVBAYTAlZOMB4XDTI2MDIxMDAzMzgwMFoXDTI4MDIxMDAzMzgwMFowgZQxCzAJBgNVBAYTAlZOMR0wGwYDVQQHDBRCw4AgUuG7ikEgVsWoTkcgVMOAVTFGMEQGA1UEAww9Q8OUTkcgVFkgVE5ISCBUSMavxqBORyBN4bqgSSBT4bqiTiBYVeG6pFQgVMOCTiDEkOG7qEMgVEjhu4pOSDEeMBwGCgmSJomT8ixkAQEMDk1TVDozNTAyNDEyNjY5MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDcHMBQ9TGwpTVIn8aLPUnkzlxBAi3rhinHW3H+ayohgwmyhNbfGHiHXDmJrWcYHf+UeNCHlG2KrO/5z7IL7jfwdzkwvOX68HOAmKV5F7PoYlxbLGJNizMYAoEVk1QLemkxx6JNE2IVKlSKMrKIe4IIGW8yV2Z7folnNSLKOCRRnwIDAQABo4IBmTCCAZUwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBRD1TUAi74HuuNN5h4kWVaIW77MSjB5BggrBgEFBQcBAQRtMGswQgYIKwYBBQUHMAKGNmh0dHA6Ly92aWV0dGVsLWNhLnZuL2Rvd25sb2Fkcy9zdWIvVmlldHRlbC1DQV9TSEEyLmNydDAlBggrBgEFBQcwAYYZaHR0cDovL29jc3AudmlldHRlbC1jYS52bjAzBgNVHSUELDAqBggrBgEFBQcDAgYIKwYBBQUHAwQGCisGAQQBgjcKAwwGCCsGAQUFBwMkMIGEBgNVHR8EfTB7MHmgMqAwhi5odHRwOi8vY3JsLnZpZXR0ZWwtY2Eudm4vVmlldHRlbC1DQS1TSEEyLTIuY3JsokOkQTA/MRgwFgYDVQQDDA9WaWV0dGVsLUNBIFNIQTIxFjAUBgNVBAoMDVZpZXR0ZWwgR3JvdXAxCzAJBgNVBAYTAlZOMB0GA1UdDgQWBBT9h9792TjUnd+bEg0Dyu1V67moMjAOBgNVHQ8BAf8EBAMCBeAwDQYJKoZIhvcNAQELBQADggEBAND1s5vWjelHocG3nF8sSzTOJN1nLKOD8ec42dJ+nSh55tFLmQIQ7C0ThZipZu5l01l3z3pnbK7v2RcEx2FV6Vpj2LW/VIXG/e2H4NII8ADz0n9wLfQTABxhngy2jAVci3rcHWd7/WnH7GqDeU9j2ScwHbH3NZDkz5D+VyzJYcXVFUMzKWwNiXq2h0hFOZnAtPJFAwefiptMeRH58hNs9ro9HvqhVrbEinRcv21Xpp0R1PVNJ400wHBiFadAlgjvChWGKv/8aykM1wp7QnWiFoauhkfAAsesa/6kB0Tbdv6PReTX1667elLe1ABlhXKQUitmaUKiL6FrsSzgfti4pNc=");
 
-
-            using (HttpClient client = new HttpClient())
-            {
-                string url = $"https://mst.vn/api/company/{"3502495312"}";
-                var res = await client.GetStringAsync(url); 
-            }
+            progressPanel1.Caption= "Đang đăng nhập hệ thống vinvoice.viettel.vn...";
+            Application.DoEvents(); 
+            //using (HttpClient client = new HttpClient())
+            //{
+            //    string url = $"https://mst.vn/api/company/{"3502495312"}";
+            //    var res = await client.GetStringAsync(url); 
+            //}
 
 
 
@@ -994,27 +1018,18 @@ namespace SaovietTax
 
                 // Chuyển thẳng đến trang draft (không delay)
                 driver.Navigate().GoToUrl("https://vinvoice.viettel.vn/invoice-management/invoice-draft");
-                 wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
-                 
+                Thread.Sleep(1000);
+                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                var btnClose = driver.FindElement(By.XPath("//button[@aria-label='Close']"));
+                btnClose.Click();
+                Thread.Sleep(1000); 
                 // chờ button tồn tại + click được luôn
-                var btnUpload = wait.Until(driver =>
-                {
-                    try
-                    {
-                        var el = driver.FindElement(By.XPath(
-                            $"//input[@value='{cardid}']/ancestor::tr//button[i[contains(@class,'fa-cloud-upload')]]"
-                        ));
+                var btnEdit = driver.FindElement(
+     By.XPath("//button[i[contains(@class,'fa-pencil-square-o')]]")
+ );
 
-                        return (el.Displayed && el.Enabled) ? el : null;
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                });
-
-                btnUpload.Click();
-               this.Close();
+                btnEdit.Click();
+                this.Close();
                 // Chờ trang draft load + xử lý popup cùng lúc
                 try
                 {
@@ -1063,6 +1078,7 @@ namespace SaovietTax
         private Dictionary<string, string> lstallCookies = new Dictionary<string, string>();   // Lưu tất cả cookie
         private async void simpleButton1_Click(object sender, EventArgs e)
         {
+          
             var baseUrl = "https://vinvoice.viettel.vn";
             var cookieContainer = new CookieContainer();
 
@@ -1200,7 +1216,8 @@ namespace SaovietTax
         }
         private async void simpleButton3_Click(object sender, EventArgs e)
         {
-          
+            progressPanel1.Caption = "Đang thực hiện tạo hoá đơn nháp...";
+            Application.DoEvents();
 
             string query = "SELECT * FROM tbRegister";
             string pathluu = "";    
@@ -1226,7 +1243,8 @@ namespace SaovietTax
             }
             //Lấy tbgetphieu
             var getsplit = _content.Split('_');
-           
+            progressPanel1.Caption = "Đang lấy thông tin hoá đơn...";
+            Application.DoEvents();
             // Có thể bạn nên JOIN theo ID, không phải MaSo
             var qrTimct = @"
     SELECT ChungTu.*,HOADON.*
@@ -1317,7 +1335,9 @@ namespace SaovietTax
         quantity = Convert.ToDouble(row["Quantity"]),
         itemTotalAmountWithoutVat = Convert.ToDouble(row["Amount"]),
         selection = 1
-    }).ToArray(); 
+    }).ToArray();
+            progressPanel1.Caption = "Đang thực hiện tạo hoá đơn ...";
+            Application.DoEvents();
             var baseUrl = "https://vinvoice.viettel.vn";
             var cookieContainer = new CookieContainer();
 
@@ -1330,7 +1350,9 @@ namespace SaovietTax
             {
                 // 1. Thêm cookies
                 var uri = new Uri(baseUrl);
+                if(useCookie.__cf_bm!=null)
                 cookieContainer.Add(uri, new Cookie("__cf_bm", useCookie.__cf_bm));
+                if(useCookie.JSESSIONID!=null)
                 cookieContainer.Add(uri, new Cookie("JSESSIONID", useCookie.JSESSIONID));
 
                 // 2. Thêm headers
@@ -1438,6 +1460,8 @@ namespace SaovietTax
 
                 if (response.IsSuccessStatusCode)
                 {
+                    progressPanel1.Caption = "Tạo hóa đơn thành công...";
+                    Application.DoEvents();
                     var jObj = JObject.Parse(result);
                     long invoiceId = jObj["data"]["id"].Value<long>();
                     var updateQr = @"UPDATE HoaDon  SET IdNhap = ?,IdTemplate =? WHERE MaSo =?";
@@ -1474,7 +1498,9 @@ namespace SaovietTax
                 }
                 else
                 {
-                    MessageBox.Show($"Lỗi {response.StatusCode}:\n{result}");
+                    progressPanel1.Caption = $"Lỗi {response.StatusCode}:\n{result}";
+                    Application.DoEvents();
+                   // MessageBox.Show($"Lỗi {response.StatusCode}:\n{result}");
                 }
             }
         }
@@ -1495,10 +1521,12 @@ namespace SaovietTax
                 var uri = new Uri(baseUrl);
 
                 // Thêm __cf_bm
+                if (useCookie.__cf_bm!= null)
                 cookieContainer.Add(uri, new Cookie("__cf_bm", useCookie.__cf_bm));
 
                 // Thêm JSESSIONID
-                cookieContainer.Add(uri, new Cookie("JSESSIONID", useCookie.JSESSIONID));
+                if (useCookie.JSESSIONID != null)
+                    cookieContainer.Add(uri, new Cookie("JSESSIONID", useCookie.JSESSIONID));
 
                 // 2. Thêm headers (access_token và session_token)
                 client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
@@ -1511,7 +1539,8 @@ namespace SaovietTax
 
                 var response = await client.GetAsync(searchUrl);
                 var result = await response.Content.ReadAsStringAsync();
-
+                progressPanel1.Caption = "Thực hiện lấy danh sách mẫu hoá đơn...";
+                Application.DoEvents();
                 if (response.IsSuccessStatusCode)
                 {
                     var list = JObject.Parse(result)["data"]["content"]
@@ -1577,6 +1606,7 @@ namespace SaovietTax
                 }
                 else
                 {
+                    progressPanel1.Caption = $"Lỗi {response.StatusCode}";
                     MessageBox.Show($"Lỗi {response.StatusCode}:\n{result}");
                 }
 
@@ -1593,6 +1623,11 @@ namespace SaovietTax
         {
             //TestBrowser();
             LoginWithSelenium(getcardid);
+        }
+
+        private void progressPanel1_Click(object sender, EventArgs e)
+        {
+
         }
 
         public int ExecuteQueryResult(string query, params OleDbParameter[] parameters)
