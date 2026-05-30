@@ -164,9 +164,63 @@ namespace SaovietTax
                                 break;
 
                             case string s when s.StartsWith("Huy_"):
+                                 idinvoice = int.Parse(s.Split('_')[1]);
+                                var payload = new[]
+                                {
+                                    new
+                                    {
+                                        id = idinvoice
+                                    }
+                                };
+                                 json = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
 
+                                var saveUrl = "https://vinvoice.viettel.vn/api/cluster5/services/einvoiceapplication/api/invoice/delete";
+
+                                var request = new HttpRequestMessage(HttpMethod.Delete, saveUrl)
+                                {
+                                    Content = new StringContent(
+                                        json,
+                                        Encoding.UTF8,
+                                        "application/json"
+                                    )
+                                };
+
+                                 response = await client.SendAsync(request);
+
+                                 result = await response.Content.ReadAsStringAsync();
+                                string query = "SELECT * FROM tbRegister";
+                                string pathluu = "";
+                                var kq = ExecuteQuery(query, null);
+                                try
+                                {
+                                    if (kq.Rows.Count > 0)
+                                    {
+                                        pathluu = kq.Rows[0]["Hoadonpath"].ToString();
+                                        pathluu = Directory.GetParent(pathluu).FullName;
+                                        pathluu = Path.Combine(pathluu, $"HoaDon/HdNhap");
+                                        // ✅ kiểm tra tồn tại
+                                       string finalpath= Path.Combine(pathluu, $"{idinvoice}.pdf");
+                                        try
+                                        {
+                                            if (File.Exists(finalpath))
+                                            {
+                                                File.Delete(finalpath);
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            XtraMessageBox.Show(ex.Message);
+                                        }
+                                        //Lấy nam taichinh
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    XtraMessageBox.Show(ex.Message);
+                                }
+                                Application.Exit();
                                 break;
-
+                            
                             default:
 
                                 simpleButton3.PerformClick();

@@ -3848,7 +3848,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             "Trong kỳ",
   });
             comboBoxEdit4.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            comboBoxEdit4.SelectedIndex =2;
+            comboBoxEdit4.SelectedIndex =0;
         }
         private void InitData()
         {
@@ -4906,8 +4906,8 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
         }
         private void ThietLapNhapKhoAbow()
         {
-            panelControl1.Width= (int)(this.ClientSize.Width * 0.75);
-            panelControl2.Width = (int)(this.ClientSize.Width * 0.25);
+            panelControl1.Width= (int)(this.ClientSize.Width * 0.78);
+            panelControl2.Width = (int)(this.ClientSize.Width * 0.20);
 
             panelControl1.Location = new Point(10, panelControl1.Location.Y);
             panelControl2.Location = new Point(panelControl1.Location.X+ panelControl1.Width+10, panelControl2.Location.Y);
@@ -29530,6 +29530,10 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 dr.TenVT = lstvt.Where(m => m.MaSo == dr.MaVatTu).FirstOrDefault().TenVattu;
                 dr.SoHieu = lstvt.Where(m => m.MaSo == dr.MaVatTu).FirstOrDefault().SoHieu;
                 nhapkhotp.TenThanhPham = Helpers.ConvertVniToUnicode(dr.TenVT) +"|" + dr.SoHieu;
+                if(dr.SoHieu== "BIA3451")
+                {
+                    int a = 0;
+                }
                 if (nhapkhotp.TenThanhPham.Contains("Trứng chiên"))
                 {
                     int a = 10;
@@ -29541,7 +29545,19 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 PropertyInfo propertyInfo = typeof(GeTonKho).GetProperty(propertyName); 
                 
                 var getSLDauky = propertyInfo!=null?(double)propertyInfo.GetValue(dr):0;
-                var loctheongay = existingTbChungtu.AsEnumerable().Where(m => m.Field<int>("MaVattu") == dr.MaVatTu && DateTime.Parse(m["NgayCT"].ToString()).Date >=dateEdit1.DateTime && DateTime.Parse(m["NgayCT"].ToString()).Date <= dateEdit2.DateTime && !m["SoHieu"].ToString().Contains("GV")).ToList();
+                var loctheongay = existingTbChungtu.AsEnumerable()
+    .Where(m =>
+        m.Field<int>("MaVattu") == dr.MaVatTu
+        && DateTime.Parse(m["NgayCT"].ToString()).Date >= dateEdit1.DateTime.Date
+        && DateTime.Parse(m["NgayCT"].ToString()).Date <= dateEdit2.DateTime.Date
+        && (
+            m["SoHieu"].ToString().Contains("GV")
+            || double.Parse(m["SoPS2No"].ToString()) > 0
+        ))
+    .ToList();
+                DataTable dt = loctheongay.Any()
+    ? loctheongay.CopyToDataTable()
+    : existingTbChungtu.Clone();
                 //Tính số lượng hoá đơn từ đầu tháng đến hiện tại
                 //Tổng nhập
                 double totalNo = 0;
@@ -29551,8 +29567,16 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 {
                     totalNo = loctheongay.AsEnumerable().Sum(m => m.Field<double>("SoPS2No"));
                     totalCo = loctheongay.AsEnumerable().Sum(m => m.Field<double>("SoPS2Co"));
-                    var getlast = loctheongay.AsEnumerable().Where(m => m.Field<int>("MaVattu") == dr.MaVatTu && !m["SoHieu"].ToString().Contains("GV")).AsEnumerable().Where(m => double.Parse(m["SoPS2Co"].ToString()) > 0).AsEnumerable().LastOrDefault();
-                    if(getlast != null)
+                    var getlast = existingTbChungtu.AsEnumerable()
+    .Where(m =>
+        m.Field<int>("MaVattu") == dr.MaVatTu
+        && !m["SoHieu"].ToString().Contains("GV")
+        && DateTime.Parse(m["NgayCT"].ToString()).Date >= dateEdit1.DateTime.Date
+        && DateTime.Parse(m["NgayCT"].ToString()).Date <= dateEdit2.DateTime.Date
+        && double.Parse(m["SoPS2Co"].ToString()) > 0
+    )
+    .LastOrDefault();
+                    if (getlast != null)
                     {
                         var sops = getlast.Field<double>("SoPS");
                         var sl = getlast.Field<double>("SoPS2Co");
@@ -29560,20 +29584,30 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     }
                     typeloc = 1;
                 }
-                else
+                if (nhapkhotp.GiaBan <= 0)
                 {
-                    loctheongay = existingTbChungtu.AsEnumerable().OrderByDescending(m=>m.Field<int>("MaSo")).Where(m => m.Field<int>("MaVattu") == dr.MaVatTu && !m["SoHieu"].ToString().Contains("GV")).ToList();
-                    totalNo = loctheongay.AsEnumerable().Sum(m => m.Field<double>("SoPS2No"));
-                    totalCo = loctheongay.AsEnumerable().Sum(m => m.Field<double>("SoPS2Co"));
-                    var getlast = loctheongay.AsEnumerable().Where(m => m.Field<int>("MaVattu") == dr.MaVatTu && !m["SoHieu"].ToString().Contains("GV")).AsEnumerable().Where(m => double.Parse(m["SoPS2Co"].ToString()) > 0).AsEnumerable().FirstOrDefault();
+                    var getlast = existingTbChungtu.AsEnumerable().Where(m => m.Field<int>("MaVattu") == dr.MaVatTu && !m["SoHieu"].ToString().Contains("GV")).AsEnumerable().Where(m => double.Parse(m["SoPS2Co"].ToString()) > 0).AsEnumerable().LastOrDefault();
                     if (getlast != null)
                     {
                         var sops = getlast.Field<double>("SoPS");
                         var sl = getlast.Field<double>("SoPS2Co");
                         nhapkhotp.GiaBan = Math.Round(sops / sl, 2);
                     }
-                    typeloc = 2;
                 }
+                //else
+                //{
+                //    loctheongay = existingTbChungtu.AsEnumerable().OrderByDescending(m=>m.Field<int>("MaSo")).Where(m => m.Field<int>("MaVattu") == dr.MaVatTu && !m["SoHieu"].ToString().Contains("GV")).ToList();
+                //    totalNo = loctheongay.AsEnumerable().Sum(m => m.Field<double>("SoPS2No"));
+                //    totalCo = loctheongay.AsEnumerable().Sum(m => m.Field<double>("SoPS2Co"));
+                //    var getlast = loctheongay.AsEnumerable().Where(m => m.Field<int>("MaVattu") == dr.MaVatTu && !m["SoHieu"].ToString().Contains("GV")).AsEnumerable().Where(m => double.Parse(m["SoPS2Co"].ToString()) > 0).AsEnumerable().FirstOrDefault();
+                //    if (getlast != null)
+                //    {
+                //        var sops = getlast.Field<double>("SoPS");
+                //        var sl = getlast.Field<double>("SoPS2Co");
+                //        nhapkhotp.GiaBan = Math.Round(sops / sl, 2);
+                //    }
+                //    typeloc = 2;
+                //}
                 double soluogton = 0;
                 if(comboBoxEdit4.SelectedIndex==0)
                 {
