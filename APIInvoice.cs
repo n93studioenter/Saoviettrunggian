@@ -152,7 +152,43 @@ namespace SaovietTax
                             case "1":
                                 btnGetTemplate.PerformClick();
                                 break;
+                            case string s when s.StartsWith("KT"):
+                                progressPanel1.Caption = "Đang đồng bộ trạng thái hoá đơn...";
+                                Application.DoEvents();
+                                //Lấy danh sahch hóa đơn đang ở trạng thái nháp 
+                                var sqlcheck = @"
+SELECT *
+FROM HoaDon
+WHERE IdNhap IS NOT NULL
+  AND IdNhap <> ''"; 
+                                var checkupdate = ExecuteQuery(sqlcheck, null);
+                                foreach(DataRow r in checkupdate.Rows)
+                                {
+                                    string idnhap = r["IdNhap"].ToString();
+                                    string api = $"https://vinvoice.viettel.vn/api/cluster5/services/einvoiceapplication/api/invoice/search-invoice-by-id/{idnhap}/draft";
 
+                                    var rsp = await client.GetAsync(api);
+                                    var rs = await rsp.Content.ReadAsStringAsync();
+                                    string StatusPH = "";
+                                    if (rsp.IsSuccessStatusCode)
+                                    {
+                                        StatusPH = "0";
+                                    }
+                                    else
+                                    {
+                                        StatusPH = "1";
+                                    }
+                                    var updateQr = @"UPDATE HoaDon  SET StatusPH = ?  WHERE MaSo =?";
+                                    var updateParameters = new OleDbParameter[]
+                                    {
+        new OleDbParameter("?", StatusPH), // Cập nhật giá trị StatusPH     
+        new OleDbParameter("?", r["MaSo"]),
+
+                                    };
+                                    var updateRowsAffected = ExecuteQueryResult(updateQr, updateParameters);
+                                }
+                               this.Close();    
+                                break;
                             case string s when s.StartsWith("PH_"):
 
                                 int idinvoice = int.Parse(s.Split('_')[1]);
@@ -1076,13 +1112,18 @@ namespace SaovietTax
                 wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
                 var btnClose = driver.FindElement(By.XPath("//button[@aria-label='Close']"));
                 btnClose.Click();
-                Thread.Sleep(1000); 
+                Thread.Sleep(1000);
+                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                 btnClose = driver.FindElement(By.XPath("//button[@aria-label='Close']"));
+                btnClose.Click();
+                Thread.Sleep(1000);
                 // chờ button tồn tại + click được luôn
-                var btnEdit = driver.FindElement(
-     By.XPath("//button[i[contains(@class,'fa-pencil-square-o')]]")
- );
+                var allButtons = driver.FindElements(By.XPath("//button[i[contains(@class,'fa-cloud-upload')]]"));
 
-                btnEdit.Click();
+                if (allButtons.Count > 1)
+                {
+                    allButtons[1].Click();
+                }
                 this.Close();
                 // Chờ trang draft load + xử lý popup cùng lúc
                 try
@@ -1127,6 +1168,7 @@ namespace SaovietTax
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi: " + ex.Message);
+                this.Close();
             }
         }
         private Dictionary<string, string> lstallCookies = new Dictionary<string, string>();   // Lưu tất cả cookie
@@ -1548,6 +1590,13 @@ namespace SaovietTax
                     {
                         UseShellExecute = true
                     });
+
+                    var upd = @"UPDATE tbResponse  SET Status = ?";
+                    var paas = new OleDbParameter[]
+                    {
+        new OleDbParameter("?", "1")
+                    };
+                    var rrs = ExecuteQueryResult(upd, paas);
                     Application.Exit();
                 }
                 else

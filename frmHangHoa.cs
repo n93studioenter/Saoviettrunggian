@@ -156,7 +156,23 @@ namespace SaovietTax
 
                 if(vt!=null)
                 {
-                    var percent= frmMain.CompareProductNew(item.TenVattu.ToLower(), txtTenvattu.Text.ToLower());
+                    if(item.TenVattu.ToLower() == "cò mổ gn6. 20mm dr,w tq")
+                    {
+                        int a = 10;
+                    }
+                    VietnameseProductMatcher matcher = new VietnameseProductMatcher();
+                    string normalizedTen = matcher.NormalizeVietnameseProduct(item.TenVattu);
+                    string normalizedTen2 = matcher.NormalizeVietnameseProduct(txtTenvattu.Text);
+                    var kiemtracodong = HasParentheses(normalizedTen2);
+                    if (kiemtracodong)
+                    {
+                        normalizedTen2 = RemoveParentheses(normalizedTen2); 
+                    }
+                    var percent= frmMain.CompareProductNew(normalizedTen.ToLower(), normalizedTen2.ToLower());
+                    if(normalizedTen.ToLower() != normalizedTen2.ToLower() && percent==100)
+                    {
+                        percent -= 1;
+                    }
                     item.Percent = percent;
                 }
             }
@@ -170,9 +186,12 @@ namespace SaovietTax
             {
                 datasource =null;
             }
-            if(datasource!=null)
+            if (datasource != null)
             {
-                gridControl1.DataSource = datasource.OrderByDescending(m => m.Percent);
+                 gridControl1.DataSource = datasource
+                .OrderByDescending(m => m.Percent)
+                .ThenByDescending(m => m.SoLuong)   // nếu SoLuong càng lớn càng ưu tiên
+                .ToList();
                 int getmavtu = datasource.OrderByDescending(m => m.Percent).FirstOrDefault().MaPhanLoai;
                 var selectedItem = comboBoxEdit1.Properties.Items.Cast<Item>().FirstOrDefault(i => i.Id == getmavtu);
                 if (selectedItem != null)
@@ -936,6 +955,11 @@ namespace SaovietTax
                 frmMain.isHHPopupOpen = false;
             }
             
+        }
+
+        private void btnSearch_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

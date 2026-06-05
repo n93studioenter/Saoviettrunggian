@@ -6311,10 +6311,14 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 // Tính 10% chiều rộng màn hình
                 btnKTTen.Width = (int)(screenWidth * 0.07);
                 btnKTTen.Location = new Point(screenWidth - btnKTTen.Width-30, btnKTTen.Location.Y);
-                txtDVTMacdinh.Width= (int)(screenWidth * 0.07);
-                txtDVTMacdinh.Location = new Point(screenWidth - txtDVTMacdinh.Width - btnKTTen.Width- 50, txtDVTMacdinh.Location.Y);
+                txtDVTMacdinh.Width= (int)(screenWidth * 0.05);
+                txtDVTMacdinh.Location = new Point(screenWidth - txtDVTMacdinh.Width - btnKTTen.Width- 30, txtDVTMacdinh.Location.Y);
                 chkDVTMacdinh.Width= (int)(screenWidth * 0.08); 
                 chkDVTMacdinh.Location= new Point(screenWidth - chkDVTMacdinh.Width - txtDVTMacdinh.Width - btnKTTen.Width - 50, chkDVTMacdinh.Location.Y);
+                chkUutiensoluong.Location= new Point(chkDVTMacdinh.Location.X - chkUutiensoluong.Width - 20, chkUutiensoluong.Location.Y);
+                txtTylechonHH.Location= new Point(chkUutiensoluong.Location.X - txtTylechonHH.Width - 20, txtTylechonHH.Location.Y);
+                labelControl24.Location= new Point(txtTylechonHH.Location.X - labelControl24.Width - 5, labelControl24.Location.Y);
+                radioButton1.Location= new Point(comboBoxEdit1.Location.X - radioButton1.Width - 20, radioButton1.Location.Y);
                 chktaituweb.Location= new Point(radioButton1.Location.X + radioButton1.Width+10, radioButton1.Location.Y);
                 btnSetting.Location= new Point(chktaituweb.Location.X + chktaituweb.Width + 5, chktaituweb.Location.Y);
                 // XtraMessageBox.Show("xin chao");
@@ -8329,7 +8333,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             _lookupByTenChinhs = new Dictionary<string, VatTuInfo>(StringComparer.OrdinalIgnoreCase);
 
             vatTuLookup = lstVattu
-           .ToDictionary(v => v.SoHieu, v => (v.TenVattu, v.TenVattu2, v.DonVi,v.Dongia));
+           .ToDictionary(v => v.SoHieu, v => (v.TenVattu, v.TenVattu2, v.DonVi,v.Dongia,v.SoLuong));
             foreach (var kvp in vatTuLookup)
             {
                 string sohieu = kvp.Key;
@@ -11895,7 +11899,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
             _lookupByTenPhu = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             vatTuLookup = lstvt
-           .ToDictionary(v => v.SoHieu, v => (v.TenVattu, v.TenVattu2, v.DonVi,v.Dongia));
+           .ToDictionary(v => v.SoHieu, v => (v.TenVattu, v.TenVattu2, v.DonVi,v.Dongia,v.SoLuong));
             foreach (var kvp in vatTuLookup)
             {
                 string sohieu = kvp.Key;
@@ -16692,7 +16696,9 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             gridControl2.Refresh();
             gridView1.RefreshData();
             gridView3.RefreshData();
-           // btnChonthang.PerformClick();
+            _cacheToanCuc.Clear();
+            _fuzzyCache.Clear();    
+            // btnChonthang.PerformClick();
         }
         public int ExecuteNonQuery2(string query, params OleDbParameter[] parameters)
         {
@@ -18553,7 +18559,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 var gridView = sender as GridView;
 
                 FileImportDetail rowData = gridView.GetRow(rowHandle) as FileImportDetail;
-                if(int.Parse(rowData.Percent) >=90 && int.Parse(rowData.Percent) < 100)
+                if(int.Parse(rowData.Percent) >= double.Parse(txtTylechonHH.Text) && int.Parse(rowData.Percent) < 100)
                 {
                     e.Appearance.ForeColor = Color.Blue; // Tô màu chữ đỏ
                     cellColors2[(rowHandle, e.Column.FieldName)] = Color.Blue; // Lưu màu
@@ -21000,7 +21006,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 return true;
             return false;
         }
-        private Dictionary<string, (string TenVattu, string TenVattu2, string DonVi,double Dongia)> vatTuLookup;
+        private Dictionary<string, (string TenVattu, string TenVattu2, string DonVi,double Dongia,double SoLuong)> vatTuLookup;
 
         // ==================== TOÀN CỤC (chỉ khai báo 1 lần) ====================
         private readonly Dictionary<string, (string SoHieu, double Percent)> _cacheToanCuc
@@ -21087,11 +21093,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         }
 
         // Cấu trúc Tuple mới thêm trường TenChuan và QuyCach
-        private Dictionary<string, (string TenChuan, string TenPhuChuan, string QuyCach, string DonVi,double Dongia)> _optimizedVatTu;
+        private Dictionary<string, (string TenChuan, string TenPhuChuan, string QuyCach, string DonVi,double Dongia,double soluong)> _optimizedVatTu;
 
         private void InitializeVatTuOptimization()
         {
-            _optimizedVatTu = new Dictionary<string, (string, string, string, string,double)>();
+            _optimizedVatTu = new Dictionary<string, (string, string, string, string,double,double)>();
             Regex regex = new Regex(@"(\d+(g|ml|L|kg)|x\d+|(\d+\s*cái))", RegexOptions.IgnoreCase);
 
             foreach (var item in vatTuLookup)
@@ -21100,7 +21106,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 string ten2 = Helpers.NormalizeVietnameseString(item.Value.TenVattu2);
                 string quyCach = regex.Match(ten1).Value;
 
-                _optimizedVatTu[item.Key] = (ten1, ten2, quyCach, item.Value.DonVi,item.Value.Dongia);
+                _optimizedVatTu[item.Key] = (ten1, ten2, quyCach, item.Value.DonVi,item.Value.Dongia,item.Value.SoLuong);
             }
         }
         public static bool HasParentheses(string text)
@@ -21602,10 +21608,26 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             if ((_lookupByTenChinh != null && _lookupByTenChinh.TryGetValue(key, out string sohieu)) ||
              (_lookupByTenPhu != null && _lookupByTenPhu.TryGetValue(key, out sohieu)))
             {
-                tbImportDetail.SoHieu = sohieu;
-                tbImportDetail.Percent = 100;
-                _cacheToanCuc[key] = (sohieu, 100);
-                return;
+
+                if (chkUutiensoluong.Checked == false)
+                {
+                    tbImportDetail.SoHieu = sohieu;
+                    tbImportDetail.Percent = 100;
+                    _cacheToanCuc[key] = (sohieu, 100);
+                    return;
+                }
+                if (chkUutiensoluong.Checked)
+                {
+                    double sol = _optimizedVatTu.Where(m => m.Key == sohieu).FirstOrDefault().Value.soluong;
+                    if (sol > tbImportDetail.Soluong)
+                    {
+                        tbImportDetail.SoHieu = sohieu;
+                        tbImportDetail.Percent = 100;
+                        _cacheToanCuc[key] = (sohieu, 100);
+                        return;
+                    }
+
+                }
             }
 
             // === KIỂM TRA CACHE FUZZY (THÊM MỚI - TĂNG TỐC) ===
@@ -21628,8 +21650,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             string inputQuyCach = regex.Match(key).Value;
 
             double bestPercent = 0;
+            double bestPercentbak = 0;
             string bestSoHieu = null;
-
+            string bestSoHieubak = null;
+            double bestsl = -100;
+            double bestslbak = -100;
             // Khởi tạo list để lưu kết quả cho cache
             var fuzzyResults = new List<(string SoHieu, int Score)>();
 
@@ -21638,9 +21663,13 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             {
                 foreach (var item in _optimizedVatTu)
                 {
+                    if (item.Key == "BO3978")
+                    {
+                        int test = 10;
+                    }
                     kiemtracodong = HasParentheses(item.Value.TenChuan);
                     string tenhang = item.Value.TenChuan;
-                    string tenhang2 = item.Value.TenPhuChuan;
+                    string tenhang2 = item.Value.TenPhuChuan; 
                     //Nếu tên hàng có ngoặc, thì xoá luôn cho cả 2
                     key = originkey;
                     if (kiemtracodong)
@@ -21658,11 +21687,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         }
                     }
                     // Kiểm tra quy cách trước (Rẻ hơn Fuzzy)
-                    if (!string.IsNullOrEmpty(inputQuyCach) && inputQuyCach.ToLower() != item.Value.QuyCach.ToLower() && !kiemtracodong)
-                        continue;
+                    //if (!string.IsNullOrEmpty(inputQuyCach) && inputQuyCach.ToLower() != item.Value.QuyCach.ToLower() && !kiemtracodong)
+                        //continue;
 
                     double final = 0;
-
+                    double soluong =0;
                     //So sánh theo giá
                     if (Timtheogia && (final >= 60 || tenhang.ToLower().Split(' ')[0] == key.ToLower().Split(' ')[0]))
                     {
@@ -21677,11 +21706,19 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     }
 
                     //Sunlight
-                    if (tenhang.ToLower().Contains("sunlight")  && key.ToLower().Contains("sunlight"))
+                    if (key.ToLower() == "nẹp sàn phảix390x")
+                    {
+                        if (item.Key== "BO3978")
+                        {
+                            int test = 10;
+                        }
+                       
+                    }
+                    //81250kvgv40-hộp chứa đồ
+                    if (tenhang.ToLower() == "81250kvgv40-hộp chứa đồ")
                     {
                         int test = 10;
                     }
-
                     // ===== TÍNH ĐIỂM (GIỮ NGUYÊN CODE CỦA BẠN) =====
                     int testfinal = CompareProductNew(tenhang.ToLower(), key.ToLower());
                     int testfinal2 = CompareProductNew(tenhang2.ToLower(), key.ToLower());
@@ -21691,7 +21728,9 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     }
                     testfinal = Math.Max(testfinal, testfinal2);
                     if (testfinal > final)
+                    {
                         final = testfinal;
+                    }
                     if (final == 100)
                         final = 99;
 
@@ -21700,7 +21739,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     {
                         string dvt1 = Helpers.ConvertVniToUnicode(tbImportDetail.DVT).ToLower();
                         string dvt2 = item.Value.DonVi.ToLower();
-                        if (dvt1 != dvt2)
+                        if (dvt1 != dvt2 && !string.IsNullOrEmpty(dvt1))
                         {
                             final -= 50;
                             bestPercent -= 50;
@@ -21723,6 +21762,14 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             //} 
 
                         }
+                        soluong= item.Value.soluong;
+                    }
+                    else
+                    {
+                        if (chkUutiensoluong.Checked)
+                        {
+                            soluong = item.Value.soluong;
+                        }
                     }
 
                     // Lưu kết quả vào list cache
@@ -21731,14 +21778,55 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         fuzzyResults.Add((item.Key, (int)final));
                     }
 
-                    if (final > bestPercent)
+                    //Nếu ưu tiên số lượng thì ko cân phải lớn hơn bestpercent mà chỉ cần lớn hơn 1 ngưỡng nào đó (ví dụ 80) và số lượng lớn hơn bestsl
+                    if (chkUutiensoluong.Checked)
                     {
-                        bestPercent = final;
-                        bestSoHieu = item.Key;
+                        if(final >= double.Parse(txtTylechonHH.Text))
+                        {
+                            if (soluong >= tbImportDetail.Soluong)
+                            {
+                                if (soluong >= bestsl && final > bestPercent)
+                                {
+                                    int a = 10;
+                                    bestPercent = final;
+                                    bestSoHieu = item.Key; 
+                                    bestsl = soluong;
+                                }
+                            }
+                            else
+                            {
+                                if (final >= bestPercentbak)
+                                {
+                                    bestPercentbak = final;
+                                    bestSoHieubak = item.Key;
+                                    bestslbak = soluong;
+                                }
+                                   
+                            }
+                        }
                     }
+                    else
+                    {
+                        if (final >= bestPercent)
+                        {
+                            if (soluong >= bestsl)
+                            {
+                                bestPercent = final;
+                                bestSoHieu = item.Key;
+                                if (final >= 90)
+                                    bestsl = soluong;
+                            }
+
+                        }
+                    }  
                 }
             }
-
+            if (bestPercent == 0)
+            {
+                bestPercent = bestPercentbak;
+                bestSoHieu = bestSoHieubak;
+                bestsl = bestslbak;
+            }
             // === LƯU KẾT QUẢ FUZZY VÀO CACHE (THÊM MỚI) ===
             lock (_cacheLock)
             {
@@ -21751,9 +21839,12 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         .ToList();
                 }
             }
-
+            if(string.IsNullOrEmpty(txtTylechonHH.Text))
+            {
+                txtTylechonHH.Text=90.ToString();   
+            }
             // === XỬ LÝ KẾT QUẢ (GIỮ NGUYÊN CODE CỦA BẠN) ===
-            if (bestSoHieu != null && bestPercent >= 90 ) // Chỉ lấy nếu độ chính xác > 85%
+            if (bestSoHieu != null && bestPercent >= double.Parse(txtTylechonHH.Text) ) // Chỉ lấy nếu độ chính xác > 85%
             {
                 SetVatTuResult(tbImportDetail, key, bestSoHieu, Math.Round(bestPercent));
             }

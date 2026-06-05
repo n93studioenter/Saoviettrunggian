@@ -100,7 +100,7 @@
             this.gridControl2.MainView = this.gridView2;
             this.gridControl2.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.gridControl2.Name = "gridControl2";
-            this.gridControl2.Size = new System.Drawing.Size(0, 80);
+            this.gridControl2.Size = new System.Drawing.Size(9, 80);
             this.gridControl2.TabIndex = 16;
             this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView2});
@@ -166,17 +166,16 @@
             // 
             this.txtGhichu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGhichu.Location = new System.Drawing.Point(16, 220);
+            this.txtGhichu.Location = new System.Drawing.Point(495, 39);
             this.txtGhichu.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtGhichu.Name = "txtGhichu";
-            this.txtGhichu.Size = new System.Drawing.Size(162, 23);
+            this.txtGhichu.Size = new System.Drawing.Size(224, 23);
             this.txtGhichu.TabIndex = 20;
-            this.txtGhichu.Visible = false;
             // 
             // btnThem
             // 
             this.btnThem.ImageOptions.Image = global::SaovietTax.Properties.Resources.add_16x16;
-            this.btnThem.Location = new System.Drawing.Point(20, 73);
+            this.btnThem.Location = new System.Drawing.Point(14, 67);
             this.btnThem.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(96, 30);
@@ -187,18 +186,17 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(16, 216);
+            this.label4.Location = new System.Drawing.Point(442, 42);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(49, 16);
             this.label4.TabIndex = 19;
             this.label4.Text = "Ghi chú";
-            this.label4.Visible = false;
             // 
             // btnGhi
             // 
             this.btnGhi.ImageOptions.Image = global::SaovietTax.Properties.Resources.saveto_16x16;
-            this.btnGhi.Location = new System.Drawing.Point(120, 73);
+            this.btnGhi.Location = new System.Drawing.Point(114, 67);
             this.btnGhi.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.btnGhi.Name = "btnGhi";
             this.btnGhi.Size = new System.Drawing.Size(116, 29);
@@ -209,7 +207,7 @@
             // btnXoa
             // 
             this.btnXoa.ImageOptions.Image = global::SaovietTax.Properties.Resources.cancel_16x16;
-            this.btnXoa.Location = new System.Drawing.Point(242, 72);
+            this.btnXoa.Location = new System.Drawing.Point(236, 66);
             this.btnXoa.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(119, 30);
@@ -230,13 +228,13 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSearch.ImageOptions.Image")));
-            this.btnSearch.Location = new System.Drawing.Point(375, 359);
+            this.btnSearch.ImageOptions.Image = global::SaovietTax.Properties.Resources.find_16x16;
+            this.btnSearch.Location = new System.Drawing.Point(691, 72);
             this.btnSearch.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(52, 36);
+            this.btnSearch.Size = new System.Drawing.Size(23, 20);
             this.btnSearch.TabIndex = 26;
-            this.btnSearch.Visible = false;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click_1);
             // 
             // txtsoluong
             // 
@@ -252,7 +250,7 @@
             // 
             this.btnThoat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnThoat.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnThoat.ImageOptions.Image")));
-            this.btnThoat.Location = new System.Drawing.Point(52, 303);
+            this.btnThoat.Location = new System.Drawing.Point(61, 303);
             this.btnThoat.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(116, 36);
@@ -327,7 +325,7 @@
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(371, 77);
+            this.txtSearch.Location = new System.Drawing.Point(371, 70);
             this.txtSearch.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(346, 23);
@@ -339,11 +337,11 @@
             this.gridControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.gridControl1.Location = new System.Drawing.Point(10, 126);
+            this.gridControl1.Location = new System.Drawing.Point(10, 112);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(718, 273);
+            this.gridControl1.Size = new System.Drawing.Size(727, 287);
             this.gridControl1.TabIndex = 17;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -448,9 +446,12 @@
             this.panelControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelControl1.Controls.Add(this.simpleButton2);
+            this.panelControl1.Controls.Add(this.label4);
+            this.panelControl1.Controls.Add(this.txtGhichu);
             this.panelControl1.Controls.Add(this.label5);
             this.panelControl1.Controls.Add(this.txtDonvi);
             this.panelControl1.Controls.Add(this.btnThem);
+            this.panelControl1.Controls.Add(this.btnSearch);
             this.panelControl1.Controls.Add(this.label3);
             this.panelControl1.Controls.Add(this.txtTenvattu);
             this.panelControl1.Controls.Add(this.btnGhi);
@@ -460,10 +461,10 @@
             this.panelControl1.Controls.Add(this.txtSohieu);
             this.panelControl1.Controls.Add(this.label1);
             this.panelControl1.Controls.Add(this.txtSearch);
-            this.panelControl1.Location = new System.Drawing.Point(11, 2);
+            this.panelControl1.Location = new System.Drawing.Point(9, 2);
             this.panelControl1.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(717, 116);
+            this.panelControl1.Size = new System.Drawing.Size(728, 102);
             this.panelControl1.TabIndex = 18;
             this.panelControl1.MouseEnter += new System.EventHandler(this.panelControl1_MouseEnter);
             // 
@@ -479,7 +480,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(459, 7);
+            this.label5.Location = new System.Drawing.Point(427, 7);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(64, 16);
@@ -488,16 +489,16 @@
             // 
             // txtDonvi
             // 
-            this.txtDonvi.Location = new System.Drawing.Point(360, 5);
+            this.txtDonvi.Location = new System.Drawing.Point(311, 7);
             this.txtDonvi.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtDonvi.Name = "txtDonvi";
-            this.txtDonvi.Size = new System.Drawing.Size(86, 23);
+            this.txtDonvi.Size = new System.Drawing.Size(103, 23);
             this.txtDonvi.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(313, 10);
+            this.label3.Location = new System.Drawing.Point(264, 10);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(43, 16);
@@ -506,20 +507,20 @@
             // 
             // txtTenvattu
             // 
-            this.txtTenvattu.Location = new System.Drawing.Point(79, 39);
+            this.txtTenvattu.Location = new System.Drawing.Point(52, 37);
             this.txtTenvattu.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtTenvattu.Name = "txtTenvattu";
-            this.txtTenvattu.Size = new System.Drawing.Size(638, 23);
+            this.txtTenvattu.Size = new System.Drawing.Size(362, 23);
             this.txtTenvattu.TabIndex = 3;
             // 
             // comboBoxEdit1
             // 
-            this.comboBoxEdit1.Location = new System.Drawing.Point(527, 3);
+            this.comboBoxEdit1.Location = new System.Drawing.Point(495, 3);
             this.comboBoxEdit1.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.comboBoxEdit1.Name = "comboBoxEdit1";
             this.comboBoxEdit1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.comboBoxEdit1.Size = new System.Drawing.Size(190, 23);
+            this.comboBoxEdit1.Size = new System.Drawing.Size(222, 23);
             this.comboBoxEdit1.TabIndex = 4;
             this.comboBoxEdit1.SelectedIndexChanged += new System.EventHandler(this.comboBoxEdit1_SelectedIndexChanged);
             // 
@@ -535,16 +536,16 @@
             // 
             // txtSohieu
             // 
-            this.txtSohieu.Location = new System.Drawing.Point(79, 6);
+            this.txtSohieu.Location = new System.Drawing.Point(52, 6);
             this.txtSohieu.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtSohieu.Name = "txtSohieu";
-            this.txtSohieu.Size = new System.Drawing.Size(230, 23);
+            this.txtSohieu.Size = new System.Drawing.Size(208, 23);
             this.txtSohieu.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 12);
+            this.label1.Location = new System.Drawing.Point(4, 10);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 16);
@@ -556,12 +557,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(736, 480);
+            this.ClientSize = new System.Drawing.Size(745, 480);
             this.Controls.Add(this.txtdongia);
-            this.Controls.Add(this.txtGhichu);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtsoluong);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.label6);

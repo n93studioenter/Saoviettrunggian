@@ -764,6 +764,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Hoadon\invoice.txt" />
+    <None Include="Resources\find_16x16.png" />
+    <None Include="Resources\filterbyseries_pie_16x16.png" />
     <None Include="Resources\69d8e99d154e94b3b5dcedb68edbcaa6.png" />
     <None Include="Resources\properties_16x16.png" />
     <None Include="Resources\lookup&amp;reference_16x16.png" />

@@ -247,6 +247,10 @@
             this.comboBoxEdit3 = new DevExpress.XtraEditors.ComboBoxEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.panelControl6 = new DevExpress.XtraEditors.PanelControl();
+            this.chkUutiensoluong = new DevExpress.XtraEditors.CheckEdit();
+            this.simpleButton15 = new DevExpress.XtraEditors.SimpleButton();
+            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
+            this.txtTylechonHH = new DevExpress.XtraEditors.TextEdit();
             this.txtDVTMacdinh = new DevExpress.XtraEditors.TextEdit();
             this.chkDVTMacdinh = new DevExpress.XtraEditors.CheckEdit();
             this.simpleButton12 = new DevExpress.XtraEditors.SimpleButton();
@@ -389,6 +393,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxEdit3.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl6)).BeginInit();
             this.panelControl6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chkUutiensoluong.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTylechonHH.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtDVTMacdinh.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkDVTMacdinh.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkTudong.Properties)).BeginInit();
@@ -2943,6 +2949,10 @@
             this.panelControl6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelControl6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelControl6.Controls.Add(this.chkUutiensoluong);
+            this.panelControl6.Controls.Add(this.simpleButton15);
+            this.panelControl6.Controls.Add(this.labelControl24);
+            this.panelControl6.Controls.Add(this.txtTylechonHH);
             this.panelControl6.Controls.Add(this.txtDVTMacdinh);
             this.panelControl6.Controls.Add(this.chkDVTMacdinh);
             this.panelControl6.Controls.Add(this.simpleButton12);
@@ -2968,6 +2978,42 @@
             this.panelControl6.Size = new System.Drawing.Size(1657, 59);
             this.panelControl6.TabIndex = 20;
             // 
+            // chkUutiensoluong
+            // 
+            this.chkUutiensoluong.Location = new System.Drawing.Point(1096, 24);
+            this.chkUutiensoluong.Name = "chkUutiensoluong";
+            this.chkUutiensoluong.Properties.Caption = "Ưu tiên số lượng";
+            this.chkUutiensoluong.Size = new System.Drawing.Size(134, 20);
+            this.chkUutiensoluong.TabIndex = 31;
+            // 
+            // simpleButton15
+            // 
+            this.simpleButton15.ImageOptions.Image = global::SaovietTax.Properties.Resources.filterbyseries_pie_16x16;
+            this.simpleButton15.Location = new System.Drawing.Point(751, 15);
+            this.simpleButton15.Name = "simpleButton15";
+            this.simpleButton15.Size = new System.Drawing.Size(182, 29);
+            this.simpleButton15.TabIndex = 30;
+            this.simpleButton15.Text = "Bô lọc tìm sản phẩm";
+            this.simpleButton15.Visible = false;
+            // 
+            // labelControl24
+            // 
+            this.labelControl24.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelControl24.Location = new System.Drawing.Point(961, 25);
+            this.labelControl24.Name = "labelControl24";
+            this.labelControl24.Size = new System.Drawing.Size(79, 16);
+            this.labelControl24.TabIndex = 29;
+            this.labelControl24.Text = "Tỷ lệ chọn HH";
+            // 
+            // txtTylechonHH
+            // 
+            this.txtTylechonHH.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtTylechonHH.EditValue = "90";
+            this.txtTylechonHH.Location = new System.Drawing.Point(1046, 22);
+            this.txtTylechonHH.Name = "txtTylechonHH";
+            this.txtTylechonHH.Size = new System.Drawing.Size(44, 23);
+            this.txtTylechonHH.TabIndex = 28;
+            // 
             // txtDVTMacdinh
             // 
             this.txtDVTMacdinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -2987,7 +3033,7 @@
             // 
             // simpleButton12
             // 
-            this.simpleButton12.Location = new System.Drawing.Point(1117, 21);
+            this.simpleButton12.Location = new System.Drawing.Point(479, 11);
             this.simpleButton12.Name = "simpleButton12";
             this.simpleButton12.Size = new System.Drawing.Size(94, 29);
             this.simpleButton12.TabIndex = 11;
@@ -2997,7 +3043,7 @@
             // 
             // simpleButton13
             // 
-            this.simpleButton13.Location = new System.Drawing.Point(1107, 16);
+            this.simpleButton13.Location = new System.Drawing.Point(474, 5);
             this.simpleButton13.Name = "simpleButton13";
             this.simpleButton13.Size = new System.Drawing.Size(94, 29);
             this.simpleButton13.TabIndex = 25;
@@ -3008,7 +3054,7 @@
             // chkTudong
             // 
             this.chkTudong.EditValue = true;
-            this.chkTudong.Location = new System.Drawing.Point(1007, 21);
+            this.chkTudong.Location = new System.Drawing.Point(479, 18);
             this.chkTudong.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.chkTudong.Name = "chkTudong";
             this.chkTudong.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 7F);
@@ -3027,7 +3073,7 @@
             // 
             this.chkHienthimau.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkHienthimau.EditValue = true;
-            this.chkHienthimau.Location = new System.Drawing.Point(1107, 27);
+            this.chkHienthimau.Location = new System.Drawing.Point(513, 16);
             this.chkHienthimau.Name = "chkHienthimau";
             this.chkHienthimau.Properties.Caption = "Hiển thị màu";
             this.chkHienthimau.Size = new System.Drawing.Size(94, 20);
@@ -3039,7 +3085,7 @@
             // 
             this.btnExportExcelVao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportExcelVao.ImageOptions.Image = global::SaovietTax.Properties.Resources.exporttoxlsx_16x16;
-            this.btnExportExcelVao.Location = new System.Drawing.Point(1007, 14);
+            this.btnExportExcelVao.Location = new System.Drawing.Point(479, 11);
             this.btnExportExcelVao.Name = "btnExportExcelVao";
             this.btnExportExcelVao.Size = new System.Drawing.Size(116, 29);
             this.btnExportExcelVao.TabIndex = 12;
@@ -3060,7 +3106,7 @@
             // btnXoaDSRa
             // 
             this.btnXoaDSRa.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnXoaDSRa.Location = new System.Drawing.Point(972, 21);
+            this.btnXoaDSRa.Location = new System.Drawing.Point(479, 21);
             this.btnXoaDSRa.Name = "btnXoaDSRa";
             this.btnXoaDSRa.Size = new System.Drawing.Size(65, 26);
             this.btnXoaDSRa.TabIndex = 12;
@@ -3085,7 +3131,7 @@
             // btnXoaDSVao
             // 
             this.btnXoaDSVao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnXoaDSVao.Location = new System.Drawing.Point(985, 9);
+            this.btnXoaDSVao.Location = new System.Drawing.Point(474, 16);
             this.btnXoaDSVao.Name = "btnXoaDSVao";
             this.btnXoaDSVao.Size = new System.Drawing.Size(64, 28);
             this.btnXoaDSVao.TabIndex = 11;
@@ -3096,7 +3142,7 @@
             // lblThongbaos
             // 
             this.lblThongbaos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblThongbaos.Location = new System.Drawing.Point(1016, 20);
+            this.lblThongbaos.Location = new System.Drawing.Point(491, 24);
             this.lblThongbaos.Name = "lblThongbaos";
             this.lblThongbaos.Size = new System.Drawing.Size(75, 16);
             this.lblThongbaos.TabIndex = 18;
@@ -3107,7 +3153,7 @@
             // 
             this.simpleButton7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton7.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton7.ImageOptions.Image")));
-            this.simpleButton7.Location = new System.Drawing.Point(967, 11);
+            this.simpleButton7.Location = new System.Drawing.Point(491, 7);
             this.simpleButton7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton7.Name = "simpleButton7";
             this.simpleButton7.Size = new System.Drawing.Size(51, 33);
@@ -3119,7 +3165,7 @@
             // 
             this.simpleButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton1.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton1.ImageOptions.Image")));
-            this.simpleButton1.Location = new System.Drawing.Point(1042, 7);
+            this.simpleButton1.Location = new System.Drawing.Point(503, 9);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(35, 31);
@@ -3141,10 +3187,10 @@
             // 
             this.btnLichsuimport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLichsuimport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnLichsuimport.ImageOptions.Image")));
-            this.btnLichsuimport.Location = new System.Drawing.Point(924, 10);
+            this.btnLichsuimport.Location = new System.Drawing.Point(479, 13);
             this.btnLichsuimport.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnLichsuimport.Name = "btnLichsuimport";
-            this.btnLichsuimport.Size = new System.Drawing.Size(199, 33);
+            this.btnLichsuimport.Size = new System.Drawing.Size(148, 33);
             this.btnLichsuimport.TabIndex = 14;
             this.btnLichsuimport.Text = "Lịch sử import";
             this.btnLichsuimport.Visible = false;
@@ -3155,10 +3201,10 @@
             this.DocfilePDF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DocfilePDF.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("DocfilePDF.ImageOptions.Image")));
-            this.DocfilePDF.Location = new System.Drawing.Point(855, 9);
+            this.DocfilePDF.Location = new System.Drawing.Point(479, 11);
             this.DocfilePDF.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.DocfilePDF.Name = "DocfilePDF";
-            this.DocfilePDF.Size = new System.Drawing.Size(346, 33);
+            this.DocfilePDF.Size = new System.Drawing.Size(179, 33);
             this.DocfilePDF.TabIndex = 16;
             this.DocfilePDF.Text = "Đọc file PDF";
             this.DocfilePDF.Visible = false;
@@ -3167,7 +3213,7 @@
             // btnTaicoquanthue
             // 
             this.btnTaicoquanthue.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnTaicoquanthue.ImageOptions.Image")));
-            this.btnTaicoquanthue.Location = new System.Drawing.Point(406, 14);
+            this.btnTaicoquanthue.Location = new System.Drawing.Point(244, 11);
             this.btnTaicoquanthue.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnTaicoquanthue.Name = "btnTaicoquanthue";
             this.btnTaicoquanthue.Size = new System.Drawing.Size(228, 35);
@@ -3178,7 +3224,7 @@
             // 
             // simpleButton2
             // 
-            this.simpleButton2.Location = new System.Drawing.Point(766, 12);
+            this.simpleButton2.Location = new System.Drawing.Point(479, 10);
             this.simpleButton2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton2.Name = "simpleButton2";
             this.simpleButton2.Size = new System.Drawing.Size(111, 33);
@@ -3191,7 +3237,7 @@
             // 
             this.lblThongbao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblThongbao.AutoSize = true;
-            this.lblThongbao.Location = new System.Drawing.Point(654, 18);
+            this.lblThongbao.Location = new System.Drawing.Point(488, 22);
             this.lblThongbao.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblThongbao.Name = "lblThongbao";
             this.lblThongbao.Size = new System.Drawing.Size(41, 16);
@@ -3896,6 +3942,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl6)).EndInit();
             this.panelControl6.ResumeLayout(false);
             this.panelControl6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chkUutiensoluong.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTylechonHH.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtDVTMacdinh.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkDVTMacdinh.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkTudong.Properties)).EndInit();
@@ -4228,5 +4276,9 @@
         private DevExpress.XtraEditors.LabelControl labelControl18;
         private DevExpress.XtraEditors.CheckEdit chktaituweb;
         private DevExpress.XtraEditors.SimpleButton btnSetting;
+        private DevExpress.XtraEditors.LabelControl labelControl24;
+        private DevExpress.XtraEditors.TextEdit txtTylechonHH;
+        private DevExpress.XtraEditors.SimpleButton simpleButton15;
+        private DevExpress.XtraEditors.CheckEdit chkUutiensoluong;
     }
 }
