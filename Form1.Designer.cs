@@ -893,7 +893,7 @@
             this.gridColumn22.Name = "gridColumn22";
             this.gridColumn22.Visible = true;
             this.gridColumn22.VisibleIndex = 0;
-            this.gridColumn22.Width = 77;
+            this.gridColumn22.Width = 82;
             // 
             // colTen3
             // 
@@ -903,7 +903,7 @@
             this.colTen3.Name = "colTen3";
             this.colTen3.Visible = true;
             this.colTen3.VisibleIndex = 1;
-            this.colTen3.Width = 431;
+            this.colTen3.Width = 459;
             // 
             // colSoHieu3
             // 
@@ -913,7 +913,7 @@
             this.colSoHieu3.Name = "colSoHieu3";
             this.colSoHieu3.Visible = true;
             this.colSoHieu3.VisibleIndex = 2;
-            this.colSoHieu3.Width = 91;
+            this.colSoHieu3.Width = 132;
             // 
             // colSoluong3
             // 
@@ -925,7 +925,7 @@
             this.colSoluong3.Name = "colSoluong3";
             this.colSoluong3.Visible = true;
             this.colSoluong3.VisibleIndex = 3;
-            this.colSoluong3.Width = 149;
+            this.colSoluong3.Width = 151;
             // 
             // colDongia3
             // 
@@ -937,7 +937,7 @@
             this.colDongia3.Name = "colDongia3";
             this.colDongia3.Visible = true;
             this.colDongia3.VisibleIndex = 4;
-            this.colDongia3.Width = 149;
+            this.colDongia3.Width = 428;
             // 
             // colThanhtien2
             // 
@@ -949,7 +949,7 @@
             this.colThanhtien2.Name = "colThanhtien2";
             this.colThanhtien2.Visible = true;
             this.colThanhtien2.VisibleIndex = 5;
-            this.colThanhtien2.Width = 149;
+            this.colThanhtien2.Width = 107;
             // 
             // colDVT3
             // 
@@ -959,7 +959,7 @@
             this.colDVT3.Name = "colDVT3";
             this.colDVT3.Visible = true;
             this.colDVT3.VisibleIndex = 6;
-            this.colDVT3.Width = 149;
+            this.colDVT3.Width = 88;
             // 
             // colTKNo3
             // 
@@ -969,7 +969,7 @@
             this.colTKNo3.Name = "colTKNo3";
             this.colTKNo3.Visible = true;
             this.colTKNo3.VisibleIndex = 7;
-            this.colTKNo3.Width = 149;
+            this.colTKNo3.Width = 79;
             // 
             // colTKCo3
             // 
@@ -979,7 +979,7 @@
             this.colTKCo3.Name = "colTKCo3";
             this.colTKCo3.Visible = true;
             this.colTKCo3.VisibleIndex = 8;
-            this.colTKCo3.Width = 180;
+            this.colTKCo3.Width = 99;
             // 
             // colIDs
             // 
@@ -988,8 +988,6 @@
             this.colIDs.MinWidth = 25;
             this.colIDs.Name = "colIDs";
             this.colIDs.OptionsColumn.AllowEdit = false;
-            this.colIDs.Visible = true;
-            this.colIDs.VisibleIndex = 9;
             this.colIDs.Width = 80;
             // 
             // gridControl2
@@ -1283,7 +1281,7 @@
             this.colpercent.Name = "colpercent";
             this.colpercent.Visible = true;
             this.colpercent.VisibleIndex = 0;
-            this.colpercent.Width = 52;
+            this.colpercent.Width = 56;
             // 
             // colTen2
             // 
@@ -1293,7 +1291,7 @@
             this.colTen2.Name = "colTen2";
             this.colTen2.Visible = true;
             this.colTen2.VisibleIndex = 1;
-            this.colTen2.Width = 445;
+            this.colTen2.Width = 482;
             // 
             // colSohieu2
             // 
@@ -1303,7 +1301,7 @@
             this.colSohieu2.Name = "colSohieu2";
             this.colSohieu2.Visible = true;
             this.colSohieu2.VisibleIndex = 2;
-            this.colSohieu2.Width = 92;
+            this.colSohieu2.Width = 127;
             // 
             // colSoluong2
             // 
@@ -1315,7 +1313,7 @@
             this.colSoluong2.Name = "colSoluong2";
             this.colSoluong2.Visible = true;
             this.colSoluong2.VisibleIndex = 3;
-            this.colSoluong2.Width = 119;
+            this.colSoluong2.Width = 125;
             // 
             // colDongia2
             // 
@@ -1327,7 +1325,7 @@
             this.colDongia2.Name = "colDongia2";
             this.colDongia2.Visible = true;
             this.colDongia2.VisibleIndex = 4;
-            this.colDongia2.Width = 153;
+            this.colDongia2.Width = 160;
             // 
             // colThanhTien
             // 
@@ -1339,7 +1337,7 @@
             this.colThanhTien.Name = "colThanhTien";
             this.colThanhTien.Visible = true;
             this.colThanhTien.VisibleIndex = 5;
-            this.colThanhTien.Width = 153;
+            this.colThanhTien.Width = 160;
             // 
             // colDVT
             // 
@@ -1349,7 +1347,7 @@
             this.colDVT.Name = "colDVT";
             this.colDVT.Visible = true;
             this.colDVT.VisibleIndex = 6;
-            this.colDVT.Width = 153;
+            this.colDVT.Width = 160;
             // 
             // colMaCT2
             // 
@@ -1367,7 +1365,7 @@
             this.colTKNo2.Name = "colTKNo2";
             this.colTKNo2.Visible = true;
             this.colTKNo2.VisibleIndex = 7;
-            this.colTKNo2.Width = 153;
+            this.colTKNo2.Width = 160;
             // 
             // coltkco2
             // 
@@ -1377,7 +1375,7 @@
             this.coltkco2.Name = "coltkco2";
             this.coltkco2.Visible = true;
             this.coltkco2.VisibleIndex = 8;
-            this.coltkco2.Width = 171;
+            this.coltkco2.Width = 188;
             // 
             // gridColumn12
             // 
@@ -1385,8 +1383,6 @@
             this.gridColumn12.FieldName = "ID";
             this.gridColumn12.MinWidth = 29;
             this.gridColumn12.Name = "gridColumn12";
-            this.gridColumn12.Visible = true;
-            this.gridColumn12.VisibleIndex = 9;
             this.gridColumn12.Width = 106;
             // 
             // gridControl1
@@ -1765,7 +1761,7 @@
             this.progressPanel1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.progressPanel1.Description = "";
             this.progressPanel1.LineAnimationElementType = DevExpress.Utils.Animation.LineAnimationElementType.Triangle;
-            this.progressPanel1.Location = new System.Drawing.Point(5, 8);
+            this.progressPanel1.Location = new System.Drawing.Point(-2, 0);
             this.progressPanel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.progressPanel1.Name = "progressPanel1";
             this.progressPanel1.Size = new System.Drawing.Size(811, 29);
@@ -1843,7 +1839,7 @@
             this.progressPanel2.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.progressPanel2.Description = "";
             this.progressPanel2.LineAnimationElementType = DevExpress.Utils.Animation.LineAnimationElementType.Triangle;
-            this.progressPanel2.Location = new System.Drawing.Point(9, 5);
+            this.progressPanel2.Location = new System.Drawing.Point(14, 3);
             this.progressPanel2.LookAndFeel.SkinName = "Office 2019 Black";
             this.progressPanel2.LookAndFeel.UseDefaultLookAndFeel = false;
             this.progressPanel2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -2980,6 +2976,7 @@
             // 
             // chkUutiensoluong
             // 
+            this.chkUutiensoluong.EditValue = true;
             this.chkUutiensoluong.Location = new System.Drawing.Point(1096, 24);
             this.chkUutiensoluong.Name = "chkUutiensoluong";
             this.chkUutiensoluong.Properties.Caption = "Ưu tiên số lượng";

@@ -1492,7 +1492,7 @@
           }
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
+      "Selenium.WebDriver.ChromeDriver/149.0.7827.11500": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -3413,7 +3413,7 @@
           "buildTransitive/Selenium.WebDriver.props": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
+      "Selenium.WebDriver.ChromeDriver/149.0.7827.11500": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -5325,7 +5325,7 @@
           "buildTransitive/Selenium.WebDriver.props": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
+      "Selenium.WebDriver.ChromeDriver/149.0.7827.11500": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -7240,7 +7240,7 @@
           "buildTransitive/Selenium.WebDriver.props": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
+      "Selenium.WebDriver.ChromeDriver/149.0.7827.11500": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -9149,7 +9149,7 @@
           "buildTransitive/Selenium.WebDriver.props": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
+      "Selenium.WebDriver.ChromeDriver/149.0.7827.11500": {
         "type": "package",
         "build": {
           "build/Selenium.WebDriver.ChromeDriver.targets": {}
@@ -12541,10 +12541,10 @@
         "selenium.webdriver.nuspec"
       ]
     },
-    "Selenium.WebDriver.ChromeDriver/147.0.7727.11700": {
-      "sha512": "NKur0NrsxJwFUmz0WJjAEyJ9LeLzuRi/gNEb+RN4pB5NZjYFLtAwNw9ISbyD+pp79YQ+Pan2rfwt3dUUdtufSw==",
+    "Selenium.WebDriver.ChromeDriver/149.0.7827.11500": {
+      "sha512": "yZaUyvVXBAswRMRZEJSuZeJhlZfYCDWoD33zF13A4cXwkqCKz7sL12SmmG5Z9s2aawVSSMtv9AwuhGuudhPrbw==",
       "type": "package",
-      "path": "selenium.webdriver.chromedriver/147.0.7727.11700",
+      "path": "selenium.webdriver.chromedriver/149.0.7827.11500",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -12561,7 +12561,7 @@
         "driver/win32/LICENSE.chromedriver",
         "driver/win32/chromedriver.exe",
         "nupkg-icon.png",
-        "selenium.webdriver.chromedriver.147.0.7727.11700.nupkg.sha512",
+        "selenium.webdriver.chromedriver.149.0.7827.11500.nupkg.sha512",
         "selenium.webdriver.chromedriver.nuspec"
       ]
     },
@@ -13752,7 +13752,7 @@
       "PdfSharp >= 6.2.0",
       "Pkcs11Interop >= 5.0.1",
       "Selenium.Support >= 4.43.0",
-      "Selenium.WebDriver.ChromeDriver >= 147.0.7727.11700",
+      "Selenium.WebDriver.ChromeDriver >= 149.0.7827.11500",
       "SimMetrics.Net >= 1.0.5",
       "Svg >= 3.4.7",
       "System.Data.SQLite >= 2.0.1",
@@ -13900,7 +13900,7 @@
           },
           "Selenium.WebDriver.ChromeDriver": {
             "target": "Package",
-            "version": "[147.0.7727.11700, )"
+            "version": "[149.0.7827.11500, )"
           },
           "SimMetrics.Net": {
             "target": "Package",

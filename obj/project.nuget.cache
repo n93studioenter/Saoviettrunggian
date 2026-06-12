@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "PnmI5IEWgCY=",
+  "dgSpecHash": "b/j5VMVTj1A=",
   "success": true,
   "projectFilePath": "D:\\DA3\\SourcePmTrungGiang\\SaovietTax\\SaovietTax\\SaovietTax.csproj",
   "expectedPackageFiles": [
@@ -67,7 +67,7 @@
     "C:\\Users\\Admin\\.nuget\\packages\\rbush.signed\\4.0.0\\rbush.signed.4.0.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\selenium.support\\4.43.0\\selenium.support.4.43.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver\\4.43.0\\selenium.webdriver.4.43.0.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver.chromedriver\\147.0.7727.11700\\selenium.webdriver.chromedriver.147.0.7727.11700.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\selenium.webdriver.chromedriver\\149.0.7827.11500\\selenium.webdriver.chromedriver.149.0.7827.11500.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\serilog\\2.10.0\\serilog.2.10.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\serilog.sinks.console\\4.1.0\\serilog.sinks.console.4.1.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sharpziplib\\1.4.2\\sharpziplib.1.4.2.nupkg.sha512",

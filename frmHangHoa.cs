@@ -166,7 +166,7 @@ namespace SaovietTax
                     var kiemtracodong = HasParentheses(normalizedTen2);
                     if (kiemtracodong)
                     {
-                        normalizedTen2 = RemoveParentheses(normalizedTen2); 
+                       // normalizedTen2 = RemoveParentheses(normalizedTen2); 
                     }
                     var percent= frmMain.CompareProductNew(normalizedTen.ToLower(), normalizedTen2.ToLower());
                     if(normalizedTen.ToLower() != normalizedTen2.ToLower() && percent==100)
@@ -958,6 +958,11 @@ namespace SaovietTax
         }
 
         private void btnSearch_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gridControl1_Click(object sender, EventArgs e)
         {
 
         }
