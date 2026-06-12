@@ -81,6 +81,7 @@ using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using PdfSharp.Internal.Png.BigGustave;
 using PdfSharp.Pdf.IO;
+using QRCoder;
 using SaovietTax.BankReader;
 using SaovietTax.Database;
 using SaovietTax.DTO;
@@ -152,11 +153,13 @@ using GridView = DevExpress.XtraGrid.Views.Grid.GridView;
 using Keys = OpenQA.Selenium.Keys;
 using Label = System.Windows.Forms.Label;
 using Match = System.Text.RegularExpressions.Match;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using Panel = System.Windows.Forms.Panel;
 using Path = System.IO.Path;
 using PdfReader = PdfSharp.Pdf.IO.PdfReader;
 using Point = System.Drawing.Point; 
 using Rectangle = System.Drawing.Rectangle;
+using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 using Size = DocumentFormat.OpenXml.Drawing.Charts.Size;
 using TextEdit = DevExpress.XtraEditors.TextEdit;
 using Timer = System.Windows.Forms.Timer;
@@ -6278,8 +6281,18 @@ Chỉ trả lời: CÓ hoặc KHÔNG
 
             return "";
         }
+        public static Bitmap GenerateQRCode(string text)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
+
+            QRCode qrCode = new QRCode(qrCodeData);
+
+            return qrCode.GetGraphic(10);
+        }
         private async void frmMain_Load(object sender, EventArgs e)
         {
+          
             int checkcompare = CompareProductNew("BVS Diana Sensi Cool Fresh siêu mỏng cánhx20", "BVS Diana SENSI Cool Fresh SMCánh20 - 2302");
             // var list = AcbPdfReader.Read(@"C:\Users\Admin\Desktop\18687768_SAOKE_TK_202511.pdf");
 
