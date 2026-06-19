@@ -6380,8 +6380,8 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                     comboBoxEdit7.EditValue = tbRegister.AsEnumerable().FirstOrDefault().Field<string>("tk155");
                 }
                 querydinhdanh = @"SELECT * FROM PhanLoaiVattu";
-                existingTbHeThongTK = await Task.Run(() => ExecuteQuery(querydinhdanh, null));
-                foreach (DataRow dt in existingTbHeThongTK.Rows)
+                var plvt = await Task.Run(() => ExecuteQuery(querydinhdanh, null));
+                foreach (DataRow dt in plvt.Rows)
                 {
                     comboBoxEdit6.Properties.Items.Add(dt.Field<string>("SoHieu"));
                 }
@@ -17482,6 +17482,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     frmHangHoa.Location = new Point(x, y);
 
                                     frmHangHoa.ShowDialog(this);
+                                    gridView2.RefreshData();
                                 }
                             }
 
@@ -17811,6 +17812,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     frmHangHoa.Location = new Point(x, y);
 
                                     frmHangHoa.ShowDialog(this);
+                                    gridView4.RefreshData();
                                 }
                             }
 

@@ -493,6 +493,48 @@ namespace SaovietTax
                         }
                     }
                 }
+                if (Typeform ==1)
+                {
+                    var gv = frmMain.Typechon == 1 ? frmMain.gv2 : frmMain.gv4;
+                    int rowHandle = gv.FocusedRowHandle;
+
+                    if (rowHandle >= 0 && !gv.IsGroupRow(rowHandle))
+                    {
+
+                        var rowObj = gv.GetRow(rowHandle);
+
+                        if (rowObj != null)
+                        {
+                            var type = rowObj.GetType();
+                            string ten = (string)type.GetProperty("Ten").GetValue(rowObj);
+                            string sohieu = (string)type.GetProperty("SoHieu").GetValue(rowObj);
+                            int ID = (int)type.GetProperty("ID").GetValue(rowObj);
+                            string DVT = (string)type.GetProperty("DVT").GetValue(rowObj);
+                            TbImportDetail TbImportDetail = rowObj as TbImportDetail;
+
+                            type.GetProperty("SoHieu")
+                                ?.SetValue(rowObj, txtSohieu.Text);
+
+                            type.GetProperty("DVT")
+                                ?.SetValue(rowObj, txtDonvi.Text);
+
+                            type.GetProperty("Ten")
+                                ?.SetValue(rowObj, txtTenvattu.Text);
+
+                            gv.RefreshRow(rowHandle);
+
+                            string query2 = @"UPDATE tbimportdetail SET Ten=?,SoHieu=?,DVT=?  WHERE ID=?";
+                            var parameters2 = new OleDbParameter[]
+                             {
+                                 new OleDbParameter("?", Helpers.ConvertUnicodeToVni(txtTenvattu.Text)),
+                                 new OleDbParameter("?", txtSohieu.Text),
+                                 new OleDbParameter("?", Helpers.ConvertUnicodeToVni(txtDonvi.Text)),
+                                 new OleDbParameter("?", ID)
+                             };
+                            rowsAffected = ExecuteQueryResult(query2, parameters2);
+                        }
+                    }
+                }
                 else
                 {
                     frmMain.hiddenValue = txtSohieu.Text;
