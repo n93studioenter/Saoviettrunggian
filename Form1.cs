@@ -6292,7 +6292,9 @@ Chỉ trả lời: CÓ hoặc KHÔNG
         }
         private async void frmMain_Load(object sender, EventArgs e)
         {
-          
+
+        
+
             int checkcompare = CompareProductNew("BVS Diana Sensi Cool Fresh siêu mỏng cánhx20", "BVS Diana SENSI Cool Fresh SMCánh20 - 2302");
             // var list = AcbPdfReader.Read(@"C:\Users\Admin\Desktop\18687768_SAOKE_TK_202511.pdf");
 
@@ -6322,6 +6324,13 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                  LoadApplicationAsync();
                 int screenWidth = Screen.PrimaryScreen.Bounds.Width;
 
+                string queryhd = "SELECT * FROM HoaDon"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
+                var getlisthd = ExecuteQuery(queryhd).AsEnumerable().Where(m=>m.Field<string>("MatHang")=="...");
+                foreach(var item in getlisthd)
+                {
+                    //Lấy ra dien giai tu chung tu
+
+                }
                 // Tính 10% chiều rộng màn hình
                 btnKTTen.Width = (int)(screenWidth * 0.07);
                 btnKTTen.Location = new Point(screenWidth - btnKTTen.Width-30, btnKTTen.Location.Y);
@@ -6446,7 +6455,9 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             XoaNLTP(3);
             XoaNLTP(4);
             XoaNLTP(5);
-             
+
+
+           
         }
         private void XoaNLTP(int index)
         {
@@ -25824,7 +25835,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             string[] headers=null;
             //Acb header
             //if (lblTKNganHangTitle.Text.ToLower().Contains("acb") || lblTKNganHangTitle.Text.ToLower().Contains("á châu"))
-            headers = new string[] {"Ngay hieu luc","Noi dung giao dich", "Ghi no","Ghi co", "Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co","Phát sinh co", "Số tiền rút", "Số tiền gửi" };
+            headers = new string[] { "Ngày tháng","Ngay hieu luc", "Noi dung giao dich", "Ghi no","Ghi co", "Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co","Phát sinh co", "Số tiền rút", "Số tiền gửi" };
             int countcol = 0;
             bool isHeaderRow = false;
             for (int i = 1; i <= 12; i++)
@@ -25899,10 +25910,10 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     int TTCoIndex = 0;
                     int BalanceIndex = 0;
                     int DoiungIndex = 0;
-                    string[] lstNgayGD = {"Ngay hieu luc","Ngay GD","Ngày giá trị", "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày GD", "Ngày giao dịch","NGÀY GIAO DỊCH", "Ngày giá trị", "Ngay hieu luc", "Ngày Date", "Transaction Date", "Ngày", "Date", "NGÀY GIAO DỊCH", "Transaction date" };
+                    string[] lstNgayGD = { "Ngày tháng","Ngay hieu luc", "Ngay GD","Ngày giá trị", "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày GD", "Ngày giao dịch","NGÀY GIAO DỊCH", "Ngày giá trị", "Ngay hieu luc", "Ngày Date", "Transaction Date", "Ngày", "Date", "NGÀY GIAO DỊCH", "Transaction date" };
                     string[] lstNoidung = {"Noi dung giao dich", "Nội dung", "Nội dung giao dịch", "Diễn giải", "Details", "Description", "Mô tả", "Ghi chú", "Remarks", "Nội dung chi tiết", "Chi tiết giao dịch", "Remark", "Ghi chú Remark", "NỘI DUNG", "Transaction Comment", "Noi dung chi tiet" };
-                    string[] lstNo = { "Ghi no","Phát sinh nợ","So tien ghi no", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Số tiền ghi nợ", "Ghi nợ", "Nợ", "Debt", "dr", "PHÁT SINH NỢ"};
-                    string[] lstCo = { "Ghi co","Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có","So tien ghi co", "Số tiền ghi có", "Ghi có", "Có", "Credit", "Credit amount", "Có", "PHÁT SINH CÓ", "Phát sinh co" };
+                    string[] lstNo = { "Số tiền rút ra","Ghi no","Phát sinh nợ","So tien ghi no", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Số tiền ghi nợ", "Ghi nợ", "Nợ", "Debt", "dr", "PHÁT SINH NỢ"};
+                    string[] lstCo = { "Số tiền gửi vào", "Ghi co","Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có","So tien ghi co", "Số tiền ghi có", "Ghi có", "Có", "Credit", "Credit amount", "Có", "PHÁT SINH CÓ", "Phát sinh co" };
                     string[] lstBalance = { "Số dư", "Balance", "Available Balance", "Số dư khả dụng", "Số dư tài khoản", "Số dư cuối", "Running balance", "SỐ DƯ" };
                     string[] lstDoiung = { "Tên tài khoản đối ứng", "Remitter's account name", "Đơn vị thụ hưởng", "Đơn vị chuyển", "Beneficiary", "Applicant" };
                     foreach (var worksheet in workbook.Worksheets)
@@ -26062,8 +26073,9 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                                         var backgroundColor = cell.Style.Fill.BackgroundColor;
 
-                                        //Kiểm tra row hợp lệ và lấy ngày giao dịch
+                                        //Kiểm tra row hợp lệ và lấy ngày giao dịch 
                                         string getNgayGD = row.Cell(ngayGDIndex).GetString();
+                                        getNgayGD = Regex.Replace(getNgayGD, @"(\d{2})\s+(\d{2})\s", "$1$2 ");
                                         if (getNgayGD == "09/02/2026")
                                         {
                                             int a = 100;
