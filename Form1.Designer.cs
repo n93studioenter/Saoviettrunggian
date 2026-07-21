@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode4 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode3 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.gridView7 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn21 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -147,11 +147,13 @@
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.xtraTabControl2 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
+            this.progressChitievao = new DevExpress.XtraWaitForm.ProgressPanel();
             this.progressPanel1 = new DevExpress.XtraWaitForm.ProgressPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.lblSofiles = new System.Windows.Forms.Label();
             this.btnReadPDF = new DevExpress.XtraEditors.SimpleButton();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
+            this.progressChitietra = new DevExpress.XtraWaitForm.ProgressPanel();
             this.progressPanel2 = new DevExpress.XtraWaitForm.ProgressPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.lblSofiles2 = new System.Windows.Forms.Label();
@@ -273,6 +275,7 @@
             this.lblThongbao = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panleLeft = new DevExpress.XtraEditors.PanelControl();
+            this.btnThietlaptairudong = new DevExpress.XtraEditors.SimpleButton();
             this.btnSetting = new DevExpress.XtraEditors.SimpleButton();
             this.chktaituweb = new DevExpress.XtraEditors.CheckEdit();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
@@ -490,10 +493,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl4.DataSource = this.nhapkhotpBindingSource1;
             this.gridControl4.Font = new System.Drawing.Font("Tahoma", 7.8F);
-            gridLevelNode1.LevelTemplate = this.gridView7;
-            gridLevelNode1.RelationName = "Child";
+            gridLevelNode4.LevelTemplate = this.gridView7;
+            gridLevelNode4.RelationName = "Child";
             this.gridControl4.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode1});
+            gridLevelNode4});
             this.gridControl4.Location = new System.Drawing.Point(7, 18);
             this.gridControl4.MainView = this.gridView6;
             this.gridControl4.Name = "gridControl4";
@@ -995,10 +998,10 @@
             this.gridControl2.DataSource = this.fileImportBindingSource;
             this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode2.LevelTemplate = this.gridView4;
-            gridLevelNode2.RelationName = "Detail";
+            gridLevelNode1.LevelTemplate = this.gridView4;
+            gridLevelNode1.RelationName = "Detail";
             this.gridControl2.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode2});
+            gridLevelNode1});
             this.gridControl2.Location = new System.Drawing.Point(0, 0);
             this.gridControl2.LookAndFeel.SkinName = "Office 2016 Colorful";
             this.gridControl2.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1390,10 +1393,10 @@
             this.gridControl1.DataSource = this.fileImportBindingSource;
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode3.LevelTemplate = this.gridView2;
-            gridLevelNode3.RelationName = "Detail";
+            gridLevelNode2.LevelTemplate = this.gridView2;
+            gridLevelNode2.RelationName = "Detail";
             this.gridControl1.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode3});
+            gridLevelNode2});
             this.gridControl1.Location = new System.Drawing.Point(0, 0);
             this.gridControl1.LookAndFeel.SkinName = "Office 2019 Colorful";
             this.gridControl1.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1672,9 +1675,9 @@
             // repositoryItemButtonEdit1
             // 
             this.repositoryItemButtonEdit1.AutoHeight = false;
-            editorButtonImageOptions1.Image = global::SaovietTax.Properties.Resources.close_16x16;
+            editorButtonImageOptions2.Image = global::SaovietTax.Properties.Resources.close_16x16;
             this.repositoryItemButtonEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.repositoryItemButtonEdit1.Name = "repositoryItemButtonEdit1";
             // 
             // gridView8
@@ -1733,6 +1736,7 @@
             // 
             // xtraTabPage3
             // 
+            this.xtraTabPage3.Controls.Add(this.progressChitievao);
             this.xtraTabPage3.Controls.Add(this.progressPanel1);
             this.xtraTabPage3.Controls.Add(this.label1);
             this.xtraTabPage3.Controls.Add(this.lblSofiles);
@@ -1742,6 +1746,18 @@
             this.xtraTabPage3.Name = "xtraTabPage3";
             this.xtraTabPage3.Size = new System.Drawing.Size(1648, 479);
             this.xtraTabPage3.Text = "HĐ đầu vào";
+            // 
+            // progressChitievao
+            // 
+            this.progressChitievao.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressChitievao.Appearance.BackColor = System.Drawing.Color.Transparent;
+            this.progressChitievao.Appearance.Options.UseBackColor = true;
+            this.progressChitievao.Location = new System.Drawing.Point(687, -8);
+            this.progressChitievao.Name = "progressChitievao";
+            this.progressChitievao.Size = new System.Drawing.Size(959, 48);
+            this.progressChitievao.TabIndex = 5;
+            this.progressChitievao.Text = "progressPanel5";
+            this.progressChitievao.Visible = false;
             // 
             // progressPanel1
             // 
@@ -1764,7 +1780,7 @@
             this.progressPanel1.Location = new System.Drawing.Point(-2, 0);
             this.progressPanel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.progressPanel1.Name = "progressPanel1";
-            this.progressPanel1.Size = new System.Drawing.Size(811, 29);
+            this.progressPanel1.Size = new System.Drawing.Size(561, 29);
             this.progressPanel1.TabIndex = 6;
             this.progressPanel1.Text = "progressPanel1";
             this.progressPanel1.Visible = false;
@@ -1776,7 +1792,7 @@
             this.label1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(957, 11);
+            this.label1.Location = new System.Drawing.Point(570, 12);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(96, 17);
@@ -1812,6 +1828,7 @@
             // 
             // xtraTabPage4
             // 
+            this.xtraTabPage4.Controls.Add(this.progressChitietra);
             this.xtraTabPage4.Controls.Add(this.progressPanel2);
             this.xtraTabPage4.Controls.Add(this.label2);
             this.xtraTabPage4.Controls.Add(this.lblSofiles2);
@@ -1820,6 +1837,18 @@
             this.xtraTabPage4.Name = "xtraTabPage4";
             this.xtraTabPage4.Size = new System.Drawing.Size(1648, 479);
             this.xtraTabPage4.Text = "HĐ Đầu ra";
+            // 
+            // progressChitietra
+            // 
+            this.progressChitietra.Appearance.BackColor = System.Drawing.Color.Transparent;
+            this.progressChitietra.Appearance.Options.UseBackColor = true;
+            this.progressChitietra.Location = new System.Drawing.Point(661, 0);
+            this.progressChitietra.Name = "progressChitietra";
+            this.progressChitietra.Size = new System.Drawing.Size(1002, 32);
+            this.progressChitietra.TabIndex = 14;
+            this.progressChitietra.Text = "progressPanel5";
+            this.progressChitietra.Visible = false;
+            this.progressChitietra.Click += new System.EventHandler(this.progressChitietra_Click);
             // 
             // progressPanel2
             // 
@@ -3257,6 +3286,7 @@
             // 
             // panleLeft
             // 
+            this.panleLeft.Controls.Add(this.btnThietlaptairudong);
             this.panleLeft.Controls.Add(this.btnSetting);
             this.panleLeft.Controls.Add(this.chktaituweb);
             this.panleLeft.Controls.Add(this.radioButton1);
@@ -3275,6 +3305,20 @@
             this.panleLeft.Name = "panleLeft";
             this.panleLeft.Size = new System.Drawing.Size(460, 132);
             this.panleLeft.TabIndex = 6;
+            // 
+            // btnThietlaptairudong
+            // 
+            this.btnThietlaptairudong.Appearance.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold);
+            this.btnThietlaptairudong.Appearance.ForeColor = System.Drawing.Color.Black;
+            this.btnThietlaptairudong.Appearance.Options.UseFont = true;
+            this.btnThietlaptairudong.Appearance.Options.UseForeColor = true;
+            this.btnThietlaptairudong.ImageOptions.Image = global::SaovietTax.Properties.Resources.selecttable_16x16;
+            this.btnThietlaptairudong.Location = new System.Drawing.Point(12, 4);
+            this.btnThietlaptairudong.Name = "btnThietlaptairudong";
+            this.btnThietlaptairudong.Size = new System.Drawing.Size(187, 26);
+            this.btnThietlaptairudong.TabIndex = 28;
+            this.btnThietlaptairudong.Text = "Thiết lập tải tự động";
+            this.btnThietlaptairudong.Click += new System.EventHandler(this.btnThietlaptairudong_Click);
             // 
             // btnSetting
             // 
@@ -3298,13 +3342,14 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(12, 5);
+            this.radioButton1.Location = new System.Drawing.Point(225, 103);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(225, 20);
+            this.radioButton1.Size = new System.Drawing.Size(36, 20);
             this.radioButton1.TabIndex = 25;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Tải tự động sau khi khởi động máy";
+            this.radioButton1.Text = "tt";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.Visible = false;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             this.radioButton1.Click += new System.EventHandler(this.radioButton1_Click);
             // 
@@ -4277,5 +4322,8 @@
         private DevExpress.XtraEditors.TextEdit txtTylechonHH;
         private DevExpress.XtraEditors.SimpleButton simpleButton15;
         private DevExpress.XtraEditors.CheckEdit chkUutiensoluong;
+        private DevExpress.XtraWaitForm.ProgressPanel progressChitievao;
+        private DevExpress.XtraWaitForm.ProgressPanel progressChitietra;
+        private DevExpress.XtraEditors.SimpleButton btnThietlaptairudong;
     }
 }

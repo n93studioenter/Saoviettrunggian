@@ -158,6 +158,7 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="ClosedXML, Version=0.104.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ClosedXML.0.104.2\lib\netstandard2.0\ClosedXML.dll</HintPath>
@@ -330,6 +331,7 @@
     <Compile Include="DTO\Matdinhnganhang.cs" />
     <Compile Include="DTO\Rootclass.cs" />
     <Compile Include="DTO\RootDetail.cs" />
+    <Compile Include="DTO\ScheduleHelper.cs" />
     <Compile Include="DTO\SvgCaptchaSolver.cs" />
     <Compile Include="DTO\TextSimilarityCalculator.cs" />
     <Compile Include="DTO\VatTu.cs" />
@@ -364,6 +366,12 @@
     </Compile>
     <Compile Include="frmAutoTai.Designer.cs">
       <DependentUpon>frmAutoTai.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmAutoTaiSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAutoTaiSetting.Designer.cs">
+      <DependentUpon>FrmAutoTaiSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="frmCamera.cs">
       <SubType>Form</SubType>
@@ -489,6 +497,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
     <Compile Include="Saoviet_main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -566,6 +579,9 @@
     <EmbeddedResource Include="frmAutoTai.resx">
       <DependentUpon>frmAutoTai.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmAutoTaiSetting.resx">
+      <DependentUpon>FrmAutoTaiSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmCamera.resx">
       <DependentUpon>frmCamera.cs</DependentUpon>
     </EmbeddedResource>
@@ -637,6 +653,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Saoviet_main.resx">
       <DependentUpon>Saoviet_main.cs</DependentUpon>
     </EmbeddedResource>
@@ -779,6 +799,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Hoadon\invoice.txt" />
+    <None Include="Resources\selecttable_16x16.png" />
+    <None Include="Resources\charttype_bar.svg" />
+    <Content Include="Resources\favicon.ico" />
+    <None Include="Resources\next.svg" />
+    <None Include="Resources\next_16x16.png" />
     <None Include="Resources\print_32x32.png" />
     <None Include="Resources\qr-code.png" />
     <None Include="Resources\find_16x16.png" />

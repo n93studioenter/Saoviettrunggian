@@ -141,6 +141,16 @@ namespace SaovietTax.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type DevExpress.Utils.Svg.SvgImage.
+        /// </summary>
+        internal static DevExpress.Utils.Svg.SvgImage charttype_bar {
+            get {
+                object obj = ResourceManager.GetObject("charttype_bar", resourceCulture);
+                return ((DevExpress.Utils.Svg.SvgImage)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap close_16x16 {
@@ -251,6 +261,26 @@ namespace SaovietTax.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type DevExpress.Utils.Svg.SvgImage.
+        /// </summary>
+        internal static DevExpress.Utils.Svg.SvgImage next {
+            get {
+                object obj = ResourceManager.GetObject("next", resourceCulture);
+                return ((DevExpress.Utils.Svg.SvgImage)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap next_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("next_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap next_32x32 {
@@ -326,6 +356,16 @@ namespace SaovietTax.Properties {
         internal static System.Drawing.Bitmap saveto_16x16 {
             get {
                 object obj = ResourceManager.GetObject("saveto_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap selecttable_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("selecttable_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

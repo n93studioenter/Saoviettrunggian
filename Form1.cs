@@ -186,7 +186,7 @@ namespace SaovietTax
         public static int Id = 1;
         bool isSetuppath = false;
         bool isetupDbpath = false;
-        string password, connectionString;
+        public string password, connectionString;
         public string MasterMST = "3502264379";
         public System.Data.DataTable result { get; set; }
         private BindingList<FileImport> people = new BindingList<FileImport>();
@@ -5304,7 +5304,10 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbRegister", "col1", "TEXT");
             AddColumnIfNotExists(conn, "tbRegister", "col2", "TEXT");
             AddColumnIfNotExists(conn, "tbRegister", "taitd", "TEXT");
-
+            AddColumnIfNotExists(conn, "tbRegister", "Moctg1", "TEXT");
+            AddColumnIfNotExists(conn, "tbRegister", "Moctg2", "TEXT");
+            AddColumnIfNotExists(conn, "tbRegister", "Moctg3", "TEXT");
+            AddColumnIfNotExists(conn, "tbRegister", "Soluottai", "NUMBER");
             // tbimport
             AddColumnIfNotExists(conn, "tbimport", "Khautruthue", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "hdon", "TEXT");
@@ -6342,7 +6345,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 txtTylechonHH.Location= new Point(chkUutiensoluong.Location.X - txtTylechonHH.Width - 20, txtTylechonHH.Location.Y);
                 labelControl24.Location= new Point(txtTylechonHH.Location.X - labelControl24.Width - 5, labelControl24.Location.Y);
                 radioButton1.Location= new Point(10, radioButton1.Location.Y);
-                chktaituweb.Location= new Point(radioButton1.Location.X + radioButton1.Width+10, radioButton1.Location.Y);
+                chktaituweb.Location= new Point(btnThietlaptairudong.Location.X + btnThietlaptairudong.Width+10, btnThietlaptairudong.Location.Y);
                 btnSetting.Location= new Point(chktaituweb.Location.X + chktaituweb.Width + 5, chktaituweb.Location.Y);
                 // XtraMessageBox.Show("xin chao");
                 AddDeleterow(gridView1, gridControl1);
@@ -10123,7 +10126,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     UseProxy = false
                 };
 
-                _client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(10) };
+                _client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(5) };
 
                 _client.DefaultRequestHeaders.Clear();
                 _client.DefaultRequestHeaders.ConnectionClose = false; // Keep-Alive
@@ -10134,7 +10137,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             public static void UpdateToken(string token)
                 => _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            public static async Task<string> GetJsonAsync(string url, int maxRetries = 3)
+            public static async Task<string> GetJsonAsync(string url, int maxRetries = 1)
             {
                 for (int i = 0; i <= maxRetries; i++)
                 {
@@ -10185,7 +10188,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 if (!string.IsNullOrEmpty(token))
                     UpdateToken(token);
 
-                const int maxRetries = 2;
+                const int maxRetries = 1;
                 int retryCount = 0;
 
                 var sw = Stopwatch.StartNew();
@@ -10237,7 +10240,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     {
                         retryCount++;
                         Console.WriteLine($"Lỗi tải file lần {retryCount}: {ex.Message}. Thử lại sau 2 giây...");
-
+                        string errorMsgs = $"Lỗi tải file lần {retryCount}: {ex.Message}. Thử lại sau 2 giây...";
+                        completionCallback?.Invoke(false, errorMsgs, currentProgress);
                         // Optional: delay tăng dần (exponential backoff)
                         await Task.Delay(1000); // 2s, 4s, 6s
 
@@ -11524,11 +11528,33 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 catch(Exception ex)
                 {
                   
-                }   
+                }
 
                 if (Directory.Exists(monthFolder))
                 {
-                    var filesInMonth = Directory.GetFiles(monthFolder, "*.xml", SearchOption.TopDirectoryOnly);
+                    var filesInMonth = Directory.GetFiles(monthFolder, "*.xml", SearchOption.TopDirectoryOnly)
+                    .Where(file =>
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(file);
+                        var getsplit = fileName.Split('_');
+                        if (getsplit.Count() == 3)
+                        {
+                            return true;
+                        }
+                        if (fileName.Length < 8)
+                            return false;
+
+                        if (!DateTime.TryParseExact(
+                                fileName.Substring(0, 8),
+                                "yyyyMMdd",
+                                CultureInfo.InvariantCulture,
+                                DateTimeStyles.None,
+                                out DateTime ngay))
+                            return false;
+
+                        return ngay >= dtTungay.DateTime.Date && ngay <= dtDenngay.DateTime.Date;
+                    })
+                    .ToList();
                     allFiles.AddRange(filesInMonth);
                 }
             }
@@ -11952,19 +11978,19 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
             }
         }
-        private bool Kiemtranamtc()
+        private bool Kiemtranamtc(int year)
         {
             string quer = "SELECT * FROM License";
             tbLicense = ExecuteQuery(quer, null);
             string namtc = tbLicense.Rows[0]["NamTC"].ToString();
-            if (namtc != dtTungay.DateTime.Year.ToString())
+            if (namtc != year.ToString())
             {
                 XtraMessageBox.Show("Năm tài chính không đúng , vui lòng kiểm tra lại!", "Cảnh báo    ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return true;
         }
-        private async  void btnChonthang_Click(object sender, EventArgs e)
+        public async  void btnChonthang_Click(object sender, EventArgs e)
         {
             if(chkDVTMacdinh.Checked && string.IsNullOrEmpty(txtDVTMacdinh.Text))
             {
@@ -11975,7 +12001,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             lstImportRa=new BindingList<FileImport>();  
             if (mstcongty == "8046549703")
                 mstcongty = "048172000197";
-            if (Kiemtranamtc()==false)
+            if (Kiemtranamtc(dtTungay.DateTime.Year)==false)
             {
                 return;
             }
@@ -19958,7 +19984,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         var parameters = new OleDbParameter[]
                            {
                         new OleDbParameter("?", item.Maso),
-                        new OleDbParameter("?", item.NgayGD),
+                        new OleDbParameter("?", item.NgayGD.Date),
                         new OleDbParameter("?", Helpers.ConvertUnicodeToVni(item.Diengiai)),
                         new OleDbParameter("?", item.ThanhTien),
                         new OleDbParameter("?", item.ThanhTien2),
@@ -20015,7 +20041,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             progressPanel1.Show();
             progressPanel1.Caption = "Đang load dữ liệu...";
             Application.DoEvents();
-            if (Kiemtranamtc() == false)
+            if (Kiemtranamtc(dtTungay.DateTime.Year) == false)
             {
                 return;
             }
@@ -20282,7 +20308,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             progressPanel1.Caption = "Đang bắt đầu tiến hành tải dữ liệu...";
             Application.DoEvents();
 
-            if (!Kiemtranamtc())
+            if (!Kiemtranamtc(dtTungay.DateTime.Year))
                 return;
 
             // ========== LOAD DATA LOCAL ==========
@@ -20310,7 +20336,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             //        var delta = DateTime.Now - DateTime.Parse(timeTK);
 
             //        // Token còn < 1 phút → KHÔNG ĐĂNG NHẬP LẠI
-            //        if (delta.TotalMinutes <=  && !string.IsNullOrEmpty(tokenDB))
+            //        if (delta.TotalMinutes <= 10  && !string.IsNullOrEmpty(tokenDB))
             //        {
             //            needLogin = false;
             //            this.tokken = tokenDB;
@@ -20435,7 +20461,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                         // GỬI REQUEST LOGIN
                         var loginRes = await client.PostAsync(loginUrl, content);
-
+                        progressPanel1.Caption = "Đăng nhập thành công";
                         if (loginRes.StatusCode == HttpStatusCode.Unauthorized)
                         {
                             string err = await loginRes.Content.ReadAsStringAsync();
@@ -21703,7 +21729,469 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         // Thêm lock object cho thread safety nếu dùng đa luồng
         private readonly object _cacheLock = new object();
+        Regex regex = new Regex(@"(\d+(g|ml|L|kg)|x\d+|(\d+\s*cái))", RegexOptions.IgnoreCase);
+
+        // Khởi tạo index 1 lần duy nhất khi load dữ liệu
+        private Dictionary<string, HashSet<string>> _keywordIndex; // keyword -> list key
+        private Dictionary<string, HashSet<string>> _quyCachIndex; // quyCach -> list key
+        private bool _isIndexBuilt = false;
+
+        private void BuildIndexes()
+        {
+            if (_isIndexBuilt) return;
+
+            _keywordIndex = new Dictionary<string, HashSet<string>>();
+            _quyCachIndex = new Dictionary<string, HashSet<string>>();
+
+            foreach (var kvp in _optimizedVatTu)
+            {
+                // Index theo từ khóa (chỉ lấy từ dài >= 3 ký tự)
+                var words = kvp.Value.TenChuan.Split(new[] { ' ', '-', ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Where(w => w.Length >= 3);
+
+                foreach (var word in words)
+                {
+                    if (!_keywordIndex.ContainsKey(word))
+                        _keywordIndex[word] = new HashSet<string>();
+                    _keywordIndex[word].Add(kvp.Key);
+                }
+
+                // Index theo quy cách
+                if (!string.IsNullOrEmpty(kvp.Value.QuyCach))
+                {
+                    if (!_quyCachIndex.ContainsKey(kvp.Value.QuyCach))
+                        _quyCachIndex[kvp.Value.QuyCach] = new HashSet<string>();
+                    _quyCachIndex[kvp.Value.QuyCach].Add(kvp.Key);
+                }
+            }
+
+            _isIndexBuilt = true;
+        }
+        // Thêm Dictionary chứa các từ đồng nghĩa
+        private Dictionary<string, string> _synonymDictionary;
+
+        // Khởi tạo từ đồng nghĩa
+        private void InitializeSynonymDictionary()
+        {
+            _synonymDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            AddSynonymIfNeeded("sài gòn", "saigon");
+            AddSynonymIfNeeded("sai gon", "saigon");
+            AddSynonymIfNeeded("sài gòn", "saigon");
+
+            // ✅ GIỮ LẠI: Thương hiệu
+            AddSynonymIfNeeded("cocacola", "coca cola");
+            AddSynonymIfNeeded("cô ca", "coca cola");
+            AddSynonymIfNeeded("cô ca cô la", "coca cola");
+            AddSynonymIfNeeded("pesi", "pepsi");
+            AddSynonymIfNeeded("redbull", "red bull");
+        }
+        private void AddSynonymIfNeeded(string original, string normalized)
+        {
+            if (string.IsNullOrEmpty(original) || string.IsNullOrEmpty(normalized))
+                return;
+
+            if (!_synonymDictionary.ContainsKey(original.ToLower()))
+            {
+                _synonymDictionary[original.ToLower()] = normalized.ToLower();
+            }
+        }
+        // Hàm chuẩn hóa tên để tăng độ chính xác
+        private string NormalizeNameForSearch(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            // 1. Chuẩn hóa dấu tiếng Việt (nếu có hàm Helpers.NormalizeVietnameseString)
+            string result = Helpers.NormalizeVietnameseString(input);
+
+            // 2. Chuyển về chữ thường
+            result = result.ToLower().Trim();
+
+            // 3. Thay thế các từ đồng nghĩa
+            if (_synonymDictionary != null)
+            {
+                foreach (var synonym in _synonymDictionary)
+                {
+                    // Thay thế từ khóa
+                    if (result.Contains(synonym.Key))
+                    {
+                        result = result.Replace(synonym.Key, synonym.Value);
+                    }
+                }
+            }
+
+            // 4. Xóa các ký tự đặc biệt thừa
+            result = Regex.Replace(result, @"[^\w\s]", " ");
+
+            // 5. Xóa khoảng trắng thừa
+            result = Regex.Replace(result, @"\s+", " ").Trim();
+
+            return result;
+        }
+
+        // Hàm mở rộng: Thêm từ đồng nghĩa động
+        public void AddSynonym(string original, string normalized)
+        {
+            if (_synonymDictionary == null)
+                _synonymDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            if (!_synonymDictionary.ContainsKey(original.ToLower()))
+            {
+                _synonymDictionary[original.ToLower()] = normalized.ToLower();
+            }
+        }
+
+        // Hàm mở rộng: Thêm nhiều từ đồng nghĩa cùng lúc
+        public void AddSynonyms(Dictionary<string, string> synonyms)
+        {
+            if (_synonymDictionary == null)
+                _synonymDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var item in synonyms)
+            {
+                if (!_synonymDictionary.ContainsKey(item.Key.ToLower()))
+                {
+                    _synonymDictionary[item.Key.ToLower()] = item.Value.ToLower();
+                }
+            }
+        }
         private void Xulysohieuvattu(TbImportDetail tbImportDetail)
+        {
+            if (tbImportDetail == null || string.IsNullOrEmpty(tbImportDetail.Ten))
+                return;
+
+            if (!_isIndexBuilt) BuildIndexes();
+            if (_synonymDictionary == null) InitializeSynonymDictionary();
+
+            string originalTen = tbImportDetail.Ten?.Trim() ?? "";
+            string normalizedTen = NormalizeNameForSearch(originalTen);
+            string quyCach = regex.Match(normalizedTen).Value;
+            string donViTinh = tbImportDetail.DVT?.Trim()?.ToLower() ?? "";
+
+            Console.WriteLine($"🔍 Đang tìm: {normalizedTen}");
+            Console.WriteLine($"   Quy cách: '{quyCach}'");
+
+            double minPercent = int.Parse(txtTylechonHH.Text);
+
+            // ========== 1. TÌM CHÍNH XÁC ==========
+            var exactMatch = _optimizedVatTu
+                .FirstOrDefault(kvp =>
+                    (NormalizeNameForSearch(kvp.Value.TenChuan) == normalizedTen ||
+                     NormalizeNameForSearch(kvp.Value.TenPhuChuan) == normalizedTen) &&
+                    (string.IsNullOrEmpty(quyCach) || kvp.Value.QuyCach == quyCach));
+
+            if (!exactMatch.Equals(default(KeyValuePair<string, (string, string, string, string, double, double)>)))
+            {
+                tbImportDetail.SoHieu = exactMatch.Key;
+                tbImportDetail.Percent = 100;
+                tbImportDetail.DVT = exactMatch.Value.DonVi;
+                Console.WriteLine($"✅ Tìm chính xác: {exactMatch.Value.TenChuan}");
+                return;
+            }
+
+            // ========== 2. TÁCH TỪ KHÓA ==========
+            var words = normalizedTen.Split(new[] { ' ', '-', ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(w => w.Length >= 3)
+                .ToList();
+
+            Console.WriteLine($"   Từ khóa: {string.Join(", ", words)}");
+
+            var phrases = new List<string>();
+            for (int i = 0; i < words.Count - 1; i++)
+            {
+                string phrase = words[i] + " " + words[i + 1];
+                if (phrase.Length >= 5)
+                {
+                    phrases.Add(phrase);
+                }
+            }
+
+            Console.WriteLine($"   Cụm từ: {string.Join(", ", phrases)}");
+
+            // ========== 3. SÀNG LỌC ỨNG VIÊN ==========
+            var candidateKeys = new HashSet<string>();
+
+            foreach (var word in words)
+            {
+                if (_keywordIndex != null && _keywordIndex.ContainsKey(word))
+                {
+                    foreach (var key in _keywordIndex[word])
+                    {
+                        candidateKeys.Add(key);
+                    }
+                }
+            }
+
+            foreach (var phrase in phrases)
+            {
+                if (_keywordIndex != null && _keywordIndex.ContainsKey(phrase))
+                {
+                    foreach (var key in _keywordIndex[phrase])
+                    {
+                        candidateKeys.Add(key);
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(quyCach) && _quyCachIndex != null && _quyCachIndex.ContainsKey(quyCach))
+            {
+                foreach (var key in _quyCachIndex[quyCach])
+                {
+                    candidateKeys.Add(key);
+                }
+            }
+
+            Console.WriteLine($"   Số ứng viên tìm được: {candidateKeys.Count}");
+
+            if (!candidateKeys.Any())
+            {
+                int count = 0;
+                foreach (var kvp in _optimizedVatTu)
+                {
+                    if (count >= 100) break;
+                    count++;
+                    candidateKeys.Add(kvp.Key);
+                }
+                Console.WriteLine($"   Fallback: lấy 100 item đầu tiên");
+            }
+
+            // ========== 4. TÍNH ĐIỂM ==========
+            var results = new List<(string Key, double Percent, string TenChuan, string QuyCach, string DonVi, int MatchCount)>();
+
+            foreach (var key in candidateKeys)
+            {
+                if (_optimizedVatTu.TryGetValue(key, out var vatTu))
+                {
+                    string tenChuanHoa = NormalizeNameForSearch(vatTu.TenChuan);
+                    string tenKhongNgoac = ExtractMainName(tenChuanHoa);
+                    string tenHoaDonKhongNgoac = ExtractMainName(normalizedTen);
+
+                    // So sánh tên không ngoặc
+                    int tokenScoreNoBracket = Fuzz.TokenSetRatio(tenKhongNgoac, tenHoaDonKhongNgoac);
+                    int partialScoreNoBracket = Fuzz.PartialRatio(tenKhongNgoac, tenHoaDonKhongNgoac);
+                    double percentNoBracket = Math.Max(tokenScoreNoBracket, partialScoreNoBracket);
+
+                    // So sánh tên đầy đủ
+                    int tokenScore = Fuzz.TokenSetRatio(tenChuanHoa, normalizedTen);
+                    int partialScore = Fuzz.PartialRatio(tenChuanHoa, normalizedTen);
+                    double percent = Math.Max(tokenScore, partialScore);
+
+                    // Lấy điểm cao nhất
+                    double finalPercent = Math.Max(percent, percentNoBracket);
+
+                    // Đếm số từ khóa khớp
+                    int matchCount = 0;
+                    foreach (var word in words)
+                    {
+                        if (tenChuanHoa.Contains(word) || tenKhongNgoac.Contains(word))
+                            matchCount++;
+                    }
+
+                    finalPercent += matchCount * 5;
+
+                    // So sánh quy cách
+                    string quyCachTrongKho = vatTu.QuyCach?.ToLower()?.Trim() ?? "";
+                    if (!string.IsNullOrEmpty(quyCach) && !string.IsNullOrEmpty(quyCachTrongKho))
+                    {
+                        if (quyCachTrongKho == quyCach || quyCachTrongKho.Contains(quyCach))
+                        {
+                            finalPercent += 20;
+                        }
+                    }
+
+                    // ========== GIỚI HẠN ĐIỂM ==========
+                    // Kiểm tra xem có phải đang khớp qua tên không ngoặc không
+                    bool isMatchByNoBracket = percentNoBracket > 80 && percentNoBracket > percent;
+
+                    if (isMatchByNoBracket)
+                    {
+                        // Nếu khớp qua tên không ngoặc (thiếu thông tin trong ngoặc)
+                        // Giới hạn tối đa 90%
+                        if (finalPercent > 90)
+                        {
+                            finalPercent = 90;
+                        }
+                    }
+                    else if (percent > 80)
+                    {
+                        // Nếu khớp qua tên đầy đủ nhưng không chính xác 100%
+                        // Giới hạn tối đa 95%
+                        if (finalPercent > 95)
+                        {
+                            finalPercent = 95;
+                        }
+                    }
+
+                    // Debug
+                    if (vatTu.TenChuan.Contains("Tiger") || vatTu.TenChuan.Contains("tiger"))
+                    {
+                        Console.WriteLine($"   Kiểm tra: {vatTu.TenChuan}");
+                        Console.WriteLine($"      Điểm: {finalPercent}%");
+                        Console.WriteLine($"      Không ngoặc: {percentNoBracket}%");
+                        Console.WriteLine($"      Từ khớp: {matchCount}");
+                        Console.WriteLine($"      Quy cách: '{quyCachTrongKho}'");
+                        Console.WriteLine($"      Khớp không ngoặc: {isMatchByNoBracket}");
+                    }
+
+                    if (finalPercent >= minPercent)
+                    {
+                        results.Add((key, Math.Min(finalPercent, 100), vatTu.TenChuan, vatTu.QuyCach, vatTu.DonVi, matchCount));
+                    }
+                }
+            }
+
+            // ========== 5. CHỌN KẾT QUẢ ==========
+            if (results.Any())
+            {
+                var sorted = results
+                    .OrderByDescending(x => x.MatchCount)
+                    .ThenByDescending(x => x.Percent)
+                    .ToList();
+
+                var best = sorted.First();
+                tbImportDetail.SoHieu = best.Key;
+                tbImportDetail.Percent = best.Percent;
+                tbImportDetail.DVT = best.DonVi;
+
+                Console.WriteLine($"✅ Tìm thấy: {best.TenChuan}");
+                Console.WriteLine($"   Độ tương đồng: {best.Percent}%");
+                Console.WriteLine($"   Quy cách: {best.QuyCach}");
+
+                if (sorted.Count > 1)
+                {
+                    Console.WriteLine($"   📋 Các kết quả khác:");
+                    foreach (var item in sorted.Skip(1).Take(3))
+                    {
+                        Console.WriteLine($"      - {item.TenChuan} (Điểm: {item.Percent}%)");
+                    }
+                }
+            }
+            else
+            {
+                tbImportDetail.SoHieu = GenerateResultString(Helpers.NormalizeVietnameseString(normalizedTen));
+                tbImportDetail.Percent = 0;
+                Console.WriteLine($"❌ Không tìm thấy vật tư cho: {normalizedTen}");
+
+                //Console.WriteLine($"⚠️ Không tìm thấy ở ngưỡng {minPercent}%, thử tìm tất cả...");
+
+                //var allResults = new List<(string Key, double Percent, string TenChuan, string QuyCach, string DonVi, int MatchCount)>();
+
+                //foreach (var kvp in _optimizedVatTu)
+                //{
+                //    string tenChuanHoa = NormalizeNameForSearch(kvp.Value.TenChuan);
+                //    string tenKhongNgoac = ExtractMainName(tenChuanHoa);
+                //    string tenHoaDonKhongNgoac = ExtractMainName(normalizedTen);
+
+                //    int tokenScoreNoBracket = Fuzz.TokenSetRatio(tenKhongNgoac, tenHoaDonKhongNgoac);
+                //    int partialScoreNoBracket = Fuzz.PartialRatio(tenKhongNgoac, tenHoaDonKhongNgoac);
+                //    double percentNoBracket = Math.Max(tokenScoreNoBracket, partialScoreNoBracket);
+
+                //    int tokenScore = Fuzz.TokenSetRatio(tenChuanHoa, normalizedTen);
+                //    int partialScore = Fuzz.PartialRatio(tenChuanHoa, normalizedTen);
+                //    double percent = Math.Max(tokenScore, partialScore);
+
+                //    double finalPercent = Math.Max(percent, percentNoBracket);
+
+                //    int matchCount = 0;
+                //    foreach (var word in words)
+                //    {
+                //        if (tenChuanHoa.Contains(word) || tenKhongNgoac.Contains(word))
+                //            matchCount++;
+                //    }
+
+                //    finalPercent += matchCount * 5;
+
+                //    // Fallback: giới hạn tối đa 85%
+                //    bool isMatchByNoBracket = percentNoBracket > 80 && percentNoBracket > percent;
+                //    if (isMatchByNoBracket)
+                //    {
+                //        if (finalPercent > 85)
+                //        {
+                //            finalPercent = 85;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (finalPercent > 90)
+                //        {
+                //            finalPercent = 90;
+                //        }
+                //    }
+
+                //    if (finalPercent > 50)
+                //    {
+                //        allResults.Add((kvp.Key, Math.Min(finalPercent, 100), kvp.Value.TenChuan, kvp.Value.QuyCach, kvp.Value.DonVi, matchCount));
+                //    }
+                //}
+
+                //if (allResults.Any())
+                //{
+                //    var sorted = allResults
+                //        .OrderByDescending(x => x.MatchCount)
+                //        .ThenByDescending(x => x.Percent)
+                //        .ToList();
+
+                //    var best = sorted.First();
+                //    tbImportDetail.SoHieu = best.Key;
+                //    tbImportDetail.Percent = best.Percent;
+                //    tbImportDetail.DVT = best.DonVi;
+
+                //    Console.WriteLine($"✅ Fallback tìm thấy: {best.TenChuan}");
+                //    Console.WriteLine($"   Độ tương đồng: {best.Percent}%");
+                //    Console.WriteLine($"   Quy cách: {best.QuyCach}");
+                //}
+                //else
+                //{
+
+                //}
+            }
+        }
+        private string ExtractMainName(string fullName)
+        {
+            if (string.IsNullOrEmpty(fullName)) return fullName;
+
+            // Bỏ phần trong ngoặc đơn, ngoặc vuông, ngoặc nhọn
+            string result = Regex.Replace(fullName, @"\(.*?\)", "").Trim();
+            result = Regex.Replace(result, @"\[.*?\]", "").Trim();
+            result = Regex.Replace(result, @"\{.*?\}", "").Trim();
+
+            // Xóa khoảng trắng thừa
+            result = Regex.Replace(result, @"\s+", " ").Trim();
+
+            return result;
+        }
+        // Hàm tính độ tương đồng phần trăm
+        private double CalculateSimilarityPercent(string str1, string str2)
+        {
+            if (string.IsNullOrEmpty(str1) || string.IsNullOrEmpty(str2))
+                return 0;
+
+            // Chuyển về chữ thường để so sánh
+            str1 = str1.ToLower();
+            str2 = str2.ToLower();
+
+            // Nếu chuỗi giống nhau hoàn toàn
+            if (str1 == str2)
+                return 100;
+
+            // Nếu chuỗi chứa nhau
+            if (str1.Contains(str2) || str2.Contains(str1))
+            {
+                int shorter = Math.Min(str1.Length, str2.Length);
+                int longer = Math.Max(str1.Length, str2.Length);
+                return Math.Min((double)shorter / longer * 100, 100);
+            }
+
+            // Tính Levenshtein distance
+            int distance = LevenshteinDistance(str1, str2);
+            int maxLen = Math.Max(str1.Length, str2.Length);
+
+            // Chuyển đổi thành phần trăm (0-100)
+            double similarity = (1.0 - (double)distance / maxLen) * 100;
+            return Math.Round(similarity, 2);
+        }
+        private void XulysohieuvattuOld(TbImportDetail tbImportDetail)
         {
             string originalTen = tbImportDetail.Ten?.Trim() ?? "";
 
@@ -22248,16 +22736,13 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 DateTime lastWriteTime = File.GetLastWriteTime(filePath);
                 TimeSpan timeDifference = DateTime.Now - lastWriteTime;
 
-                if (timeDifference.TotalMinutes > 1)
+                if (timeDifference.TotalMinutes < 10)
                 {
                     //File.Delete(filePath);
                     Console.WriteLine($"Đã xóa file: {filePath}");
-                }
-                else
-                {
-                    Console.WriteLine($"File chưa đủ 30 phút để xóa. Thời gian còn lại: {30 - timeDifference.TotalMinutes:F1} phút");
                     return;
                 }
+                
             }
 
             using (var client = new HttpClient())
@@ -22389,22 +22874,18 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 DateTime lastWriteTime = File.GetLastWriteTime(filePath);
                 TimeSpan timeDifference = DateTime.Now - lastWriteTime;
 
-                if (timeDifference.TotalMinutes > 30)
+                if (timeDifference.TotalMinutes < 15)
                 {
-                   // File.Delete(filePath);
-                    Console.WriteLine($"Đã xóa file: {filePath}");
-                }
-                else
-                {
-                    Console.WriteLine($"File chưa đủ 30 phút để xóa. Thời gian còn lại: {30 - timeDifference.TotalMinutes:F1} phút");
+                    // File.Delete(filePath);
                     return;
                 }
+               
             }
 
             using (var client = new HttpClient())
             {
                 // Thiết lập timeout
-                client.Timeout = TimeSpan.FromSeconds(10);
+                client.Timeout = TimeSpan.FromSeconds(5);
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
@@ -22435,7 +22916,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                         if (attempt == maxRetries)
                         {
-                            throw new TimeoutException($"Không thể tải file sau {maxRetries} lần thử do timeout");
+                            XtraMessageBox.Show("Không thể tải file excel trong thời điểm hiện tại, vui lòng thử lại");
+                            return;
                         }
                     }
                     catch (AggregateException ae)
@@ -22452,7 +22934,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                         if (attempt == maxRetries)
                         {
-                            throw;
+                            XtraMessageBox.Show("Không thể tải file excel trong thời điểm hiện tại, vui lòng thử lại");
+                            return;
                         }
                     }
                     catch (Exception ex)
@@ -22520,8 +23003,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                         }
                         string pathravao = "HDVao";
-                        string filename = $"{mstnb}_{getSohd}_{getSHHD}.zip";
-                        string filenameCheck= $"{mstnb}_{getSohd}_{getSHHD}.html";
+                        string filename = $"{getdate.ToString("yyyyMMdd")}_{mstnb}_{getSohd}_{getSHHD}.zip";
+                        string filenameCheck = $"{getdate.ToString("yyyyMMdd")}_{mstnb}_{getSohd}_{getSHHD}.xml";
                         string pathYear = $"HD{dtTungay.DateTime.Year}";
                         string path = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filename);
                         string pathcheck = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filenameCheck);
@@ -22598,9 +23081,13 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         if (DateTime.TryParse(GetNLap, out DateTime getdate))
                         {
                             DateTime gd = DateTime.Parse(GetNLap);
-                            bool daTonTai = lookupHoaDonCT.Contains((mstnb, getSohd, getkhhd, gd.Date,1));
-                            bool daTonTaiimport= lookupTbImportCQT.Contains((mstnb, getSohd, gd.Date,1));
-                            if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime || daTonTai || daTonTaiimport)
+                           // bool daTonTai = lookupHoaDonCT.Contains((mstnb, getSohd, getkhhd, gd.Date,1));
+                           // bool daTonTaiimport= lookupTbImportCQT.Contains((mstnb, getSohd, gd.Date,1));
+                            //if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime || daTonTai || daTonTaiimport)
+                            //{
+                            //    continue;
+                            //}
+                            if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime )
                             {
                                 continue;
                             }
@@ -22609,16 +23096,45 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     }
                 }
             }
-            if (totalInvoices == 0)
+         
+
+            string pathType = chkDauvao.Checked ? "HDVao" : "HDRa";
+            int fromMonth = dtTungay.DateTime.Month;
+            int toMonth = dtDenngay.DateTime.Month;
+            string monthFolder = Path.Combine(savedPath, pathYear, pathType, fromMonth.ToString());
+            var filesInMonth = Directory.GetFiles(monthFolder, "*.xml", SearchOption.TopDirectoryOnly)
+                 .Where(file =>
+                 {
+                     string fileName = Path.GetFileNameWithoutExtension(file);
+
+                     if (fileName.Length < 8)
+                         return false;
+
+                     if (!DateTime.TryParseExact(
+                             fileName.Substring(0, 8),
+                             "yyyyMMdd",
+                             CultureInfo.InvariantCulture,
+                             DateTimeStyles.None,
+                             out DateTime ngay))
+                         return false;
+
+                     return ngay >= dtTungay.DateTime.Date && ngay <= dtDenngay.DateTime.Date;
+                 })
+                 .ToList();
+
+            int i = 1;
+            int invoiceType = 0;
+            int hdtaithucsu = 1;
+            currentProgress = filesInMonth.Count;
+            hdtaithucsu = filesInMonth.Count;
+            progressPanel1.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
+            tongsohodadon = excelFiles.Count;
+            if (totalInvoices == hdtaithucsu)
             {
                 modeClick = 2;
                 btnChonthang.PerformClick();
 
             }
-            progressPanel1.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
-            tongsohodadon = excelFiles.Count;
-            int i = 1;
-            int invoiceType = 0;
             foreach (var excelFile in excelFiles)
             {
                 using (var workbook = new XLWorkbook(excelFile))
@@ -22660,8 +23176,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                         }
                         string pathravao = "HDVao";
-                        string filename = $"{mstnb}_{getSohd}_{getSHHD}.zip";
-                        string filenameCheck = $"{mstnb}_{getSohd}_{getSHHD}.xml";
+                        string filename = $"{getdate.ToString("yyyyMMdd")}_{mstnb}_{getSohd}_{getSHHD}.zip";
+                        string filenameCheck = $"{getdate.ToString("yyyyMMdd")}_{mstnb}_{getSohd}_{getSHHD}.xml";
                         string path = Path.Combine(savedPath, pathYear ,pathravao, dtTungay.DateTime.Month.ToString(), filename);
                         string pathcheck = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filenameCheck);
                         string folderpath= Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString());
@@ -22693,7 +23209,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                         // Cập nhật UI
                                         progressPanel1.Invoke(new Action(async () =>
                                         {
-                                            progressPanel1.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
+                                            progressPanel1.Caption = $"Đang đọc file thứ {hdtaithucsu} / {totalInvoices}";
+                                            hdtaithucsu += 1;
                                             string ph = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filenameCheck); 
                                             if (File.Exists(ph))
                                             {
@@ -24867,60 +25384,89 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     var worksheet = workbook.Worksheet(1);
                     foreach (var row in worksheet.RowsUsed().Skip(3))
                     {
-                        string GetNLap = row.Cell("E").Value.ToString();
-                        string getSohd = Helpers.RemoveLeadingZeros(row.Cell("D").Value.ToString()); // Lấy giá trị của cột C trong hàng hiện tại 
-                        string getkhhd = row.Cell("C").Value.ToString();
-                        if (getSohd == "104")
+                        try
                         {
-                            int dngg = 10;
+                            string GetNLap = row.Cell("E").Value.ToString();
+                            string getSohd = Helpers.RemoveLeadingZeros(row.Cell("D").Value.ToString()); // Lấy giá trị của cột C trong hàng hiện tại 
+                            string getkhhd = row.Cell("C").Value.ToString();
+                            if (getSohd == "104")
+                            {
+                                int dngg = 10;
+                            }
+                            string mstnm = row.Cell("H").Value.ToString();
+                            if (DateTime.TryParse(GetNLap, out DateTime getdate))
+                            {
+                                DateTime gd = DateTime.Parse(GetNLap);
+                                bool daTonTai = false;
+                                bool daTonTaiimport = false;
+
+                                if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime)
+                                {
+                                    continue;
+                                }
+                                totalInvoices++;
+                            }
                         }
-                        string mstnm = row.Cell("H").Value.ToString();
-                        if (DateTime.TryParse(GetNLap, out DateTime getdate))
+                        catch(Exception ex)
                         {
-                            DateTime gd = DateTime.Parse(GetNLap);
-                            bool daTonTai = false;
-                            bool daTonTaiimport = false;
-                            if (!string.IsNullOrEmpty(mstnm))
-                            {
-                                daTonTai = lookupHoaDonCT.Contains((mstnm, getSohd, getkhhd, gd.Date,2));
-                                daTonTaiimport = lookupTbImport.Contains((mstnm, getSohd, getdate.Date,2));
-                            }
-                            else
-                            {
-                               // daTonTai = lookupHoaDonCT.Any(x => x.NLap == gd.Date && x.SoHD == getSohd);
-                                var findct=existingTbChungtu.AsEnumerable().Where(m => m.Field<string>("SoHieu") == getSohd && m.Field<string>("KyHieu") == getkhhd && m.Field<DateTime>("NgayCT").Date == gd.Date && m["MaLoai"].ToString()=="8").FirstOrDefault();
-                                if (findct != null)
-                                {
-                                    daTonTai = true;
-                                }
-                               // daTonTaiimport = lookupTbImport.Any(x=>x.NLap==getdate.Date && x.SHDon==getSohd);
-                                var findip=tbimport.AsEnumerable().Where(m => m.Field<string>("SHDon") == getSohd && m.Field<string>("KHHDon") == getkhhd && m.Field<DateTime>("NLap").Date == getdate.Date && m["Type"].ToString() == "2").FirstOrDefault();
-                                if (findip != null)
-                                {
-                                    daTonTaiimport = true;
-                                }
-                            }
-                            
-                            if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime || daTonTai || daTonTaiimport)
-                            {
-                                continue;
-                            }
-                            totalInvoices++;
+                            XtraMessageBox.Show(ex.Message);
                         }
                     }
                 }
             }
-            
+
+
+            string pathType = chkDauvao.Checked ? "HDVao" : "HDRa";
+            int fromMonth = dtTungay.DateTime.Month;
+            int toMonth = dtDenngay.DateTime.Month;
+            string monthFolder = Path.Combine(savedPath, pathYear, pathType, fromMonth.ToString());
+            var filesInMonth = Directory.GetFiles(monthFolder, "*.xml", SearchOption.TopDirectoryOnly)
+                 .Where(file =>
+                 {
+                     string fileName = Path.GetFileNameWithoutExtension(file);
+
+                     if (fileName.Length < 8)
+                         return false;
+
+                     if (!DateTime.TryParseExact(
+                             fileName.Substring(0, 8),
+                             "yyyyMMdd",
+                             CultureInfo.InvariantCulture,
+                             DateTimeStyles.None,
+                             out DateTime ngay))
+                         return false;
+
+                     return ngay >= dtTungay.DateTime.Date && ngay <= dtDenngay.DateTime.Date;
+                 })
+                 .ToList();
+
             //Nếu tổng =0 thì dừng luôn
-                if(totalInvoices==0)
+            if (chkDauvao.Checked)
             {
-                
+                progressChitievao.Visible = true;
+            }
+            else
+            {
+                progressChitietra.Visible = true;
+            }
+            int hdtaithucsu = 1;
+            int soluottai = 0;
+            currentProgress = filesInMonth.Count;
+            hdtaithucsu = filesInMonth.Count;
+            if (hdtaithucsu == 0)
+                hdtaithucsu = 1;
+            tongsohodadon = excelFiles.Count;
+            soluottai = hdtaithucsu;
+            if (totalInvoices == hdtaithucsu)
+            {
                 modeClick = 2;
-                btnChonthang.PerformClick();
+                progressChitietra.Visible = false;
+                progressChitietra.Caption = "";
+                btnChonthang.PerformClick(); 
             }
 
-            tongsohodadon = excelFiles.Count;
             int i = 1;
+            progressPanel2.Caption = $"Đang đọc file thứ {hdtaithucsu} / {totalInvoices}";
             foreach (var excelFile in excelFiles)
             {
                 using (var workbook = new XLWorkbook(excelFile))
@@ -24983,8 +25529,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                         }
                         string pathravao = "HDRa";
-                        string filename = $"{mstcongty}_{getsohoadon}_{getSHHD}.zip";
-                        string filenameCheck = $"{mstcongty}_{getsohoadon}_{getSHHD}.html";
+                        string filename = $"{getdate.ToString("yyyyMMdd")}_{mstcongty}_{getsohoadon}_{getSHHD}.zip";
+                        string filenameCheck = $"{getdate.ToString("yyyyMMdd")}{mstcongty}_{getsohoadon}_{getSHHD}.html";
                         string path = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filename);
                         string pathcheck = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filenameCheck);
 
@@ -24994,6 +25540,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         {
                             try
                             {
+                                progressChitietra.Caption = $"Đang tải hoá đon {getsohoadon} ngày {GetNLap}";  
+                                Application.DoEvents();
                                 // Tối ưu: Bỏ Thread.Sleep không cần thiết 
                                 await GDTClient.DownloadFileAsync(
                                 url: url,
@@ -25008,9 +25556,12 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                         // Cập nhật UI
                                         progressPanel2.Invoke(new Action(async () =>
                                         {
-                                            progressPanel2.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
+                                           
+                                           // progressPanel2.Caption = $"Đang đọc file thứ {hdtaithucsu} / {totalInvoices}";
                                             string ph = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filenameCheck);
-
+                                            hdtaithucsu += 1;
+                                            soluottai += 1;
+                                            progressPanel2.Caption = $"Đang đọc file thứ {hdtaithucsu} / {totalInvoices}";
                                             if (File.Exists(ph))
                                             {
                                                 // Kiểm tra xem có phải đuôi .xml không (không phân biệt hoa thường)
@@ -25030,7 +25581,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                                 if (serverMode == "2")
                                                     ToastMeaasge("Đã tải xong liệu cơ quan thuế, đang tiến hành đọc");
                                                 modeClick =1;
-                                                btnChonthang.PerformClick();
+                                               // btnChonthang.PerformClick();
                                             }
                                             //double percent = (double)progressCount / totalInvoices * 100;
                                             //progressPanel1.Description = $"{percent:F1}% - {Path.GetFileName(path)}";
@@ -25041,29 +25592,43 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                     else
                                     {
                                         Console.WriteLine($"❌ Lỗi: {message}");
+                                        progressChitietra.Caption = $"Hoá đơn {getsohoadon} Đã xảy ra lỗi: {message} ";
+                                        Application.DoEvents();
                                     }
                                 }
                             );
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine($"Đã xảy ra lỗi: {ex.Message} hoá đơn {getsohoadon}"); 
+                                Console.WriteLine($"Đã xảy ra lỗi: {ex.Message} hoá đơn {getsohoadon}");
+                                progressChitietra.Caption = $"Hoá đơn {getsohoadon} Đã xảy ra lỗi: {ex.Message} ";
+                                Application.DoEvents();
+                                //progressPanel2.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
                                 await Task.Delay(1000);  // Đây chính là delay 1000ms trong async
                                 currentProgress += 1;
-                                progressPanel2.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
+                                soluottai += 1;
                             }
                             await Task.Delay(100);  // Đây chính là delay 1000ms trong async
+                            if ( soluottai == totalInvoices)
+                            {
+                                modeClick = 2;
+                                progressChitietra.Visible = false;
+                                progressChitietra.Caption = "";
+                                btnChonthang.PerformClick();
+                            }
                         }
                         else
                         {
                             //Trường hợp file đã tải vào rồi cũng cập nhật
                             currentProgress += 1;
-                            progressPanel2.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
+                           // progressPanel2.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
                             string ph = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filenameCheck); ;
                             DocfileXmlOne(ph, currentIndex);
-                            if (currentProgress == totalInvoices)
+                            if (currentProgress == totalInvoices || soluottai==totalInvoices)
                             {
                                 modeClick = 2;
+                                progressChitietra.Visible = false;
+                                progressChitietra.Caption = "";
                                 btnChonthang.PerformClick();
                             }
                         }
@@ -25835,7 +26400,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             string[] headers=null;
             //Acb header
             //if (lblTKNganHangTitle.Text.ToLower().Contains("acb") || lblTKNganHangTitle.Text.ToLower().Contains("á châu"))
-            headers = new string[] { "Ngày tháng","Ngay hieu luc", "Noi dung giao dich", "Ghi no","Ghi co", "Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co","Phát sinh co", "Số tiền rút", "Số tiền gửi" };
+            headers = new string[] {"Ngày","Phát sinh nợ","Phát sinh có", "Ngày tháng","Ngay hieu luc", "Noi dung giao dich", "Ghi no","Ghi co", "Chi tiết giao dịch","Ngay giao dich","Ngày giá trị","Nợ","Có","Dien giai","So du","NGÀY GIAO DỊCH", "PHÁT SINH NỢ", "PHÁT SINH CÓ","SỐ DƯ", "Ngày giao dịch", "Debit", "Credit", "Balance", "Remark","Details", "Số tiền ghi nợ", "Số tiền ghi có", "Deposit", "Remarks", "Withdrawal","Số tiền rút ra","Số tiền gửi vào", "số dư", "GD", "Ghi nợ", "Ghi có", "Mô tả", "PHÁT SINH CÓ", "PHÁT SINH NỢ", "Số dư", "Nội dung", "Noi dung chi tiet", "Ngay GD" , "So tien ghi no", "So tien ghi co","Phát sinh co", "Số tiền rút", "Số tiền gửi" };
             int countcol = 0;
             bool isHeaderRow = false;
             for (int i = 1; i <= 12; i++)
@@ -25912,8 +26477,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     int DoiungIndex = 0;
                     string[] lstNgayGD = { "Ngày tháng","Ngay hieu luc", "Ngay GD","Ngày giá trị", "Ngày hiệu lực", "Ngày hạch toán", "Ngày HL", "Νɡàу ɡiаo ԁịch", "Ngày GD", "Ngày giao dịch","NGÀY GIAO DỊCH", "Ngày giá trị", "Ngay hieu luc", "Ngày Date", "Transaction Date", "Ngày", "Date", "NGÀY GIAO DỊCH", "Transaction date" };
                     string[] lstNoidung = {"Noi dung giao dich", "Nội dung", "Nội dung giao dịch", "Diễn giải", "Details", "Description", "Mô tả", "Ghi chú", "Remarks", "Nội dung chi tiết", "Chi tiết giao dịch", "Remark", "Ghi chú Remark", "NỘI DUNG", "Transaction Comment", "Noi dung chi tiet" };
-                    string[] lstNo = { "Số tiền rút ra","Ghi no","Phát sinh nợ","So tien ghi no", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Số tiền ghi nợ", "Ghi nợ", "Nợ", "Debt", "dr", "PHÁT SINH NỢ"};
-                    string[] lstCo = { "Số tiền gửi vào", "Ghi co","Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có","So tien ghi co", "Số tiền ghi có", "Ghi có", "Có", "Credit", "Credit amount", "Có", "PHÁT SINH CÓ", "Phát sinh co" };
+                    string[] lstNo = { "Phát sinh nợ","Số tiền rút ra","Ghi no","Phát sinh nợ","So tien ghi no", "Số tiền rút", "Debit", "Số tiền ɡhi nợ", "Số tiền ghi nợ", "Ghi nợ", "Nợ", "Debt", "dr", "PHÁT SINH NỢ"};
+                    string[] lstCo = { "Phát sinh có", "Số tiền gửi vào", "Ghi co","Phát sinh có", "Số tiền gửi", "Credit", "Số tiền ɡhi có","So tien ghi co", "Số tiền ghi có", "Ghi có", "Có", "Credit", "Credit amount", "Có", "PHÁT SINH CÓ", "Phát sinh co" };
                     string[] lstBalance = { "Số dư", "Balance", "Available Balance", "Số dư khả dụng", "Số dư tài khoản", "Số dư cuối", "Running balance", "SỐ DƯ" };
                     string[] lstDoiung = { "Tên tài khoản đối ứng", "Remitter's account name", "Đơn vị thụ hưởng", "Đơn vị chuyển", "Beneficiary", "Applicant" };
                     foreach (var worksheet in workbook.Worksheets)
@@ -25956,8 +26521,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                 foreach (var rowOffset in new[] { 0, 0 }) // Kiểm tra hàng trước và hàng hiện tại
                                 {
 
-                                    if (hasrowIndex == 1 && rowOffset == -1 && typeBank == 1)
-                                        continue;
+                                    //if (hasrowIndex == 1 && rowOffset == -1 && typeBank == 1)
+                                    //    continue;
                                     try
                                     {
                                         foreach (var cell in worksheet.Row(hasrowIndex + rowOffset).CellsUsed())
@@ -32580,6 +33145,17 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             {
                 MessageBox.Show("Lỗi khi lấy dữ liệu: " + ex.Message);
             }   
+        }
+
+        private void progressChitietra_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnThietlaptairudong_Click(object sender, EventArgs e)
+        {
+            FrmAutoTaiSetting frmAutoTaiSetting = new FrmAutoTaiSetting();
+            frmAutoTaiSetting.ShowDialog();
         }
 
         //private void btnScanCmera_Click(object sender, EventArgs e)
