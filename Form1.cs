@@ -5308,6 +5308,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbRegister", "Moctg2", "TEXT");
             AddColumnIfNotExists(conn, "tbRegister", "Moctg3", "TEXT");
             AddColumnIfNotExists(conn, "tbRegister", "Soluottai", "NUMBER");
+            AddColumnIfNotExists(conn, "tbRegister", "Thoigiantai", "NUMBER");
             // tbimport
             AddColumnIfNotExists(conn, "tbimport", "Khautruthue", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "hdon", "TEXT");

@@ -40,6 +40,8 @@
             this.chkTime3 = new DevExpress.XtraEditors.CheckEdit();
             this.chkTime2 = new DevExpress.XtraEditors.CheckEdit();
             this.chkTime1 = new DevExpress.XtraEditors.CheckEdit();
+            this.txtThoigiancho = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtTime3.Properties)).BeginInit();
@@ -50,12 +52,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.chkTime3.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkTime2.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkTime1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtThoigiancho.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // panelControl1
             // 
             this.panelControl1.Appearance.BackColor = System.Drawing.Color.White;
             this.panelControl1.Appearance.Options.UseBackColor = true;
+            this.panelControl1.Controls.Add(this.txtThoigiancho);
+            this.panelControl1.Controls.Add(this.labelControl2);
             this.panelControl1.Controls.Add(this.txtTime3);
             this.panelControl1.Controls.Add(this.txtTime2);
             this.panelControl1.Controls.Add(this.txtTime1);
@@ -68,7 +73,7 @@
             this.panelControl1.Controls.Add(this.chkTime1);
             this.panelControl1.Location = new System.Drawing.Point(12, 12);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(289, 233);
+            this.panelControl1.Size = new System.Drawing.Size(301, 278);
             this.panelControl1.TabIndex = 0;
             // 
             // txtTime3
@@ -166,11 +171,27 @@
             this.chkTime1.TabIndex = 3;
             this.chkTime1.CheckedChanged += new System.EventHandler(this.chkTime1_CheckedChanged);
             // 
+            // txtThoigiancho
+            // 
+            this.txtThoigiancho.Location = new System.Drawing.Point(146, 233);
+            this.txtThoigiancho.Name = "txtThoigiancho";
+            this.txtThoigiancho.Size = new System.Drawing.Size(125, 23);
+            this.txtThoigiancho.TabIndex = 36;
+            this.txtThoigiancho.EditValueChanged += new System.EventHandler(this.txtThoigiancho_EditValueChanged);
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Location = new System.Drawing.Point(63, 236);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(77, 16);
+            this.labelControl2.TabIndex = 35;
+            this.labelControl2.Text = "Thời gian chờ";
+            // 
             // FrmAutoTaiSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(315, 254);
+            this.ClientSize = new System.Drawing.Size(318, 300);
             this.Controls.Add(this.panelControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FrmAutoTaiSetting";
@@ -188,6 +209,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chkTime3.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkTime2.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chkTime1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtThoigiancho.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -205,5 +227,7 @@
         private DevExpress.XtraEditors.TextEdit txtTime3;
         private DevExpress.XtraEditors.TextEdit txtTime2;
         private DevExpress.XtraEditors.TextEdit txtTime1;
+        private DevExpress.XtraEditors.TextEdit txtThoigiancho;
+        private DevExpress.XtraEditors.LabelControl labelControl2;
     }
 }

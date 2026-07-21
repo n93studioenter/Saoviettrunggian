@@ -58,7 +58,7 @@ namespace SaovietTax
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
                 connection.Open();
-                XtraMessageBox.Show("Kết nối đến cơ sở dữ liệu thành công! " + query);
+                Console.WriteLine("Kết nối đến cơ sở dữ liệu thành công! " + query);
 
                 using (OleDbCommand command = new OleDbCommand(query, connection))
                 {
@@ -197,7 +197,7 @@ namespace SaovietTax
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    Console.WriteLine(ex.Message);
                 }
 
             }
@@ -278,6 +278,8 @@ namespace SaovietTax
                 txtTime3.Enabled = true;
             }
             txtSolantai.Text = Soluottai.ToString();
+            int thoigiancho = !string.IsNullOrEmpty(tbRegister.Rows[0]["Thoigiantai"].ToString()) ? int.Parse(tbRegister.Rows[0]["Thoigiantai"].ToString()) : 0;
+            txtThoigiancho.Text = thoigiancho.ToString();   
         }
 
         private void chkTime1_CheckedChanged(object sender, EventArgs e)
@@ -521,6 +523,19 @@ namespace SaovietTax
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtThoigiancho_EditValueChanged(object sender, EventArgs e)
+        {
+            string query = "UPDATE tbRegister SET Thoigiantai = ?";
+            // Khai báo mảng tham số với đủ 10 tham số
+            OleDbParameter[] parameters = new OleDbParameter[]
+            {
+        new OleDbParameter("?", txtThoigiancho.Text)
+            };
+
+            // Thực thi truy vấn và lấy kết quả
+            int a = ExecuteQueryResult(query, parameters);
         }
     }
 }

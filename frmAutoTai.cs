@@ -372,7 +372,13 @@ namespace SaovietTax
                     var tbRegister = ExecuteQuery(querykh, new OleDbParameter("?", ""));
                     txtUsername.Text = tbRegister.Rows[0].Field<string>("Username");
                     txtPassword.Text = tbRegister.Rows[0].Field<string>("Password");
-                   
+                     soluottai = tbRegister.Rows[0]["Soluottai"] == DBNull.Value
+      ? 0
+      : Convert.ToInt32(tbRegister.Rows[0]["Soluottai"]);
+
+                     thoigiantai = tbRegister.Rows[0]["Thoigiantai"] == DBNull.Value
+                        ? 0
+                        : Convert.ToInt32(tbRegister.Rows[0]["Thoigiantai"]);
                     savedPath = tbRegister.Rows[0]["Hoadonpath"].ToString();
                     mstcongty= tbRegister.Rows[0]["Username"].ToString();
                     var payload = new
@@ -442,8 +448,215 @@ namespace SaovietTax
             string cmd = $"schtasks /delete /tn \"MyAppDaily\" /f";
             Process.Start("cmd", "/c " + cmd).WaitForExit();
         }
-        
         public void DocfileExcelRa(string mstcongty, string savedPath, string originpath)
+        {
+            LoadHoadonCT();
+            Loadtbimport();
+
+            string querykh = @" SELECT *  FROM tbimport";
+            tbimport = ExecuteQuery(querykh, new OleDbParameter("?", ""));
+            querykh = @" SELECT *  FROM Chungtu";
+            tbchungtu = ExecuteQuery(querykh, new OleDbParameter("?", ""));
+
+            string directoryPath = Path.Combine(savedPath, DateTime.Now.Month.ToString());
+
+            // ========================================
+            // KIỂM TRA THƯ MỤC TỒN TẠI
+            // ========================================
+            if (!Directory.Exists(directoryPath))
+            {
+                Console.WriteLine($"❌ Thư mục không tồn tại: {directoryPath}");
+                return;
+            }
+
+            var excelFiles = Directory.EnumerateFiles(directoryPath, "*.xlsx", SearchOption.AllDirectories)
+                                      .Where(m => m.Contains(mstcongty)).ToList();
+
+            int tongsohodadon = excelFiles.Count;
+            int i = 1;
+
+            foreach (var excelFile in excelFiles)
+            {
+                using (var workbook = new XLWorkbook(excelFile))
+                {
+                    var worksheet = workbook.Worksheet(1);
+                    foreach (var row in worksheet.RowsUsed().Skip(3))
+                    {
+                        string khhd = row.Cell("B").Value.ToString();
+                        string getSHHD = row.Cell("C").Value.ToString();
+                        string getSohd = RemoveLeadingZeros(row.Cell("D").Value.ToString());
+                        string GetNLap = row.Cell("E").Value.ToString();
+                        string mstnb = row.Cell("F").Value.ToString();
+
+                        stateDetail.Text = $"Đang tải hoá đơn {getSohd} ";
+                        Application.DoEvents();
+
+                        DateTime getdate = DateTime.Parse(GetNLap);
+
+                        // Kiểm tra file đã tải
+                        var checkfile = savedPath + "\\" + getdate.ToString("yyyyMMdd") + "_" + mstcongty + "_" + getSohd + "_" + getSHHD + ".xml";
+                        if (File.Exists(checkfile))
+                        {
+                            Console.WriteLine("File đã import");
+                            continue;
+                        }
+
+                        var checkExist = tbimport.AsEnumerable()
+                            .Where(m => m.Field<string>("SHDon") == getSohd &&
+                                        m.Field<DateTime>("Nlap").Date == getdate.Date)
+                            .FirstOrDefault();
+                        if (checkExist != null)
+                        {
+                            Console.WriteLine("File đã import");
+                            continue;
+                        }
+
+                        var checkExistct = tbchungtu.AsEnumerable()
+                            .Where(m => m.Field<string>("SoHieu") == getSohd &&
+                                        m.Field<DateTime>("NgayCT").Date == getdate.Date)
+                            .FirstOrDefault();
+                        if (checkExistct != null)
+                        {
+                            Console.WriteLine("File đã import");
+                            continue;
+                        }
+
+                        // Tạo URL
+                        string url = "";
+                        if (i == 1)
+                        {
+                            url = $"https://hoadondientu.gdt.gov.vn/api/sco-query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
+                        }
+                        if (i == 2)
+                        {
+                            url = $"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-xml?nbmst={mstnb}&khhdon={getSHHD}&shdon={getSohd}&khmshdon={khhd}";
+                        }
+
+                        lookupTbImport.Add((mstcongty, getSohd, getdate.Date, 1));
+
+                        string filename = $"{getdate.ToString("yyyyMMdd")}_{mstcongty}_{getSohd}_{getSHHD}.zip";
+                        string path = Path.Combine(directoryPath, filename);
+                        string filenamexml = $"{getdate.ToString("yyyyMMdd")}_{mstcongty}_{getSohd}_{getSHHD}.xml";
+                        string pathxml = Path.Combine(directoryPath, filenamexml);
+
+                        // Kiểm tra nếu hoá đơn chưa được tải
+                        if (!File.Exists(path) && !File.Exists(pathxml))
+                        {
+                            // ========================================
+                            // TẢI FILE VỚI RETRY 3 LẦN
+                            // ========================================
+                            bool isDownloaded = DownloadFileWithRetryRa(url, path, tokken, soluottai, thoigiantai);
+
+                            if (isDownloaded)
+                            {
+                                Console.WriteLine($"✅ Tải file thành công: {filename}");
+                                richTextBox1.Text = $"✅ Tải file thành công: {filename}";
+                                Application.DoEvents();
+                                ExtractZipXML(path); // Giải nén file ZIP
+                                Application.DoEvents();
+                            }
+                            else
+                            {
+                                richTextBox1.Text = $"❌ Tải file thất bại sau 3 lần thử: {filename}";
+                                Application.DoEvents();
+                                Console.WriteLine($"❌ Tải file thất bại sau 3 lần thử: {filename}");
+                            }
+                        }
+                    }
+                }
+                i++;
+            }
+        }
+
+        // ========================================
+        // HÀM TẢI FILE VỚI RETRY
+        // ========================================
+        private bool DownloadFileWithRetryRa(string url, string filePath, string token, int maxRetry = 3, int timeoutSeconds = 5)
+        {
+            int retryCount = 0;
+            bool isDownloaded = false;
+
+            while (retryCount < maxRetry && !isDownloaded)
+            {
+                retryCount++;
+                Console.WriteLine($"Lần thử {retryCount}/{maxRetry} - Đang tải: {Path.GetFileName(filePath)}");
+                richTextBox1.Text = $"Lần thử {retryCount}/{maxRetry} - Đang tải: {Path.GetFileName(filePath)}";
+                Application.DoEvents();
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.Timeout = TimeSpan.FromSeconds(thoigiantai);
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
+                        // Sử dụng Task để kiểm soát timeout
+                        var task = client.GetAsync(url);
+
+                        if (task.Wait(TimeSpan.FromSeconds(thoigiantai)))
+                        {
+                            HttpResponseMessage response = task.Result;
+
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var fileBytes = response.Content.ReadAsByteArrayAsync().Result;
+
+                                // Lưu file
+                                using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096))
+                                {
+                                    fileStream.Write(fileBytes, 0, fileBytes.Length);
+                                }
+
+                                isDownloaded = true;
+                                Console.WriteLine($"✅ Tải thành công: {Path.GetFileName(filePath)}");
+                                richTextBox1.Text = $"✅ Tải thành công: {Path.GetFileName(filePath)}";
+                                Application.DoEvents();
+                            }
+                            else
+                            {
+                                Console.WriteLine($"❌ Lỗi HTTP: {response.StatusCode} - {response.ReasonPhrase}");
+                                richTextBox1.Text = $"❌ Lỗi HTTP: {response.StatusCode} - {response.ReasonPhrase}";
+                                Application.DoEvents();
+                            }
+                        }
+                        else
+                        {
+                            // Timeout
+                            Console.WriteLine($"⏰ Timeout! Lần thử {retryCount}/{maxRetry}");
+                            richTextBox1.Text = $"⏰ Timeout! Lần thử {retryCount}/{maxRetry}";
+                            Application.DoEvents();
+                            client.CancelPendingRequests();
+                        }
+                    }
+                }
+                catch (TaskCanceledException ex)
+                {
+                    Console.WriteLine($"⏰ Request bị hủy do timeout: {ex.Message}");
+                    richTextBox1.Text = $"⏰ Request bị hủy do timeout: {ex.Message}";
+                    Application.DoEvents();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Lỗi: {ex.Message}");
+                    richTextBox1.Text = $"❌ Lỗi: {ex.Message}";
+                    Application.DoEvents();
+                }
+
+                // Nếu chưa tải thành công và còn lượt thử
+                if (!isDownloaded && retryCount < maxRetry)
+                {
+                    // Tăng dần thời gian chờ: 5s, 10s, 15s
+                    int waitSeconds =1 ;
+                    Console.WriteLine($"⏳ Chờ {waitSeconds} giây trước khi thử lại...");
+                    richTextBox1.Text = $"⏳ Chờ {waitSeconds} giây trước khi thử lại...";
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(waitSeconds * 1000);
+                }
+            }
+
+            return isDownloaded;
+        }
+        public void DocfileExcelRaOld(string mstcongty, string savedPath, string originpath)
         {
             LoadHoadonCT();
             Loadtbimport();
@@ -472,6 +685,8 @@ namespace SaovietTax
                         string GetNLap = row.Cell("E").Value.ToString();
                         string mstnb = row.Cell("F").Value.ToString();
 
+                        stateDetail.Text = $"Đang tải hoá đơn {getSohd} ";
+                        Application.DoEvents();
                         if (getSohd == "3423")
                         {
                             int a = 10;
@@ -528,7 +743,7 @@ namespace SaovietTax
                             {
                                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokken);
                                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
-
+                                client.Timeout = TimeSpan.FromSeconds(10);
                                 try
                                 {
 
@@ -729,7 +944,7 @@ namespace SaovietTax
                             // ========================================
                             // TẢI FILE VỚI TIMEOUT VÀ RETRY 3 LẦN
                             // ========================================
-                            bool isDownloaded = DownloadFileWithRetry(url, path, tokken, 3, 5);
+                            bool isDownloaded = DownloadFileWithRetry(url, path, tokken,soluottai, thoigiantai);
 
                             if (isDownloaded)
                             {
@@ -772,14 +987,14 @@ namespace SaovietTax
                     using (var client = new HttpClient())
                     {
                         // Set timeout
-                        client.Timeout = TimeSpan.FromSeconds(10);
+                        client.Timeout = TimeSpan.FromSeconds(thoigiantai);
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
                         // Sử dụng Task để kiểm soát timeout
                         var task = client.GetAsync(url);
 
-                        if (task.Wait(TimeSpan.FromSeconds(10)))
+                        if (task.Wait(TimeSpan.FromSeconds(thoigiantai)))
                         {
                             HttpResponseMessage response = task.Result;
 
@@ -1346,6 +1561,8 @@ namespace SaovietTax
                 else
                 {
                     Console.WriteLine($"File chưa đủ 30 phút để xóa. Thời gian còn lại: {30 - timeDifference.TotalMinutes:F1} phút");
+                    richTextBox1.Text = $"File chưa đủ 30 phút để xóa. Thời gian còn lại: {30 - timeDifference.TotalMinutes:F1} phút";
+                    Application.DoEvents();
                     return;
                 }
             }
@@ -1388,18 +1605,23 @@ namespace SaovietTax
                                 File.WriteAllBytes(filePath, fileBytes);
 
                                 Console.WriteLine($"✅ Tải file thành công: {filename}");
+                                richTextBox1.Text = $"✅ Tải file thành công: {filename}";
+                                Application.DoEvents();
                                 isDownloaded = true;
                             }
                             else
                             {
                                 Console.WriteLine($"❌ Lỗi HTTP: {response.StatusCode} - {response.ReasonPhrase}");
+                                richTextBox1.Text = $"❌ Lỗi HTTP: {response.StatusCode} - {response.ReasonPhrase}";
+                                Application.DoEvents();
                             }
                         }
                         else
                         {
                             // Timeout
                             Console.WriteLine($"⏰ Timeout! Lần thử {retryCount}/{maxRetry}");
-
+                            richTextBox1.Text = $"⏰ Timeout! Lần thử {retryCount}/{maxRetry}";
+                            Application.DoEvents();
                             // Hủy request
                             client.CancelPendingRequests();
                         }
@@ -1418,8 +1640,10 @@ namespace SaovietTax
                 if (!isDownloaded && retryCount < maxRetry)
                 {
                     // Chờ 5 giây trước khi thử lại
-                    int waitSeconds = 3; // Tăng dần thời gian chờ: 5s, 10s, 15s
+                    int waitSeconds = 1; // Tăng dần thời gian chờ: 5s, 10s, 15s
                     Console.WriteLine($"⏳ Chờ {waitSeconds} giây trước khi thử lại...");
+                    richTextBox1.Text = $"⏳ Chờ {waitSeconds} giây trước khi thử lại...";
+                    Application.DoEvents();
                     System.Threading.Thread.Sleep(waitSeconds * 1000);
                 }
             }
@@ -1427,6 +1651,8 @@ namespace SaovietTax
             if (!isDownloaded)
             {
                 Console.WriteLine($"❌ Không thể tải file sau {maxRetry} lần thử: {filename}");
+                richTextBox1.Text = $"⏰ Timeout! Lần thử  {retryCount} / {maxRetry}";
+                Application.DoEvents();
             }
         }
         public void Xulyexelraold(string token, int _type)
@@ -1502,7 +1728,8 @@ namespace SaovietTax
                 }
             }
         }
-
+        int soluottai = 0;
+        int thoigiantai = 0;
         private void frmAutoTai_Load(object sender, EventArgs e)
         {
             stateDetail.Text = "...";
@@ -1539,11 +1766,10 @@ namespace SaovietTax
             Xulyexelra(tokken, 2);
             directoryPath = Path.Combine(tbRegister.Rows[0]["Hoadonpath"].ToString(), currentYear, "HDRa");
             MessagteToast("Đang tải hoá đơn đầu ra..");
-            //DocfileExcelRa(tbRegister.Rows[0]["Username"].ToString(), directoryPath, originpath);
+            DocfileExcelRa(tbRegister.Rows[0]["Username"].ToString(), directoryPath, originpath);
             //XtraMessageBox.Show("Đã hoàn thành tự động tải hoá đơn"+ mstcongty); 
             XulylietkeHoaDon(1);
-            XulylietkeHoaDon(2);
-            this.Close();
+            XulylietkeHoaDon(2); 
         }
         private List<TbImport> lstdsVao = new List<TbImport>();
 
@@ -2215,16 +2441,16 @@ namespace SaovietTax
                     if (type == 1) // Hóa đơn đầu vào
                     {
                         GetMST();
-                        if (mstcongty != nMua?.SelectSingleNode("MST")?.InnerText && CCCD != nMua?.SelectSingleNode("MST")?.InnerText) return null;
+                       // if (mstcongty != nMua?.SelectSingleNode("MST")?.InnerText && CCCD != nMua?.SelectSingleNode("MST")?.InnerText) return null;
                         tbImport.Ten = Helpers.ConvertUnicodeToVni(nBan?.SelectSingleNode("Ten")?.InnerText ?? "");
                         tbImport.Mst = nBan?.SelectSingleNode("MST")?.InnerText ?? "";
                     }
                     else // Hóa đơn đầu ra
                     {
-                        if (mstcongty != nBan?.SelectSingleNode("MST")?.InnerText)
-                        {
-                            return null;
-                        }
+                        //if (mstcongty != nBan?.SelectSingleNode("MST")?.InnerText)
+                        //{
+                        //    return null;
+                        //}
 
                         string tenDoiTac =
   !string.IsNullOrWhiteSpace(nMua?.SelectSingleNode("Ten")?.InnerText)
@@ -3144,7 +3370,8 @@ namespace SaovietTax
             {
                 retryCount++;
                 Console.WriteLine($"Lần thử {retryCount}/{maxRetry} - Đang tải file: {filename}");
-
+                richTextBox1.Text = $"Lần thử {retryCount}/{maxRetry} - Đang tải file: {filename}";
+                Application.DoEvents();
                 try
                 {
                     using (var client = new HttpClient())
@@ -3170,18 +3397,23 @@ namespace SaovietTax
                                 File.WriteAllBytes(filePath, fileBytes);
 
                                 Console.WriteLine($"✅ Tải file thành công: {filename}");
+                                richTextBox1.Text = $"✅ Tải file thành công: {filename}";
+                                Application.DoEvents();
                                 isDownloaded = true;
                             }
                             else
                             {
                                 Console.WriteLine($"❌ Lỗi HTTP: {response.StatusCode} - {response.ReasonPhrase}");
+                                richTextBox1.Text = $"❌ Lỗi HTTP: {response.StatusCode} - {response.ReasonPhrase}";
+                                Application.DoEvents();
                             }
                         }
                         else
                         {
                             // Timeout
                             Console.WriteLine($"⏰ Timeout! Lần thử {retryCount}/{maxRetry}");
-
+                            richTextBox1.Text = $"✅ Tải file thành công:  {filename}";
+                            Application.DoEvents();
                             // Hủy request
                             client.CancelPendingRequests();
                         }
@@ -3190,10 +3422,14 @@ namespace SaovietTax
                 catch (TaskCanceledException ex)
                 {
                     Console.WriteLine($"⏰ Request bị hủy do timeout: {ex.Message}");
+                    richTextBox1.Text = $"⏰ Request bị hủy do timeout: {ex.Message}";
+                    Application.DoEvents();
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"❌ Lỗi: {ex.Message}");
+                    richTextBox1.Text = $"❌ Lỗi: {ex.Message}";
+                    Application.DoEvents();
                 }
 
                 // Nếu chưa tải thành công và còn lượt thử
@@ -3202,6 +3438,8 @@ namespace SaovietTax
                     // Chờ 5 giây trước khi thử lại (tăng dần)
                     int waitSeconds = 3;
                     Console.WriteLine($"⏳ Chờ {waitSeconds} giây trước khi thử lại...");
+                    richTextBox1.Text = $"⏳ Chờ {waitSeconds} giây trước khi thử lại...";
+                    Application.DoEvents();
                     System.Threading.Thread.Sleep(waitSeconds * 1000);
                 }
             }
@@ -3209,6 +3447,8 @@ namespace SaovietTax
             if (!isDownloaded)
             {
                 Console.WriteLine($"❌ Không thể tải file sau {maxRetry} lần thử: {filename}");
+                richTextBox1.Text = $"❌ Không thể tải file sau {maxRetry} lần thử: {filename}";
+                Application.DoEvents();
             }
         }
     }
