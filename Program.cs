@@ -32,7 +32,7 @@ namespace SaovietTax {
             //Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-            mutex = new Mutex(false, "Global\\MyCompany_MyProduct_SingleInstance");
+           // mutex = new Mutex(false, "Global\\MyCompany_MyProduct_SingleInstance");
             bool isAutoStart = args.Length > 0 && args[0] == "-autostart";
             try
             { 
@@ -53,7 +53,7 @@ namespace SaovietTax {
                 Application.SetCompatibleTextRenderingDefault(false);
                 if (isAutoStart)
                 {
-                    mutex.WaitOne();
+                    //mutex.WaitOne();
                     //Application.Run(new frmAutoTai());
                     //SaveConfig("Mode", "2");
                     Application.Run(new frmAutoTai());
@@ -140,8 +140,8 @@ namespace SaovietTax {
             }
             finally
             {
-                if (isAutoStart)
-                    mutex.ReleaseMutex();
+                //if (isAutoStart)
+                //    mutex.ReleaseMutex();
             }
 
         }
