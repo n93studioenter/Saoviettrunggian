@@ -799,6 +799,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Hoadon\invoice.txt" />
+    <None Include="Resources\next_16x161.png" />
     <None Include="Resources\selecttable_16x16.png" />
     <None Include="Resources\charttype_bar.svg" />
     <None Include="Resources\charttype_barstacked100.svg" />

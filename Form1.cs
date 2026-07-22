@@ -4868,7 +4868,8 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             dtDenngay.Location= new Point(panleLeft.Width - dtDenngay.Width - 10, dtDenngay.Location.Y);
             dtTungay.Location = new Point(txtuser.Location.X, dtTungay.Location.Y);
             labelControl3.Location = new Point(panleLeft.Width - labelControl3.Width - dtDenngay.Width-20, labelControl3.Location.Y);
-            chkDaura.Location= new Point(panleLeft.Width - chkDaura.Width - 10, chkDaura.Location.Y);
+            chkDaura.Location= new Point(panleLeft.Width - chkDaura.Width - 10- chkInvoice.Width, chkDaura.Location.Y);
+            chkInvoice.Location= new Point(panleLeft.Width - 10 - chkInvoice.Width, chkDaura.Location.Y);
             chkDauvao.Location = new Point(10, chkDauvao.Location.Y);
         }
         private void ThietLapPanleMiddle()
@@ -16791,7 +16792,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 chkDaura.Checked = true;
                 chkDauvao.Checked = false;
                 xtraTabControl2.SelectedTabPageIndex = 1;
-                btnChonthang.PerformClick();
+                if (chkInvoice.Checked)
+                {
+                    Tainhacungcap();
+                }
+                else
+                {
+                    btnChonthang.PerformClick();
+                } 
             }
             int getthang = 0;
             //try
@@ -25461,10 +25469,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             {
                 progressChitievao.Visible = true;
             }
-            else
-            {
-                progressChitietra.Visible = true;
-            }
+           
             int hdtaithucsu = 1;
             int soluottai = 0;
             currentProgress = filesInMonth.Count;
@@ -25475,9 +25480,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             soluottai = hdtaithucsu;
             if (totalInvoices == hdtaithucsu)
             {
-                modeClick = 2;
-                progressChitietra.Visible = false;
-                progressChitietra.Caption = "";
+                modeClick = 2; 
                 btnChonthang.PerformClick(); 
             }
 
@@ -25555,8 +25558,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         if (!File.Exists(pathcheck))
                         {
                             try
-                            {
-                                progressChitietra.Caption = $"Đang tải hoá đon {getsohoadon} ngày {GetNLap}";  
+                            {   
                                 Application.DoEvents();
                                 // Tối ưu: Bỏ Thread.Sleep không cần thiết 
                                 await GDTClient.DownloadFileAsync(
@@ -25607,8 +25609,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                     }
                                     else
                                     {
-                                        Console.WriteLine($"❌ Lỗi: {message}");
-                                        progressChitietra.Caption = $"Hoá đơn {getsohoadon} Đã xảy ra lỗi: {message} ";
+                                        Console.WriteLine($"❌ Lỗi: {message}"); 
                                         Application.DoEvents();
                                     }
                                 }
@@ -25616,8 +25617,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine($"Đã xảy ra lỗi: {ex.Message} hoá đơn {getsohoadon}");
-                                progressChitietra.Caption = $"Hoá đơn {getsohoadon} Đã xảy ra lỗi: {ex.Message} ";
+                                Console.WriteLine($"Đã xảy ra lỗi: {ex.Message} hoá đơn {getsohoadon}"); 
                                 Application.DoEvents();
                                 //progressPanel2.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
                                 await Task.Delay(1000);  // Đây chính là delay 1000ms trong async
@@ -25627,9 +25627,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             await Task.Delay(100);  // Đây chính là delay 1000ms trong async
                             if ( soluottai == totalInvoices)
                             {
-                                modeClick = 2;
-                                progressChitietra.Visible = false;
-                                progressChitietra.Caption = "";
+                                modeClick = 2; 
                                 btnChonthang.PerformClick();
                             }
                         }
@@ -25642,9 +25640,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             DocfileXmlOne(ph, currentIndex);
                             if (currentProgress == totalInvoices || soluottai==totalInvoices)
                             {
-                                modeClick = 2;
-                                progressChitietra.Visible = false;
-                                progressChitietra.Caption = "";
+                                modeClick = 2; 
                                 btnChonthang.PerformClick();
                             }
                         }
@@ -33228,7 +33224,10 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             return input;
         }
 
-
+        private void Tainhacungcap()
+        {
+            btnTaiInvoice.PerformClick();
+        }
         private async void btnTaiInvoice_Click(object sender, EventArgs e)
         {
             string qrq = "SELECT * FROM tbInvoiceInfo";
@@ -33311,8 +33310,28 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             // ========================================
                             // GỌI API LẤY DANH SÁCH HÓA ĐƠN
                             // ========================================
-                            string urls = "https://vinvoice.viettel.vn/api/cluster7/services/einvoiceapplication/api/invoice/search?page=0&size=1000&createdDate.greaterThanOrEqual=2026-06-30T17%3A00%3A00.000Z&createdDate.lessThanOrEqual=2026-07-21T16%3A59%3A59.000Z&supplierId.equals=103807&dateType.equals=0&invoiceStatus.equals=1&invoiceTypeId.notEquals=52&sort=issueDate%2Cdesc&sort=invoiceNumber%2Cdesc";
+                            int page = 0;
+                            int size = 1000;
+                            int supplierId = 103807;
 
+                       
+
+                            // API dùng giờ UTC (trừ 7 tiếng)
+                            string fromDate = dtTungay.DateTime.Date.AddHours(-7).ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                            string toDate = dtDenngay.DateTime.Date.AddDays(1).AddSeconds(-1).AddHours(-7)
+                                                .ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+
+                            string urls = $"https://vinvoice.viettel.vn/api/cluster7/services/einvoiceapplication/api/invoice/search" +
+                                         $"?page={page}" +
+                                         $"&size={size}" +
+                                         $"&createdDate.greaterThanOrEqual={Uri.EscapeDataString(fromDate)}" +
+                                         $"&createdDate.lessThanOrEqual={Uri.EscapeDataString(toDate)}" +
+                                         $"&supplierId.equals={supplierId}" +
+                                         $"&dateType.equals=0" +
+                                         $"&invoiceStatus.equals=1" +
+                                         $"&invoiceTypeId.notEquals=52" +
+                                         $"&sort=issueDate,desc" +
+                                         $"&sort=invoiceNumber,desc";
                             // Thêm Authorization header
                             if (!string.IsNullOrEmpty(useCookie.access_token))
                             {
@@ -33333,47 +33352,42 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                 if (searchResult != null && searchResult.code == 200 && searchResult.data != null)
                                 {
                                     var invoices = searchResult.data.content;
-                                    progressPanel1.Caption = $"✅ Tìm thấy {invoices.Count} hóa đơn. Bắt đầu tải...";
+                                    progressPanel2.Caption = $"✅ Tìm thấy {invoices.Count} hóa đơn. Bắt đầu tải...";
                                     Application.DoEvents();
 
                                     // Tạo thư mục lưu file
-                                    string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Invoices");
-                                    Directory.CreateDirectory(folderPath);
+                                    //string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Invoices");
+                                    //Directory.CreateDirectory(folderPath);
 
                                     int successCount = 0;
                                     int total = invoices.Count;
-
+                                    string pathravao = "HDRa";
+                                    string pathYear = $"HD{dtTungay.DateTime.Year}";
                                     for (int i = 0; i < invoices.Count; i++)
                                     {
                                         var invoice = invoices[i];
-                                        DownloadInvoiceXml(client, invoice.id.ToString());
-                                        DownloadInvoicePdf(client, invoice.id.ToString());
-                                        //progressPanel1.Caption = $"Đang tải {i + 1}/{total}: {invoice.invoiceNo}";
-                                        //Application.DoEvents();
-
-                                        //// ========================================
-                                        //// TẢI XML
-                                        //// ========================================
-                                        //bool xmlOk = await DownloadInvoiceFile(client, invoice.id, "XML", folderPath);
-
-                                        //// ========================================
-                                        //// TẢI PDF
-                                        //// ========================================
-                                        //bool pdfOk = await DownloadInvoiceFile(client, invoice.id, "PDF", folderPath);
-
-                                        //if (xmlOk || pdfOk) successCount++;
-
-                                        //// Chờ 500ms để tránh rate limit
-                                        //await Task.Delay(500);
+                                        string filename = $"{invoice.createdDate.ToString("yyyyMMdd")}_{mstcongty}_{invoice.invoiceNumber}_{invoice.invoiceType}{invoice.invoiceSeri}.xml";
+                                        string filepath = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filename);
+                                        string filenamepdf = $"{invoice.createdDate.ToString("yyyyMMdd")}_{mstcongty}_{invoice.invoiceNumber}_{invoice.invoiceType}{invoice.invoiceSeri}.pdf";
+                                        string filepathpdf = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filenamepdf);
+                                        
+                                        DownloadInvoiceXml(client, invoice.id.ToString(), filepath);
+                                        DownloadInvoicePdf(client, invoice.id.ToString(), filepathpdf);
+                                        progressPanel2.Visible = true;
+                                        progressPanel2.Caption = $"Tải hoá đơn thứ {i}/{total}";
+                                        Application.DoEvents();
+                                       // Chờ 500ms để tránh rate limit
+                                       await Task.Delay(150);
                                     }
-
-                                    progressPanel1.Caption = $"✅ Tải thành công {successCount}/{total} hóa đơn!";
-                                    MessageBox.Show($"Hoàn thành tải {successCount}/{total} hóa đơn!\nLưu tại: {folderPath}",
-                                                   "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    progressPanel2.Visible = false;
+                                    XtraMessageBox.Show($"✅ Tải thành công {successCount}/{total} hóa đơn!");
+                                    btnChonthang.PerformClick();
+                                    //MessageBox.Show($"Hoàn thành tải {successCount}/{total} hóa đơn!\nLưu tại: {filepath}",
+                                    //               "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 else
                                 {
-                                    progressPanel1.Caption = "❌ Không tìm thấy hóa đơn nào!";
+                                    progressPanel2.Caption = "❌ Không tìm thấy hóa đơn nào!";
                                     MessageBox.Show("Không tìm thấy hóa đơn nào trong khoảng thời gian này!",
                                                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
@@ -33381,7 +33395,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             else
                             {
                                 string error = await responses.Content.ReadAsStringAsync();
-                                progressPanel1.Caption = $"❌ Lỗi tìm kiếm: {responses.StatusCode}";
+                                progressPanel2.Caption = $"❌ Lỗi tìm kiếm: {responses.StatusCode}";
                                 MessageBox.Show($"Lỗi tìm kiếm: {responses.StatusCode}\n{error}",
                                                "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
@@ -33411,6 +33425,10 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         public class InvoiceItem
         {
             public long id { get; set; }
+            public int invoiceType { get; set; }
+            public string invoiceNumber { get; set; }
+            public string invoiceSeri { get; set; }
+            public DateTime createdDate { get; set; }
             // Có thể thêm các trường khác nếu cần sử dụng
         }
         private bool IsTokenValid()
@@ -33530,7 +33548,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         // Hiển thị danh sách
                         foreach (var inv in invoices)
                         {
-                            DownloadInvoicePdf(client, inv.id.ToString());
+                            DownloadInvoicePdf(client, inv.id.ToString(),"");
                           //  Console.WriteLine($"ID: {inv.id}, Số: {inv.invoiceNo}, Tiền: {inv.totalAmountWithVAT}");
                         }
                     }
@@ -33554,7 +33572,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         // Hàm refresh token 
         // HÀM TẢI FILE XML
         // ========================================
-        private async Task DownloadInvoiceXml(HttpClient client, string invoiceId)
+        private async Task DownloadInvoiceXml(HttpClient client, string invoiceId,string filePath)
         {
             try
             {
@@ -33583,8 +33601,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     string xmlContent = await response.Content.ReadAsStringAsync();
 
                     // Lưu vào file
-                    string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Invoices");
-                    string filePath = Path.Combine(folderPath, $"Invoice_{invoiceId}.xml");
+                    //string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Invoices");
+                    //string filePath = Path.Combine(folderPath, $"Invoice_{invoiceId}.xml");
                      
                     File.WriteAllText(filePath, xmlContent);
 
@@ -33614,7 +33632,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         // ========================================
         // HÀM TẢI FILE PDF
         // ========================================
-        private async Task DownloadInvoicePdf(HttpClient client, string invoiceId)
+        private async Task DownloadInvoicePdf(HttpClient client, string invoiceId,string filePath)
         {
             try
             {
@@ -33644,8 +33662,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
 
                     // Lưu file PDF
-                    string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Invoices");
-                    string filePath = Path.Combine(folderPath, $"Invoice_{invoiceId}.pdf");
+                    //string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Invoices");
+                    //string filePath = Path.Combine(folderPath, $"Invoice_{invoiceId}.pdf");
 
                     File.WriteAllBytes(filePath, fileBytes);
 

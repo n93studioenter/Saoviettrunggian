@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode3 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode4 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions3 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject9 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject10 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject11 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject12 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode3 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.gridView7 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn21 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -153,7 +153,6 @@
             this.lblSofiles = new System.Windows.Forms.Label();
             this.btnReadPDF = new DevExpress.XtraEditors.SimpleButton();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
-            this.progressChitietra = new DevExpress.XtraWaitForm.ProgressPanel();
             this.progressPanel2 = new DevExpress.XtraWaitForm.ProgressPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.lblSofiles2 = new System.Windows.Forms.Label();
@@ -334,6 +333,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.chkInvoice = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nhapkhotpBindingSource1)).BeginInit();
@@ -435,6 +435,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nganhangBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileImportDetailBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radialMenu1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkInvoice.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // gridView7
@@ -494,10 +495,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl4.DataSource = this.nhapkhotpBindingSource1;
             this.gridControl4.Font = new System.Drawing.Font("Tahoma", 7.8F);
-            gridLevelNode3.LevelTemplate = this.gridView7;
-            gridLevelNode3.RelationName = "Child";
+            gridLevelNode1.LevelTemplate = this.gridView7;
+            gridLevelNode1.RelationName = "Child";
             this.gridControl4.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode3});
+            gridLevelNode1});
             this.gridControl4.Location = new System.Drawing.Point(7, 18);
             this.gridControl4.MainView = this.gridView6;
             this.gridControl4.Name = "gridControl4";
@@ -999,10 +1000,10 @@
             this.gridControl2.DataSource = this.fileImportBindingSource;
             this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode4.LevelTemplate = this.gridView4;
-            gridLevelNode4.RelationName = "Detail";
+            gridLevelNode2.LevelTemplate = this.gridView4;
+            gridLevelNode2.RelationName = "Detail";
             this.gridControl2.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode4});
+            gridLevelNode2});
             this.gridControl2.Location = new System.Drawing.Point(0, 0);
             this.gridControl2.LookAndFeel.SkinName = "Office 2016 Colorful";
             this.gridControl2.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1394,10 +1395,10 @@
             this.gridControl1.DataSource = this.fileImportBindingSource;
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode1.LevelTemplate = this.gridView2;
-            gridLevelNode1.RelationName = "Detail";
+            gridLevelNode3.LevelTemplate = this.gridView2;
+            gridLevelNode3.RelationName = "Detail";
             this.gridControl1.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode1});
+            gridLevelNode3});
             this.gridControl1.Location = new System.Drawing.Point(0, 0);
             this.gridControl1.LookAndFeel.SkinName = "Office 2019 Colorful";
             this.gridControl1.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1676,9 +1677,9 @@
             // repositoryItemButtonEdit1
             // 
             this.repositoryItemButtonEdit1.AutoHeight = false;
-            editorButtonImageOptions3.Image = global::SaovietTax.Properties.Resources.close_16x16;
+            editorButtonImageOptions1.Image = global::SaovietTax.Properties.Resources.close_16x16;
             this.repositoryItemButtonEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions3, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject9, serializableAppearanceObject10, serializableAppearanceObject11, serializableAppearanceObject12, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.repositoryItemButtonEdit1.Name = "repositoryItemButtonEdit1";
             // 
             // gridView8
@@ -1829,7 +1830,6 @@
             // 
             // xtraTabPage4
             // 
-            this.xtraTabPage4.Controls.Add(this.progressChitietra);
             this.xtraTabPage4.Controls.Add(this.progressPanel2);
             this.xtraTabPage4.Controls.Add(this.label2);
             this.xtraTabPage4.Controls.Add(this.lblSofiles2);
@@ -1838,18 +1838,6 @@
             this.xtraTabPage4.Name = "xtraTabPage4";
             this.xtraTabPage4.Size = new System.Drawing.Size(1648, 479);
             this.xtraTabPage4.Text = "HĐ Đầu ra";
-            // 
-            // progressChitietra
-            // 
-            this.progressChitietra.Appearance.BackColor = System.Drawing.Color.Transparent;
-            this.progressChitietra.Appearance.Options.UseBackColor = true;
-            this.progressChitietra.Location = new System.Drawing.Point(661, 0);
-            this.progressChitietra.Name = "progressChitietra";
-            this.progressChitietra.Size = new System.Drawing.Size(1002, 32);
-            this.progressChitietra.TabIndex = 14;
-            this.progressChitietra.Text = "progressPanel5";
-            this.progressChitietra.Visible = false;
-            this.progressChitietra.Click += new System.EventHandler(this.progressChitietra_Click);
             // 
             // progressPanel2
             // 
@@ -1874,7 +1862,7 @@
             this.progressPanel2.LookAndFeel.UseDefaultLookAndFeel = false;
             this.progressPanel2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.progressPanel2.Name = "progressPanel2";
-            this.progressPanel2.Size = new System.Drawing.Size(811, 29);
+            this.progressPanel2.Size = new System.Drawing.Size(652, 29);
             this.progressPanel2.TabIndex = 13;
             this.progressPanel2.Text = "progressPanel2";
             this.progressPanel2.ToolTipIconType = DevExpress.Utils.ToolTipIconType.Application;
@@ -2975,6 +2963,7 @@
             this.panelControl6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelControl6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelControl6.Controls.Add(this.btnTaiInvoice);
             this.panelControl6.Controls.Add(this.chkUutiensoluong);
             this.panelControl6.Controls.Add(this.simpleButton15);
             this.panelControl6.Controls.Add(this.labelControl24);
@@ -3287,7 +3276,7 @@
             // 
             // panleLeft
             // 
-            this.panleLeft.Controls.Add(this.btnTaiInvoice);
+            this.panleLeft.Controls.Add(this.chkInvoice);
             this.panleLeft.Controls.Add(this.btnThietlaptairudong);
             this.panleLeft.Controls.Add(this.btnSetting);
             this.panleLeft.Controls.Add(this.chktaituweb);
@@ -3310,11 +3299,12 @@
             // 
             // btnTaiInvoice
             // 
-            this.btnTaiInvoice.ImageOptions.SvgImage = global::SaovietTax.Properties.Resources.charttype_barstacked100;
-            this.btnTaiInvoice.Location = new System.Drawing.Point(409, 96);
+            this.btnTaiInvoice.ImageOptions.Image = global::SaovietTax.Properties.Resources.next_16x161;
+            this.btnTaiInvoice.Location = new System.Drawing.Point(677, 11);
             this.btnTaiInvoice.Name = "btnTaiInvoice";
-            this.btnTaiInvoice.Size = new System.Drawing.Size(46, 29);
+            this.btnTaiInvoice.Size = new System.Drawing.Size(24, 29);
             this.btnTaiInvoice.TabIndex = 29;
+            this.btnTaiInvoice.Visible = false;
             this.btnTaiInvoice.Click += new System.EventHandler(this.btnTaiInvoice_Click);
             // 
             // btnThietlaptairudong
@@ -3905,6 +3895,14 @@
             // 
             this.printDialog1.UseEXDialog = true;
             // 
+            // chkInvoice
+            // 
+            this.chkInvoice.Location = new System.Drawing.Point(409, 102);
+            this.chkInvoice.Name = "chkInvoice";
+            this.chkInvoice.Properties.Caption = "NCC";
+            this.chkInvoice.Size = new System.Drawing.Size(46, 20);
+            this.chkInvoice.TabIndex = 29;
+            // 
             // frmMain
             // 
             this.Appearance.Options.UseFont = true;
@@ -4035,6 +4033,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nganhangBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileImportDetailBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radialMenu1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkInvoice.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4334,8 +4333,8 @@
         private DevExpress.XtraEditors.SimpleButton simpleButton15;
         private DevExpress.XtraEditors.CheckEdit chkUutiensoluong;
         private DevExpress.XtraWaitForm.ProgressPanel progressChitievao;
-        private DevExpress.XtraWaitForm.ProgressPanel progressChitietra;
         private DevExpress.XtraEditors.SimpleButton btnThietlaptairudong;
         private DevExpress.XtraEditors.SimpleButton btnTaiInvoice;
+        private DevExpress.XtraEditors.CheckEdit chkInvoice;
     }
 }
