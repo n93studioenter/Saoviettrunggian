@@ -248,6 +248,7 @@
             this.comboBoxEdit3 = new DevExpress.XtraEditors.ComboBoxEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.panelControl6 = new DevExpress.XtraEditors.PanelControl();
+            this.btnTaiInvoice = new DevExpress.XtraEditors.SimpleButton();
             this.chkUutiensoluong = new DevExpress.XtraEditors.CheckEdit();
             this.simpleButton15 = new DevExpress.XtraEditors.SimpleButton();
             this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
@@ -274,7 +275,7 @@
             this.lblThongbao = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panleLeft = new DevExpress.XtraEditors.PanelControl();
-            this.btnTaiInvoice = new DevExpress.XtraEditors.SimpleButton();
+            this.chkInvoice = new DevExpress.XtraEditors.CheckEdit();
             this.btnThietlaptairudong = new DevExpress.XtraEditors.SimpleButton();
             this.btnSetting = new DevExpress.XtraEditors.SimpleButton();
             this.chktaituweb = new DevExpress.XtraEditors.CheckEdit();
@@ -333,7 +334,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.chkInvoice = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nhapkhotpBindingSource1)).BeginInit();
@@ -407,6 +407,7 @@
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panleLeft)).BeginInit();
             this.panleLeft.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chkInvoice.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chktaituweb.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDenngay.Properties.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDenngay.Properties)).BeginInit();
@@ -435,7 +436,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nganhangBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileImportDetailBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radialMenu1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chkInvoice.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // gridView7
@@ -2993,6 +2993,16 @@
             this.panelControl6.Size = new System.Drawing.Size(1657, 59);
             this.panelControl6.TabIndex = 20;
             // 
+            // btnTaiInvoice
+            // 
+            this.btnTaiInvoice.ImageOptions.Image = global::SaovietTax.Properties.Resources.next_16x161;
+            this.btnTaiInvoice.Location = new System.Drawing.Point(677, 11);
+            this.btnTaiInvoice.Name = "btnTaiInvoice";
+            this.btnTaiInvoice.Size = new System.Drawing.Size(24, 29);
+            this.btnTaiInvoice.TabIndex = 29;
+            this.btnTaiInvoice.Visible = false;
+            this.btnTaiInvoice.Click += new System.EventHandler(this.btnTaiInvoice_Click);
+            // 
             // chkUutiensoluong
             // 
             this.chkUutiensoluong.EditValue = true;
@@ -3297,15 +3307,13 @@
             this.panleLeft.Size = new System.Drawing.Size(460, 132);
             this.panleLeft.TabIndex = 6;
             // 
-            // btnTaiInvoice
+            // chkInvoice
             // 
-            this.btnTaiInvoice.ImageOptions.Image = global::SaovietTax.Properties.Resources.next_16x161;
-            this.btnTaiInvoice.Location = new System.Drawing.Point(677, 11);
-            this.btnTaiInvoice.Name = "btnTaiInvoice";
-            this.btnTaiInvoice.Size = new System.Drawing.Size(24, 29);
-            this.btnTaiInvoice.TabIndex = 29;
-            this.btnTaiInvoice.Visible = false;
-            this.btnTaiInvoice.Click += new System.EventHandler(this.btnTaiInvoice_Click);
+            this.chkInvoice.Location = new System.Drawing.Point(409, 102);
+            this.chkInvoice.Name = "chkInvoice";
+            this.chkInvoice.Properties.Caption = "NCC";
+            this.chkInvoice.Size = new System.Drawing.Size(46, 20);
+            this.chkInvoice.TabIndex = 29;
             // 
             // btnThietlaptairudong
             // 
@@ -3895,14 +3903,6 @@
             // 
             this.printDialog1.UseEXDialog = true;
             // 
-            // chkInvoice
-            // 
-            this.chkInvoice.Location = new System.Drawing.Point(409, 102);
-            this.chkInvoice.Name = "chkInvoice";
-            this.chkInvoice.Properties.Caption = "NCC";
-            this.chkInvoice.Size = new System.Drawing.Size(46, 20);
-            this.chkInvoice.TabIndex = 29;
-            // 
             // frmMain
             // 
             this.Appearance.Options.UseFont = true;
@@ -4004,6 +4004,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panleLeft)).EndInit();
             this.panleLeft.ResumeLayout(false);
             this.panleLeft.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chkInvoice.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chktaituweb.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDenngay.Properties.CalendarTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDenngay.Properties)).EndInit();
@@ -4033,7 +4034,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nganhangBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileImportDetailBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radialMenu1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chkInvoice.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }

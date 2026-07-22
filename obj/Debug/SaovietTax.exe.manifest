@@ -2862,14 +2862,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SaovietTax.exe" size="8449536">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SaovietTax.exe" size="8452608">
       <assemblyIdentity name="SaovietTax" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>gpT+U8UQrQzzPR0cZisjlFRTTKBIenkNhwJ7l7MzlwY=</dsig:DigestValue>
+        <dsig:DigestValue>zFoyICt9E/CQBrWClFfHlsctJTcxOrlwz3/qGmRA+uU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -7589,13 +7589,13 @@
       <dsig:DigestValue>x5rjk5aMXzx5cfZWjRDrx/Nkwy/bi4MJrWCJl2BZvY0=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Hoadon\invoice.txt" size="65">
+  <file name="Hoadon\invoice.txt" size="70">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>mIIR21fQZd77KrI8e08kDnBRCHVCHIl6R9X6K7uxRHg=</dsig:DigestValue>
+      <dsig:DigestValue>vlkqDTTIu/hhZhYWnD3DU5LZQx0GqSsuKYDHdjwD/EM=</dsig:DigestValue>
     </hash>
   </file>
   <file name="LdaNative.dll" size="164136">

@@ -159,7 +159,8 @@ using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using Panel = System.Windows.Forms.Panel;
 using Path = System.IO.Path;
 using PdfReader = PdfSharp.Pdf.IO.PdfReader;
-using Point = System.Drawing.Point; 
+using Point = System.Drawing.Point;
+using Process = System.Diagnostics.Process;
 using Rectangle = System.Drawing.Rectangle;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 using Size = DocumentFormat.OpenXml.Drawing.Charts.Size;
@@ -16478,16 +16479,31 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         hiddenValue = pathThumuc + result;
                     }
                 }
-                frmWebbrowser frmCongTrinh = new frmWebbrowser();
-                frmCongTrinh.Text = hiddenValue.ToString().Replace(".xml", "");
-                frmCongTrinh.Show();
-                frmCongTrinh.BringToFront();
-                frmCongTrinh.Activate();
-                // Thêm điều khiển WebBrowser vào Form
-                frmCongTrinh.Controls.Add(webBrowser1);
+              
                 string filePath = hiddenValue.ToString().Replace(".xml", ".html");
+                if (!File.Exists(filePath))
+                {
+                    filePath = Path.ChangeExtension(filePath, ".pdf");
+                    frmXemhoadonInvoicse frmXemhoadonInvoicse = new frmXemhoadonInvoicse();
+                    frmXemhoadonInvoicse.path = filePath;
+                    string[] arr = filePath.Split('_');
 
-                webBrowser1.Navigate("file:///" + filePath.Replace("\\", "/"));
+                    string soHoaDon = arr[2];   // 878
+                    string mauSo = arr[3];      // 1C26MBD
+                    frmXemhoadonInvoicse.name = $"📄 Hóa đơn {soHoaDon} • {mauSo}";
+                    frmXemhoadonInvoicse.Show();
+                }
+                else
+                {
+                    frmWebbrowser frmCongTrinh = new frmWebbrowser();
+                    frmCongTrinh.Text = hiddenValue.ToString().Replace(".xml", "");
+                    frmCongTrinh.BringToFront();
+                    frmCongTrinh.Activate();
+                    // Thêm điều khiển WebBrowser vào Form
+                    frmCongTrinh.Controls.Add(webBrowser1);
+                    frmCongTrinh.Show();
+                    webBrowser1.Navigate("file:///" + filePath.Replace("\\", "/"));
+                }
             }
         }
 
@@ -33224,11 +33240,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             return input;
         }
 
-        private void Tainhacungcap()
-        {
-            btnTaiInvoice.PerformClick();
-        }
-        private async void btnTaiInvoice_Click(object sender, EventArgs e)
+        private async void Tainhacungcap()
         {
             string qrq = "SELECT * FROM tbInvoiceInfo";
             var dtInvoiceInfo = ExecuteQuery(qrq, null);
@@ -33314,7 +33326,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             int size = 1000;
                             int supplierId = 103807;
 
-                       
+
 
                             // API dùng giờ UTC (trừ 7 tiếng)
                             string fromDate = dtTungay.DateTime.Date.AddHours(-7).ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
@@ -33366,18 +33378,18 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                     for (int i = 0; i < invoices.Count; i++)
                                     {
                                         var invoice = invoices[i];
-                                        string filename = $"{invoice.createdDate.ToString("yyyyMMdd")}_{mstcongty}_{invoice.invoiceNumber}_{invoice.invoiceType}{invoice.invoiceSeri}.xml";
+                                        string filename = $"{invoice.createdDate.ToString("yyyyMMdd")}_{mstcongty}_{invoice.invoiceNumber}_{invoice.invoiceSeri}.xml";
                                         string filepath = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filename);
-                                        string filenamepdf = $"{invoice.createdDate.ToString("yyyyMMdd")}_{mstcongty}_{invoice.invoiceNumber}_{invoice.invoiceType}{invoice.invoiceSeri}.pdf";
+                                        string filenamepdf = $"{invoice.createdDate.ToString("yyyyMMdd")}_{mstcongty}_{invoice.invoiceNumber}_{invoice.invoiceSeri}.pdf";
                                         string filepathpdf = Path.Combine(savedPath, pathYear, pathravao, dtTungay.DateTime.Month.ToString(), filenamepdf);
-                                        
+
                                         DownloadInvoiceXml(client, invoice.id.ToString(), filepath);
                                         DownloadInvoicePdf(client, invoice.id.ToString(), filepathpdf);
                                         progressPanel2.Visible = true;
                                         progressPanel2.Caption = $"Tải hoá đơn thứ {i}/{total}";
                                         Application.DoEvents();
-                                       // Chờ 500ms để tránh rate limit
-                                       await Task.Delay(150);
+                                        // Chờ 500ms để tránh rate limit
+                                        await Task.Delay(150);
                                     }
                                     progressPanel2.Visible = false;
                                     XtraMessageBox.Show($"✅ Tải thành công {successCount}/{total} hóa đơn!");
@@ -33409,6 +33421,10 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     }
                 }
             }
+        }
+        private async void btnTaiInvoice_Click(object sender, EventArgs e)
+        {
+           
         }
         public class SearchResponse
         {
