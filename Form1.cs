@@ -5316,6 +5316,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbRegister", "IsRegisTry", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "VbCoche", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "VbCoche2", "NUMBER");
+            AddColumnIfNotExists(conn, "tbRegister", "IsRunning", "NUMBER");
             // tbimport
             AddColumnIfNotExists(conn, "tbimport", "Khautruthue", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "hdon", "TEXT");

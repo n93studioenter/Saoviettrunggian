@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode4 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode3 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.gridView7 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn21 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -509,10 +509,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl4.DataSource = this.nhapkhotpBindingSource1;
             this.gridControl4.Font = new System.Drawing.Font("Tahoma", 7.8F);
-            gridLevelNode1.LevelTemplate = this.gridView7;
-            gridLevelNode1.RelationName = "Child";
+            gridLevelNode4.LevelTemplate = this.gridView7;
+            gridLevelNode4.RelationName = "Child";
             this.gridControl4.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode1});
+            gridLevelNode4});
             this.gridControl4.Location = new System.Drawing.Point(7, 18);
             this.gridControl4.MainView = this.gridView6;
             this.gridControl4.Name = "gridControl4";
@@ -1014,10 +1014,10 @@
             this.gridControl2.DataSource = this.fileImportBindingSource;
             this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode2.LevelTemplate = this.gridView4;
-            gridLevelNode2.RelationName = "Detail";
+            gridLevelNode1.LevelTemplate = this.gridView4;
+            gridLevelNode1.RelationName = "Detail";
             this.gridControl2.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode2});
+            gridLevelNode1});
             this.gridControl2.Location = new System.Drawing.Point(0, 0);
             this.gridControl2.LookAndFeel.SkinName = "Office 2016 Colorful";
             this.gridControl2.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1409,10 +1409,10 @@
             this.gridControl1.DataSource = this.fileImportBindingSource;
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode3.LevelTemplate = this.gridView2;
-            gridLevelNode3.RelationName = "Detail";
+            gridLevelNode2.LevelTemplate = this.gridView2;
+            gridLevelNode2.RelationName = "Detail";
             this.gridControl1.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode3});
+            gridLevelNode2});
             this.gridControl1.Location = new System.Drawing.Point(0, 0);
             this.gridControl1.LookAndFeel.SkinName = "Office 2019 Colorful";
             this.gridControl1.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1691,9 +1691,9 @@
             // repositoryItemButtonEdit1
             // 
             this.repositoryItemButtonEdit1.AutoHeight = false;
-            editorButtonImageOptions1.Image = global::SaovietTax.Properties.Resources.close_16x16;
+            editorButtonImageOptions2.Image = global::SaovietTax.Properties.Resources.close_16x16;
             this.repositoryItemButtonEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.repositoryItemButtonEdit1.Name = "repositoryItemButtonEdit1";
             // 
             // gridView8
@@ -3306,7 +3306,6 @@
             this.panleLeft.Controls.Add(this.btnThietlaptairudong);
             this.panleLeft.Controls.Add(this.btnSetting);
             this.panleLeft.Controls.Add(this.chktaituweb);
-            this.panleLeft.Controls.Add(this.radioButton1);
             this.panleLeft.Controls.Add(this.dtDenngay);
             this.panleLeft.Controls.Add(this.chkDaura);
             this.panleLeft.Controls.Add(this.dtTungay);
@@ -3339,31 +3338,31 @@
             this.radVbDauvao1.AutoSize = true;
             this.radVbDauvao1.Location = new System.Drawing.Point(5, 5);
             this.radVbDauvao1.Name = "radVbDauvao1";
-            this.radVbDauvao1.Size = new System.Drawing.Size(178, 20);
+            this.radVbDauvao1.Size = new System.Drawing.Size(192, 20);
             this.radVbDauvao1.TabIndex = 18;
             this.radVbDauvao1.TabStop = true;
-            this.radVbDauvao1.Text = "Tải vào vb đầu vào đầy đủ";
+            this.radVbDauvao1.Text = "Tải toàn bộ hoá đơn đầu vào";
             this.radVbDauvao1.UseVisualStyleBackColor = true;
             this.radVbDauvao1.CheckedChanged += new System.EventHandler(this.radVbDauvao_CheckedChanged);
             // 
             // radVbDauvao2
             // 
             this.radVbDauvao2.AutoSize = true;
-            this.radVbDauvao2.Location = new System.Drawing.Point(239, 6);
+            this.radVbDauvao2.Location = new System.Drawing.Point(301, 5);
             this.radVbDauvao2.Name = "radVbDauvao2";
-            this.radVbDauvao2.Size = new System.Drawing.Size(153, 20);
+            this.radVbDauvao2.Size = new System.Drawing.Size(129, 20);
             this.radVbDauvao2.TabIndex = 19;
             this.radVbDauvao2.TabStop = true;
-            this.radVbDauvao2.Text = "Tải vào theo mật định";
+            this.radVbDauvao2.Text = "Tải theo mật định";
             this.radVbDauvao2.UseVisualStyleBackColor = true;
             this.radVbDauvao2.CheckedChanged += new System.EventHandler(this.radVbDaura_CheckedChanged);
             // 
             // chkInvoice
             // 
-            this.chkInvoice.Location = new System.Drawing.Point(409, 102);
+            this.chkInvoice.Location = new System.Drawing.Point(342, 102);
             this.chkInvoice.Name = "chkInvoice";
-            this.chkInvoice.Properties.Caption = "NCC";
-            this.chkInvoice.Size = new System.Drawing.Size(46, 20);
+            this.chkInvoice.Properties.Caption = "Tải từ NCC";
+            this.chkInvoice.Size = new System.Drawing.Size(113, 20);
             this.chkInvoice.TabIndex = 29;
             this.chkInvoice.CheckedChanged += new System.EventHandler(this.chkInvoice_CheckedChanged);
             // 
@@ -3403,7 +3402,7 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(197, 101);
+            this.radioButton1.Location = new System.Drawing.Point(127, 151);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(36, 20);
             this.radioButton1.TabIndex = 25;
@@ -3433,7 +3432,7 @@
             // chkDaura
             // 
             this.chkDaura.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkDaura.Location = new System.Drawing.Point(238, 100);
+            this.chkDaura.Location = new System.Drawing.Point(179, 100);
             this.chkDaura.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.chkDaura.Name = "chkDaura";
             this.chkDaura.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F);
@@ -3572,12 +3571,12 @@
             // radVbDaura2
             // 
             this.radVbDaura2.AutoSize = true;
-            this.radVbDaura2.Location = new System.Drawing.Point(215, 5);
+            this.radVbDaura2.Location = new System.Drawing.Point(243, 5);
             this.radVbDaura2.Name = "radVbDaura2";
-            this.radVbDaura2.Size = new System.Drawing.Size(145, 20);
+            this.radVbDaura2.Size = new System.Drawing.Size(129, 20);
             this.radVbDaura2.TabIndex = 19;
             this.radVbDaura2.TabStop = true;
-            this.radVbDaura2.Text = "Tải ra theo mật định";
+            this.radVbDaura2.Text = "Tải theo mật định";
             this.radVbDaura2.UseVisualStyleBackColor = true;
             this.radVbDaura2.CheckedChanged += new System.EventHandler(this.radVbDaura2_CheckedChanged);
             // 
@@ -3586,10 +3585,10 @@
             this.radVbDaura1.AutoSize = true;
             this.radVbDaura1.Location = new System.Drawing.Point(5, 5);
             this.radVbDaura1.Name = "radVbDaura1";
-            this.radVbDaura1.Size = new System.Drawing.Size(170, 20);
+            this.radVbDaura1.Size = new System.Drawing.Size(184, 20);
             this.radVbDaura1.TabIndex = 18;
             this.radVbDaura1.TabStop = true;
-            this.radVbDaura1.Text = "Tải vào vb đầu ra đầy đủ";
+            this.radVbDaura1.Text = "Tải toàn bộ hoá đơn đầu ra";
             this.radVbDaura1.UseVisualStyleBackColor = true;
             this.radVbDaura1.CheckedChanged += new System.EventHandler(this.radVbDaura1_CheckedChanged);
             // 
@@ -3719,6 +3718,7 @@
             this.panleRight.Controls.Add(this.btnClearNganhang);
             this.panleRight.Controls.Add(this.btnMatdinhnganhang);
             this.panleRight.Controls.Add(this.btnDocfileExcel);
+            this.panleRight.Controls.Add(this.radioButton1);
             this.panleRight.Controls.Add(this.btnImportChungtunganhang);
             this.panleRight.Controls.Add(this.simpleButton4);
             this.panleRight.Location = new System.Drawing.Point(870, 3);
@@ -4129,6 +4129,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panleRight)).EndInit();
             this.panleRight.ResumeLayout(false);
+            this.panleRight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panleFinal)).EndInit();
             this.panleFinal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).EndInit();
