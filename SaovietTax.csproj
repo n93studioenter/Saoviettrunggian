@@ -367,6 +367,12 @@
     <Compile Include="frmAutoTai.Designer.cs">
       <DependentUpon>frmAutoTai.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmAutotaiNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAutotaiNew.Designer.cs">
+      <DependentUpon>frmAutotaiNew.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmAutoTaiSetting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -591,6 +597,9 @@
     <EmbeddedResource Include="frmAutoTai.resx">
       <DependentUpon>frmAutoTai.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmAutotaiNew.resx">
+      <DependentUpon>frmAutotaiNew.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmAutoTaiSetting.resx">
       <DependentUpon>FrmAutoTaiSetting.cs</DependentUpon>
     </EmbeddedResource>
@@ -703,6 +712,7 @@
     <None Include="config\acb.json" />
     <None Include="NGÂN HÀNG BIVD.pdf" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\frmAutotaiNew.HoadonTai.datasource" />
     <None Include="Properties\DataSources\frmDinhdanh.PhanLoaiVattu.datasource" />
     <None Include="Properties\DataSources\frmKiemtrahethong.KTHeThong.datasource" />
     <None Include="Properties\DataSources\frmMain.FileImport.datasource" />

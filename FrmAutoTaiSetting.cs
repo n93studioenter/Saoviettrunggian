@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static SaovietTax.frmHangHoa;
 
 namespace SaovietTax
 {
@@ -78,6 +79,31 @@ namespace SaovietTax
                 }
             }
         }
+        public int ExecuteQueryResult2(string query, params OleDbParameter[] parameters)
+        {
+            using (OleDbConnection connection = new OleDbConnection(connectionString2))
+            {
+                connection.Open();
+                Console.WriteLine("Kết nối đến cơ sở dữ liệu thành công! " + query);
+
+                using (OleDbCommand command = new OleDbCommand(query, connection))
+                {
+                    // Thêm tham số
+                    if (parameters != null)
+                        command.Parameters.AddRange(parameters);
+
+                    // Thực thi INSERT, UPDATE, DELETE
+                    command.ExecuteNonQuery();
+                }
+
+                // Lấy ID vừa thêm bằng @@IDENTITY
+                using (OleDbCommand idCommand = new OleDbCommand("SELECT @@IDENTITY", connection))
+                {
+                    object result = idCommand.ExecuteScalar();
+                    return Convert.ToInt32(result);
+                }
+            }
+        }
         public void AddToStartup()
         {
             try
@@ -96,7 +122,9 @@ namespace SaovietTax
                 string exeWithArgs = $"\"{exePath}\" -autostart";
 
                 // 4. Lấy tên hiển thị (không có dấu cách)
-                string appName = "SaovietTax"; // Hoặc từ database, nhưng không có dấu cách
+                string queryGetdetail = @"SELECT * FROM tbregister";
+                DataTable tbImportdetails = ExecuteQuery(queryGetdetail);
+                string appName = tbImportdetails.Rows[0].Field<string>("Username");
 
                 // 5. Mở Registry Run
                 using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(
@@ -149,8 +177,13 @@ namespace SaovietTax
                     if (rk.GetValue(appName) != null)
                     {
                         rk.DeleteValue(appName, false);
-                        //MessageBox.Show($"Đã xoá '{appName}' khỏi Startup.", "Thông báo",
-                        //              MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        string query = @"UPDATE tbRegister SET taitd = ?";
+
+                        var parameters = new OleDbParameter[]
+                 {
+                                new OleDbParameter("?","0"),
+                 };
+                        int rowsAffected = ExecuteQueryResult(query, parameters);
                     }
                     else
                     {
@@ -205,6 +238,7 @@ namespace SaovietTax
             return dataTable; // Trả về DataTable chứa dữ liệu
         }
         string connectionString = "";
+        string connectionString2 = "";
         string dbPath = "";
         string filename = "";
         private void FrmAutoTaiSetting_Load(object sender, EventArgs e)
@@ -258,6 +292,8 @@ namespace SaovietTax
             string Moctg1 = tbRegister.Rows[0].Field<string>("Moctg1");
             string Moctg2 = tbRegister.Rows[0].Field<string>("Moctg2");
             string Moctg3 = tbRegister.Rows[0].Field<string>("Moctg3");
+            string isresitry = tbRegister.Rows[0]["IsRegisTry"].ToString();
+            chkThietlaptong.Checked= isresitry=="1"?true:false;
             int Soluottai = !string.IsNullOrEmpty(tbRegister.Rows[0]["Soluottai"].ToString()) ?int.Parse(tbRegister.Rows[0]["Soluottai"].ToString()):0;
             if (!string.IsNullOrEmpty(Moctg1))
             {
@@ -313,7 +349,7 @@ namespace SaovietTax
         {
             if (string.IsNullOrEmpty(txtTime1.Text))
             {
-                string query = "UPDATE tbRegister SET Moctg1 = ?";
+                string query = "UPDATE tbsetting SET Moctg1 = ?";
                 // Khai báo mảng tham số với đủ 10 tham số
                 OleDbParameter[] parameters = new OleDbParameter[]
                 {
@@ -536,6 +572,125 @@ namespace SaovietTax
 
             // Thực thi truy vấn và lấy kết quả
             int a = ExecuteQueryResult(query, parameters);
+        }
+
+        private void chkThietlaptong_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkThietlaptong.Checked)
+            {
+                //Gỡ tải khi khoi dong máy
+                string qr = @"SELECT * FROM tbregister";
+                DataTable getRegister = ExecuteQuery(qr);
+                if (getRegister.Rows[0]["taitd"].ToString() == "1")
+                {
+                    RemoveFromStartup();
+                }
+                string querys = @"UPDATE tbRegister SET IsRegistry = ?";
+
+                var parameterss = new OleDbParameter[]
+                 {
+                   new OleDbParameter("?",chkThietlaptong.Checked?1:0),
+                 };
+                int rowsAffecteds = ExecuteQueryResult(querys, parameterss);
+                string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+                connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
+                string queryGetdetail = @"SELECT * FROM tbCompany";
+                DataTable tbImportdetails = ExecuteQuery2(queryGetdetail);
+                string getmst = getRegister.Rows[0]["Username"].ToString();
+                //Kiem tra đã thêm chưa
+
+                string querycheck = @"SELECT COUNT(*) FROM tbCompany WHERE MST = ? and Saoviet =?";
+                string computerName = Environment.MachineName;
+
+                var parameterss2 = new OleDbParameter[]
+               {
+                   new OleDbParameter("?",getmst),
+                    new OleDbParameter("?",computerName),
+               };
+                DataTable getTablecheck = ExecuteQuery2(querycheck, parameterss2);
+                int count = Convert.ToInt32(getTablecheck.Rows[0][0]);
+
+                if (count == 0)
+                {
+                    // 1. Sửa câu lệnh INSERT - bỏ cột Dauvao bị trùng
+                    string qrInsert = @"INSERT INTO tbCompany (Name, Dbpath, FolderPath, MST, STT, Status, IsRun, Dauvao, Daura, Saoviet) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                    string namecongty = getRegister.Rows[0]["Dbpath"].ToString().Split('\\')[4].Replace(".MDB", "");
+                 
+                    var parameters = new OleDbParameter[]
+                    {
+                        new OleDbParameter("?", namecongty),                                      // 1. Name
+                        new OleDbParameter("?", getRegister.Rows[0]["Dbpath"].ToString()),       // 2. Dbpath
+                        new OleDbParameter("?", getRegister.Rows[0]["Hoadonpath"].ToString()),   // 3. FolderPath
+                        new OleDbParameter("?", getmst),                                         // 4. MST
+                        new OleDbParameter("?", 1),                                              // 5. STT
+                        new OleDbParameter("?", 1),                                              // 6. Status
+                        new OleDbParameter("?", 1),                                              // 7. IsRun  <-- THÊM VÀO
+                        new OleDbParameter("?", 1),                                              // 8. Dauvao
+                        new OleDbParameter("?", 1),                                              // 9. Daura
+                        new OleDbParameter("?", computerName)                               // 10. Saoviet
+                    };
+
+                    int rowsAffected = ExecuteQueryResult2(qrInsert, parameters);
+                }
+            }
+            else
+            {
+                string qr = @"SELECT * FROM tbregister";
+                DataTable getRegister = ExecuteQuery(qr);
+
+
+                string querys = @"UPDATE tbRegister SET IsRegistry = ?";
+                int redd= ExecuteQueryResult(querys, null);
+                var parameterss = new OleDbParameter[]
+                 {
+                   new OleDbParameter("?",chkThietlaptong.Checked?1:0),
+                 };
+                string query = "DELETE FROM [tbCompany] WHERE [MST] = ? AND [Saoviet] = ?";
+                string computerName = Environment.MachineName;
+                var parameters = new OleDbParameter[]
+                  {                                // 9. Daura
+                        new OleDbParameter("?", getRegister.Rows[0]["Username"].ToString()),
+                        new OleDbParameter("?", computerName)                               // 10. Saoviet
+                  };
+
+                int rowsAffected = ExecuteQueryResult2(query, parameters);
+            }
+        }
+
+        public System.Data.DataTable ExecuteQuery2(string query, params OleDbParameter[] parameters)
+        {
+            System.Data.DataTable dataTable = new System.Data.DataTable();
+
+            using (OleDbConnection connection = new OleDbConnection(connectionString2))
+            {
+                try
+                {
+                    connection.Open();
+
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        // Thêm các tham số vào command
+                        if (parameters != null)
+                        {
+                            command.Parameters.AddRange(parameters);
+                        }
+
+                        using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(command))
+                        {
+                            dataAdapter.Fill(dataTable);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+
+            return dataTable; // Trả về DataTable chứa dữ liệu
         }
     }
 }

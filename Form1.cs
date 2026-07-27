@@ -5313,6 +5313,9 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbRegister", "Moctg3", "TEXT");
             AddColumnIfNotExists(conn, "tbRegister", "Soluottai", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "Thoigiantai", "NUMBER");
+            AddColumnIfNotExists(conn, "tbRegister", "IsRegisTry", "NUMBER");
+            AddColumnIfNotExists(conn, "tbRegister", "VbCoche", "NUMBER");
+            AddColumnIfNotExists(conn, "tbRegister", "VbCoche2", "NUMBER");
             // tbimport
             AddColumnIfNotExists(conn, "tbimport", "Khautruthue", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "hdon", "TEXT");
@@ -5339,6 +5342,8 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbimport", "TgTCThue1", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "TgTCThue2", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "TgTCThue3", "NUMBER");
+            AddColumnIfNotExists(conn, "tbimport", "LoaiVb", "NUMBER");
+            AddColumnIfNotExists(conn, "tbimport", "IsMD", "NUMBER");
 
             // tbimportdetail
             AddColumnIfNotExists(conn, "tbimportdetail", "IsMacdinh", "NUMBER");
@@ -6369,6 +6374,28 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 comboBoxEdit7.Properties.Items.Add("155");
                 comboBoxEdit7.Properties.Items.Add("156");
                 tbRegister = ExecuteQuery("SELECT * FROM tbRegister", null);
+                string getLoaivb = tbRegister.Rows[0]["VbCoche"].ToString();
+                string getLoaivb2 = tbRegister.Rows[0]["VbCoche2"].ToString();
+
+                // radVbDauvao.Location = new Point(panleMiddle.Location.X + 10, radVbDauvao.Location.Y);
+                // radVbDaura.Location = new Point(radVbDauvao.Width +10 , radVbDaura.Location.Y);
+                // radVbtudong.Location = new Point(  radVbDaura.Width + 10, radVbtudong.Location.Y);
+                if (!string.IsNullOrEmpty(getLoaivb))
+                {
+                    int getl = int.Parse(getLoaivb);
+                    if (getl == 1)
+                        radVbDauvao1.Checked = true;
+                    if (getl == 2)
+                        radVbDauvao2.Checked = true; 
+                }
+                if (!string.IsNullOrEmpty(getLoaivb2))
+                {
+                    int getl = int.Parse(getLoaivb2);
+                    if (getl == 1)
+                        radVbDaura1.Checked = true;
+                    if (getl == 2)
+                        radVbDaura2.Checked = true;
+                }
                 //Nếu trong database chưa có 
                 if (string.IsNullOrEmpty(tbRegister.AsEnumerable().FirstOrDefault().Field<string>("tk154")))
                 {
@@ -33645,6 +33672,62 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void chkInvoice_CheckedChanged(object sender, EventArgs e)
+        {
+
+        } 
+
+        private void radVbDauvao_CheckedChanged(object sender, EventArgs e)
+        {
+            var query = "UPDATE tbRegister SET VbCoche=? ";
+            var parametersss = new OleDbParameter[]
+            {
+                new OleDbParameter("?","1")
+            }; 
+            ExecuteQueryResult(query, parametersss);
+        }
+
+        private void radVbDaura_CheckedChanged(object sender, EventArgs e)
+        {
+            var query = "UPDATE tbRegister SET VbCoche=? ";
+            var parametersss = new OleDbParameter[]
+            {
+                new OleDbParameter("?","2")
+            };
+            ExecuteQueryResult(query, parametersss);
+        }
+
+        private void radVbtudong_CheckedChanged(object sender, EventArgs e)
+        {
+            var query = "UPDATE tbRegister SET VbCoche=?";
+            var parametersss = new OleDbParameter[]
+            {
+                new OleDbParameter("?","3")
+            };
+            ExecuteQueryResult(query, parametersss);
+        }
+
+        private void radVbDaura1_CheckedChanged(object sender, EventArgs e)
+        {
+            var query = "UPDATE tbRegister SET VbCoche2=?";
+            var parametersss = new OleDbParameter[]
+            {
+                new OleDbParameter("?","1")
+            };
+            ExecuteQueryResult(query, parametersss);
+        }
+
+        private void radVbDaura2_CheckedChanged(object sender, EventArgs e)
+        {
+            var query = "UPDATE tbRegister SET VbCoche2=?";
+            var parametersss = new OleDbParameter[]
+            {
+                new OleDbParameter("?","2")
+            };
+            ExecuteQueryResult(query, parametersss);
+        }
+
         // ========================================
         // HÀM TẢI FILE PDF
         // ========================================

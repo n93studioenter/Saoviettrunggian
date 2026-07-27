@@ -275,6 +275,9 @@
             this.lblThongbao = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panleLeft = new DevExpress.XtraEditors.PanelControl();
+            this.panelControl8 = new DevExpress.XtraEditors.PanelControl();
+            this.radVbDauvao1 = new System.Windows.Forms.RadioButton();
+            this.radVbDauvao2 = new System.Windows.Forms.RadioButton();
             this.chkInvoice = new DevExpress.XtraEditors.CheckEdit();
             this.btnThietlaptairudong = new DevExpress.XtraEditors.SimpleButton();
             this.btnSetting = new DevExpress.XtraEditors.SimpleButton();
@@ -291,6 +294,10 @@
             this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
             this.txtuser = new System.Windows.Forms.TextBox();
             this.panleMiddle = new DevExpress.XtraEditors.PanelControl();
+            this.panelControl7 = new DevExpress.XtraEditors.PanelControl();
+            this.radVbDaura2 = new System.Windows.Forms.RadioButton();
+            this.radVbDaura1 = new System.Windows.Forms.RadioButton();
+            this.panelControl4 = new DevExpress.XtraEditors.PanelControl();
             this.btnClearMatdinh = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.btnRefresh = new DevExpress.XtraEditors.SimpleButton();
@@ -311,6 +318,7 @@
             this.panleFinal = new DevExpress.XtraEditors.PanelControl();
             this.simpleButton14 = new DevExpress.XtraEditors.SimpleButton();
             this.pictureEdit1 = new DevExpress.XtraEditors.PictureEdit();
+            this.checkEdit1 = new DevExpress.XtraEditors.CheckEdit();
             this.comboBoxEdit2 = new DevExpress.XtraEditors.ComboBoxEdit();
             this.comboBoxEdit1 = new DevExpress.XtraEditors.ComboBoxEdit();
             this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
@@ -407,6 +415,8 @@
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panleLeft)).BeginInit();
             this.panleLeft.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl8)).BeginInit();
+            this.panelControl8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chkInvoice.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chktaituweb.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDenngay.Properties.CalendarTimeProperties)).BeginInit();
@@ -417,11 +427,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.chkDauvao.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panleMiddle)).BeginInit();
             this.panleMiddle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl7)).BeginInit();
+            this.panelControl7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panleRight)).BeginInit();
             this.panleRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panleFinal)).BeginInit();
             this.panleFinal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxEdit2.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxEdit1.Properties)).BeginInit();
             this.xtraTabPage6.SuspendLayout();
@@ -1010,7 +1024,7 @@
             this.gridControl2.MainView = this.gridView3;
             this.gridControl2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gridControl2.Name = "gridControl2";
-            this.gridControl2.Size = new System.Drawing.Size(1648, 479);
+            this.gridControl2.Size = new System.Drawing.Size(1648, 412);
             this.gridControl2.TabIndex = 1;
             this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView3,
@@ -1407,7 +1421,7 @@
             this.gridControl1.Name = "gridControl1";
             this.gridControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemButtonEdit1});
-            this.gridControl1.Size = new System.Drawing.Size(1648, 479);
+            this.gridControl1.Size = new System.Drawing.Size(1648, 412);
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1,
@@ -1721,11 +1735,11 @@
             this.xtraTabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.xtraTabControl2.Location = new System.Drawing.Point(8, 153);
+            this.xtraTabControl2.Location = new System.Drawing.Point(8, 220);
             this.xtraTabControl2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabControl2.Name = "xtraTabControl2";
             this.xtraTabControl2.SelectedTabPage = this.xtraTabPage3;
-            this.xtraTabControl2.Size = new System.Drawing.Size(1652, 507);
+            this.xtraTabControl2.Size = new System.Drawing.Size(1652, 440);
             this.xtraTabControl2.TabIndex = 8;
             this.xtraTabControl2.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage3,
@@ -1746,7 +1760,7 @@
             this.xtraTabPage3.Controls.Add(this.btnReadPDF);
             this.xtraTabPage3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(1648, 479);
+            this.xtraTabPage3.Size = new System.Drawing.Size(1648, 412);
             this.xtraTabPage3.Text = "HĐ đầu vào";
             // 
             // progressChitievao
@@ -1819,7 +1833,7 @@
             // 
             this.btnReadPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReadPDF.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnReadPDF.ImageOptions.Image")));
-            this.btnReadPDF.Location = new System.Drawing.Point(1606, 227);
+            this.btnReadPDF.Location = new System.Drawing.Point(1606, 160);
             this.btnReadPDF.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnReadPDF.Name = "btnReadPDF";
             this.btnReadPDF.Size = new System.Drawing.Size(162, 39);
@@ -1836,7 +1850,7 @@
             this.xtraTabPage4.Controls.Add(this.gridControl2);
             this.xtraTabPage4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(1648, 479);
+            this.xtraTabPage4.Size = new System.Drawing.Size(1648, 412);
             this.xtraTabPage4.Text = "HĐ Đầu ra";
             // 
             // progressPanel2
@@ -1906,7 +1920,7 @@
             this.xtraTabPage7.Controls.Add(this.simpleButton11);
             this.xtraTabPage7.Controls.Add(this.gridControl7);
             this.xtraTabPage7.Name = "xtraTabPage7";
-            this.xtraTabPage7.Size = new System.Drawing.Size(1648, 479);
+            this.xtraTabPage7.Size = new System.Drawing.Size(1648, 412);
             this.xtraTabPage7.Text = "Ngân hàng";
             // 
             // labelControl23
@@ -2193,7 +2207,7 @@
             this.xtraTabPage2.Controls.Add(this.gridControl3);
             this.xtraTabPage2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(1648, 479);
+            this.xtraTabPage2.Size = new System.Drawing.Size(1648, 412);
             this.xtraTabPage2.Text = "Ngân hàng";
             // 
             // lblTKNganHangTitle
@@ -2298,7 +2312,7 @@
             this.gridControl3.MainView = this.gridView5;
             this.gridControl3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gridControl3.Name = "gridControl3";
-            this.gridControl3.Size = new System.Drawing.Size(1648, 479);
+            this.gridControl3.Size = new System.Drawing.Size(1648, 412);
             this.gridControl3.TabIndex = 0;
             this.gridControl3.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView5});
@@ -2480,7 +2494,7 @@
             this.xtraTabPage5.Controls.Add(this.panleGrid);
             this.xtraTabPage5.Controls.Add(this.panelControl1);
             this.xtraTabPage5.Name = "xtraTabPage5";
-            this.xtraTabPage5.Size = new System.Drawing.Size(1648, 479);
+            this.xtraTabPage5.Size = new System.Drawing.Size(1648, 412);
             this.xtraTabPage5.Text = "Nhập kho thành phẩm";
             // 
             // panelControl2
@@ -3279,13 +3293,15 @@
             this.flowLayoutPanel1.Controls.Add(this.panleMiddle);
             this.flowLayoutPanel1.Controls.Add(this.panleRight);
             this.flowLayoutPanel1.Controls.Add(this.panleFinal);
+            this.flowLayoutPanel1.Controls.Add(this.checkEdit1);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 8);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1654, 139);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(1654, 206);
             this.flowLayoutPanel1.TabIndex = 17;
             // 
             // panleLeft
             // 
+            this.panleLeft.Controls.Add(this.panelControl8);
             this.panleLeft.Controls.Add(this.chkInvoice);
             this.panleLeft.Controls.Add(this.btnThietlaptairudong);
             this.panleLeft.Controls.Add(this.btnSetting);
@@ -3304,8 +3320,43 @@
             this.panleLeft.Location = new System.Drawing.Point(2, 3);
             this.panleLeft.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panleLeft.Name = "panleLeft";
-            this.panleLeft.Size = new System.Drawing.Size(460, 132);
+            this.panleLeft.Size = new System.Drawing.Size(460, 177);
             this.panleLeft.TabIndex = 6;
+            // 
+            // panelControl8
+            // 
+            this.panelControl8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelControl8.Controls.Add(this.radVbDauvao1);
+            this.panelControl8.Controls.Add(this.radVbDauvao2);
+            this.panelControl8.Location = new System.Drawing.Point(12, 136);
+            this.panelControl8.Name = "panelControl8";
+            this.panelControl8.Size = new System.Drawing.Size(443, 35);
+            this.panelControl8.TabIndex = 35;
+            // 
+            // radVbDauvao1
+            // 
+            this.radVbDauvao1.AutoSize = true;
+            this.radVbDauvao1.Location = new System.Drawing.Point(5, 5);
+            this.radVbDauvao1.Name = "radVbDauvao1";
+            this.radVbDauvao1.Size = new System.Drawing.Size(178, 20);
+            this.radVbDauvao1.TabIndex = 18;
+            this.radVbDauvao1.TabStop = true;
+            this.radVbDauvao1.Text = "Tải vào vb đầu vào đầy đủ";
+            this.radVbDauvao1.UseVisualStyleBackColor = true;
+            this.radVbDauvao1.CheckedChanged += new System.EventHandler(this.radVbDauvao_CheckedChanged);
+            // 
+            // radVbDauvao2
+            // 
+            this.radVbDauvao2.AutoSize = true;
+            this.radVbDauvao2.Location = new System.Drawing.Point(239, 6);
+            this.radVbDauvao2.Name = "radVbDauvao2";
+            this.radVbDauvao2.Size = new System.Drawing.Size(153, 20);
+            this.radVbDauvao2.TabIndex = 19;
+            this.radVbDauvao2.TabStop = true;
+            this.radVbDauvao2.Text = "Tải vào theo mật định";
+            this.radVbDauvao2.UseVisualStyleBackColor = true;
+            this.radVbDauvao2.CheckedChanged += new System.EventHandler(this.radVbDaura_CheckedChanged);
             // 
             // chkInvoice
             // 
@@ -3314,6 +3365,7 @@
             this.chkInvoice.Properties.Caption = "NCC";
             this.chkInvoice.Size = new System.Drawing.Size(46, 20);
             this.chkInvoice.TabIndex = 29;
+            this.chkInvoice.CheckedChanged += new System.EventHandler(this.chkInvoice_CheckedChanged);
             // 
             // btnThietlaptairudong
             // 
@@ -3489,6 +3541,8 @@
             // panleMiddle
             // 
             this.panleMiddle.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panleMiddle.Controls.Add(this.panelControl7);
+            this.panleMiddle.Controls.Add(this.panelControl4);
             this.panleMiddle.Controls.Add(this.btnClearMatdinh);
             this.panleMiddle.Controls.Add(this.simpleButton6);
             this.panleMiddle.Controls.Add(this.btnRefresh);
@@ -3500,15 +3554,59 @@
             this.panleMiddle.Controls.Add(this.simpleButton3);
             this.panleMiddle.Location = new System.Drawing.Point(467, 3);
             this.panleMiddle.Name = "panleMiddle";
-            this.panleMiddle.Size = new System.Drawing.Size(389, 132);
+            this.panleMiddle.Size = new System.Drawing.Size(397, 177);
             this.panleMiddle.TabIndex = 6;
             this.panleMiddle.Paint += new System.Windows.Forms.PaintEventHandler(this.panleMiddle_Paint);
+            // 
+            // panelControl7
+            // 
+            this.panelControl7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelControl7.Controls.Add(this.radVbDaura2);
+            this.panelControl7.Controls.Add(this.radVbDaura1);
+            this.panelControl7.Location = new System.Drawing.Point(5, 137);
+            this.panelControl7.Name = "panelControl7";
+            this.panelControl7.Size = new System.Drawing.Size(387, 35);
+            this.panelControl7.TabIndex = 23;
+            // 
+            // radVbDaura2
+            // 
+            this.radVbDaura2.AutoSize = true;
+            this.radVbDaura2.Location = new System.Drawing.Point(215, 5);
+            this.radVbDaura2.Name = "radVbDaura2";
+            this.radVbDaura2.Size = new System.Drawing.Size(145, 20);
+            this.radVbDaura2.TabIndex = 19;
+            this.radVbDaura2.TabStop = true;
+            this.radVbDaura2.Text = "Tải ra theo mật định";
+            this.radVbDaura2.UseVisualStyleBackColor = true;
+            this.radVbDaura2.CheckedChanged += new System.EventHandler(this.radVbDaura2_CheckedChanged);
+            // 
+            // radVbDaura1
+            // 
+            this.radVbDaura1.AutoSize = true;
+            this.radVbDaura1.Location = new System.Drawing.Point(5, 5);
+            this.radVbDaura1.Name = "radVbDaura1";
+            this.radVbDaura1.Size = new System.Drawing.Size(170, 20);
+            this.radVbDaura1.TabIndex = 18;
+            this.radVbDaura1.TabStop = true;
+            this.radVbDaura1.Text = "Tải vào vb đầu ra đầy đủ";
+            this.radVbDaura1.UseVisualStyleBackColor = true;
+            this.radVbDaura1.CheckedChanged += new System.EventHandler(this.radVbDaura1_CheckedChanged);
+            // 
+            // panelControl4
+            // 
+            this.panelControl4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelControl4.Location = new System.Drawing.Point(103, 212);
+            this.panelControl4.Name = "panelControl4";
+            this.panelControl4.Size = new System.Drawing.Size(387, 30);
+            this.panelControl4.TabIndex = 22;
             // 
             // btnClearMatdinh
             // 
             this.btnClearMatdinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClearMatdinh.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnClearMatdinh.ImageOptions.Image")));
-            this.btnClearMatdinh.Location = new System.Drawing.Point(331, 81);
+            this.btnClearMatdinh.Location = new System.Drawing.Point(339, 81);
             this.btnClearMatdinh.Name = "btnClearMatdinh";
             this.btnClearMatdinh.Size = new System.Drawing.Size(53, 41);
             this.btnClearMatdinh.TabIndex = 13;
@@ -3519,10 +3617,10 @@
             this.simpleButton6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton6.ImageOptions.Image = global::SaovietTax.Properties.Resources.sendxls_32x321;
-            this.simpleButton6.Location = new System.Drawing.Point(203, 44);
+            this.simpleButton6.Location = new System.Drawing.Point(204, 45);
             this.simpleButton6.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton6.Name = "simpleButton6";
-            this.simpleButton6.Size = new System.Drawing.Size(181, 31);
+            this.simpleButton6.Size = new System.Drawing.Size(189, 31);
             this.simpleButton6.TabIndex = 18;
             this.simpleButton6.Text = "Liệt kê hóa đơn excel";
             this.simpleButton6.Click += new System.EventHandler(this.simpleButton6_Click);
@@ -3563,10 +3661,10 @@
             this.simpleButton5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton5.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton5.ImageOptions.Image")));
-            this.simpleButton5.Location = new System.Drawing.Point(5, 44);
+            this.simpleButton5.Location = new System.Drawing.Point(0, 44);
             this.simpleButton5.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton5.Name = "simpleButton5";
-            this.simpleButton5.Size = new System.Drawing.Size(194, 31);
+            this.simpleButton5.Size = new System.Drawing.Size(202, 31);
             this.simpleButton5.TabIndex = 17;
             this.simpleButton5.Text = "Đọc file Excel";
             this.simpleButton5.Click += new System.EventHandler(this.simpleButton5_Click);
@@ -3576,10 +3674,10 @@
             this.btnChonthang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnChonthang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnChonthang.ImageOptions.Image")));
-            this.btnChonthang.Location = new System.Drawing.Point(203, 3);
+            this.btnChonthang.Location = new System.Drawing.Point(211, 3);
             this.btnChonthang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnChonthang.Name = "btnChonthang";
-            this.btnChonthang.Size = new System.Drawing.Size(181, 31);
+            this.btnChonthang.Size = new System.Drawing.Size(181, 36);
             this.btnChonthang.TabIndex = 8;
             this.btnChonthang.Text = "Liệt kê hóa đơn";
             this.btnChonthang.Click += new System.EventHandler(this.btnChonthang_Click);
@@ -3588,7 +3686,7 @@
             // 
             this.btnMdtk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMdtk.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnMdtk.ImageOptions.Image")));
-            this.btnMdtk.Location = new System.Drawing.Point(203, 83);
+            this.btnMdtk.Location = new System.Drawing.Point(211, 83);
             this.btnMdtk.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnMdtk.Name = "btnMdtk";
             this.btnMdtk.Size = new System.Drawing.Size(123, 38);
@@ -3605,7 +3703,7 @@
             this.simpleButton3.Location = new System.Drawing.Point(5, 4);
             this.simpleButton3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton3.Name = "simpleButton3";
-            this.simpleButton3.Size = new System.Drawing.Size(194, 33);
+            this.simpleButton3.Size = new System.Drawing.Size(194, 34);
             this.simpleButton3.TabIndex = 13;
             this.simpleButton3.Text = "Tải HĐ từ cơ quan thuế";
             this.simpleButton3.ToolTip = "https://hoadondientu.gdt.gov.vn/";
@@ -3623,9 +3721,9 @@
             this.panleRight.Controls.Add(this.btnDocfileExcel);
             this.panleRight.Controls.Add(this.btnImportChungtunganhang);
             this.panleRight.Controls.Add(this.simpleButton4);
-            this.panleRight.Location = new System.Drawing.Point(862, 3);
+            this.panleRight.Location = new System.Drawing.Point(870, 3);
             this.panleRight.Name = "panleRight";
-            this.panleRight.Size = new System.Drawing.Size(478, 133);
+            this.panleRight.Size = new System.Drawing.Size(478, 177);
             this.panleRight.TabIndex = 6;
             // 
             // btnPdf24
@@ -3720,9 +3818,9 @@
             this.panleFinal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panleFinal.Controls.Add(this.simpleButton14);
             this.panleFinal.Controls.Add(this.pictureEdit1);
-            this.panleFinal.Location = new System.Drawing.Point(3, 142);
+            this.panleFinal.Location = new System.Drawing.Point(1354, 3);
             this.panleFinal.Name = "panleFinal";
-            this.panleFinal.Size = new System.Drawing.Size(324, 132);
+            this.panleFinal.Size = new System.Drawing.Size(260, 49);
             this.panleFinal.TabIndex = 7;
             // 
             // simpleButton14
@@ -3739,12 +3837,20 @@
             // 
             this.pictureEdit1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureEdit1.EditValue = ((object)(resources.GetObject("pictureEdit1.EditValue")));
-            this.pictureEdit1.Location = new System.Drawing.Point(15, 6);
+            this.pictureEdit1.Location = new System.Drawing.Point(-49, 39);
             this.pictureEdit1.Name = "pictureEdit1";
             this.pictureEdit1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
             this.pictureEdit1.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch;
-            this.pictureEdit1.Size = new System.Drawing.Size(147, 120);
+            this.pictureEdit1.Size = new System.Drawing.Size(64, 87);
             this.pictureEdit1.TabIndex = 1;
+            // 
+            // checkEdit1
+            // 
+            this.checkEdit1.Location = new System.Drawing.Point(3, 186);
+            this.checkEdit1.Name = "checkEdit1";
+            this.checkEdit1.Properties.Caption = "checkEdit1";
+            this.checkEdit1.Size = new System.Drawing.Size(94, 20);
+            this.checkEdit1.TabIndex = 5;
             // 
             // comboBoxEdit2
             // 
@@ -4004,6 +4110,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.panleLeft)).EndInit();
             this.panleLeft.ResumeLayout(false);
             this.panleLeft.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl8)).EndInit();
+            this.panelControl8.ResumeLayout(false);
+            this.panelControl8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chkInvoice.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chktaituweb.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDenngay.Properties.CalendarTimeProperties)).EndInit();
@@ -4014,11 +4123,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.chkDauvao.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panleMiddle)).EndInit();
             this.panleMiddle.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl7)).EndInit();
+            this.panelControl7.ResumeLayout(false);
+            this.panelControl7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panleRight)).EndInit();
             this.panleRight.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.panleFinal)).EndInit();
             this.panleFinal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxEdit2.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxEdit1.Properties)).EndInit();
             this.xtraTabPage6.ResumeLayout(false);
@@ -4336,5 +4450,13 @@
         private DevExpress.XtraEditors.SimpleButton btnThietlaptairudong;
         private DevExpress.XtraEditors.SimpleButton btnTaiInvoice;
         private DevExpress.XtraEditors.CheckEdit chkInvoice;
+        private DevExpress.XtraEditors.CheckEdit checkEdit1;
+        private System.Windows.Forms.RadioButton radVbDauvao2;
+        private System.Windows.Forms.RadioButton radVbDauvao1;
+        private DevExpress.XtraEditors.PanelControl panelControl7;
+        private System.Windows.Forms.RadioButton radVbDaura1;
+        private System.Windows.Forms.RadioButton radVbDaura2;
+        private DevExpress.XtraEditors.PanelControl panelControl4;
+        private DevExpress.XtraEditors.PanelControl panelControl8;
     }
 }

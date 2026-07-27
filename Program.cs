@@ -56,7 +56,7 @@ namespace SaovietTax {
                     //mutex.WaitOne();
                     //Application.Run(new frmAutoTai());
                     //SaveConfig("Mode", "2");
-                    Application.Run(new frmAutoTai());
+                    Application.Run(new frmAutotaiNew());
                 }
                 else
                 {
