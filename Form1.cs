@@ -6385,17 +6385,17 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 {
                     int getl = int.Parse(getLoaivb);
                     if (getl == 1)
-                        radVbDauvao1.Checked = true;
+                        chkVbdauvao.Checked = true;
                     if (getl == 2)
-                        radVbDauvao2.Checked = true; 
+                        chkVbdauvao2.Checked = true; 
                 }
                 if (!string.IsNullOrEmpty(getLoaivb2))
                 {
                     int getl = int.Parse(getLoaivb2);
                     if (getl == 1)
-                        radVbDaura1.Checked = true;
+                        chkVbdaura.Checked = true;
                     if (getl == 2)
-                        radVbDaura2.Checked = true;
+                        chkVbdaura2.Checked = true;
                 }
                 //Nếu trong database chưa có 
                 if (string.IsNullOrEmpty(tbRegister.AsEnumerable().FirstOrDefault().Field<string>("tk154")))
@@ -33725,6 +33725,125 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             var parametersss = new OleDbParameter[]
             {
                 new OleDbParameter("?","2")
+            };
+            ExecuteQueryResult(query, parametersss);
+        }
+
+        private void chkVbdauvao_CheckedChanged(object sender, EventArgs e)
+        {
+            if(lock1==true)
+            {
+                lock1 = false;
+                return;
+            }
+            if (chkVbdauvao2.Checked)
+            {
+                lock2 = true;
+                chkVbdauvao2.Checked = false;
+            }
+            int chk = 0;
+            if (chkVbdauvao.Checked)
+            {
+                chk = 1;
+            }
+            else
+            {
+                chk = 0;
+            }
+            var query = "UPDATE tbRegister SET VbCoche=? ";
+            var parametersss = new OleDbParameter[]
+            {
+                new OleDbParameter("?",chk)
+            };
+            ExecuteQueryResult(query, parametersss);
+        }
+        bool lock1 = false;
+        bool lock2 = false;
+        bool lock3 = false;
+        bool lock4 = false;
+        private void chkVbdauvao2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lock2 == true)
+            {
+                lock2 = false;
+                return;
+            }
+            if (chkVbdauvao.Checked)
+            {
+                lock1 = true;
+                chkVbdauvao.Checked = false;
+            }
+            int chk = 0;
+            if (chkVbdauvao2.Checked)
+            {
+                chk = 2;
+            }
+            else
+            {
+                chk = 0;
+            }
+            var query = "UPDATE tbRegister SET VbCoche=? ";
+            var parametersss = new OleDbParameter[]
+            {
+                new OleDbParameter("?",chk)
+            };
+            ExecuteQueryResult(query, parametersss);
+        }
+
+        private void chkVbdaura_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lock3 == true)
+            {
+                lock3 = false;
+                return;
+            }
+            if (chkVbdaura2.Checked)
+            {
+                lock4 = true;
+                chkVbdaura2.Checked = false;
+            }
+            int chk = 0;
+            if (chkVbdaura.Checked)
+            {
+                chk = 1;
+            }
+            else
+            {
+                chk = 0;
+            }
+            var query = "UPDATE tbRegister SET VbCoche2=? ";
+            var parametersss = new OleDbParameter[]
+            {
+                new OleDbParameter("?",chk)
+            };
+            ExecuteQueryResult(query, parametersss);
+        }
+
+        private void chkVbdaura2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lock4 == true)
+            {
+                lock4 = false;
+                return;
+            }
+            if (chkVbdaura.Checked)
+            {
+                lock3 = true;
+                chkVbdaura.Checked = false;
+            }
+            int chk = 0;
+            if (chkVbdaura2.Checked)
+            {
+                chk = 2;
+            }
+            else
+            {
+                chk = 0;
+            }
+            var query = "UPDATE tbRegister SET VbCoche2=? ";
+            var parametersss = new OleDbParameter[]
+            {
+                new OleDbParameter("?",chk)
             };
             ExecuteQueryResult(query, parametersss);
         }

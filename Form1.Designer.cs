@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode4 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode3 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions5 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject17 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject18 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject19 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject20 = new DevExpress.Utils.SerializableAppearanceObject();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.gridView7 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn21 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -282,7 +282,6 @@
             this.btnThietlaptairudong = new DevExpress.XtraEditors.SimpleButton();
             this.btnSetting = new DevExpress.XtraEditors.SimpleButton();
             this.chktaituweb = new DevExpress.XtraEditors.CheckEdit();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.dtDenngay = new DevExpress.XtraEditors.DateEdit();
             this.chkDaura = new DevExpress.XtraEditors.CheckEdit();
             this.dtTungay = new DevExpress.XtraEditors.DateEdit();
@@ -313,6 +312,7 @@
             this.btnClearNganhang = new DevExpress.XtraEditors.SimpleButton();
             this.btnMatdinhnganhang = new DevExpress.XtraEditors.SimpleButton();
             this.btnDocfileExcel = new DevExpress.XtraEditors.SimpleButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.btnImportChungtunganhang = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
             this.panleFinal = new DevExpress.XtraEditors.PanelControl();
@@ -342,6 +342,10 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.chkVbdauvao = new DevExpress.XtraEditors.CheckEdit();
+            this.chkVbdauvao2 = new DevExpress.XtraEditors.CheckEdit();
+            this.chkVbdaura2 = new DevExpress.XtraEditors.CheckEdit();
+            this.chkVbdaura = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nhapkhotpBindingSource1)).BeginInit();
@@ -450,6 +454,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nganhangBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileImportDetailBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radialMenu1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkVbdauvao.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkVbdauvao2.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkVbdaura2.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkVbdaura.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // gridView7
@@ -509,10 +517,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl4.DataSource = this.nhapkhotpBindingSource1;
             this.gridControl4.Font = new System.Drawing.Font("Tahoma", 7.8F);
-            gridLevelNode4.LevelTemplate = this.gridView7;
-            gridLevelNode4.RelationName = "Child";
+            gridLevelNode1.LevelTemplate = this.gridView7;
+            gridLevelNode1.RelationName = "Child";
             this.gridControl4.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode4});
+            gridLevelNode1});
             this.gridControl4.Location = new System.Drawing.Point(7, 18);
             this.gridControl4.MainView = this.gridView6;
             this.gridControl4.Name = "gridControl4";
@@ -1014,10 +1022,10 @@
             this.gridControl2.DataSource = this.fileImportBindingSource;
             this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode1.LevelTemplate = this.gridView4;
-            gridLevelNode1.RelationName = "Detail";
+            gridLevelNode2.LevelTemplate = this.gridView4;
+            gridLevelNode2.RelationName = "Detail";
             this.gridControl2.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode1});
+            gridLevelNode2});
             this.gridControl2.Location = new System.Drawing.Point(0, 0);
             this.gridControl2.LookAndFeel.SkinName = "Office 2016 Colorful";
             this.gridControl2.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1409,10 +1417,10 @@
             this.gridControl1.DataSource = this.fileImportBindingSource;
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode2.LevelTemplate = this.gridView2;
-            gridLevelNode2.RelationName = "Detail";
+            gridLevelNode3.LevelTemplate = this.gridView2;
+            gridLevelNode3.RelationName = "Detail";
             this.gridControl1.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode2});
+            gridLevelNode3});
             this.gridControl1.Location = new System.Drawing.Point(0, 0);
             this.gridControl1.LookAndFeel.SkinName = "Office 2019 Colorful";
             this.gridControl1.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1691,9 +1699,9 @@
             // repositoryItemButtonEdit1
             // 
             this.repositoryItemButtonEdit1.AutoHeight = false;
-            editorButtonImageOptions2.Image = global::SaovietTax.Properties.Resources.close_16x16;
+            editorButtonImageOptions5.Image = global::SaovietTax.Properties.Resources.close_16x16;
             this.repositoryItemButtonEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions5, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject17, serializableAppearanceObject18, serializableAppearanceObject19, serializableAppearanceObject20, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.repositoryItemButtonEdit1.Name = "repositoryItemButtonEdit1";
             // 
             // gridView8
@@ -3326,8 +3334,8 @@
             // 
             this.panelControl8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelControl8.Controls.Add(this.radVbDauvao1);
-            this.panelControl8.Controls.Add(this.radVbDauvao2);
+            this.panelControl8.Controls.Add(this.chkVbdauvao2);
+            this.panelControl8.Controls.Add(this.chkVbdauvao);
             this.panelControl8.Location = new System.Drawing.Point(12, 136);
             this.panelControl8.Name = "panelControl8";
             this.panelControl8.Size = new System.Drawing.Size(443, 35);
@@ -3336,25 +3344,27 @@
             // radVbDauvao1
             // 
             this.radVbDauvao1.AutoSize = true;
-            this.radVbDauvao1.Location = new System.Drawing.Point(5, 5);
+            this.radVbDauvao1.Location = new System.Drawing.Point(7, 125);
             this.radVbDauvao1.Name = "radVbDauvao1";
             this.radVbDauvao1.Size = new System.Drawing.Size(192, 20);
             this.radVbDauvao1.TabIndex = 18;
             this.radVbDauvao1.TabStop = true;
             this.radVbDauvao1.Text = "Tải toàn bộ hoá đơn đầu vào";
             this.radVbDauvao1.UseVisualStyleBackColor = true;
+            this.radVbDauvao1.Visible = false;
             this.radVbDauvao1.CheckedChanged += new System.EventHandler(this.radVbDauvao_CheckedChanged);
             // 
             // radVbDauvao2
             // 
             this.radVbDauvao2.AutoSize = true;
-            this.radVbDauvao2.Location = new System.Drawing.Point(301, 5);
+            this.radVbDauvao2.Location = new System.Drawing.Point(219, 127);
             this.radVbDauvao2.Name = "radVbDauvao2";
             this.radVbDauvao2.Size = new System.Drawing.Size(129, 20);
             this.radVbDauvao2.TabIndex = 19;
             this.radVbDauvao2.TabStop = true;
             this.radVbDauvao2.Text = "Tải theo mật định";
             this.radVbDauvao2.UseVisualStyleBackColor = true;
+            this.radVbDauvao2.Visible = false;
             this.radVbDauvao2.CheckedChanged += new System.EventHandler(this.radVbDaura_CheckedChanged);
             // 
             // chkInvoice
@@ -3398,20 +3408,6 @@
             this.chktaituweb.Size = new System.Drawing.Size(152, 20);
             this.chktaituweb.TabIndex = 26;
             this.chktaituweb.CheckedChanged += new System.EventHandler(this.chktaituweb_CheckedChanged);
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(127, 151);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(36, 20);
-            this.radioButton1.TabIndex = 25;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "tt";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.Visible = false;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            this.radioButton1.Click += new System.EventHandler(this.radioButton1_Click);
             // 
             // dtDenngay
             // 
@@ -3561,8 +3557,8 @@
             // 
             this.panelControl7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelControl7.Controls.Add(this.radVbDaura2);
-            this.panelControl7.Controls.Add(this.radVbDaura1);
+            this.panelControl7.Controls.Add(this.chkVbdaura2);
+            this.panelControl7.Controls.Add(this.chkVbdaura);
             this.panelControl7.Location = new System.Drawing.Point(5, 137);
             this.panelControl7.Name = "panelControl7";
             this.panelControl7.Size = new System.Drawing.Size(387, 35);
@@ -3571,25 +3567,27 @@
             // radVbDaura2
             // 
             this.radVbDaura2.AutoSize = true;
-            this.radVbDaura2.Location = new System.Drawing.Point(243, 5);
+            this.radVbDaura2.Location = new System.Drawing.Point(224, 152);
             this.radVbDaura2.Name = "radVbDaura2";
             this.radVbDaura2.Size = new System.Drawing.Size(129, 20);
             this.radVbDaura2.TabIndex = 19;
             this.radVbDaura2.TabStop = true;
             this.radVbDaura2.Text = "Tải theo mật định";
             this.radVbDaura2.UseVisualStyleBackColor = true;
+            this.radVbDaura2.Visible = false;
             this.radVbDaura2.CheckedChanged += new System.EventHandler(this.radVbDaura2_CheckedChanged);
             // 
             // radVbDaura1
             // 
             this.radVbDaura1.AutoSize = true;
-            this.radVbDaura1.Location = new System.Drawing.Point(5, 5);
+            this.radVbDaura1.Location = new System.Drawing.Point(15, 151);
             this.radVbDaura1.Name = "radVbDaura1";
             this.radVbDaura1.Size = new System.Drawing.Size(184, 20);
             this.radVbDaura1.TabIndex = 18;
             this.radVbDaura1.TabStop = true;
             this.radVbDaura1.Text = "Tải toàn bộ hoá đơn đầu ra";
             this.radVbDaura1.UseVisualStyleBackColor = true;
+            this.radVbDaura1.Visible = false;
             this.radVbDaura1.CheckedChanged += new System.EventHandler(this.radVbDaura1_CheckedChanged);
             // 
             // panelControl4
@@ -3713,7 +3711,11 @@
             // panleRight
             // 
             this.panleRight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panleRight.Controls.Add(this.radVbDaura2);
             this.panleRight.Controls.Add(this.btnPdf24);
+            this.panleRight.Controls.Add(this.radVbDaura1);
+            this.panleRight.Controls.Add(this.radVbDauvao2);
+            this.panleRight.Controls.Add(this.radVbDauvao1);
             this.panleRight.Controls.Add(this.btnLocdulieuNganhang);
             this.panleRight.Controls.Add(this.btnClearNganhang);
             this.panleRight.Controls.Add(this.btnMatdinhnganhang);
@@ -3785,6 +3787,20 @@
             this.btnDocfileExcel.TabIndex = 16;
             this.btnDocfileExcel.Text = "Đọc file Excel";
             this.btnDocfileExcel.Click += new System.EventHandler(this.btnDocfileExcel_Click);
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(127, 151);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(36, 20);
+            this.radioButton1.TabIndex = 25;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "tt";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.Visible = false;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.radioButton1.Click += new System.EventHandler(this.radioButton1_Click);
             // 
             // btnImportChungtunganhang
             // 
@@ -4009,6 +4025,42 @@
             // 
             this.printDialog1.UseEXDialog = true;
             // 
+            // chkVbdauvao
+            // 
+            this.chkVbdauvao.Location = new System.Drawing.Point(5, 6);
+            this.chkVbdauvao.Name = "chkVbdauvao";
+            this.chkVbdauvao.Properties.Caption = "Tải toàn bộ hoá đơn đầu vào";
+            this.chkVbdauvao.Size = new System.Drawing.Size(222, 20);
+            this.chkVbdauvao.TabIndex = 20;
+            this.chkVbdauvao.CheckedChanged += new System.EventHandler(this.chkVbdauvao_CheckedChanged);
+            // 
+            // chkVbdauvao2
+            // 
+            this.chkVbdauvao2.Location = new System.Drawing.Point(264, 6);
+            this.chkVbdauvao2.Name = "chkVbdauvao2";
+            this.chkVbdauvao2.Properties.Caption = "Tải theo mật định";
+            this.chkVbdauvao2.Size = new System.Drawing.Size(151, 20);
+            this.chkVbdauvao2.TabIndex = 21;
+            this.chkVbdauvao2.CheckedChanged += new System.EventHandler(this.chkVbdauvao2_CheckedChanged);
+            // 
+            // chkVbdaura2
+            // 
+            this.chkVbdaura2.Location = new System.Drawing.Point(231, 10);
+            this.chkVbdaura2.Name = "chkVbdaura2";
+            this.chkVbdaura2.Properties.Caption = "Tải theo mật định";
+            this.chkVbdaura2.Size = new System.Drawing.Size(151, 20);
+            this.chkVbdaura2.TabIndex = 23;
+            this.chkVbdaura2.CheckedChanged += new System.EventHandler(this.chkVbdaura2_CheckedChanged);
+            // 
+            // chkVbdaura
+            // 
+            this.chkVbdaura.Location = new System.Drawing.Point(13, 10);
+            this.chkVbdaura.Name = "chkVbdaura";
+            this.chkVbdaura.Properties.Caption = "Tải toàn bộ hoá đơn đầu ra";
+            this.chkVbdaura.Size = new System.Drawing.Size(222, 20);
+            this.chkVbdaura.TabIndex = 22;
+            this.chkVbdaura.CheckedChanged += new System.EventHandler(this.chkVbdaura_CheckedChanged);
+            // 
             // frmMain
             // 
             this.Appearance.Options.UseFont = true;
@@ -4112,7 +4164,6 @@
             this.panleLeft.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl8)).EndInit();
             this.panelControl8.ResumeLayout(false);
-            this.panelControl8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chkInvoice.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chktaituweb.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtDenngay.Properties.CalendarTimeProperties)).EndInit();
@@ -4125,7 +4176,6 @@
             this.panleMiddle.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl7)).EndInit();
             this.panelControl7.ResumeLayout(false);
-            this.panelControl7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panleRight)).EndInit();
             this.panleRight.ResumeLayout(false);
@@ -4149,6 +4199,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nganhangBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileImportDetailBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radialMenu1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkVbdauvao.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkVbdauvao2.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkVbdaura2.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chkVbdaura.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4459,5 +4513,9 @@
         private System.Windows.Forms.RadioButton radVbDaura2;
         private DevExpress.XtraEditors.PanelControl panelControl4;
         private DevExpress.XtraEditors.PanelControl panelControl8;
+        private DevExpress.XtraEditors.CheckEdit chkVbdauvao2;
+        private DevExpress.XtraEditors.CheckEdit chkVbdauvao;
+        private DevExpress.XtraEditors.CheckEdit chkVbdaura2;
+        private DevExpress.XtraEditors.CheckEdit chkVbdaura;
     }
 }
