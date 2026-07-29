@@ -1475,3 +1475,4 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.pdb
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.frmXemhoadonInvoicse.resources
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.vb6Xemhoadon.resources
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.frmAutotaiNew.resources
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.Vanguard.resources

@@ -131,7 +131,8 @@ namespace SaovietTax {
                         case "7": Application.Run(new VNPTInvoice()); break;
                         case "8": Application.Run(new TendoInvoice()); break;
                         case "9": Application.Run(new frmQrcode()); break;
-                        case "10": Application.Run(new vb6Xemhoadon()); break; 
+                        case "10": Application.Run(new vb6Xemhoadon()); break;
+                        case "11": Application.Run(new Vanguard()); break;
                     }
                 }
             }

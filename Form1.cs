@@ -365,6 +365,7 @@ namespace SaovietTax
             public bool Khautruthue { get; set; }   
             public int InvoiceType { get; set; }
             public string SoHieuTP { get; set; }
+               public int IsMD { get; set; }
             public string Macdinhstatus { get; set; }
             public List<FileImportDetail> fileImportDetails;
             public FileImport(bool chk,string path, string shdon, string khhdon, DateTime nlap, DateTime ntao, string ten, string noidung, string tkno, string tkco, int tkthue, string mst, double tongTien, int vat, int type, string tenTP, bool isacess, double tPhi, double tgTCThue, double tgTThue, bool _isHaschild, int _InvoiceType, double tvat, int vat2, double tvat2, int vat3, double tvat3, string macdinhstatus,bool khautruthue)
@@ -409,11 +410,21 @@ namespace SaovietTax
         #endregion# 
         #region loadData
         public int mode { get; set; }
-        
+        public bool Isrunning=false;
         public frmMain()
         {
            
             InitializeComponent();
+            InitDB();
+
+            string queryGetdetail = @"SELECT * FROM tbRegister";
+            DataTable tbRegister = ExecuteQuery(queryGetdetail);
+            if (tbRegister.Rows[0]["IsRunning"].ToString() == "1")
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
+                Isrunning = true;
+            }
             serverMode = ConfigurationManager.AppSettings["Mode"];
             if (serverMode == "2")
             {
@@ -1972,6 +1983,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                                         {
                                             match = true;
                                             item.TKNo = rule.TKNo;
+                                            item.IsMD = 1;
                                             item.TKCo = rule.TKCo;
                                             item.Checked = rule.IsChecked == "-1" ? false : true;
                                             if (!string.IsNullOrEmpty(rule.Noidung))
@@ -5718,7 +5730,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
 
                     // 3. Khởi tạo DB + đọc License
                     ShowProgress("Kết nối database...");
-                    InitDB();
+                   // InitDB();
                     SetVietnameseCulture();
                     ControlsSetup();
                     // 4. Migrate database (chạy background)
@@ -6493,7 +6505,10 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             XoaNLTP(5);
 
 
-           
+            if (Isrunning)
+            {
+                btnChonthang.PerformClick(); 
+            }
         }
         private void XoaNLTP(int index)
         {
@@ -8564,7 +8579,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             // 1. Cập nhật master (tbimport)
                 string queryMaster = @"
             UPDATE tbimport
-            SET TKNo = ?, TKCo = ?, Noidung = ?, Macdinhstatus = ?
+            SET TKNo = ?, TKCo = ?, Noidung = ?, Macdinhstatus = ?, IsMD= ?
             WHERE ID = ?";
 
             using (var cmd = new OleDbCommand(queryMaster, conn, tran))
@@ -8573,6 +8588,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 cmd.Parameters.AddWithValue("TKCo", item.TKCo);
                 cmd.Parameters.AddWithValue("Noidung", Helpers.ConvertUnicodeToVni(item.Noidung));
                 cmd.Parameters.AddWithValue("Macdinhstatus", "1");
+                cmd.Parameters.AddWithValue("Macdinhstatus",item.IsMD);
                 cmd.Parameters.AddWithValue("ID", item.ID);
                 cmd.ExecuteNonQuery();
             }
@@ -12096,6 +12112,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 gridView1.OptionsDetail.EnableMasterViewMode = true;
                 Application.DoEvents();
                 SetGridViewOptions(gridView1);
+                if (Isrunning)
+                {
+                    chkDauvao.Checked = false;
+                    chkDaura.Checked = true;
+                }
             }
             if (chkDaura.Checked)
             {
@@ -12138,8 +12159,138 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             tbImportDt = await Task.Run(() =>
                   ExecuteQuery("SELECT * FROM tbimportdetail", null)
               );
-
+            if (Isrunning)
+            {
+                if (taidaura == false)
+                {
+                    btnChonthang.PerformClick();
+                    taidaura = true;
+                }
+                else
+                {
+                    ImportVb6();
+                    //this.Close();
+                }
+               
+            } 
         }
+        public void ImportVb6()
+        {
+
+            //Tìm file exe mới nhất
+            string query = @"SELECT * FROM tbRegister";
+            var getResgistry = ExecuteQuery(query);
+
+            //Nếu đng chạy thì ko chạy nữa
+            //if (getResgistry.Rows[0]["IsRunning"].ToString() == "1")
+            //{
+            //    return;
+            //}
+
+            //string qr = $"UPDATE tbRegister SET IsRunning = ?";
+            //var parameters = new OleDbParameter[]
+            //{
+            //new OleDbParameter("?", "1"),
+            //};
+
+            //int rowsAffected = ExecuteQueryResult(qr, parameters);
+            //Xử lý lọc hoa don
+            //Lấy ra các hoa don trong tháng hiện tại
+            string gettbimport = @"SELECT * FROM tbImport";
+            DataTable lsttbImport = ExecuteQuery(gettbimport);
+            if (lsttbImport != null)
+            {
+                lsttbImport = lsttbImport.AsEnumerable().Where(m => m.Field<DateTime>("Nlap").Month == DateTime.Now.Month).CopyToDataTable();
+            }
+            //Lọc theo điều kiện mật định nếu có
+            int vbCoche = int.Parse(getResgistry.Rows[0]["VbCoche"].ToString());
+            int vbCoche2 = int.Parse(getResgistry.Rows[0]["VbCoche2"].ToString());
+            foreach (DataRow dr in lsttbImport.Rows)
+            {
+                //Đầu vào
+                if (dr["Type"].ToString() == "1")
+                {
+                    if (vbCoche == 0)
+                    {
+                        dr["IsImport"] = 0;
+                        continue;
+                    }
+                    if (vbCoche == 1)
+                    {
+                        dr["IsImport"] = 1;
+                    }
+                    //Kiem tra xem nó có mật đinh ko mới cho vô
+                    else
+                    {
+                        if (dr["IsMD"].ToString() == "1")
+                        {
+                            dr["IsImport"] = 1;
+                        }
+                        else
+                        {
+                            dr["IsImport"] = 0;
+                        }
+                    }
+                }
+                //Đầu ra
+                if (dr["Type"].ToString() == "2")
+                {
+                    if (vbCoche2 == 0)
+                    {
+                        dr["IsImport"] = 0;
+                    }
+                    if (vbCoche2 == 1)
+                    {
+                        dr["IsImport"] = 1;
+                    }
+                    //Kiem tra xem nó có mật đinh ko mới cho vô
+                    else
+                    {
+                        if (dr["IsMD"].ToString() == "1")
+                        {
+                            dr["IsImport"] = 1;
+                        }
+                        else
+                        {
+                            dr["IsImport"] = 0;
+                        }
+                    }
+                }
+
+                string qrupdate = $"UPDATE tbimport SET IsImport = ? WHERE ID = ?";
+                var paramss = new OleDbParameter[]
+                {
+                    new OleDbParameter("?", dr["IsImport"]),
+                    new OleDbParameter("?", dr["ID"])
+                };
+
+                int rrf = ExecuteQueryResult(qrupdate, paramss);
+
+            }
+            string hoadonpath = getResgistry.Rows[0]["Hoadonpath"].ToString();
+
+            // ✅ Lùi về 1 thư mục cha
+            string backPath = Directory.GetParent(hoadonpath)?.FullName ?? hoadonpath;
+
+            // ✅ Tìm file .exe mới nhất
+            string latestExe = Directory.GetFiles(backPath, "*.exe", SearchOption.TopDirectoryOnly)
+             .OrderByDescending(f => File.GetLastWriteTime(f))
+             .FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(latestExe))
+            {
+                Log($"📁 File EXE mới nhất: {latestExe}");
+                Log($"📅 Thời gian sửa đổi: {File.GetLastWriteTime(latestExe)}");
+                Process.Start(latestExe);
+
+            }
+            else
+            {
+                Log($"⚠️ Không tìm thấy file .exe nào trong: {backPath}");
+            }
+            this.Close();
+        }
+        private bool taidaura = false;
         private async Task SaveDataXmlOneGoc(TbImport item, int type)
         {
             string query = @"
