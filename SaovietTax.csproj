@@ -337,6 +337,7 @@
     <Compile Include="DTO\VatTu.cs" />
     <Compile Include="DTO\VietnameseProductMatcher.cs" />
     <Compile Include="DTO\VietQRService.cs" />
+    <Compile Include="DTO\ViettelInvoiceService.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -360,6 +361,12 @@
     </Compile>
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formtest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formtest.Designer.cs">
+      <DependentUpon>formtest.cs</DependentUpon>
     </Compile>
     <Compile Include="frmAutoTai.cs">
       <SubType>Form</SubType>
@@ -501,6 +508,7 @@
       <DependentUpon>NhapFileExcel.cs</DependentUpon>
     </Compile>
     <Compile Include="OllamaProductChecker.cs" />
+    <Compile Include="PersistentClass1.cs" />
     <Compile Include="PopupTaikhoan.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -599,6 +607,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formtest.resx">
+      <DependentUpon>formtest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmAutoTai.resx">
       <DependentUpon>frmAutoTai.cs</DependentUpon>

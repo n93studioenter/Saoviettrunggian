@@ -139,6 +139,7 @@ using static DevExpress.Xpo.Helpers.CannotLoadObjectsHelper;
 using static DevExpress.XtraRichEdit.Forms.Design.BorderShadingUserControl;
 using static iText.IO.Codec.TiffWriter;
 using static iText.IO.Image.Jpeg2000ImageData;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using static SaovietTax.APIInvoice;
 using static SaovietTax.frmCongtrinh;
 using static SaovietTax.frmKiemtrahethong;
@@ -12207,6 +12208,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             int vbCoche2 = int.Parse(getResgistry.Rows[0]["VbCoche2"].ToString());
             foreach (DataRow dr in lsttbImport.Rows)
             {
+                if (dr["TKNo"].ToString().Contains("64"))
+                {
+                    dr["IsHaschild"] = 0;
+                }
+                if (dr["TKCo"].ToString().Contains("5113"))
+                {
+                    dr["IsHaschild"] = 0;
+                }
                 //Đầu vào
                 if (dr["Type"].ToString() == "1")
                 {
@@ -12257,10 +12266,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     }
                 }
 
-                string qrupdate = $"UPDATE tbimport SET IsImport = ? WHERE ID = ?";
+                string qrupdate = $"UPDATE tbimport SET IsImport = ?, IsHaschild=?  WHERE ID = ?";
                 var paramss = new OleDbParameter[]
                 {
                     new OleDbParameter("?", dr["IsImport"]),
+                     new OleDbParameter("?", dr["IsHaschild"]),
                     new OleDbParameter("?", dr["ID"])
                 };
 
