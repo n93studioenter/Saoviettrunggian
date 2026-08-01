@@ -55,6 +55,7 @@
             this.Name = "frmXemhoadonInvoicse";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmXemhoadonInvoicse";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmXemhoadonInvoicse_FormClosed);
             this.Load += new System.EventHandler(this.frmXemhoadonInvoicse_Load);
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
             this.ResumeLayout(false);

@@ -96,6 +96,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Drawing;
@@ -5330,6 +5331,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbRegister", "VbCoche", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "VbCoche2", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "IsRunning", "NUMBER");
+         
             // tbimport
             AddColumnIfNotExists(conn, "tbimport", "Khautruthue", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "hdon", "TEXT");
@@ -5358,7 +5360,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbimport", "TgTCThue3", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "LoaiVb", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "IsMD", "NUMBER");
-
+            AddColumnIfNotExists(conn, "tbimport", "IsAuto", "NUMBER");
             // tbimportdetail
             AddColumnIfNotExists(conn, "tbimportdetail", "IsMacdinh", "NUMBER");
             AddColumnIfNotExists(conn, "tbimportdetail", "Tchat", "NUMBER");
@@ -6508,6 +6510,16 @@ Chỉ trả lời: CÓ hoặc KHÔNG
 
             if (Isrunning)
             {
+                string computerName = Environment.MachineName;
+
+                string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+                string connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
+                string queryGetdetail = @"SELECT * FROM tbRemember";
+                DataTable tbRemember = ExecuteQuery3(queryGetdetail, connectionString2);
+                int ThangCT = int.Parse(tbRemember.Rows[0]["ThangCT"].ToString());
+                string qrls = "SELECT * FROM License";
+                dtTungay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, 1);
+                dtDenngay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, DateTime.DaysInMonth(DateTime.Now.Year, ThangCT));
                 btnChonthang.PerformClick(); 
             }
         }
@@ -8321,7 +8333,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                     : 0;
                                 VatTu.SoLuong = soluong;
                                 //Tìm số lượng thông qua tbchungtu
-                               
+                               if(VatTu.SoHieu== "HL-110-001")
+                                {
+                                    int a = 10;
+                                }
                               
                                  var thanhtien = tonKhoRow["Tien_" + cnt] != DBNull.Value
                                     ? double.Parse(tonKhoRow["Tien_" + cnt].ToString())
@@ -10164,6 +10179,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             Timeout = TimeSpan.FromSeconds(30)
         };
         // ======== 2. Class GDTClient static (đặt ở file riêng, ví dụ GDTClient.cs) ========
+        private static int taithatbai = 0;
         public static class GDTClient
         {
             private static readonly HttpClient _client;
@@ -10288,6 +10304,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     }
                     catch (Exception ex) when (retryCount < maxRetries - 1) // Chỉ retry nếu còn lượt
                     {
+                        taithatbai++; 
+                         
                         retryCount++;
                         Console.WriteLine($"Lỗi tải file lần {retryCount}: {ex.Message}. Thử lại sau 2 giây...");
                         string errorMsgs = $"Lỗi tải file lần {retryCount}: {ex.Message}. Thử lại sau 2 giây...";
@@ -12175,8 +12193,56 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                
             } 
         }
+        public DataTable ExecuteQuery3(string query, string connectionst, params OleDbParameter[] parameters)
+        {
+            DataTable dataTable = new DataTable();
+
+            using (OleDbConnection connection = new OleDbConnection(connectionst))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        if (parameters != null)
+                        {
+                            command.Parameters.AddRange(parameters);
+                        }
+                        using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(command))
+                        {
+                            dataAdapter.Fill(dataTable);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log($"Lỗi ExecuteQuery2: {ex.Message}");
+                }
+            }
+
+            return dataTable;
+        }
         public void ImportVb6()
         {
+            //Lấy tháng của saoviet
+            string computerName = Environment.MachineName;
+
+            string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+            string connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
+            string queryGetdetail = @"SELECT * FROM tbRemember";
+            DataTable tbRemember = ExecuteQuery3(queryGetdetail, connectionString2);
+            int ThangCT = int.Parse(tbRemember.Rows[0]["ThangCT"].ToString());
+            string qrls = "SELECT * FROM License";
+
+            // Tạo mảng tham số với giá trị cho câu lệnh SQL
+
+            var kq = ExecuteQuery(qrls, null);
+            if (kq.Rows.Count > 0)
+            {
+                string tencongty = kq.Rows[0]["TenCty"].ToString();
+                ToastMeaasge($"Công ty  {tencongty} Đang import tháng {ThangCT}");
+            }
+          
 
             //Tìm file exe mới nhất
             string query = @"SELECT * FROM tbRegister";
@@ -12199,15 +12265,68 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             //Lấy ra các hoa don trong tháng hiện tại
             string gettbimport = @"SELECT * FROM tbImport";
             DataTable lsttbImport = ExecuteQuery(gettbimport);
-            if (lsttbImport != null)
+
+            if (lsttbImport != null && lsttbImport.Rows.Count > 0)
             {
-                lsttbImport = lsttbImport.AsEnumerable().Where(m => m.Field<DateTime>("Nlap").Month == DateTime.Now.Month).CopyToDataTable();
+                var filteredRows = lsttbImport.AsEnumerable()
+                    .Where(m => m.Field<DateTime>("Nlap").Month == ThangCT);
+
+                // ✅ Kiểm tra có dòng nào không
+                if (filteredRows.Any())
+                {
+                    lsttbImport = filteredRows.CopyToDataTable();
+                }
+                else
+                {
+                    // ✅ Nếu không có dòng, tạo DataTable rỗng
+                    lsttbImport = lsttbImport.Clone();
+                }
             }
             //Lọc theo điều kiện mật định nếu có
             int vbCoche = int.Parse(getResgistry.Rows[0]["VbCoche"].ToString());
             int vbCoche2 = int.Parse(getResgistry.Rows[0]["VbCoche2"].ToString());
             foreach (DataRow dr in lsttbImport.Rows)
             {
+                string getimportdetail = @"SELECT * FROM tbimportdetail WHERE ParentId = @ParentId";
+                var param = new OleDbParameter[]
+                {
+                     new OleDbParameter("@ParentId", dr["ID"].ToString())
+                }; 
+                DataTable lsttbImportdetail = ExecuteQuery(getimportdetail, param);
+                foreach (DataRow dr2 in lsttbImportdetail.Rows)
+                {
+                    // Insert hàng hóa
+                    if (dr["Type"].ToString() == "1")
+                    {
+                        if (dr["TKNo"].ToString().Contains("15") || (dr["TKNo"].ToString().Contains("642") && dr["IsHaschild"].ToString() == "1"))
+                        {
+                            if (!dr["TKNo"].ToString().Contains("154") && !dr["TKNo"].ToString().Contains("642"))
+                            {
+                                InsertHangHoa2(
+                                    dr2["DVT"].ToString(),
+                                    dr2["SoHieu"].ToString(),
+                                    dr2["Ten"].ToString(),
+                                    dr2["TKNo"].ToString(), dr["SHDon"].ToString());
+                            }
+                        }
+
+                    }
+                    if (dr["Type"].ToString() == "2")
+                    {
+                        if (!dr["TKCo"].ToString().Contains("5113"))
+                        {
+
+                            InsertHangHoa2(
+                                dr2["DVT"].ToString(),
+                                dr2["SoHieu"].ToString(),
+                                dr2["Ten"].ToString(),
+                               dr2["TKCo"].ToString(), dr["SHDon"].ToString());
+                        }
+                    }
+                }
+                  
+                 
+
                 if (dr["TKNo"].ToString().Contains("64"))
                 {
                     dr["IsHaschild"] = 0;
@@ -12227,6 +12346,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     if (vbCoche == 1)
                     {
                         dr["IsImport"] = 1;
+                        dr["IsAuto"] = 1;
                     }
                     //Kiem tra xem nó có mật đinh ko mới cho vô
                     else
@@ -12234,6 +12354,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         if (dr["IsMD"].ToString() == "1")
                         {
                             dr["IsImport"] = 1;
+                            dr["IsAuto"] = 1;
                         }
                         else
                         {
@@ -12251,6 +12372,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     if (vbCoche2 == 1)
                     {
                         dr["IsImport"] = 1;
+                        dr["IsAuto"] = 1;
                     }
                     //Kiem tra xem nó có mật đinh ko mới cho vô
                     else
@@ -12258,6 +12380,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         if (dr["IsMD"].ToString() == "1")
                         {
                             dr["IsImport"] = 1;
+                            dr["IsAuto"] = 1;
                         }
                         else
                         {
@@ -12266,11 +12389,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     }
                 }
 
-                string qrupdate = $"UPDATE tbimport SET IsImport = ?, IsHaschild=?  WHERE ID = ?";
+                string qrupdate = $"UPDATE tbimport SET IsImport = ?, IsHaschild=?, IsAuto =?  WHERE ID = ?";
                 var paramss = new OleDbParameter[]
                 {
                     new OleDbParameter("?", dr["IsImport"]),
                      new OleDbParameter("?", dr["IsHaschild"]),
+                     new OleDbParameter("?", dr["IsAuto"]),
                     new OleDbParameter("?", dr["ID"])
                 };
 
@@ -12289,9 +12413,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
             if (!string.IsNullOrEmpty(latestExe))
             {
+               
                 Log($"📁 File EXE mới nhất: {latestExe}");
                 Log($"📅 Thời gian sửa đổi: {File.GetLastWriteTime(latestExe)}");
-                Process.Start(latestExe);
+                // Gọi VB6 với tham số /AutoMode
+                Process.Start(latestExe, "/AutoMode");
 
             }
             else
@@ -20629,7 +20755,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                         if (!resCap.IsSuccessStatusCode)
                         {
-                            ToastMeaasge("Không lấy được captcha");
+                            ToastMeaasge("Không lấy được captcha, sẽ thử lại sau 2s");
+                            //Tiến hành đăng nhập lại sau 2s
+                            Thread.Sleep(2000);
+                            simpleButton3.PerformClick();
                             return;
                         }
 
@@ -20663,7 +20792,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                         if (string.IsNullOrEmpty(cvalue))
                         {
-                            ToastMeaasge("Không giải được captcha");
+                            ToastMeaasge("Không giải được captcha sẽ thử lại sau 2s");
+                            //Tiến hành đăng nhập lại sau 2s
+                            Thread.Sleep(2000);
+                            simpleButton3.PerformClick();
                             return;
                         }
 
@@ -20691,10 +20823,14 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         // GỬI REQUEST LOGIN
                         var loginRes = await client.PostAsync(loginUrl, content);
                         progressPanel1.Caption = "Đăng nhập thành công";
+                        Application.DoEvents();
                         if (loginRes.StatusCode == HttpStatusCode.Unauthorized)
                         {
                             string err = await loginRes.Content.ReadAsStringAsync();
-                            ToastMeaasge("Đăng nhập thất bại (401): " + err);
+                            ToastMeaasge("Đăng nhập thất bại (401): " + err + " sẽ thử lại sau 2s");
+                            //Tiến hành đăng nhập lại sau 2s
+                            Thread.Sleep(2000);
+                            simpleButton3.PerformClick();
                             return;
                         }
 
@@ -22914,15 +23050,15 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             string tenfileExcel = "";
             if (_type == 1)
             {
-                tenfileExcel = "HDDienTuDaCapMa";   
+                tenfileExcel = "File excel hoá đơn nhận mã";   
             }
             if(_type==2)
             {
-                tenfileExcel = "HDDienTuKhongMa";
+                tenfileExcel = "File excel hoá đơn không nhận mã";
             }   
             if(_type==3)
             {
-                tenfileExcel = "HDDienTuMayTinhTien";
+                tenfileExcel = "File Excel hoá đơn máy tính tiền";
             }   
             // Tối ưu: Tính toán datetime một lần
             DateTime dtFrom = new DateTime(dtTungay.DateTime.Year, dtTungay.DateTime.Month, 1);
@@ -22965,7 +23101,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 DateTime lastWriteTime = File.GetLastWriteTime(filePath);
                 TimeSpan timeDifference = DateTime.Now - lastWriteTime;
 
-                if (timeDifference.TotalMinutes < 10)
+                if (timeDifference.TotalMinutes < 30)
                 {
                     //File.Delete(filePath);
                     Console.WriteLine($"Đã xóa file: {filePath}");
@@ -23024,7 +23160,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                         if (attempt == maxRetries)
                         {
-                            return;
+                             
+                            ToastMeaasge("Không tải dược file excel, sẽ thử lại sau 2s");
+                            //Tiến hành đăng nhập lại sau 2s
+                            Thread.Sleep(2000);
+                            simpleButton3.PerformClick();
                         }
                     }
                     catch (Exception ex)
@@ -23033,7 +23173,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                         if (attempt == maxRetries)
                         {
-                            return;
+
+                            ToastMeaasge("Không tải dược file excel, sẽ thử lại sau 2s");
+                            //Tiến hành đăng nhập lại sau 2s
+                            Thread.Sleep(2000);
+                            simpleButton3.PerformClick();
                         }
                     }
 
@@ -23103,7 +23247,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 DateTime lastWriteTime = File.GetLastWriteTime(filePath);
                 TimeSpan timeDifference = DateTime.Now - lastWriteTime;
 
-                if (timeDifference.TotalMinutes < 15)
+                if (timeDifference.TotalMinutes < 30)
                 {
                     // File.Delete(filePath);
                     return;
@@ -23310,12 +23454,12 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         if (DateTime.TryParse(GetNLap, out DateTime getdate))
                         {
                             DateTime gd = DateTime.Parse(GetNLap);
-                           // bool daTonTai = lookupHoaDonCT.Contains((mstnb, getSohd, getkhhd, gd.Date,1));
-                           // bool daTonTaiimport= lookupTbImportCQT.Contains((mstnb, getSohd, gd.Date,1));
-                            //if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime || daTonTai || daTonTaiimport)
-                            //{
-                            //    continue;
-                            //}
+                            bool daTonTai = lookupHoaDonCT.Contains((mstnb, getSohd, getkhhd, gd.Date, 1));
+                            bool daTonTaiimport = lookupTbImportCQT.Contains((mstnb, getSohd, gd.Date, 1));
+                            if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime || daTonTai || daTonTaiimport)
+                            {
+                                continue;
+                            }
                             if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime )
                             {
                                 continue;
@@ -23354,11 +23498,12 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             int i = 1;
             int invoiceType = 0;
             int hdtaithucsu = 1;
-            currentProgress = filesInMonth.Count;
+            //currentProgress = filesInMonth.Count; 
             hdtaithucsu = filesInMonth.Count;
             progressPanel1.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
+            Application.DoEvents();
             tongsohodadon = excelFiles.Count;
-            if (totalInvoices == hdtaithucsu)
+            if (totalInvoices == currentProgress || totalInvoices==0)
             {
                 modeClick = 2;
                 btnChonthang.PerformClick();
@@ -23469,6 +23614,13 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                     else
                                     {
                                         Console.WriteLine($"❌ Lỗi: {message}");
+                                        if (taithatbai == 2)
+                                        {
+                                            ToastMeaasge("Không tải, sẽ thử lại sau 2s");
+                                            //Tiến hành đăng nhập lại sau 2s
+                                            Thread.Sleep(2000);
+                                            simpleButton3.PerformClick();
+                                        }
                                     }
                                 }
                             );
@@ -25613,84 +25765,74 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     var worksheet = workbook.Worksheet(1);
                     foreach (var row in worksheet.RowsUsed().Skip(3))
                     {
-                        try
+                        string GetNLap = row.Cell("E").Value.ToString();
+                        string getSohd = Helpers.RemoveLeadingZeros(row.Cell("D").Value.ToString()); // Lấy giá trị của cột C trong hàng hiện tại 
+                        string getkhhd = row.Cell("C").Value.ToString();
+                        if (getSohd == "104")
                         {
-                            string GetNLap = row.Cell("E").Value.ToString();
-                            string getSohd = Helpers.RemoveLeadingZeros(row.Cell("D").Value.ToString()); // Lấy giá trị của cột C trong hàng hiện tại 
-                            string getkhhd = row.Cell("C").Value.ToString();
-                            if (getSohd == "104")
-                            {
-                                int dngg = 10;
-                            }
-                            string mstnm = row.Cell("H").Value.ToString();
-                            if (DateTime.TryParse(GetNLap, out DateTime getdate))
-                            {
-                                DateTime gd = DateTime.Parse(GetNLap);
-                                bool daTonTai = false;
-                                bool daTonTaiimport = false;
-
-                                if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime)
-                                {
-                                    continue;
-                                }
-                                totalInvoices++;
-                            }
+                            int dngg = 10;
                         }
-                        catch(Exception ex)
+                        string mstnm = row.Cell("H").Value.ToString();
+                        if (DateTime.TryParse(GetNLap, out DateTime getdate))
                         {
-                            XtraMessageBox.Show(ex.Message);
+                            DateTime gd = DateTime.Parse(GetNLap);
+                            bool daTonTai = false;
+                            bool daTonTaiimport = false;
+                            if (!string.IsNullOrEmpty(mstnm))
+                            {
+                                daTonTai = lookupHoaDonCT.Contains((mstnm, getSohd, getkhhd, gd.Date, 2));
+                                daTonTaiimport = lookupTbImport.Contains((mstnm, getSohd, getdate.Date, 2));
+                            }
+                            else
+                            {
+                                // daTonTai = lookupHoaDonCT.Any(x => x.NLap == gd.Date && x.SoHD == getSohd);
+                                var findct = existingTbChungtu.AsEnumerable().Where(m => m.Field<string>("SoHieu") == getSohd && m.Field<string>("KyHieu") == getkhhd && m.Field<DateTime>("NgayCT").Date == gd.Date && m["MaLoai"].ToString() == "8").FirstOrDefault();
+                                if (findct != null)
+                                {
+                                    daTonTai = true;
+                                }
+                                // daTonTaiimport = lookupTbImport.Any(x=>x.NLap==getdate.Date && x.SHDon==getSohd);
+                                var findip = tbimport.AsEnumerable().Where(m => m.Field<string>("SHDon") == getSohd && m.Field<string>("KHHDon") == getkhhd && m.Field<DateTime>("NLap").Date == getdate.Date && m["Type"].ToString() == "2").FirstOrDefault();
+                                if (findip != null)
+                                {
+                                    daTonTaiimport = true;
+                                }
+                            }
+
+                            if (getdate < dtTungay.DateTime || getdate > dtDenngay.DateTime || daTonTai || daTonTaiimport)
+                            {
+                                continue;
+                            }
+                            totalInvoices++;
                         }
                     }
                 }
             }
 
-
-            string pathType = chkDauvao.Checked ? "HDVao" : "HDRa";
-            int fromMonth = dtTungay.DateTime.Month;
-            int toMonth = dtDenngay.DateTime.Month;
-            string monthFolder = Path.Combine(savedPath, pathYear, pathType, fromMonth.ToString());
-            var filesInMonth = Directory.GetFiles(monthFolder, "*.xml", SearchOption.TopDirectoryOnly)
-                 .Where(file =>
-                 {
-                     string fileName = Path.GetFileNameWithoutExtension(file);
-
-                     if (fileName.Length < 8)
-                         return false;
-
-                     if (!DateTime.TryParseExact(
-                             fileName.Substring(0, 8),
-                             "yyyyMMdd",
-                             CultureInfo.InvariantCulture,
-                             DateTimeStyles.None,
-                             out DateTime ngay))
-                         return false;
-
-                     return ngay >= dtTungay.DateTime.Date && ngay <= dtDenngay.DateTime.Date;
-                 })
-                 .ToList();
-
             //Nếu tổng =0 thì dừng luôn
-            if (chkDauvao.Checked)
+            if (totalInvoices == 0)
             {
-                progressChitievao.Visible = true;
+
+                modeClick = 2;
+                btnChonthang.PerformClick();
             }
-           
+
             int hdtaithucsu = 1;
             int soluottai = 0;
-            currentProgress = filesInMonth.Count;
-            hdtaithucsu = filesInMonth.Count;
+           // currentProgress = filesInMonth.Count;
+           // hdtaithucsu = filesInMonth.Count;
             if (hdtaithucsu == 0)
                 hdtaithucsu = 1;
             tongsohodadon = excelFiles.Count;
             soluottai = hdtaithucsu;
-            if (totalInvoices == hdtaithucsu)
-            {
-                modeClick = 2; 
-                btnChonthang.PerformClick(); 
-            }
+            //if (totalInvoices == currentProgress)
+            //{
+            //    modeClick = 2; 
+            //    btnChonthang.PerformClick(); 
+            //}
 
             int i = 1;
-            progressPanel2.Caption = $"Đang đọc file thứ {hdtaithucsu} / {totalInvoices}";
+            progressPanel2.Caption = $"Đang đọc file thứ {currentProgress} / {totalInvoices}";
             foreach (var excelFile in excelFiles)
             {
                 using (var workbook = new XLWorkbook(excelFile))
@@ -29976,6 +30118,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                                 it.TKNo,item.SHDon);
                                         }
                                     }
+
                                 }
                             }
 

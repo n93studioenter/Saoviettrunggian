@@ -18,6 +18,7 @@ namespace SaovietTax
         public vb6Xemhoadon()
         {
             InitializeComponent();
+            
         }
 
         private void vb6Xemhoadon_Load(object sender, EventArgs e)
@@ -34,6 +35,7 @@ namespace SaovietTax
             {
                 frmXemhoadonInvoicse frmXemhoadonInvoicse = new frmXemhoadonInvoicse();
                 frmXemhoadonInvoicse.path= _content;
+                frmXemhoadonInvoicse.invoicse = this;
                 frmXemhoadonInvoicse.ShowDialog();
             }
             else
@@ -41,8 +43,19 @@ namespace SaovietTax
                 _content = Path.ChangeExtension(_content, ".pdf");
                 frmXemhoadonInvoicse frmXemhoadonInvoicse = new frmXemhoadonInvoicse();
                 frmXemhoadonInvoicse.path = _content;
+                frmXemhoadonInvoicse.invoicse = this;
                 frmXemhoadonInvoicse.ShowDialog();
             }
+        }
+
+        private void vb6Xemhoadon_FormClosing(object sender, FormClosingEventArgs e)
+        {
+           
+        }
+
+        private void vb6Xemhoadon_FormClosed(object sender, FormClosedEventArgs e)
+        {
+           
         }
     }
 }

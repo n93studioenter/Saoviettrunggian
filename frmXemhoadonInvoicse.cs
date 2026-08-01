@@ -13,6 +13,7 @@ namespace SaovietTax
 {
     public partial class frmXemhoadonInvoicse : DevExpress.XtraEditors.XtraForm
     {
+        public vb6Xemhoadon invoicse;
         public frmXemhoadonInvoicse()
         {
             InitializeComponent();
@@ -28,6 +29,11 @@ namespace SaovietTax
         {
             webView21.Source = new Uri(path);
             this.Text = name;
+        }
+
+        private void frmXemhoadonInvoicse_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            invoicse.Close();
         }
     }
 }
