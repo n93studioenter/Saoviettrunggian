@@ -11601,27 +11601,27 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 if (Directory.Exists(monthFolder))
                 {
                     var filesInMonth = Directory.GetFiles(monthFolder, "*.xml", SearchOption.TopDirectoryOnly)
-                    .Where(file =>
-                    {
-                        string fileName = Path.GetFileNameWithoutExtension(file);
-                        var getsplit = fileName.Split('_');
-                        if (getsplit.Count() == 3)
-                        {
-                            return true;
-                        }
-                        if (fileName.Length < 8)
-                            return false;
+                    //.Where(file =>
+                    //{
+                    //    string fileName = Path.GetFileNameWithoutExtension(file);
+                    //    var getsplit = fileName.Split('_');
+                    //    if (getsplit.Count() == 3)
+                    //    {
+                    //        return true;
+                    //    }
+                    //    if (fileName.Length < 8)
+                    //        return false;
 
-                        if (!DateTime.TryParseExact(
-                                fileName.Substring(0, 8),
-                                "yyyyMMdd",
-                                CultureInfo.InvariantCulture,
-                                DateTimeStyles.None,
-                                out DateTime ngay))
-                            return false;
+                    //    if (!DateTime.TryParseExact(
+                    //            fileName.Substring(0, 8),
+                    //            "yyyyMMdd",
+                    //            CultureInfo.InvariantCulture,
+                    //            DateTimeStyles.None,
+                    //            out DateTime ngay))
+                    //        return false;
 
-                        return ngay >= dtTungay.DateTime.Date && ngay <= dtDenngay.DateTime.Date;
-                    })
+                    //    return ngay >= dtTungay.DateTime.Date && ngay <= dtDenngay.DateTime.Date;
+                    //})
                     .ToList();
                     allFiles.AddRange(filesInMonth);
                 }

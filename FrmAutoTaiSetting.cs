@@ -593,6 +593,7 @@ namespace SaovietTax
                  };
                 int rowsAffecteds = ExecuteQueryResult(querys, parameterss);
                 string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+                //string dbPath = Path.Combine("D:\\", "Tooldb.accdb");
                 connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
                 string queryGetdetail = @"SELECT * FROM tbCompany";
                 DataTable tbImportdetails = ExecuteQuery2(queryGetdetail);
