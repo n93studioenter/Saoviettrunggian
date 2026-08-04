@@ -2862,14 +2862,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SaovietTax.exe" size="8560128">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SaovietTax.exe" size="8560640">
       <assemblyIdentity name="SaovietTax" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Vvalmwl7XY7Npi1g5kUK7klUivW+4bzk8flwZpPj0o4=</dsig:DigestValue>
+        <dsig:DigestValue>44iCLQ4pkgTnVqZAON5ajxPe5A8FFl426HoveEFj+r4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

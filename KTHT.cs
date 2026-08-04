@@ -1493,7 +1493,57 @@ namespace SaovietTax
 
         private async void gridControl1_DoubleClick(object sender, EventArgs e)
         {
-           
+            //DevExpress.XtraGrid.Views.Grid.GridView gridView = gridControl1.MainView as DevExpress.XtraGrid.Views.Grid.GridView;
+            //var hitInfo = gridView.CalcHitInfo(gridView.GridControl.PointToClient(MousePosition));
+
+
+            //// Kiểm tra nếu nhấp vào một ô
+            //if (hitInfo.InRowCell)
+            //{
+            //    int columnIndex = hitInfo.Column.VisibleIndex; // Chỉ số cột
+            //    //if (columnIndex != 1)
+            //    //    return;
+            //    System.Windows.Forms.WebBrowser webBrowser1 = new System.Windows.Forms.WebBrowser
+            //    {
+            //        Dock = DockStyle.Fill // Đổ đầy không gian của form
+            //    };
+            //    // Lấy giá trị trong ô đã nhấp
+            //    var hiddenValue = gridView.GetRowCellValue(hitInfo.RowHandle, gridView.Columns["Path"]);
+            //    if (!File.Exists(hiddenValue.ToString()))
+            //    {
+            //        Match match = Regex.Match(hiddenValue.ToString(), @"\\Hoadon\\.*$", RegexOptions.IgnoreCase);
+            //        if (match.Success)
+            //        {
+            //            string result = match.Value; // "\Hoadon\HDVao\12\0306340860_2880_C25TDT.xml"
+            //            hiddenValue = pathThumuc + result;
+            //        }
+            //    }
+
+            //    string filePath = hiddenValue.ToString().Replace(".xml", ".html");
+            //    if (!File.Exists(filePath))
+            //    {
+            //        filePath = Path.ChangeExtension(filePath, ".pdf");
+            //        frmXemhoadonInvoicse frmXemhoadonInvoicse = new frmXemhoadonInvoicse();
+            //        frmXemhoadonInvoicse.path = filePath;
+            //        string[] arr = filePath.Split('_');
+
+            //        string soHoaDon = arr[2];   // 878
+            //        string mauSo = arr[3];      // 1C26MBD
+            //        frmXemhoadonInvoicse.name = $"📄 Hóa đơn {soHoaDon} • {mauSo}";
+            //        frmXemhoadonInvoicse.Show();
+            //    }
+            //    else
+            //    {
+            //        frmWebbrowser frmCongTrinh = new frmWebbrowser();
+            //        frmCongTrinh.Text = hiddenValue.ToString().Replace(".xml", "");
+            //        frmCongTrinh.BringToFront();
+            //        frmCongTrinh.Activate();
+            //        // Thêm điều khiển WebBrowser vào Form
+            //        frmCongTrinh.Controls.Add(webBrowser1);
+            //        frmCongTrinh.Show();
+            //        webBrowser1.Navigate("file:///" + filePath.Replace("\\", "/"));
+            //    }
+            //}
             DevExpress.XtraGrid.Views.Grid.GridView gridView = gridControl1.MainView as DevExpress.XtraGrid.Views.Grid.GridView;
             var hitInfo = gridView.CalcHitInfo(gridView.GridControl.PointToClient(MousePosition));
             var selectedRow = gridView.GetRow(gridView.FocusedRowHandle) as clsKTHT;
@@ -1502,8 +1552,8 @@ namespace SaovietTax
             if (hitInfo.InRowCell)
             {
                 int columnIndex = hitInfo.Column.VisibleIndex; // Chỉ số cột
-                //if (columnIndex != 2)
-                 //   return;
+                                                               //if (columnIndex != 2)
+                                                               //   return;
                 System.Windows.Forms.WebBrowser webBrowser1 = new System.Windows.Forms.WebBrowser
                 {
                     Dock = DockStyle.Fill // Đổ đầy không gian của form
@@ -1524,7 +1574,7 @@ namespace SaovietTax
                 if (mst == "8046549703")
                     mst = "048172000197";
                 string pathravao = radDauvao.Checked ? "HDVao" : "HDRa";
-                string fn = $"{mst}_{selectedRow.SoHD}_{selectedRow.KHHD}.html";
+                string fn = $"{selectedRow.NgayLap.ToString("yyyyMMdd")}_{mst}_{selectedRow.SoHD}_{selectedRow.KHHD}.html";
                 int tuthang = int.Parse(cbbChonthang.Text.Replace("Tháng ", ""));
                 string query = "SELECT * FROM License";
 
@@ -1557,8 +1607,8 @@ namespace SaovietTax
                     frmCongTrinh.BringToFront();
                     frmCongTrinh.Activate();
                     // Thêm điều khiển WebBrowser vào Form
-                    frmCongTrinh.Controls.Add(webBrowser1); 
-                    webBrowser1.Navigate("file:///" + filePath.Replace("\\", "/")); 
+                    frmCongTrinh.Controls.Add(webBrowser1);
+                    webBrowser1.Navigate("file:///" + filePath.Replace("\\", "/"));
                 }
                 else
                 {
@@ -1569,15 +1619,15 @@ namespace SaovietTax
                     if (selectedRow.Type == 2)
                         type = 6;
                     if (selectedRow.Type == 3)
-                        type =5;
+                        type = 5;
                     if (selectedRow.Type == 4)
                         type = 4;
                     if (selectedRow.Type == 5)
-                        type =5;
-               
-                        string url = GetInvoiceUrl(type, mst, selectedRow.KHHD, selectedRow.SoHD, selectedRow.KHMS);
+                        type = 5;
 
-               
+                    string url = GetInvoiceUrl(type, mst, selectedRow.KHHD, selectedRow.SoHD, selectedRow.KHMS);
+
+
                     string filename = $"{mst}_{selectedRow.SoHD}_{selectedRow.KHHD}.zip";
                     string path = Path.Combine(savedPath, yearPath, pathravao, tuthang.ToString(), filename);
 
@@ -1601,7 +1651,7 @@ namespace SaovietTax
                             // Lưu file ZIP bằng FileStream
                             using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
                             {
-                                 fileStream.WriteAsync(fileBytes, 0, fileBytes.Length);
+                                fileStream.WriteAsync(fileBytes, 0, fileBytes.Length);
                             }
 
                             Console.WriteLine($"File ZIP đã được lưu tại: {path}");
@@ -1620,14 +1670,14 @@ namespace SaovietTax
                                 File.Move(files.FirstOrDefault(), targetFilePath);
                                 File.Delete(path);
                                 Directory.Delete(directoryPath, true);
-                                frmWebbrowser frmCongTrinh = new frmWebbrowser(); 
+                                frmWebbrowser frmCongTrinh = new frmWebbrowser();
                                 frmCongTrinh.Show();
                                 frmCongTrinh.BringToFront();
                                 frmCongTrinh.Activate();
                                 // Thêm điều khiển WebBrowser vào Form
                                 frmCongTrinh.Controls.Add(webBrowser1);
                                 string filePath = targetFilePath;
-                                selectedRow.Path= filePath; 
+                                selectedRow.Path = filePath;
                                 webBrowser1.Navigate("file:///" + filePath.Replace("\\", "/"));
                                 this.Cursor = Cursors.Default;
                             }
@@ -1643,7 +1693,7 @@ namespace SaovietTax
                             }
                             finally
                             {
-                              
+
                             }
                             //(path, fileImport); // Giải nén file ZIP
                         }
@@ -1667,7 +1717,7 @@ namespace SaovietTax
 
                     }
                 }
-               
+
             }
         }
         public string GetInvoiceUrl(int invoiceType, string nbmst, string khhdon, string shdon, string Khmshdon)

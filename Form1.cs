@@ -12257,8 +12257,13 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
             string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
             string connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
-            string queryGetdetail = @"SELECT * FROM tbRemember";
-            DataTable tbRemember = ExecuteQuery3(queryGetdetail, connectionString2);
+            string queryGetdetail = @"SELECT * FROM tbRemember where Saoviet=?";
+            var parameters = new OleDbParameter[]
+               {
+                 new OleDbParameter("?", computerName),
+               }; 
+
+            DataTable tbRemember = ExecuteQuery3(queryGetdetail, connectionString2, parameters);
             int ThangCT = int.Parse(tbRemember.Rows[0]["ThangCT"].ToString());
             string qrls = "SELECT * FROM License";
 
@@ -12393,13 +12398,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
              .FirstOrDefault();
 
             if (!string.IsNullOrEmpty(latestExe))
-            {
-               
+            { 
                 Log($"📁 File EXE mới nhất: {latestExe}");
                 Log($"📅 Thời gian sửa đổi: {File.GetLastWriteTime(latestExe)}");
                 // Gọi VB6 với tham số /AutoMode
-                Process.Start(latestExe, "/AutoMode");
-
+                Process.Start(latestExe, "/AutoMode"); 
             }
             else
             {
@@ -24092,8 +24095,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 {
                     progressPanel1.Caption = $"Đang đọc file thứ {sothutu}/{tongfile}";
                     Application.DoEvents();
-                    frmStatusAuto.LoadMessage($"(Đầu vào) - Đang đọc file thứ {sothutu}/{tongfile}");
-                    Application.DoEvents();
+                    if (Isrunning)
+                    { 
+                        frmStatusAuto.LoadMessage($"(Đầu vào) - Đang đọc file thứ {sothutu}/{tongfile}");
+                        Application.DoEvents();
+                    }
                 }
             }
             else
@@ -24102,8 +24108,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 {
                     progressPanel2.Caption = $"Đang đọc file thứ {sothutu}/{tongfile}";
                     Application.DoEvents();
-                    frmStatusAuto.LoadMessage($"(Đầu ra) - Đang đọc file thứ {sothutu}/{tongfile}");
-                    Application.DoEvents();
+                    if (Isrunning)
+                    {
+                        frmStatusAuto.LoadMessage($"(Đầu ra) - Đang đọc file thứ {sothutu}/{tongfile}");
+                        Application.DoEvents();
+                    } 
                 }
                    
             }
@@ -29683,8 +29692,13 @@ private static readonly Dictionary<string, string[]> BrandAliases =
            
              if (chkDauvao.Checked)
             {
-                frmStatusAuto.LoadMessage("Đang tải hoá đơn đầu vào");
-                Application.DoEvents();
+                if (Isrunning)
+                {
+                    frmStatusAuto.LoadMessage("Đang tải hoá đơn đầu vào");
+                    Application.DoEvents();
+                }
+
+              
                 string qr = "SELECT * FROM tbimport"; 
                 var datatbimport = ExecuteQuery(qr, null);
                 //Xử lý 6422
@@ -30136,8 +30150,12 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             }
             else
             {
-                frmStatusAuto.LoadMessage("Đang tải hoá đơn đầu ra");
-                Application.DoEvents();
+                if (Isrunning)
+                {
+                    frmStatusAuto.LoadMessage("Đang tải hoá đơn đầu ra");
+                    Application.DoEvents();
+                }
+                   
                 UpdateStatusImportVao_Safe(lstImportRa); 
 
                 string querys = "SELECT * FROM License";
