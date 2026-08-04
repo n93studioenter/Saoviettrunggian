@@ -641,9 +641,12 @@ namespace SaovietTax
                 string qr = @"SELECT * FROM tbregister";
                 DataTable getRegister = ExecuteQuery(qr);
 
-
                 string querys = @"UPDATE tbRegister SET IsRegistry = ?";
-                int redd= ExecuteQueryResult(querys, null);
+                var pra = new OleDbParameter[]
+                   {
+                        new OleDbParameter("?", "0"),                               // 10. Saoviet
+                   };
+                int redd= ExecuteQueryResult(querys, pra);
                 var parameterss = new OleDbParameter[]
                  {
                    new OleDbParameter("?",chkThietlaptong.Checked?1:0),

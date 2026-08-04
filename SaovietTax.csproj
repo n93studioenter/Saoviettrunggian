@@ -446,6 +446,12 @@
     <Compile Include="frmQrcode.Designer.cs">
       <DependentUpon>frmQrcode.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmStatusAuto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStatusAuto.Designer.cs">
+      <DependentUpon>frmStatusAuto.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmTaiCoQuanThue.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -649,6 +655,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmQrcode.resx">
       <DependentUpon>frmQrcode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStatusAuto.resx">
+      <DependentUpon>frmStatusAuto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTaiCoQuanThue.resx">
       <DependentUpon>frmTaiCoQuanThue.cs</DependentUpon>

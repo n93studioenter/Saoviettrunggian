@@ -76,12 +76,12 @@
             this.panelControl1.Controls.Add(this.chkTime1);
             this.panelControl1.Location = new System.Drawing.Point(12, 12);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(313, 366);
+            this.panelControl1.Size = new System.Drawing.Size(282, 295);
             this.panelControl1.TabIndex = 0;
             // 
             // chkThietlaptong
             // 
-            this.chkThietlaptong.Location = new System.Drawing.Point(17, 318);
+            this.chkThietlaptong.Location = new System.Drawing.Point(10, 262);
             this.chkThietlaptong.Name = "chkThietlaptong";
             this.chkThietlaptong.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold);
             this.chkThietlaptong.Properties.Appearance.ForeColor = System.Drawing.Color.Red;
@@ -207,7 +207,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 445);
+            this.ClientSize = new System.Drawing.Size(305, 314);
             this.Controls.Add(this.panelControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FrmAutoTaiSetting";

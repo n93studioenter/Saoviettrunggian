@@ -1768,7 +1768,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                         //Kiem tra lech tien
                         if (tgTCThue != tongcon && tgTCThue!=0 && tongcon!=0 && sotienlect> -5000 && sotienlect <5000)
                         {
-                            if (xulychoall == false)
+                            if (xulychoall == false && 1>2)
                             {
                                 XtraMessageBoxArgs args = new XtraMessageBoxArgs();
 
@@ -4560,11 +4560,34 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 Console.WriteLine("File lịch sử của Chrome không tồn tại.");
             }
         }
-       public DataTable tbImportDt;
+        public DataTable tbImportDt;
         public DataTable tbImport;
         public async Task LoadVT()
         {
+            if (Isrunning)
+            {
+                frmStatusAuto.LoadMessage("Đang load danh sách vật tư");
+                Application.DoEvents();
+            }
             lstvt = await LoadDataVattuAsync();
+            if (Isrunning && lstvt.Count>0)
+            {
+                string computerName = Environment.MachineName;
+                string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+                string connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
+                string queryGetdetail = @"SELECT * FROM tbRemember";
+                DataTable tbRemember = ExecuteQuery3(queryGetdetail, connectionString2);
+
+                if (tbRemember.Rows.Count > 0)
+                {
+                    int ThangCT = int.Parse(tbRemember.Rows[0]["ThangCT"].ToString());
+                    dtTungay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, 1);
+                    dtDenngay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, DateTime.DaysInMonth(DateTime.Now.Year, ThangCT));
+                    frmStatusAuto.LoadMessage("Tiến hành liệt kê hoá đơn đầu vào...");
+                    Application.DoEvents();
+                    btnChonthang.PerformClick();
+                }
+            }
         } 
         private TcpClient client;
         private NetworkStream stream;
@@ -5141,6 +5164,15 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             string tenCty = Helpers.ConvertVniToUnicode(
                 row["TenCty"] == DBNull.Value ? "" : row["TenCty"].ToString());
 
+            if (Isrunning)
+            {
+                frmStatusAuto = new frmStatusAuto();
+                frmStatusAuto.SetDescription($"Công ty {tenCty}");
+                frmStatusAuto.LoadMessage("Đang bắt đầu import hoá đơn");
+                frmStatusAuto.Show();
+                Application.DoEvents();
+            }
+
             //mstcongty = row["CCCD"] == DBNull.Value
             //  ? ""
             //  : row["CCCD"].ToString();
@@ -5589,6 +5621,8 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             txtpass.Text = row["Password"] == DBNull.Value
                 ? ""
                 : row["Password"].ToString();
+
+
         }
         private void LoadTbImportData()
         {
@@ -6319,11 +6353,12 @@ Chỉ trả lời: CÓ hoặc KHÔNG
 
             return qrCode.GetGraphic(10);
         }
+        bool autoTaidauvao = false;
+        bool autoTaidaura = false;
+        public frmStatusAuto frmStatusAuto { get;set;}
         private async void frmMain_Load(object sender, EventArgs e)
         {
-
-        
-
+            
             int checkcompare = CompareProductNew("BVS Diana Sensi Cool Fresh siêu mỏng cánhx20", "BVS Diana SENSI Cool Fresh SMCánh20 - 2302");
             // var list = AcbPdfReader.Read(@"C:\Users\Admin\Desktop\18687768_SAOKE_TK_202511.pdf");
 
@@ -6508,20 +6543,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             XoaNLTP(5);
 
 
-            if (Isrunning)
-            {
-                string computerName = Environment.MachineName;
-
-                string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
-                string connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
-                string queryGetdetail = @"SELECT * FROM tbRemember";
-                DataTable tbRemember = ExecuteQuery3(queryGetdetail, connectionString2);
-                int ThangCT = int.Parse(tbRemember.Rows[0]["ThangCT"].ToString());
-                string qrls = "SELECT * FROM License";
-                dtTungay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, 1);
-                dtDenngay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, DateTime.DaysInMonth(DateTime.Now.Year, ThangCT));
-                btnChonthang.PerformClick(); 
-            }
+           
         }
         private void XoaNLTP(int index)
         {
@@ -8458,6 +8480,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
             }
             InitializeVatTuOptimization();
+           
             return lstVattu;
         }
         private Dictionary<string, DataRow> LoadExistingKhachHang(string tableName, string keyColumn)
@@ -11532,8 +11555,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             }
         }
         private async Task TainewData2()
-        {
-           
+        { 
             // 1. Khởi tạo danh sách
             if (taihoddon)
             {
@@ -11628,6 +11650,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             }
 
             tongfile = allFiles.Count;
+          
             sothutu = 1;
             if (tongfile == 0)
             {
@@ -12058,18 +12081,18 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             }
             return true;
         }
-        public async  void btnChonthang_Click(object sender, EventArgs e)
+        public async void Xulychonthang()
         {
-            if(chkDVTMacdinh.Checked && string.IsNullOrEmpty(txtDVTMacdinh.Text))
+            if (chkDVTMacdinh.Checked && string.IsNullOrEmpty(txtDVTMacdinh.Text))
             {
                 XtraMessageBox.Show("Vui lòng nhập đơn vị tính mặc định", "Cảnh báo    ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            lstImportVao=new BindingList<FileImport>();
-            lstImportRa=new BindingList<FileImport>();  
+            lstImportVao = new BindingList<FileImport>();
+            lstImportRa = new BindingList<FileImport>();
             if (mstcongty == "8046549703")
                 mstcongty = "048172000197";
-            if (Kiemtranamtc(dtTungay.DateTime.Year)==false)
+            if (Kiemtranamtc(dtTungay.DateTime.Year) == false)
             {
                 return;
             }
@@ -12078,11 +12101,13 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             //Ta
             if (chkDauvao.Checked)
             {
+               
                 progressPanel1.Show();
                 progressPanel1.Caption = "Đang lấy dữ liệu..";
             }
             else
             {
+               
                 progressPanel2.Show();
                 progressPanel2.Caption = "Đang lấy dữ liệu..";
             }
@@ -12090,7 +12115,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             //Loadtbimport();
 
             Application.DoEvents();
-            await TainewData2(); 
+            await TainewData2();
             btnChonthang.Enabled = false;
             Application.DoEvents();
             if (chkDauvao.Checked)
@@ -12103,7 +12128,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 progressPanel2.Visible = true;
                 progressPanel2.Caption = "Đang liệt kê hoá đơn vui lòng  chờ";
             }
-                cellColors = new Dictionary<(int, string), Color>();
+            cellColors = new Dictionary<(int, string), Color>();
             string querykh = @" SELECT *  FROM PhanLoaiVattu"; // Sử dụng ? thay cho @mst trong OleDb
             PLHH = ExecuteQuery(querykh, new OleDbParameter("?", ""));
 
@@ -12121,7 +12146,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 // LoadExcel(savedPath, 1);
                 //ImportHD(people, "HDVao");
                 //Xulyexcel();
-                await  LoadDataGridviewAsyncnew(1);
+                await LoadDataGridviewAsyncnew(1);
                 UncheckImport(lstImportVao.ToList(), 1);
                 //Xử lý đơn vi tính
                 progressPanel1.Visible = true;
@@ -12131,40 +12156,51 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 gridView1.OptionsDetail.EnableMasterViewMode = true;
                 Application.DoEvents();
                 SetGridViewOptions(gridView1);
-                if (Isrunning)
+                if (Isrunning && autoTaidauvao == false)
                 {
-                    chkDauvao.Checked = false;
-                    chkDaura.Checked = true;
+                    autoTaidauvao = true;
+                    btnimport.PerformClick();
+                    // chkDauvao.Checked = false;
+                    // chkDaura.Checked = true;
                 }
             }
-            if (chkDaura.Checked)
+            else
             {
-                // LoadXmlFilesOptimized(savedPath, 2);
-                // ImportHD(people2, "HDRa");
-                //Xulyexcel2();
-                await LoadDataGridviewAsyncnew(2);
-                UncheckImport(lstImportRa.ToList(), 2);
-                foreach(var item in lstImportRa.ToList())
+                if (chkDaura.Checked)
                 {
-                    foreach(var it in item.fileImportDetails)
+                    // LoadXmlFilesOptimized(savedPath, 2);
+                    // ImportHD(people2, "HDRa");
+                    //Xulyexcel2();
+                    await LoadDataGridviewAsyncnew(2);
+                    UncheckImport(lstImportRa.ToList(), 2);
+                    foreach (var item in lstImportRa.ToList())
                     {
-                        if (string.IsNullOrEmpty(it.DVT))
+                        foreach (var it in item.fileImportDetails)
                         {
-                          var getdvt = lstvt
-                         .Where(m => m.SoHieu == it.SoHieu)
-                         .Select(m => m.DonVi)
-                         .FirstOrDefault();
+                            if (string.IsNullOrEmpty(it.DVT))
+                            {
+                                var getdvt = lstvt
+                               .Where(m => m.SoHieu == it.SoHieu)
+                               .Select(m => m.DonVi)
+                               .FirstOrDefault();
 
-                            var donViValue = getdvt != null ? getdvt : ""; // Thay defaultValue bằng giá trị mặc định bạn mong muốn
-                            it.DVT = CapitalizeFirstLetter(donViValue);
-                        }
-                        else
-                        {
-                            it.DVT = CapitalizeFirstLetter(it.DVT);
+                                var donViValue = getdvt != null ? getdvt : ""; // Thay defaultValue bằng giá trị mặc định bạn mong muốn
+                                it.DVT = CapitalizeFirstLetter(donViValue);
+                            }
+                            else
+                            {
+                                it.DVT = CapitalizeFirstLetter(it.DVT);
+                            }
                         }
                     }
+                    SetGridViewOptions(gridView3);
+
+                    if (Isrunning && autoTaidaura == false)
+                    {
+                        autoTaidaura = true;
+                        btnimport.PerformClick();
+                    }
                 }
-                SetGridViewOptions(gridView3);
             }
 
             progressPanel1.Visible = false;
@@ -12178,20 +12214,10 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             tbImportDt = await Task.Run(() =>
                   ExecuteQuery("SELECT * FROM tbimportdetail", null)
               );
-            if (Isrunning)
-            {
-                if (taidaura == false)
-                {
-                    btnChonthang.PerformClick();
-                    taidaura = true;
-                }
-                else
-                {
-                    ImportVb6();
-                    //this.Close();
-                }
-               
-            } 
+        }
+        public async  void btnChonthang_Click(object sender, EventArgs e)
+        {
+            Xulychonthang();  
         }
         public DataTable ExecuteQuery3(string query, string connectionst, params OleDbParameter[] parameters)
         {
@@ -12224,6 +12250,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         }
         public void ImportVb6()
         {
+            frmStatusAuto.LoadMessage("Tiến hành lọc hoá đơn chuẩn bị import vào phần mềm...");
+            Application.DoEvents();
             //Lấy tháng của saoviet
             string computerName = Environment.MachineName;
 
@@ -12242,7 +12270,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 string tencongty = kq.Rows[0]["TenCty"].ToString();
                 ToastMeaasge($"Công ty  {tencongty} Đang import tháng {ThangCT}");
             }
-          
+            
 
             //Tìm file exe mới nhất
             string query = @"SELECT * FROM tbRegister";
@@ -12287,54 +12315,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             int vbCoche2 = int.Parse(getResgistry.Rows[0]["VbCoche2"].ToString());
             foreach (DataRow dr in lsttbImport.Rows)
             {
-                string getimportdetail = @"SELECT * FROM tbimportdetail WHERE ParentId = @ParentId";
-                var param = new OleDbParameter[]
-                {
-                     new OleDbParameter("@ParentId", dr["ID"].ToString())
-                }; 
-                DataTable lsttbImportdetail = ExecuteQuery(getimportdetail, param);
-                foreach (DataRow dr2 in lsttbImportdetail.Rows)
-                {
-                    // Insert hàng hóa
-                    if (dr["Type"].ToString() == "1")
-                    {
-                        if (dr["TKNo"].ToString().Contains("15") || (dr["TKNo"].ToString().Contains("642") && dr["IsHaschild"].ToString() == "1"))
-                        {
-                            if (!dr["TKNo"].ToString().Contains("154") && !dr["TKNo"].ToString().Contains("642"))
-                            {
-                                InsertHangHoa2(
-                                    dr2["DVT"].ToString(),
-                                    dr2["SoHieu"].ToString(),
-                                    dr2["Ten"].ToString(),
-                                    dr2["TKNo"].ToString(), dr["SHDon"].ToString());
-                            }
-                        }
-
-                    }
-                    if (dr["Type"].ToString() == "2")
-                    {
-                        if (!dr["TKCo"].ToString().Contains("5113"))
-                        {
-
-                            InsertHangHoa2(
-                                dr2["DVT"].ToString(),
-                                dr2["SoHieu"].ToString(),
-                                dr2["Ten"].ToString(),
-                               dr2["TKCo"].ToString(), dr["SHDon"].ToString());
-                        }
-                    }
-                }
-                  
-                 
-
-                if (dr["TKNo"].ToString().Contains("64"))
-                {
-                    dr["IsHaschild"] = 0;
-                }
-                if (dr["TKCo"].ToString().Contains("5113"))
-                {
-                    dr["IsHaschild"] = 0;
-                }
+                
                 //Đầu vào
                 if (dr["Type"].ToString() == "1")
                 {
@@ -17116,7 +17097,6 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         int uutienselect = 0;
         private void chkDaura_CheckedChanged(object sender, EventArgs e)
         {
-
             if (chkDaura.Checked && (uutienselect == 2 || uutienselect == 0))
             {
                 uutienselect = 2;
@@ -17129,9 +17109,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
                 else
                 {
-                    btnChonthang.PerformClick();
-                } 
+                    //btnChonthang.PerformClick();
+                    Xulychonthang();
+                }
             }
+
             int getthang = 0;
             //try
             //{
@@ -17241,7 +17223,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void dtDenngay_EditValueChanged_1(object sender, EventArgs e)
         {
-            btnChonthang.PerformClick();
+            if (Isrunning==false)
+            {
+                btnChonthang.PerformClick();
+            }
+               
         }
 
         private void chkDauvao_MouseClick(object sender, MouseEventArgs e)
@@ -22107,7 +22093,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
             _keywordIndex = new Dictionary<string, HashSet<string>>();
             _quyCachIndex = new Dictionary<string, HashSet<string>>();
-
+            if (_optimizedVatTu == null)
+                return;
             foreach (var kvp in _optimizedVatTu)
             {
                 // Index theo từ khóa (chỉ lấy từ dài >= 3 ký tự)
@@ -22240,20 +22227,24 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             double minPercent = int.Parse(txtTylechonHH.Text);
 
             // ========== 1. TÌM CHÍNH XÁC ==========
-            var exactMatch = _optimizedVatTu
-                .FirstOrDefault(kvp =>
-                    (NormalizeNameForSearch(kvp.Value.TenChuan) == normalizedTen ||
-                     NormalizeNameForSearch(kvp.Value.TenPhuChuan) == normalizedTen) &&
-                    (string.IsNullOrEmpty(quyCach) || kvp.Value.QuyCach == quyCach));
-
-            if (!exactMatch.Equals(default(KeyValuePair<string, (string, string, string, string, double, double)>)))
+            if (_optimizedVatTu != null)
             {
-                tbImportDetail.SoHieu = exactMatch.Key;
-                tbImportDetail.Percent = 100;
-                tbImportDetail.DVT = exactMatch.Value.DonVi;
-                Console.WriteLine($"✅ Tìm chính xác: {exactMatch.Value.TenChuan}");
-                return;
+                var exactMatch = _optimizedVatTu
+             .FirstOrDefault(kvp =>
+                 (NormalizeNameForSearch(kvp.Value.TenChuan) == normalizedTen ||
+                  NormalizeNameForSearch(kvp.Value.TenPhuChuan) == normalizedTen) &&
+                 (string.IsNullOrEmpty(quyCach) || kvp.Value.QuyCach == quyCach));
+
+                if (!exactMatch.Equals(default(KeyValuePair<string, (string, string, string, string, double, double)>)))
+                {
+                    tbImportDetail.SoHieu = exactMatch.Key;
+                    tbImportDetail.Percent = 100;
+                    tbImportDetail.DVT = exactMatch.Value.DonVi;
+                    Console.WriteLine($"✅ Tìm chính xác: {exactMatch.Value.TenChuan}");
+                    return;
+                }
             }
+         
 
             // ========== 2. TÁCH TỪ KHÓA ==========
             var words = normalizedTen.Split(new[] { ' ', '-', ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
@@ -24078,7 +24069,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         bool isAddhd = true;
         private async Task<TbImport> DocfileXmlOne(string pathXml, int stt)
         {
-            if(pathXml.Contains("427"))
+         
+            if (pathXml.Contains("427"))
             {
                 int kiemtra = 10;
             }   
@@ -24100,6 +24092,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 {
                     progressPanel1.Caption = $"Đang đọc file thứ {sothutu}/{tongfile}";
                     Application.DoEvents();
+                    frmStatusAuto.LoadMessage($"(Đầu vào) - Đang đọc file thứ {sothutu}/{tongfile}");
+                    Application.DoEvents();
                 }
             }
             else
@@ -24107,6 +24101,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 if (modeClick != 2)
                 {
                     progressPanel2.Caption = $"Đang đọc file thứ {sothutu}/{tongfile}";
+                    Application.DoEvents();
+                    frmStatusAuto.LoadMessage($"(Đầu ra) - Đang đọc file thứ {sothutu}/{tongfile}");
                     Application.DoEvents();
                 }
                    
@@ -24380,29 +24376,33 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             }
                             finalTotal += dt.TTien;
                             if (daGiam)
-                                {
-                                    Match m = Regex.Match(tenGoc, @"\d{1,3}(?:\.\d{3})*(?:,\d+)?");
-                                    if (m.Success) dt.TTien = double.Parse(m.Value.Replace(".", ""));
-                                }
-
-                                // Fuzzy Match & Cache
-                                string keyCache = NormalizeVietnameseString(dt.Ten);
-                                if (cacheMatHangTrongHoaDon.TryGetValue(keyCache, out var cached))
-                                {
-                                    dt.SoHieu = cached.SoHieu; dt.Percent = cached.Percent;
-                                }
-                                else
-                                {
-                                    Xulysohieuvattu(dt);
-                                    cacheMatHangTrongHoaDon[keyCache] = dt;
-                                }
-
-                                if (chkDauvao.Checked && (tchat == 3 || daGiam)) dt.TKCo = "711";
-                                dt.Ten = Helpers.ConvertUnicodeToVni(dt.Ten);
-                                dt.Percent = Math.Round(dt.Percent);
-                                tbImport.tbImportDetails.Add(dt);
+                            {
+                                Match m = Regex.Match(tenGoc, @"\d{1,3}(?:\.\d{3})*(?:,\d+)?");
+                                if (m.Success) dt.TTien = double.Parse(m.Value.Replace(".", ""));
                             }
-                            catch (Exception ex)
+
+                            // Fuzzy Match & Cache
+                            string keyCache = NormalizeVietnameseString(dt.Ten);
+                            if (cacheMatHangTrongHoaDon.TryGetValue(keyCache, out var cached))
+                            {
+                                dt.SoHieu = cached.SoHieu; dt.Percent = cached.Percent;
+                            }
+                            else
+                            {
+                                if (dt.Ten == "Khác")
+                                {
+                                    int aad = 10;
+                                }
+                                Xulysohieuvattu(dt);
+                                cacheMatHangTrongHoaDon[keyCache] = dt;
+                            }
+
+                            if (chkDauvao.Checked && (tchat == 3 || daGiam)) dt.TKCo = "711";
+                            dt.Ten = Helpers.ConvertUnicodeToVni(dt.Ten);
+                            dt.Percent = Math.Round(dt.Percent);
+                            tbImport.tbImportDetails.Add(dt);
+                        }
+                        catch (Exception ex)
                             {
                                 XtraMessageBox.Show(ten);
                             }
@@ -29683,6 +29683,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
            
              if (chkDauvao.Checked)
             {
+                frmStatusAuto.LoadMessage("Đang tải hoá đơn đầu vào");
+                Application.DoEvents();
                 string qr = "SELECT * FROM tbimport"; 
                 var datatbimport = ExecuteQuery(qr, null);
                 //Xử lý 6422
@@ -30134,7 +30136,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             }
             else
             {
-              
+                frmStatusAuto.LoadMessage("Đang tải hoá đơn đầu ra");
+                Application.DoEvents();
                 UpdateStatusImportVao_Safe(lstImportRa); 
 
                 string querys = "SELECT * FROM License";
@@ -30318,11 +30321,25 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
             }
             //Nếu isHAschild
-
-
+             
             isClick = true;
-           
-            this.Close();
+            if (Isrunning==false)
+            {
+                this.Close();
+            }
+            else
+            {
+                if (autoTaidaura == false)
+                {
+                    chkDauvao.Checked = false;
+                    chkDaura.Checked = true;
+                }
+                else
+                {
+                    ImportVb6();
+                }
+            }
+               
         } 
         private void simpleButton7_Click(object sender, EventArgs e)
         {
