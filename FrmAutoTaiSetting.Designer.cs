@@ -43,6 +43,7 @@
             this.chkTime3 = new DevExpress.XtraEditors.CheckEdit();
             this.chkTime2 = new DevExpress.XtraEditors.CheckEdit();
             this.chkTime1 = new DevExpress.XtraEditors.CheckEdit();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chkThietlaptong.Properties)).BeginInit();
@@ -61,6 +62,7 @@
             // 
             this.panelControl1.Appearance.BackColor = System.Drawing.Color.White;
             this.panelControl1.Appearance.Options.UseBackColor = true;
+            this.panelControl1.Controls.Add(this.label1);
             this.panelControl1.Controls.Add(this.chkThietlaptong);
             this.panelControl1.Controls.Add(this.txtThoigiancho);
             this.panelControl1.Controls.Add(this.labelControl2);
@@ -76,25 +78,25 @@
             this.panelControl1.Controls.Add(this.chkTime1);
             this.panelControl1.Location = new System.Drawing.Point(12, 12);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(282, 295);
+            this.panelControl1.Size = new System.Drawing.Size(281, 286);
             this.panelControl1.TabIndex = 0;
             // 
             // chkThietlaptong
             // 
-            this.chkThietlaptong.Location = new System.Drawing.Point(10, 262);
+            this.chkThietlaptong.Location = new System.Drawing.Point(136, 60);
             this.chkThietlaptong.Name = "chkThietlaptong";
             this.chkThietlaptong.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold);
-            this.chkThietlaptong.Properties.Appearance.ForeColor = System.Drawing.Color.Red;
+            this.chkThietlaptong.Properties.Appearance.ForeColor = System.Drawing.Color.Blue;
             this.chkThietlaptong.Properties.Appearance.Options.UseFont = true;
             this.chkThietlaptong.Properties.Appearance.Options.UseForeColor = true;
-            this.chkThietlaptong.Properties.Caption = "Lưu thiết lập tổng";
-            this.chkThietlaptong.Size = new System.Drawing.Size(291, 20);
+            this.chkThietlaptong.Properties.Caption = "Tải theo tool tổng";
+            this.chkThietlaptong.Size = new System.Drawing.Size(135, 20);
             this.chkThietlaptong.TabIndex = 37;
             this.chkThietlaptong.CheckedChanged += new System.EventHandler(this.chkThietlaptong_CheckedChanged);
             // 
             // txtThoigiancho
             // 
-            this.txtThoigiancho.Location = new System.Drawing.Point(146, 233);
+            this.txtThoigiancho.Location = new System.Drawing.Point(141, 258);
             this.txtThoigiancho.Name = "txtThoigiancho";
             this.txtThoigiancho.Size = new System.Drawing.Size(125, 23);
             this.txtThoigiancho.TabIndex = 36;
@@ -102,7 +104,7 @@
             // 
             // labelControl2
             // 
-            this.labelControl2.Location = new System.Drawing.Point(63, 236);
+            this.labelControl2.Location = new System.Drawing.Point(35, 261);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(77, 16);
             this.labelControl2.TabIndex = 35;
@@ -111,7 +113,7 @@
             // txtTime3
             // 
             this.txtTime3.Enabled = false;
-            this.txtTime3.Location = new System.Drawing.Point(146, 159);
+            this.txtTime3.Location = new System.Drawing.Point(141, 184);
             this.txtTime3.Name = "txtTime3";
             this.txtTime3.Size = new System.Drawing.Size(125, 23);
             this.txtTime3.TabIndex = 34;
@@ -121,7 +123,7 @@
             // txtTime2
             // 
             this.txtTime2.Enabled = false;
-            this.txtTime2.Location = new System.Drawing.Point(146, 120);
+            this.txtTime2.Location = new System.Drawing.Point(141, 145);
             this.txtTime2.Name = "txtTime2";
             this.txtTime2.Size = new System.Drawing.Size(125, 23);
             this.txtTime2.TabIndex = 33;
@@ -131,7 +133,7 @@
             // txtTime1
             // 
             this.txtTime1.Enabled = false;
-            this.txtTime1.Location = new System.Drawing.Point(146, 80);
+            this.txtTime1.Location = new System.Drawing.Point(141, 105);
             this.txtTime1.Name = "txtTime1";
             this.txtTime1.Size = new System.Drawing.Size(125, 23);
             this.txtTime1.TabIndex = 32;
@@ -140,7 +142,7 @@
             // 
             // txtSolantai
             // 
-            this.txtSolantai.Location = new System.Drawing.Point(146, 197);
+            this.txtSolantai.Location = new System.Drawing.Point(141, 222);
             this.txtSolantai.Name = "txtSolantai";
             this.txtSolantai.Size = new System.Drawing.Size(125, 23);
             this.txtSolantai.TabIndex = 31;
@@ -148,7 +150,7 @@
             // 
             // svgImageBox1
             // 
-            this.svgImageBox1.Location = new System.Drawing.Point(10, 11);
+            this.svgImageBox1.Location = new System.Drawing.Point(35, 22);
             this.svgImageBox1.Name = "svgImageBox1";
             this.svgImageBox1.Size = new System.Drawing.Size(55, 48);
             this.svgImageBox1.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("svgImageBox1.SvgImage")));
@@ -158,19 +160,21 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(118, 26);
+            this.radioButton1.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold);
+            this.radioButton1.ForeColor = System.Drawing.Color.Blue;
+            this.radioButton1.Location = new System.Drawing.Point(136, 11);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(153, 20);
+            this.radioButton1.Size = new System.Drawing.Size(144, 20);
             this.radioButton1.TabIndex = 26;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Tải khi khởi động máy";
+            this.radioButton1.Text = "Tải theo từng cty ";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             this.radioButton1.Click += new System.EventHandler(this.radioButton1_Click);
             // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(63, 204);
+            this.labelControl1.Location = new System.Drawing.Point(58, 229);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(54, 16);
             this.labelControl1.TabIndex = 8;
@@ -178,7 +182,7 @@
             // 
             // chkTime3
             // 
-            this.chkTime3.Location = new System.Drawing.Point(10, 162);
+            this.chkTime3.Location = new System.Drawing.Point(5, 187);
             this.chkTime3.Name = "chkTime3";
             this.chkTime3.Properties.Caption = "Mốc thời gian 3";
             this.chkTime3.Size = new System.Drawing.Size(130, 20);
@@ -187,7 +191,7 @@
             // 
             // chkTime2
             // 
-            this.chkTime2.Location = new System.Drawing.Point(10, 121);
+            this.chkTime2.Location = new System.Drawing.Point(5, 146);
             this.chkTime2.Name = "chkTime2";
             this.chkTime2.Properties.Caption = "Mốc thời gian 2";
             this.chkTime2.Size = new System.Drawing.Size(130, 20);
@@ -196,18 +200,29 @@
             // 
             // chkTime1
             // 
-            this.chkTime1.Location = new System.Drawing.Point(10, 83);
+            this.chkTime1.Location = new System.Drawing.Point(5, 108);
             this.chkTime1.Name = "chkTime1";
             this.chkTime1.Properties.Caption = "Mốc thời gian 1";
             this.chkTime1.Size = new System.Drawing.Size(130, 20);
             this.chkTime1.TabIndex = 3;
             this.chkTime1.CheckedChanged += new System.EventHandler(this.chkTime1_CheckedChanged);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 7F);
+            this.label1.ForeColor = System.Drawing.Color.Blue;
+            this.label1.Location = new System.Drawing.Point(138, 34);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(138, 14);
+            this.label1.TabIndex = 38;
+            this.label1.Text = "(sau khi khởi động máy)";
+            // 
             // FrmAutoTaiSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(305, 314);
+            this.ClientSize = new System.Drawing.Size(298, 307);
             this.Controls.Add(this.panelControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FrmAutoTaiSetting";
@@ -247,5 +262,6 @@
         private DevExpress.XtraEditors.TextEdit txtThoigiancho;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.CheckEdit chkThietlaptong;
+        private System.Windows.Forms.Label label1;
     }
 }

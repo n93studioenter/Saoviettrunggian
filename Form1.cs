@@ -5770,7 +5770,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
 
                     // 2. Khởi tạo giao diện
                     ShowProgress("Khởi tạo giao diện...");
-                    Thietlapcontrol();
+                    //Thietlapcontrol();
                     ThietlapMenu();
 
                     // 3. Khởi tạo DB + đọc License
@@ -6404,18 +6404,18 @@ Chỉ trả lời: CÓ hoặc KHÔNG
 
                 }
                 // Tính 10% chiều rộng màn hình
-                btnKTTen.Width = (int)(screenWidth * 0.07);
-                btnKTTen.Location = new Point(screenWidth - btnKTTen.Width-30, btnKTTen.Location.Y);
-                txtDVTMacdinh.Width= (int)(screenWidth * 0.05);
-                txtDVTMacdinh.Location = new Point(screenWidth - txtDVTMacdinh.Width - btnKTTen.Width- 30, txtDVTMacdinh.Location.Y);
-                chkDVTMacdinh.Width= (int)(screenWidth * 0.08); 
-                chkDVTMacdinh.Location= new Point(screenWidth - chkDVTMacdinh.Width - txtDVTMacdinh.Width - btnKTTen.Width - 50, chkDVTMacdinh.Location.Y);
-                chkUutiensoluong.Location= new Point(chkDVTMacdinh.Location.X - chkUutiensoluong.Width - 20, chkUutiensoluong.Location.Y);
-                txtTylechonHH.Location= new Point(chkUutiensoluong.Location.X - txtTylechonHH.Width - 20, txtTylechonHH.Location.Y);
-                labelControl24.Location= new Point(txtTylechonHH.Location.X - labelControl24.Width - 5, labelControl24.Location.Y);
-                radioButton1.Location= new Point(10, radioButton1.Location.Y);
-                chktaituweb.Location= new Point(btnThietlaptairudong.Location.X + btnThietlaptairudong.Width+10, btnThietlaptairudong.Location.Y);
-                btnSetting.Location= new Point(chktaituweb.Location.X + chktaituweb.Width + 5, chktaituweb.Location.Y);
+                //btnKTTen.Width = (int)(screenWidth * 0.07);
+                //btnKTTen.Location = new Point(screenWidth - btnKTTen.Width-30, btnKTTen.Location.Y);
+                //txtDVTMacdinh.Width= (int)(screenWidth * 0.05);
+                //txtDVTMacdinh.Location = new Point(screenWidth - txtDVTMacdinh.Width - btnKTTen.Width- 30, txtDVTMacdinh.Location.Y);
+                //chkDVTMacdinh.Width= (int)(screenWidth * 0.08); 
+                //chkDVTMacdinh.Location= new Point(screenWidth - chkDVTMacdinh.Width - txtDVTMacdinh.Width - btnKTTen.Width - 50, chkDVTMacdinh.Location.Y);
+                //chkUutiensoluong.Location= new Point(chkDVTMacdinh.Location.X - chkUutiensoluong.Width - 20, chkUutiensoluong.Location.Y);
+                //txtTylechonHH.Location= new Point(chkUutiensoluong.Location.X - txtTylechonHH.Width - 20, txtTylechonHH.Location.Y);
+                //labelControl24.Location= new Point(txtTylechonHH.Location.X - labelControl24.Width - 5, labelControl24.Location.Y);
+                //radioButton1.Location= new Point(10, radioButton1.Location.Y);
+                //chktaituweb.Location= new Point(btnThietlaptairudong.Location.X + btnThietlaptairudong.Width+10, btnThietlaptairudong.Location.Y);
+                //btnSetting.Location= new Point(chktaituweb.Location.X + chktaituweb.Width + 5, chktaituweb.Location.Y);
                 // XtraMessageBox.Show("xin chao");
                 AddDeleterow(gridView1, gridControl1);
                 AddDeleterow(gridView3, gridControl2);
@@ -34207,6 +34207,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 new OleDbParameter("?",chk)
             };
             ExecuteQueryResult(query, parametersss);
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
         // ========================================
