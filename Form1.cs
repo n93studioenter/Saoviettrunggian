@@ -4575,14 +4575,22 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 string computerName = Environment.MachineName;
                 string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
                 string connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
-                string queryGetdetail = @"SELECT * FROM tbRemember";
-                DataTable tbRemember = ExecuteQuery3(queryGetdetail, connectionString2);
+                string queryGetdetail = @"SELECT * FROM tbRemember where Saoviet=? ";
+                var parameters2 = new OleDbParameter[]
+                               {
+                                    new OleDbParameter("?", computerName), 
+                               };
+                DataTable tbRemember = ExecuteQuery3(queryGetdetail, connectionString2, parameters2);
 
                 if (tbRemember.Rows.Count > 0)
                 {
                     int ThangCT = int.Parse(tbRemember.Rows[0]["ThangCT"].ToString());
-                    dtTungay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, 1);
-                    dtDenngay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, DateTime.DaysInMonth(DateTime.Now.Year, ThangCT));
+                    DateTime tungay= DateTime.Parse(tbRemember.Rows[0]["TuNgay"].ToString());
+                    DateTime denngay = DateTime.Parse(tbRemember.Rows[0]["DenNgay"].ToString());
+                    //dtTungay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, 1);
+                    //dtDenngay.DateTime = new DateTime(DateTime.Now.Year, ThangCT, DateTime.DaysInMonth(DateTime.Now.Year, ThangCT));
+                    dtTungay.DateTime = tungay;
+                    dtDenngay.DateTime = denngay;
                     frmStatusAuto.LoadMessage("Tiến hành liệt kê hoá đơn đầu vào...");
                     Application.DoEvents();
                     btnChonthang.PerformClick();
@@ -12298,12 +12306,20 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             //Lấy ra các hoa don trong tháng hiện tại
             string gettbimport = @"SELECT * FROM tbImport";
             DataTable lsttbImport = ExecuteQuery(gettbimport);
-
+            DateTime tuNgay = dtTungay.DateTime.Date;
+            DateTime denNgay = dtDenngay.DateTime.Date.AddDays(1).AddTicks(-1);
+              
             if (lsttbImport != null && lsttbImport.Rows.Count > 0)
             {
                 var filteredRows = lsttbImport.AsEnumerable()
-                    .Where(m => m.Field<DateTime>("Nlap").Month == ThangCT);
+                .Where(r =>
+                {
+                    if (r.IsNull("NLap"))
+                        return false;
 
+                    DateTime nLap = r.Field<DateTime>("NLap");
+                    return nLap >= tuNgay && nLap <= denNgay;
+                });
                 // ✅ Kiểm tra có dòng nào không
                 if (filteredRows.Any())
                 {
@@ -12311,12 +12327,18 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 }
                 else
                 {
+                    Application.Exit();
                     // ✅ Nếu không có dòng, tạo DataTable rỗng
                     lsttbImport = lsttbImport.Clone();
                 }
             }
-            //Lọc theo điều kiện mật định nếu có
-            int vbCoche = int.Parse(getResgistry.Rows[0]["VbCoche"].ToString());
+            else
+            {
+                this.Close();
+                return;
+            }
+                //Lọc theo điều kiện mật định nếu có
+                int vbCoche = int.Parse(getResgistry.Rows[0]["VbCoche"].ToString());
             int vbCoche2 = int.Parse(getResgistry.Rows[0]["VbCoche2"].ToString());
             foreach (DataRow dr in lsttbImport.Rows)
             {
