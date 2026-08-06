@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode4 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode3 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.gridView7 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn21 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -539,10 +539,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridControl4.DataSource = this.nhapkhotpBindingSource1;
             this.gridControl4.Font = new System.Drawing.Font("Tahoma", 7.8F);
-            gridLevelNode4.LevelTemplate = this.gridView7;
-            gridLevelNode4.RelationName = "Child";
+            gridLevelNode1.LevelTemplate = this.gridView7;
+            gridLevelNode1.RelationName = "Child";
             this.gridControl4.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode4});
+            gridLevelNode1});
             this.gridControl4.Location = new System.Drawing.Point(7, 18);
             this.gridControl4.MainView = this.gridView6;
             this.gridControl4.Name = "gridControl4";
@@ -1044,10 +1044,10 @@
             this.gridControl2.DataSource = this.fileImportBindingSource;
             this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl2.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode1.LevelTemplate = this.gridView4;
-            gridLevelNode1.RelationName = "Detail";
+            gridLevelNode2.LevelTemplate = this.gridView4;
+            gridLevelNode2.RelationName = "Detail";
             this.gridControl2.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode1});
+            gridLevelNode2});
             this.gridControl2.Location = new System.Drawing.Point(0, 0);
             this.gridControl2.LookAndFeel.SkinName = "Office 2016 Colorful";
             this.gridControl2.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1439,10 +1439,10 @@
             this.gridControl1.DataSource = this.fileImportBindingSource;
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl1.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            gridLevelNode2.LevelTemplate = this.gridView2;
-            gridLevelNode2.RelationName = "Detail";
+            gridLevelNode3.LevelTemplate = this.gridView2;
+            gridLevelNode3.RelationName = "Detail";
             this.gridControl1.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode2});
+            gridLevelNode3});
             this.gridControl1.Location = new System.Drawing.Point(0, 0);
             this.gridControl1.LookAndFeel.SkinName = "Office 2019 Colorful";
             this.gridControl1.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1721,9 +1721,9 @@
             // repositoryItemButtonEdit1
             // 
             this.repositoryItemButtonEdit1.AutoHeight = false;
-            editorButtonImageOptions2.Image = global::SaovietTax.Properties.Resources.close_16x16;
+            editorButtonImageOptions1.Image = global::SaovietTax.Properties.Resources.close_16x16;
             this.repositoryItemButtonEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.repositoryItemButtonEdit1.Name = "repositoryItemButtonEdit1";
             // 
             // gridView8
@@ -1777,7 +1777,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.70612F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.29388F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 481F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 162F));
             this.tableLayoutPanel1.Controls.Add(this.panelControl12, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.panelControl11, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.panelControl10, 0, 0);
@@ -1803,7 +1803,7 @@
             this.panelControl12.Controls.Add(this.btnClearNganhang);
             this.panelControl12.Controls.Add(this.btnLocdulieuNganhang);
             this.panelControl12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControl12.Location = new System.Drawing.Point(1002, 3);
+            this.panelControl12.Location = new System.Drawing.Point(1001, 3);
             this.panelControl12.Name = "panelControl12";
             this.panelControl12.Size = new System.Drawing.Size(475, 166);
             this.panelControl12.TabIndex = 5;
@@ -1933,7 +1933,7 @@
             this.panelControl11.Controls.Add(this.btnRefresh);
             this.panelControl11.Controls.Add(this.btnimport);
             this.panelControl11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControl11.Location = new System.Drawing.Point(570, 3);
+            this.panelControl11.Location = new System.Drawing.Point(569, 3);
             this.panelControl11.Name = "panelControl11";
             this.panelControl11.Size = new System.Drawing.Size(426, 166);
             this.panelControl11.TabIndex = 4;
@@ -2115,14 +2115,14 @@
             this.panelControl10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControl10.Location = new System.Drawing.Point(3, 3);
             this.panelControl10.Name = "panelControl10";
-            this.panelControl10.Size = new System.Drawing.Size(561, 166);
+            this.panelControl10.Size = new System.Drawing.Size(560, 166);
             this.panelControl10.TabIndex = 3;
             // 
             // txtTime1
             // 
             this.txtTime1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTime1.Enabled = false;
-            this.txtTime1.Location = new System.Drawing.Point(493, 45);
+            this.txtTime1.Location = new System.Drawing.Point(492, 45);
             this.txtTime1.Name = "txtTime1";
             this.txtTime1.Size = new System.Drawing.Size(58, 23);
             this.txtTime1.TabIndex = 42;
@@ -2132,7 +2132,7 @@
             this.dtDenngay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtDenngay.EditValue = null;
-            this.dtDenngay.Location = new System.Drawing.Point(458, 83);
+            this.dtDenngay.Location = new System.Drawing.Point(457, 83);
             this.dtDenngay.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.dtDenngay.Name = "dtDenngay";
             this.dtDenngay.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -2146,7 +2146,7 @@
             // chkTime1
             // 
             this.chkTime1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkTime1.Location = new System.Drawing.Point(395, 47);
+            this.chkTime1.Location = new System.Drawing.Point(394, 47);
             this.chkTime1.Name = "chkTime1";
             this.chkTime1.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold);
             this.chkTime1.Properties.Appearance.ForeColor = System.Drawing.Color.Blue;
@@ -2161,7 +2161,7 @@
             this.labelControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl1.Appearance.ForeColor = System.Drawing.Color.Red;
             this.labelControl1.Appearance.Options.UseForeColor = true;
-            this.labelControl1.Location = new System.Drawing.Point(276, 90);
+            this.labelControl1.Location = new System.Drawing.Point(275, 90);
             this.labelControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(52, 16);
@@ -2217,7 +2217,7 @@
             this.labelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl3.Appearance.ForeColor = System.Drawing.Color.Red;
             this.labelControl3.Appearance.Options.UseForeColor = true;
-            this.labelControl3.Location = new System.Drawing.Point(429, 89);
+            this.labelControl3.Location = new System.Drawing.Point(428, 89);
             this.labelControl3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(23, 16);
@@ -2240,7 +2240,7 @@
             this.dtTungay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtTungay.EditValue = null;
-            this.dtTungay.Location = new System.Drawing.Point(332, 83);
+            this.dtTungay.Location = new System.Drawing.Point(331, 83);
             this.dtTungay.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.dtTungay.Name = "dtTungay";
             this.dtTungay.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -2254,7 +2254,7 @@
             // txtpass
             // 
             this.txtpass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtpass.Location = new System.Drawing.Point(419, 9);
+            this.txtpass.Location = new System.Drawing.Point(418, 9);
             this.txtpass.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.txtpass.Name = "txtpass";
             this.txtpass.Size = new System.Drawing.Size(132, 23);
@@ -2270,7 +2270,7 @@
             this.simpleButton3.Appearance.Options.UseFont = true;
             this.simpleButton3.Appearance.Options.UseForeColor = true;
             this.simpleButton3.ImageOptions.Image = global::SaovietTax.Properties.Resources.drilldownonseries_chart_32x32;
-            this.simpleButton3.Location = new System.Drawing.Point(332, 125);
+            this.simpleButton3.Location = new System.Drawing.Point(331, 125);
             this.simpleButton3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton3.Name = "simpleButton3";
             this.simpleButton3.Size = new System.Drawing.Size(219, 28);
@@ -2296,7 +2296,7 @@
             this.labelControl12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl12.Appearance.ForeColor = System.Drawing.Color.Red;
             this.labelControl12.Appearance.Options.UseForeColor = true;
-            this.labelControl12.Location = new System.Drawing.Point(389, 13);
+            this.labelControl12.Location = new System.Drawing.Point(388, 13);
             this.labelControl12.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl12.Name = "labelControl12";
             this.labelControl12.Size = new System.Drawing.Size(26, 16);
@@ -2315,11 +2315,12 @@
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Khi khởi động máy";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // chkDaura
             // 
             this.chkDaura.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkDaura.Location = new System.Drawing.Point(179, 126);
+            this.chkDaura.Location = new System.Drawing.Point(178, 126);
             this.chkDaura.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.chkDaura.Name = "chkDaura";
             this.chkDaura.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
