@@ -3992,9 +3992,9 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 }
                 if (namtc == DateTime.Now.Year)
                 {
-                    thangtc = DateTime.Now.Month;
+                    thangtc = DateTime.Now.Month; 
                     dtTungay.DateTime = new DateTime(namtc, thangtc, 1);
-                    dtDenngay.DateTime = DateTime.Now;
+                    dtDenngay.DateTime = DateTime.Now.Date;
                 }
           
 
@@ -4903,51 +4903,95 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
         }
         private void ThietlappnleLeft()
         {
+            //panleLeft
+            int paddingleft = 10;
+            txtuser.Width= (int)(panleLeft.Width * 0.25f);
+            txtpass.Width= (int)(panleLeft.Width * 0.25f);
+            chkThietlaptong.Width = (int)(panleLeft.Width * 0.28f);
+            labelControl13.Location = new Point(panleLeft.Location.X + paddingleft, labelControl13.Location.Y);
             txtuser.Location = new Point(labelControl13.Location.X + labelControl13.Width + 5, txtuser.Location.Y);
             labelControl12.Location = new Point(txtuser.Location.X + txtuser.Width + 5, labelControl12.Location.Y);
+            txtpass.Location = new Point(labelControl12.Location.X + labelControl12.Width + 5, txtpass.Location.Y);
 
-            dtTungay.Width= (int)(panleLeft.Width * 0.25f);
-            dtDenngay.Width = (int)(panleLeft.Width * 0.25f);
+            //Row 2
+            chkThietlaptong.Location= new Point(panleLeft.Location.X + paddingleft, chkThietlaptong.Location.Y);
+            radioButton2.Location= new Point(chkThietlaptong.Location.X + chkThietlaptong.Width+10, radioButton2.Location.Y);
+            chkTime1.Location= new Point(radioButton2.Location.X + radioButton2.Width + 10, chkTime1.Location.Y);
+            txtTime1.Location = new Point(chkTime1.Location.X + chkTime1.Width + 10, txtTime1.Location.Y);
 
-            //Thiết lập location
-          
-            dtDenngay.Location= new Point(panleLeft.Width - dtDenngay.Width - 10, dtDenngay.Location.Y);
-            dtTungay.Location = new Point(txtuser.Location.X, dtTungay.Location.Y);
-            labelControl3.Location = new Point(panleLeft.Width - labelControl3.Width - dtDenngay.Width-20, labelControl3.Location.Y);
-            chkDaura.Location= new Point(panleLeft.Width - chkDaura.Width - 10- chkInvoice.Width, chkDaura.Location.Y);
-            chkInvoice.Location= new Point(panleLeft.Width - 10 - chkInvoice.Width, chkDaura.Location.Y);
-            chkDauvao.Location = new Point(10, chkDauvao.Location.Y);
+            //Row 3
+            simpleButton3.Location = new Point(panleLeft.Location.X + paddingleft, simpleButton3.Location.Y);
+            chktaituweb.Location = new Point(simpleButton3.Location.X + simpleButton3.Width + 10, chktaituweb.Location.Y);
+            chkInvoice.Location = new Point(chktaituweb.Location.X + chktaituweb.Width + 10, chkInvoice.Location.Y);
+
+            //Row 4
+            chkDauvao.Location = new Point(panleLeft.Location.X + paddingleft, chkDauvao.Location.Y);
+            chkDaura.Location = new Point(chkDauvao.Location.X + chkDauvao.Width + 10, chkDaura.Location.Y);
+            labelControl1.Location = new Point(chkDaura.Location.X + chkDaura.Width + 10, labelControl1.Location.Y);
+            dtTungay.Location = new Point(labelControl1.Location.X + labelControl1.Width + 10, dtTungay.Location.Y);
+            labelControl3.Location = new Point(dtTungay.Location.X + dtTungay.Width + 10, labelControl3.Location.Y);
+            dtDenngay.Location = new Point(labelControl3.Location.X + labelControl3.Width + 10, dtDenngay.Location.Y);
+            //dtTungay.Width= (int)(panleLeft.Width * 0.25f);
+            //dtDenngay.Width = (int)(panleLeft.Width * 0.25f);
+
+            ////Thiết lập location
+
+            //dtDenngay.Location= new Point(panleLeft.Width - dtDenngay.Width - 10, dtDenngay.Location.Y);
+            //dtTungay.Location = new Point(txtuser.Location.X, dtTungay.Location.Y);
+            //labelControl3.Location = new Point(panleLeft.Width - labelControl3.Width - dtDenngay.Width-20, labelControl3.Location.Y);
+            //chkDaura.Location= new Point(panleLeft.Width - chkDaura.Width - 10- chkInvoice.Width, chkDaura.Location.Y);
+            //chkInvoice.Location= new Point(panleLeft.Width - 10 - chkInvoice.Width, chkDaura.Location.Y);
+            //chkDauvao.Location = new Point(10, chkDauvao.Location.Y);
         }
         private void ThietLapPanleMiddle()
         {
-            simpleButton3.Width= (int)(panleMiddle.Width * 0.485f);
+            simpleButton5.Width= (int)(panleMiddle.Width * 0.485f);
             btnChonthang.Width = (int)(panleMiddle.Width * 0.485f);
-            btnChonthang.Location = new Point(panleMiddle.Width - btnChonthang.Width - 5, btnChonthang.Location.Y);
+           // btnChonthang.Location = new Point(panleMiddle.Location.X+10, panleMiddle.Location.Y);
+            simpleButton5.Location = new Point(panleMiddle.Width- btnChonthang.Width-5, simpleButton5.Location.Y);
+            btnOpenFolder.Width = (int)(panleMiddle.Width * 0.1f);
 
-            simpleButton5.Width = (int)(panleMiddle.Width * 0.485f);
-            simpleButton6.Width = (int)(panleMiddle.Width * 0.485f);
-            simpleButton6.Location = new Point(panleMiddle.Width - simpleButton6.Width - 5, simpleButton6.Location.Y);
-
-            btnimport.Width = (int)(panleMiddle.Width * 0.25f);
-            btnOpenFolder.Width= (int)(panleMiddle.Width * 0.1f);
+            btnOpenFolder.Location = new Point(btnimport.Location.X+ btnimport.Width + 5, btnOpenFolder.Location.Y);
             btnRefresh.Width = (int)(panleMiddle.Width * 0.1f);
 
-            btnOpenFolder.Location = new Point(btnimport.Width + 10, btnOpenFolder.Location.Y);
-            btnRefresh.Location = new Point(simpleButton5.Location.X+ simpleButton5.Width- btnRefresh.Width, btnRefresh.Location.Y);
+            btnRefresh.Location = new Point(btnOpenFolder.Location.X + btnOpenFolder.Width +5, btnRefresh.Location.Y);
+            btnMdtk.Width = (int)(panleMiddle.Width * 0.3f);
+            btnMdtk.Location = new Point(panleMiddle.Width - btnClearMatdinh.Width- btnMdtk.Width-5, btnMdtk.Location.Y);
 
-            btnMdtk.Width= (int)(panleMiddle.Width * 0.38f);
-            btnClearMatdinh.Width= (int)(panleMiddle.Width * 0.1f);
-            btnMdtk.Location= new Point(simpleButton6.Location.X, btnMdtk.Location.Y);
-            btnClearMatdinh.Location= new Point(panleMiddle.Width - btnClearMatdinh.Width - 5, btnClearMatdinh.Location.Y);
-        }   
+            btnClearMatdinh.Width = (int)(panleMiddle.Width * 0.1f);
+            btnClearMatdinh.Location = new Point(panleMiddle.Width - btnClearMatdinh.Width - 5, btnClearMatdinh.Location.Y);
+
+            chkVbdauvao.Width= (int)(panelControl8.Width * 0.485f);
+            chkVbdauvao2.Width = (int)(panelControl8.Width * 0.485f);
+            chkVbdauvao2.Location = new Point(panelControl8.Width - chkVbdauvao2.Width - 5, chkVbdauvao2.Location.Y);
+
+            chkVbdaura.Width = (int)(panelControl7.Width * 0.49f);
+            chkVbdaura2.Width = (int)(panelControl7.Width * 0.49f);
+            chkVbdaura2.Location = new Point(panelControl7.Width - chkVbdaura2.Width - 5, chkVbdaura2.Location.Y);
+
+            //simpleButton5.Width = (int)(panleMiddle.Width * 0.485f);
+            //simpleButton6.Width = (int)(panleMiddle.Width * 0.485f);
+            //simpleButton6.Location = new Point(panleMiddle.Width - simpleButton6.Width - 5, simpleButton6.Location.Y);
+
+            //btnimport.Width = (int)(panleMiddle.Width * 0.25f);
+            //btnOpenFolder.Width= (int)(panleMiddle.Width * 0.1f);
+            //btnRefresh.Width = (int)(panleMiddle.Width * 0.1f);
+
+            //btnOpenFolder.Location = new Point(btnimport.Width + 10, btnOpenFolder.Location.Y);
+            //btnRefresh.Location = new Point(simpleButton5.Location.X+ simpleButton5.Width- btnRefresh.Width, btnRefresh.Location.Y);
+
+            //btnMdtk.Width= (int)(panleMiddle.Width * 0.38f);
+            //btnClearMatdinh.Width= (int)(panleMiddle.Width * 0.1f);
+            //btnMdtk.Location= new Point(simpleButton6.Location.X, btnMdtk.Location.Y);
+            //btnClearMatdinh.Location= new Point(panleMiddle.Width - btnClearMatdinh.Width - 5, btnClearMatdinh.Location.Y);
+        }
         private void ThietLapPanleRight()
         {
             simpleButton4.Width = (int)(panleRight.Width * 0.28f);
-            btnPdf24.Location= new Point(simpleButton4.Location.X + simpleButton4.Width + 5, btnPdf24.Location.Y);
             btnPdf24.Width = (int)(panleRight.Width * 0.18f);
             btnDocfileExcel.Width = (int)(panleRight.Width * 0.485f);
-            btnDocfileExcel.Location = new Point(panleRight.Width - btnDocfileExcel.Width - 5, btnDocfileExcel.Location.Y);
-
+            btnPdf24.Location= new Point(simpleButton4.Location.X + simpleButton4.Width + 5, btnPdf24.Location.Y);
+            btnDocfileExcel.Location = new Point(panleRight.Width - btnDocfileExcel.Width - 5, btnDocfileExcel.Location.Y); 
 
             btnMatdinhnganhang.Width = (int)(panleRight.Width * 0.48f);
             btnLocdulieuNganhang.Width = (int)(panleRight.Width * 0.485f);
@@ -5057,28 +5101,27 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
         }
         private void Thietlapcontrol()
         {
-            panleLeft.Width = (int)(this.ClientSize.Width * 0.28);
-            panleMiddle.Width = (int)(this.ClientSize.Width * 0.28);
-            panleRight.Width = (int)(this.ClientSize.Width * 0.27);
-            panleFinal.Width= (int)(this.ClientSize.Width * 0.132);
+            panleLeft.Width = (int)(this.ClientSize.Width * 0.33);
+            panleMiddle.Width = (int)(this.ClientSize.Width * 0.25);
+            panleRight.Width = (int)(this.ClientSize.Width * 0.23);
+            panleFinal.Width = (int)(this.ClientSize.Width * 0.132);
+            tableLayoutPanel1.Width= (int)(this.ClientSize.Width * 0.33);
+            
             //Thiết lập cho panleLeft
             ThietlappnleLeft();
             ThietLapPanleMiddle();
             ThietLapPanleRight();
             ThietLapNhapKhoAbow();
             ThietLapNhapKho();
-            //string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            //string svgFilePath = Path.Combine(currentDirectory, "output.svg");
-            //SvgCaptchaSolver solver = new SvgCaptchaSolver();
-            //string result = solver.SolveCaptcha(svgFilePath);
+
             progressPanel1.Width = (int)(gridControl1.Width * 0.5);
             progressPanel2.Width = (int)(gridControl2.Width * 0.5);
             label1.Location = new Point(progressPanel1.Location.X + progressPanel1.Width + 15, label1.Location.Y);
             label2.Location = new Point(progressPanel1.Location.X + progressPanel1.Width + 15, label2.Location.Y);
             lblSofiles.Location = new Point(label1.Location.X + label1.Width + 15, lblSofiles.Location.Y);
-            lblSofiles2.Location= new Point(label2.Location.X + label2.Width + 15, lblSofiles2.Location.Y);
-            panleFinal.Location=new Point(panleRight.Location.X + panleFinal.Width, panleFinal.Location.Y);
-            pictureEdit1.Location = new Point(5,5); // 20px từ trái và trên của Parent
+            lblSofiles2.Location = new Point(label2.Location.X + label2.Width + 15, lblSofiles2.Location.Y);
+            panleFinal.Location = new Point(panleRight.Location.X + panleFinal.Width, panleFinal.Location.Y);
+            pictureEdit1.Location = new Point(5, 5); // 20px từ trái và trên của Parent
 
         }
         public string user { get; set; }
@@ -6403,6 +6446,8 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                     //Lấy ra dien giai tu chung tu
 
                 }
+              
+               // Thietlapcontrol();
                 // Tính 10% chiều rộng màn hình
                 //btnKTTen.Width = (int)(screenWidth * 0.07);
                 //btnKTTen.Location = new Point(screenWidth - btnKTTen.Width-30, btnKTTen.Location.Y);
@@ -12084,8 +12129,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             string namtc = tbLicense.Rows[0]["NamTC"].ToString();
             if (namtc != year.ToString())
             {
-                XtraMessageBox.Show("Năm tài chính không đúng , vui lòng kiểm tra lại!", "Cảnh báo    ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                //XtraMessageBox.Show("Năm tài chính không đúng , vui lòng kiểm tra lại!", "Cảnh báo    ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return true;
             }
             return true;
         }
@@ -34210,6 +34255,21 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         }
 
         private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void labelControl1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkThietlaptong_CheckedChanged(object sender, EventArgs e)
         {
 
         }

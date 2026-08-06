@@ -1478,3 +1478,4 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.frmAutotaiN
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.Vanguard.resources
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.formtest.resources
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.frmStatusAuto.resources
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.Tests.resources

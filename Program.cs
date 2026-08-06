@@ -80,10 +80,10 @@ namespace SaovietTax {
                     WindowsFormsSettings.SetDPIAware();   // Dòng quan trọng nhất!
 
                     // Force font chuẩn cho toàn app (nếu cần)
-                    WindowsFormsSettings.DefaultFont = new Font("Tahoma", 8.25f);
+                   // WindowsFormsSettings.DefaultFont = new Font("Tahoma", 8.25f);
 
                     // Force font cho grid header (nếu vẫn to)
-                    DevExpress.Utils.AppearanceObject.DefaultFont = new Font("Tahoma", 8.25f);
+                    //DevExpress.Utils.AppearanceObject.DefaultFont = new Font("Tahoma", 8.25f);
                     try
                     {
                         content = File.ReadAllText(filePaths);

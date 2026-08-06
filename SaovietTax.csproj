@@ -559,6 +559,12 @@
     <Compile Include="TendoInvoice.Designer.cs">
       <DependentUpon>TendoInvoice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tests.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tests.Designer.cs">
+      <DependentUpon>Tests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Vanguard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -722,6 +728,9 @@
     <EmbeddedResource Include="TendoInvoice.resx">
       <DependentUpon>TendoInvoice.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Tests.resx">
+      <DependentUpon>Tests.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Vanguard.resx">
       <DependentUpon>Vanguard.cs</DependentUpon>
     </EmbeddedResource>
@@ -860,6 +869,7 @@
     <None Include="Resources\selecttable_16x16.png" />
     <None Include="Resources\charttype_bar.svg" />
     <None Include="Resources\charttype_barstacked100.svg" />
+    <None Include="Resources\bo_customer.svg" />
     <Content Include="Resources\favicon.ico" />
     <None Include="Resources\next.svg" />
     <None Include="Resources\next_16x16.png" />
