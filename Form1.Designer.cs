@@ -158,6 +158,7 @@
             this.btnClearNganhang = new DevExpress.XtraEditors.SimpleButton();
             this.btnLocdulieuNganhang = new DevExpress.XtraEditors.SimpleButton();
             this.panelControl11 = new DevExpress.XtraEditors.PanelControl();
+            this.btnfolder = new DevExpress.XtraEditors.SimpleButton();
             this.panelControl7 = new DevExpress.XtraEditors.PanelControl();
             this.chkVbdaura2 = new DevExpress.XtraEditors.CheckEdit();
             this.chkVbdaura = new DevExpress.XtraEditors.CheckEdit();
@@ -1774,10 +1775,10 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 4;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.70612F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.29388F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 481F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 162F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.11111F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.88889F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 451F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 170F));
             this.tableLayoutPanel1.Controls.Add(this.panelControl12, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.panelControl11, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.panelControl10, 0, 0);
@@ -1793,6 +1794,7 @@
             // 
             // panelControl12
             // 
+            this.panelControl12.Controls.Add(this.btnfolder);
             this.panelControl12.Controls.Add(this.btnImportChungtunganhang);
             this.panelControl12.Controls.Add(this.btnPdf24);
             this.panelControl12.Controls.Add(this.simpleButton4);
@@ -1803,9 +1805,9 @@
             this.panelControl12.Controls.Add(this.btnClearNganhang);
             this.panelControl12.Controls.Add(this.btnLocdulieuNganhang);
             this.panelControl12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControl12.Location = new System.Drawing.Point(1001, 3);
+            this.panelControl12.Location = new System.Drawing.Point(1023, 3);
             this.panelControl12.Name = "panelControl12";
-            this.panelControl12.Size = new System.Drawing.Size(475, 166);
+            this.panelControl12.Size = new System.Drawing.Size(445, 166);
             this.panelControl12.TabIndex = 5;
             // 
             // btnImportChungtunganhang
@@ -1816,7 +1818,7 @@
             this.btnImportChungtunganhang.Location = new System.Drawing.Point(6, 87);
             this.btnImportChungtunganhang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnImportChungtunganhang.Name = "btnImportChungtunganhang";
-            this.btnImportChungtunganhang.Size = new System.Drawing.Size(392, 40);
+            this.btnImportChungtunganhang.Size = new System.Drawing.Size(362, 40);
             this.btnImportChungtunganhang.TabIndex = 12;
             this.btnImportChungtunganhang.Text = "Import chứng từ ngân hàng";
             this.btnImportChungtunganhang.Click += new System.EventHandler(this.btnImportChungtunganhang_Click);
@@ -1840,7 +1842,7 @@
             this.simpleButton4.Location = new System.Drawing.Point(5, 11);
             this.simpleButton4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton4.Name = "simpleButton4";
-            this.simpleButton4.Size = new System.Drawing.Size(145, 33);
+            this.simpleButton4.Size = new System.Drawing.Size(115, 33);
             this.simpleButton4.TabIndex = 15;
             this.simpleButton4.Text = "Đọc pdf bbyy";
             this.simpleButton4.Click += new System.EventHandler(this.simpleButton4_Click);
@@ -1854,7 +1856,7 @@
             this.btnDocfileExcel.Location = new System.Drawing.Point(264, 11);
             this.btnDocfileExcel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnDocfileExcel.Name = "btnDocfileExcel";
-            this.btnDocfileExcel.Size = new System.Drawing.Size(187, 33);
+            this.btnDocfileExcel.Size = new System.Drawing.Size(157, 33);
             this.btnDocfileExcel.TabIndex = 16;
             this.btnDocfileExcel.Text = "Đọc file Excel";
             this.btnDocfileExcel.Click += new System.EventHandler(this.btnDocfileExcel_Click);
@@ -1880,7 +1882,7 @@
             this.btnMatdinhnganhang.Location = new System.Drawing.Point(5, 50);
             this.btnMatdinhnganhang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnMatdinhnganhang.Name = "btnMatdinhnganhang";
-            this.btnMatdinhnganhang.Size = new System.Drawing.Size(234, 32);
+            this.btnMatdinhnganhang.Size = new System.Drawing.Size(204, 32);
             this.btnMatdinhnganhang.TabIndex = 11;
             this.btnMatdinhnganhang.Text = "Mật định ngân hàng";
             this.btnMatdinhnganhang.Click += new System.EventHandler(this.btnMatdinhnganhang_Click);
@@ -1902,7 +1904,7 @@
             // 
             this.btnClearNganhang.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClearNganhang.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnClearNganhang.ImageOptions.Image")));
-            this.btnClearNganhang.Location = new System.Drawing.Point(405, 86);
+            this.btnClearNganhang.Location = new System.Drawing.Point(375, 86);
             this.btnClearNganhang.Name = "btnClearNganhang";
             this.btnClearNganhang.Size = new System.Drawing.Size(46, 40);
             this.btnClearNganhang.TabIndex = 12;
@@ -1916,7 +1918,7 @@
             this.btnLocdulieuNganhang.Location = new System.Drawing.Point(243, 53);
             this.btnLocdulieuNganhang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnLocdulieuNganhang.Name = "btnLocdulieuNganhang";
-            this.btnLocdulieuNganhang.Size = new System.Drawing.Size(208, 29);
+            this.btnLocdulieuNganhang.Size = new System.Drawing.Size(178, 29);
             this.btnLocdulieuNganhang.TabIndex = 14;
             this.btnLocdulieuNganhang.Text = "Liệt kê ngân hàng";
             this.btnLocdulieuNganhang.Click += new System.EventHandler(this.btnLocdulieuNganhang_Click);
@@ -1933,10 +1935,20 @@
             this.panelControl11.Controls.Add(this.btnRefresh);
             this.panelControl11.Controls.Add(this.btnimport);
             this.panelControl11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControl11.Location = new System.Drawing.Point(569, 3);
+            this.panelControl11.Location = new System.Drawing.Point(524, 3);
             this.panelControl11.Name = "panelControl11";
-            this.panelControl11.Size = new System.Drawing.Size(426, 166);
+            this.panelControl11.Size = new System.Drawing.Size(493, 166);
             this.panelControl11.TabIndex = 4;
+            // 
+            // btnfolder
+            // 
+            this.btnfolder.ImageOptions.SvgImage = global::SaovietTax.Properties.Resources.up;
+            this.btnfolder.Location = new System.Drawing.Point(411, 129);
+            this.btnfolder.Name = "btnfolder";
+            this.btnfolder.Size = new System.Drawing.Size(47, 29);
+            this.btnfolder.TabIndex = 36;
+            this.btnfolder.Visible = false;
+            this.btnfolder.Click += new System.EventHandler(this.btnfolder_Click);
             // 
             // panelControl7
             // 
@@ -1946,7 +1958,7 @@
             this.panelControl7.Controls.Add(this.chkVbdaura);
             this.panelControl7.Location = new System.Drawing.Point(5, 114);
             this.panelControl7.Name = "panelControl7";
-            this.panelControl7.Size = new System.Drawing.Size(416, 39);
+            this.panelControl7.Size = new System.Drawing.Size(483, 39);
             this.panelControl7.TabIndex = 23;
             // 
             // chkVbdaura2
@@ -1975,10 +1987,10 @@
             // 
             this.simpleButton5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton5.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton5.ImageOptions.Image")));
-            this.simpleButton5.Location = new System.Drawing.Point(218, 10);
+            this.simpleButton5.Location = new System.Drawing.Point(286, 10);
             this.simpleButton5.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton5.Name = "simpleButton5";
-            this.simpleButton5.Size = new System.Drawing.Size(204, 31);
+            this.simpleButton5.Size = new System.Drawing.Size(203, 31);
             this.simpleButton5.TabIndex = 17;
             this.simpleButton5.Text = "Đọc file Excel";
             this.simpleButton5.Click += new System.EventHandler(this.simpleButton5_Click);
@@ -1988,10 +2000,10 @@
             this.btnMdtk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMdtk.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnMdtk.ImageOptions.Image")));
-            this.btnMdtk.Location = new System.Drawing.Point(218, 45);
+            this.btnMdtk.Location = new System.Drawing.Point(257, 45);
             this.btnMdtk.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnMdtk.Name = "btnMdtk";
-            this.btnMdtk.Size = new System.Drawing.Size(144, 30);
+            this.btnMdtk.Size = new System.Drawing.Size(172, 30);
             this.btnMdtk.TabIndex = 9;
             this.btnMdtk.Text = "Mật định TK";
             this.btnMdtk.Click += new System.EventHandler(this.btnMdtk_Click);
@@ -2004,7 +2016,7 @@
             this.panelControl8.Controls.Add(this.chkVbdauvao);
             this.panelControl8.Location = new System.Drawing.Point(5, 78);
             this.panelControl8.Name = "panelControl8";
-            this.panelControl8.Size = new System.Drawing.Size(416, 35);
+            this.panelControl8.Size = new System.Drawing.Size(483, 35);
             this.panelControl8.TabIndex = 35;
             // 
             // chkVbdauvao2
@@ -2016,7 +2028,7 @@
             this.chkVbdauvao2.Properties.Appearance.ForeColor = System.Drawing.Color.Blue;
             this.chkVbdauvao2.Properties.Appearance.Options.UseForeColor = true;
             this.chkVbdauvao2.Properties.Caption = "Imp theo mật định đầu vào";
-            this.chkVbdauvao2.Size = new System.Drawing.Size(220, 20);
+            this.chkVbdauvao2.Size = new System.Drawing.Size(287, 20);
             this.chkVbdauvao2.TabIndex = 21;
             this.chkVbdauvao2.CheckedChanged += new System.EventHandler(this.chkVbdauvao2_CheckedChanged);
             // 
@@ -2033,6 +2045,8 @@
             // 
             // btnChonthang
             // 
+            this.btnChonthang.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnChonthang.Appearance.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold);
             this.btnChonthang.Appearance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.btnChonthang.Appearance.Options.UseFont = true;
@@ -2041,7 +2055,7 @@
             this.btnChonthang.Location = new System.Drawing.Point(4, 10);
             this.btnChonthang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnChonthang.Name = "btnChonthang";
-            this.btnChonthang.Size = new System.Drawing.Size(210, 30);
+            this.btnChonthang.Size = new System.Drawing.Size(278, 30);
             this.btnChonthang.TabIndex = 8;
             this.btnChonthang.Text = "Liệt kê hóa đơn";
             this.btnChonthang.Click += new System.EventHandler(this.btnChonthang_Click);
@@ -2050,7 +2064,7 @@
             // 
             this.btnClearMatdinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClearMatdinh.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnClearMatdinh.ImageOptions.Image")));
-            this.btnClearMatdinh.Location = new System.Drawing.Point(367, 39);
+            this.btnClearMatdinh.Location = new System.Drawing.Point(434, 39);
             this.btnClearMatdinh.Name = "btnClearMatdinh";
             this.btnClearMatdinh.Size = new System.Drawing.Size(52, 35);
             this.btnClearMatdinh.TabIndex = 13;
@@ -2061,10 +2075,10 @@
             this.btnOpenFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOpenFolder.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenFolder.ImageOptions.Image")));
-            this.btnOpenFolder.Location = new System.Drawing.Point(240, 42);
+            this.btnOpenFolder.Location = new System.Drawing.Point(210, 44);
             this.btnOpenFolder.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(0, 29);
+            this.btnOpenFolder.Size = new System.Drawing.Size(43, 29);
             this.btnOpenFolder.TabIndex = 9;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
             // 
@@ -2115,24 +2129,26 @@
             this.panelControl10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControl10.Location = new System.Drawing.Point(3, 3);
             this.panelControl10.Name = "panelControl10";
-            this.panelControl10.Size = new System.Drawing.Size(560, 166);
+            this.panelControl10.Size = new System.Drawing.Size(515, 166);
             this.panelControl10.TabIndex = 3;
             // 
             // txtTime1
             // 
             this.txtTime1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTime1.Enabled = false;
-            this.txtTime1.Location = new System.Drawing.Point(492, 45);
+            this.txtTime1.Location = new System.Drawing.Point(447, 45);
             this.txtTime1.Name = "txtTime1";
             this.txtTime1.Size = new System.Drawing.Size(58, 23);
             this.txtTime1.TabIndex = 42;
+            this.txtTime1.EditValueChanged += new System.EventHandler(this.txtTime1_EditValueChanged);
+            this.txtTime1.Validated += new System.EventHandler(this.txtTime1_Validated);
             // 
             // dtDenngay
             // 
             this.dtDenngay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtDenngay.EditValue = null;
-            this.dtDenngay.Location = new System.Drawing.Point(457, 83);
+            this.dtDenngay.Location = new System.Drawing.Point(412, 83);
             this.dtDenngay.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.dtDenngay.Name = "dtDenngay";
             this.dtDenngay.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -2146,7 +2162,7 @@
             // chkTime1
             // 
             this.chkTime1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkTime1.Location = new System.Drawing.Point(394, 47);
+            this.chkTime1.Location = new System.Drawing.Point(349, 47);
             this.chkTime1.Name = "chkTime1";
             this.chkTime1.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold);
             this.chkTime1.Properties.Appearance.ForeColor = System.Drawing.Color.Blue;
@@ -2155,13 +2171,14 @@
             this.chkTime1.Properties.Caption = "Theo giờ";
             this.chkTime1.Size = new System.Drawing.Size(102, 20);
             this.chkTime1.TabIndex = 41;
+            this.chkTime1.CheckedChanged += new System.EventHandler(this.chkTime1_CheckedChanged);
             // 
             // labelControl1
             // 
             this.labelControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl1.Appearance.ForeColor = System.Drawing.Color.Red;
             this.labelControl1.Appearance.Options.UseForeColor = true;
-            this.labelControl1.Location = new System.Drawing.Point(275, 90);
+            this.labelControl1.Location = new System.Drawing.Point(230, 90);
             this.labelControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(52, 16);
@@ -2217,7 +2234,7 @@
             this.labelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl3.Appearance.ForeColor = System.Drawing.Color.Red;
             this.labelControl3.Appearance.Options.UseForeColor = true;
-            this.labelControl3.Location = new System.Drawing.Point(428, 89);
+            this.labelControl3.Location = new System.Drawing.Point(383, 89);
             this.labelControl3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(23, 16);
@@ -2240,7 +2257,7 @@
             this.dtTungay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtTungay.EditValue = null;
-            this.dtTungay.Location = new System.Drawing.Point(331, 83);
+            this.dtTungay.Location = new System.Drawing.Point(286, 83);
             this.dtTungay.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.dtTungay.Name = "dtTungay";
             this.dtTungay.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -2254,7 +2271,7 @@
             // txtpass
             // 
             this.txtpass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtpass.Location = new System.Drawing.Point(418, 9);
+            this.txtpass.Location = new System.Drawing.Point(373, 9);
             this.txtpass.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.txtpass.Name = "txtpass";
             this.txtpass.Size = new System.Drawing.Size(132, 23);
@@ -2270,7 +2287,7 @@
             this.simpleButton3.Appearance.Options.UseFont = true;
             this.simpleButton3.Appearance.Options.UseForeColor = true;
             this.simpleButton3.ImageOptions.Image = global::SaovietTax.Properties.Resources.drilldownonseries_chart_32x32;
-            this.simpleButton3.Location = new System.Drawing.Point(331, 125);
+            this.simpleButton3.Location = new System.Drawing.Point(286, 125);
             this.simpleButton3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton3.Name = "simpleButton3";
             this.simpleButton3.Size = new System.Drawing.Size(219, 28);
@@ -2296,7 +2313,7 @@
             this.labelControl12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl12.Appearance.ForeColor = System.Drawing.Color.Red;
             this.labelControl12.Appearance.Options.UseForeColor = true;
-            this.labelControl12.Location = new System.Drawing.Point(388, 13);
+            this.labelControl12.Location = new System.Drawing.Point(343, 13);
             this.labelControl12.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl12.Name = "labelControl12";
             this.labelControl12.Size = new System.Drawing.Size(26, 16);
@@ -2320,7 +2337,7 @@
             // chkDaura
             // 
             this.chkDaura.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkDaura.Location = new System.Drawing.Point(178, 126);
+            this.chkDaura.Location = new System.Drawing.Point(133, 126);
             this.chkDaura.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.chkDaura.Name = "chkDaura";
             this.chkDaura.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
@@ -4727,5 +4744,6 @@
         private DevExpress.XtraEditors.PanelControl panelControl12;
         private DevExpress.XtraEditors.PanelControl panelControl11;
         private DevExpress.XtraEditors.PanelControl panelControl10;
+        private DevExpress.XtraEditors.SimpleButton btnfolder;
     }
 }

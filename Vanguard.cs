@@ -13,6 +13,14 @@ namespace SaovietTax
 {
     public partial class Vanguard : DevExpress.XtraEditors.XtraForm
     {
+        public class WarningData
+        {
+            public string Hoadonthieu { get; set; } 
+            public string Importloi { get; set; }
+            public string Hangam {  get; set; } 
+            public string HethongTK { get; set; }   
+
+        }
         public Vanguard()
         {
             InitializeComponent();
@@ -30,6 +38,11 @@ namespace SaovietTax
         private void Vanguard_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();    
         }
     }
 }

@@ -41,7 +41,7 @@ namespace SaovietTax
                 Screen.PrimaryScreen.WorkingArea.Bottom - this.Height
             );
         }
-       
+       public string hdlink { get; set; }
         public string GetInvoiceUrl(int invoiceType, string nbmst, string khhdon, string shdon, string Khmshdon)
         {
             string url;
@@ -108,188 +108,238 @@ namespace SaovietTax
             if (!string.IsNullOrEmpty(gettimeTokken))
             {
                 var timpsan = DateTime.Now - DateTime.Parse(gettimeTokken);
-                if (timpsan.TotalMinutes <= 10)
+                if (timpsan.TotalMinutes <= 1)
                 {
                     needlogin = false;
                     mytokken = tbRegister.AsEnumerable().FirstOrDefault().Field<string>("tokken");
                 }
             }
-            if (needlogin || 1<2)
+
+            // Kiểm tra nếu cần đăng nhập
+            if (needlogin)
             {
-                try
+                int maxAttempts = 3;
+                int attemptCount = 0;
+                bool loginSuccess = false;
+
+                while (attemptCount < maxAttempts && !loginSuccess)
                 {
-                    // ===== HttpClient + CookieContainer =====
-                    var cookieContainer = new CookieContainer();
-                    var handler = new HttpClientHandler()
+                    attemptCount++;
+                    progressPanel1.Caption = $"Đang đăng nhập lần {attemptCount}/{maxAttempts}...";
+                    Application.DoEvents();
+
+                    try
                     {
-                        UseCookies = true,
-                        CookieContainer = cookieContainer,
-                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                        AllowAutoRedirect = true
-                    };
-
-                    using (var client = new HttpClient(handler))
-                    {
-                        // Set timeout
-                        client.Timeout = TimeSpan.FromSeconds(30);
-
-                        // ===== Header giống trình duyệt =====
-                        client.DefaultRequestHeaders.Clear();
-                        client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-                        client.DefaultRequestHeaders.Add("Accept", "application/json, text/plain, */*");
-                        client.DefaultRequestHeaders.Add("Accept-Language", "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7");
-                        client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
-                        client.DefaultRequestHeaders.Add("Connection", "keep-alive");
-                        client.DefaultRequestHeaders.Add("Origin", "https://hoadondientu.gdt.gov.vn");
-                        client.DefaultRequestHeaders.Add("Referer", "https://hoadondientu.gdt.gov.vn/");
-                        client.DefaultRequestHeaders.ExpectContinue = false;
-
-                        // ================= STEP 1: GET CAPTCHA ================= 
-                        Application.DoEvents();
-
-                        string capUrl = "https://hoadondientu.gdt.gov.vn/api/captcha";
-                        var resCap = await client.GetAsync(capUrl);
-
-                        if (!resCap.IsSuccessStatusCode)
+                        // ===== HttpClient + CookieContainer =====
+                        var cookieContainer = new CookieContainer();
+                        var handler = new HttpClientHandler()
                         {
-                            XtraMessageBox.Show("Không lấy được captcha");
-                            return;
-                        }
-
-                        string capBody = await resCap.Content.ReadAsStringAsync();
-                        MyJson capJson = JsonConvert.DeserializeObject<MyJson>(capBody);
-
-                        string svgPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "captcha.svg");
-                        File.WriteAllText(svgPath, capJson.Content);
-
-                        // ===== LẤY XSRF-TOKEN (NẾU CÓ) =====
-                        string xsrfToken = null;
-
-                        // Lấy từ CookieContainer
-                        var cookies = cookieContainer.GetCookies(new Uri("https://hoadondientu.gdt.gov.vn"));
-                        xsrfToken = cookies["XSRF-TOKEN"]?.Value;
-
-                        // Nếu có thì thêm vào header, không có thì bỏ qua
-                        if (!string.IsNullOrEmpty(xsrfToken))
-                        {
-                            client.DefaultRequestHeaders.Remove("X-XSRF-TOKEN");
-                            client.DefaultRequestHeaders.Add("X-XSRF-TOKEN", xsrfToken);
-                        }
-
-                        // ================= STEP 2: SOLVE CAPTCHA ================= 
-                        Application.DoEvents();
-
-                        SvgCaptchaSolver solver = new SvgCaptchaSolver();
-                        string cvalue = solver.SolveCaptcha(svgPath);
-
-                        if (string.IsNullOrEmpty(cvalue))
-                        {
-                            XtraMessageBox.Show("Không giải được captcha");
-                            return;
-                        }
-
-                        // ================= STEP 3: LOGIN ================= 
-                        Application.DoEvents();
-
-                        string loginUrl = "https://hoadondientu.gdt.gov.vn/api/security-taxpayer/authenticate";
-
-                        var payload = new
-                        {
-                            username = "3502550210",
-                            password = "3i###@6H",
-                            cvalue = cvalue,
-                            ckey = capJson.Key
+                            UseCookies = true,
+                            CookieContainer = cookieContainer,
+                            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                            AllowAutoRedirect = true
                         };
 
-                        var content = new StringContent(
-                            JsonConvert.SerializeObject(payload),
-                            Encoding.UTF8,
-                            "application/json"
-                        );
-
-                        // GỬI REQUEST LOGIN
-                        var loginRes = await client.PostAsync(loginUrl, content);
-
-                        if (loginRes.StatusCode == HttpStatusCode.Unauthorized)
+                        using (var client = new HttpClient(handler))
                         {
-                            string err = await loginRes.Content.ReadAsStringAsync();
-                            progressPanel1.Caption= $"Đăng nhập thất bại (401): {err}";
-                            return;
-                        }
+                            // Set timeout
+                            client.Timeout = TimeSpan.FromSeconds(30);
 
-                        loginRes.EnsureSuccessStatusCode();
+                            // ===== Header giống trình duyệt =====
+                            client.DefaultRequestHeaders.Clear();
+                            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                            client.DefaultRequestHeaders.Add("Accept", "application/json, text/plain, */*");
+                            client.DefaultRequestHeaders.Add("Accept-Language", "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7");
+                            client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+                            client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+                            client.DefaultRequestHeaders.Add("Origin", "https://hoadondientu.gdt.gov.vn");
+                            client.DefaultRequestHeaders.Add("Referer", "https://hoadondientu.gdt.gov.vn/");
+                            client.DefaultRequestHeaders.ExpectContinue = false;
 
-                        string loginBody = await loginRes.Content.ReadAsStringAsync();
-                        var tokenData = JsonConvert.DeserializeObject<TokenResponse>(loginBody);
-                        this.tokken = tokenData.token;
-                        mytokken = this.tokken;
-                        // ================= STEP 4: PROFILE =================
-                        try
-                        {
-                            var req = new HttpRequestMessage(
-                                HttpMethod.Get,
-                                "https://hoadondientu.gdt.gov.vn/api/security-taxpayer/profile"
+                            // ================= STEP 1: GET CAPTCHA ================= 
+                            Application.DoEvents();
+
+                            string capUrl = "https://hoadondientu.gdt.gov.vn/api/captcha";
+                            var resCap = await client.GetAsync(capUrl);
+
+                            if (!resCap.IsSuccessStatusCode)
+                            {
+                                progressPanel1.Caption = $"Lần {attemptCount}: Không lấy được captcha";
+                                continue; // Thử lại lần tiếp theo
+                            }
+
+                            string capBody = await resCap.Content.ReadAsStringAsync();
+                            MyJson capJson = JsonConvert.DeserializeObject<MyJson>(capBody);
+
+                            string svgPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "captcha.svg");
+                            File.WriteAllText(svgPath, capJson.Content);
+
+                            // ===== LẤY XSRF-TOKEN (NẾU CÓ) =====
+                            string xsrfToken = null;
+
+                            // Lấy từ CookieContainer
+                            var cookies = cookieContainer.GetCookies(new Uri("https://hoadondientu.gdt.gov.vn"));
+                            xsrfToken = cookies["XSRF-TOKEN"]?.Value;
+
+                            // Nếu có thì thêm vào header, không có thì bỏ qua
+                            if (!string.IsNullOrEmpty(xsrfToken))
+                            {
+                                client.DefaultRequestHeaders.Remove("X-XSRF-TOKEN");
+                                client.DefaultRequestHeaders.Add("X-XSRF-TOKEN", xsrfToken);
+                            }
+
+                            // ================= STEP 2: SOLVE CAPTCHA ================= 
+                            Application.DoEvents();
+
+                            SvgCaptchaSolver solver = new SvgCaptchaSolver();
+                            string cvalue = solver.SolveCaptcha(svgPath);
+
+                            if (string.IsNullOrEmpty(cvalue))
+                            {
+                                progressPanel1.Caption = $"Lần {attemptCount}: Không giải được captcha";
+                                continue; // Thử lại lần tiếp theo
+                            }
+
+                            // ================= STEP 3: LOGIN ================= 
+                            Application.DoEvents();
+
+                            string loginUrl = "https://hoadondientu.gdt.gov.vn/api/security-taxpayer/authenticate";
+
+                            var payload = new
+                            {
+                                username = tbRegister.Rows[0]["Username"].ToString(),
+                                password = tbRegister.Rows[0]["Password"].ToString(),
+                                cvalue = cvalue,
+                                ckey = capJson.Key
+                            };
+
+                            var content = new StringContent(
+                                JsonConvert.SerializeObject(payload),
+                                Encoding.UTF8,
+                                "application/json"
                             );
 
-                            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.tokken);
-                            var profRes = await client.SendAsync(req);
+                            // GỬI REQUEST LOGIN
+                            var loginRes = await client.PostAsync(loginUrl, content);
 
-                            if (profRes.IsSuccessStatusCode)
+                            if (loginRes.StatusCode == HttpStatusCode.Unauthorized)
                             {
-                                string profBody = await profRes.Content.ReadAsStringAsync();
-                                var prof = JsonConvert.DeserializeObject<ProfileResponse>(profBody);
+                                string err = await loginRes.Content.ReadAsStringAsync();
+                                progressPanel1.Caption = $"Lần {attemptCount}: Đăng nhập thất bại (401): {err}";
 
-                                if (!string.IsNullOrEmpty(prof.password_expire))
+                                // Nếu là lỗi 401, thường là do captcha sai, nên thử lại
+                                continue;
+                            }
+
+                            if (!loginRes.IsSuccessStatusCode)
+                            {
+                                string err = await loginRes.Content.ReadAsStringAsync();
+                                progressPanel1.Caption = $"Lần {attemptCount}: Đăng nhập thất bại: {loginRes.StatusCode} - {err}";
+                                continue; // Thử lại lần tiếp theo
+                            }
+
+                            string loginBody = await loginRes.Content.ReadAsStringAsync();
+                            var tokenData = JsonConvert.DeserializeObject<TokenResponse>(loginBody);
+                            this.tokken = tokenData.token;
+                            mytokken = this.tokken;
+
+                            // Đăng nhập thành công
+                            loginSuccess = true;
+                            progressPanel1.Caption = "Đăng nhập thành công!";
+
+                            // ================= STEP 4: PROFILE =================
+                            try
+                            {
+                                var req = new HttpRequestMessage(
+                                    HttpMethod.Get,
+                                    "https://hoadondientu.gdt.gov.vn/api/security-taxpayer/profile"
+                                );
+
+                                req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.tokken);
+                                var profRes = await client.SendAsync(req);
+
+                                if (profRes.IsSuccessStatusCode)
                                 {
-                                    DateTime expireDate = DateTime.Parse(prof.password_expire);
-                                    TimeSpan remain = expireDate - DateTime.Now;
+                                    string profBody = await profRes.Content.ReadAsStringAsync();
+                                    var prof = JsonConvert.DeserializeObject<ProfileResponse>(profBody);
 
-                                    if (remain.TotalDays <= 0)
+                                    if (!string.IsNullOrEmpty(prof.password_expire))
                                     {
-                                        XtraMessageBox.Show(
-                                            $"Mật khẩu đã hết hạn ngày {expireDate:dd/MM/yyyy}.",
-                                            "Hết hạn!",
-                                            MessageBoxButtons.OK,
-                                            MessageBoxIcon.Warning
-                                        );
-                                        return;
-                                    }
-                                    else if (remain.TotalDays <= 3)
-                                    {
-                                        XtraMessageBox.Show(
-                                            $"⚠ Mật khẩu sẽ hết hạn sau {remain.Days} ngày!\nNgày: {expireDate:dd/MM/yyyy}",
-                                            "Cảnh báo",
-                                            MessageBoxButtons.OK,
-                                            MessageBoxIcon.Warning
-                                        );
-                                    }
-                                    else if (remain.TotalDays <= 7)
-                                    {
-                                        XtraMessageBox.Show($"Mật khẩu sắp hết hạn {expireDate:dd/MM/yyyy} (còn {remain.Days} ngày)");
+                                        DateTime expireDate = DateTime.Parse(prof.password_expire);
+                                        TimeSpan remain = expireDate - DateTime.Now;
+
+                                        if (remain.TotalDays <= 0)
+                                        {
+                                            XtraMessageBox.Show(
+                                                $"Mật khẩu đã hết hạn ngày {expireDate:dd/MM/yyyy}.",
+                                                "Hết hạn!",
+                                                MessageBoxButtons.OK,
+                                                MessageBoxIcon.Warning
+                                            );
+                                            return;
+                                        }
+                                        else if (remain.TotalDays <= 3)
+                                        {
+                                            XtraMessageBox.Show(
+                                                $"⚠ Mật khẩu sẽ hết hạn sau {remain.Days} ngày!\nNgày: {expireDate:dd/MM/yyyy}",
+                                                "Cảnh báo",
+                                                MessageBoxButtons.OK,
+                                                MessageBoxIcon.Warning
+                                            );
+                                        }
+                                        else if (remain.TotalDays <= 7)
+                                        {
+                                            XtraMessageBox.Show($"Mật khẩu sắp hết hạn {expireDate:dd/MM/yyyy} (còn {remain.Days} ngày)");
+                                        }
                                     }
                                 }
                             }
+                            catch (Exception ex)
+                            {
+                                // Không làm gián đoạn luồng chính nếu check profile thất bại
+                                Console.WriteLine("Không kiểm tra được ngày hết hạn: " + ex.Message);
+                            }
+
+                            // ================= SAVE TOKEN TIME =================
+                            ExecuteQueryResult(
+                                "UPDATE tbRegister SET TimeTokken=?",
+                                new OleDbParameter[]
+                                {
+                            new OleDbParameter("?", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                                }
+                            );
+
+                            Application.DoEvents();
                         }
-                        catch (Exception ex)
+                    }
+                    catch (Exception ex)
+                    {
+                        progressPanel1.Caption = $"Lần {attemptCount}: Lỗi đăng nhập: {ex.Message}";
+
+                        // Nếu là lần thử cuối cùng, hiển thị thông báo lỗi
+                        if (attemptCount == maxAttempts)
                         {
-                            XtraMessageBox.Show("Không kiểm tra được ngày hết hạn: " + ex.Message);
+                            XtraMessageBox.Show(
+                                $"Đăng nhập thất bại sau {maxAttempts} lần thử.\nLỗi cuối cùng: {ex.Message}",
+                                "Lỗi đăng nhập",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error
+                            );
                         }
 
-                        // ================= SAVE TOKEN TIME =================
-                        ExecuteQueryResult(
-                            "UPDATE tbRegister SET TimeTokken=?",
-                            new OleDbParameter[]
-                            {
-                    new OleDbParameter("?", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
-                            }
-                        );
-                         
-                        Application.DoEvents();
+                        // Đợi 1-2 giây trước khi thử lại (tránh spam request)
+                        if (attemptCount < maxAttempts)
+                        {
+                            await Task.Delay(2000);
+                        }
                     }
                 }
-                catch (Exception ex)
+
+                // Xử lý khi đăng nhập thất bại sau tất cả các lần thử
+                if (!loginSuccess)
                 {
-                    progressPanel1.Caption =  $"Lỗi đăng nhập hệ thống thuế:  { ex.Message}";
+                    progressPanel1.Caption = $"Đăng nhập thất bại sau {maxAttempts} lần thử";
+                    // Có thể hiển thị thông báo hoặc thực hiện hành động khác ở đây
                 }
             }
         }
@@ -382,9 +432,9 @@ namespace SaovietTax
 
             string qr = "SELECT * FROM HoaDon";
             DataTable tbHoadon = ExecuteQuery(qr, null);
-            string filePath = Path.Combine(savedPath, "hdlink.txt");
-
-            if (File.Exists(filePath))
+            string filePath = Path.Combine(savedPath, "invoice.txt");
+            //filePath = hdlink;
+            if (File.Exists(filePath) )
             {
                 try
                 {
@@ -394,7 +444,7 @@ namespace SaovietTax
                     string sokh = "1";
                     string sohd = Helpers.RemoveLeadingZeros(getsplit[2]);
                     string khhd = getsplit[3];
-                    if (getsplit[1] == "8")
+                    if (content.Contains("HDVao"))
                     {
                         mst = mstcongty;
                     }
@@ -414,9 +464,11 @@ namespace SaovietTax
                     }
 
                     //
-                    string pathravao = getsplit[1] != "8" ? "HDVao" : "HDRa";
+                    string pathravao = content.Contains("HDVao")  ? "HDVao" : "HDRa";
                     string fn = $"{mst}_{sohd}_{khhd}.zip";
-                    int tuthang = int.Parse(getsplit[4]);
+                    var getthangsplit = getsplit[0].Split('\\');
+                    string thang = getthangsplit[getthangsplit.Length - 2];
+                    int tuthang = int.Parse(thang);
                     string yearpath = $"HD{namtc}";
                     string path = Path.Combine(savedPath, yearpath, pathravao, tuthang.ToString(), fn);
                     string url2 = GetInvoiceUrl(4, mst, khhd, sohd, sokh);
@@ -436,7 +488,7 @@ namespace SaovietTax
                                 string rootPath = Path.GetDirectoryName(path);
                                 string getnamefile = Path.GetFileNameWithoutExtension(path);
                                 string directoryPath = Path.Combine(rootPath, "Giainen_" + getnamefile);
-                                string targetFilePath = Path.Combine(rootPath, getnamefile + ".html");
+                                string targetFilePath = Path.Combine(rootPath, getnamefile );
                                 if (File.Exists(targetFilePath))
                                 {
                                     this.Close();

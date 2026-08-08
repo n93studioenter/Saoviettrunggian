@@ -922,7 +922,7 @@ namespace SaovietTax
                     }
                    
                     var ddd = frmMain.lstrowSohieu;
-                    if (ddd.Count > 0)
+                    if (ddd.Count > 1)
                     {
                         DialogResult result = XtraMessageBox.Show("Có " + ddd.Count + " sản phẩm khác đang trùng tên với sản phẩm đang sửa, bạn có muốn cập nhật luôn mã mới?",
                                         "Xác nhận",

@@ -23,6 +23,7 @@ using DevExpress.Skins;
 using DevExpress.Spreadsheet;
 using DevExpress.UserSkins;
 using DevExpress.Utils;
+using DevExpress.Utils.Drawing.Helpers;
 using DevExpress.Utils.Extensions;
 using DevExpress.Utils.VisualEffects;
 using DevExpress.Xpo;
@@ -3082,6 +3083,21 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             }
             return false;
         }
+
+        static void CreateTableSetting(OleDbConnection connection, string tableName)
+        {
+            string createTableQuery = $@"
+        CREATE TABLE {tableName} (
+            ID AUTOINCREMENT PRIMARY KEY,
+            IsSuggest NUMBER,
+            TimeSuggest NUMBER
+        );";
+
+            using (OleDbCommand command = new OleDbCommand(createTableQuery, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
         static void CreateTableHDThayThe(OleDbConnection connection, string tableName)
         {
             string createTableQuery = $@"
@@ -5259,6 +5275,11 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
 
                 string pathFile = Path.Combine(root, "hoadon", "dpPath.txt");
                 dbPath = File.ReadAllText(pathFile).Trim();
+                string fullName = dbPath.Substring(dbPath.LastIndexOf('\\') + 1);
+                // fullName = "Thanh Huong BD2026.mdb"
+
+                string fn = fullName.Substring(0, fullName.LastIndexOf('.')).Trim();
+                filename = fn;
             }
 
             // 2. Build connection string (string concat nhanh hơn interpolated)
@@ -5302,6 +5323,17 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
         {
             // ALTER TABLE an toàn (chạy được thì chạy)
             SafeExecute("ALTER TABLE TP154 ALTER COLUMN TenVattu TEXT");
+
+            //CreateTableSetting
+            if (!TableExists(conn, "tbSetting"))
+            {
+                CreateTableSetting(conn, "tbSetting");
+                string sql = "INSERT INTO tbSetting (IsSuggest) VALUES (?)";
+                ExecuteQueryResult(sql, new OleDbParameter[]
+                {
+            new OleDbParameter("?", "1") 
+                });
+            }
 
             //0 Hoadonthaythe
             if (!TableExists(conn, "tbHoadonThaythe"))
@@ -5818,7 +5850,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
 
                     // 3. Khởi tạo DB + đọc License
                     ShowProgress("Kết nối database...");
-                   // InitDB();
+                    InitDB();
                     SetVietnameseCulture();
                     ControlsSetup();
                     // 4. Migrate database (chạy background)
@@ -6423,11 +6455,8 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             // SkinManager.EnableFormSkins();
             //ChangeSkin("Office 2019 Dark Gray");
 
-
-            hoverTimer = new Timer();
-            hoverTimer.Interval = 200; // 0.5s
-            hoverTimer.Tick += HoverTimer_Tick;
-            searchExpert = true;
+           
+          
             // Code gây lỗi 
             // var result = ConvertToChrW("Xin chào các bạn"); 
             // ConnectToServer();
@@ -6447,8 +6476,21 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                     //Lấy ra dien giai tu chung tu
 
                 }
-              
-               // Thietlapcontrol();
+
+                string computerName = Environment.MachineName;
+                if (computerName != "MAYCHU")
+                {
+                    // panelControl10.Width = (int)(this.ClientSize.Width * 0.15);
+                    //panelControl11.Width = (int)(this.ClientSize.Width * 0.25);
+                    // panelControl12.Width = (int)(this.ClientSize.Width * 0.23);
+                    // panleFinal.Width = (int)(this.ClientSize.Width * 0.132);
+
+                    tableLayoutPanel1.ColumnStyles[0].SizeType = SizeType.Absolute;
+                    tableLayoutPanel1.ColumnStyles[0].Width = (int)(this.ClientSize.Width * 0.25);
+                    tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
+                    tableLayoutPanel1.ColumnStyles[1].Width = (int)(this.ClientSize.Width * 0.28);
+                }
+                // Thietlapcontrol();
                 // Tính 10% chiều rộng màn hình
                 //btnKTTen.Width = (int)(screenWidth * 0.07);
                 //btnKTTen.Location = new Point(screenWidth - btnKTTen.Width-30, btnKTTen.Location.Y);
@@ -6483,6 +6525,18 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 string getLoaivb2 = tbRegister.Rows[0]["VbCoche2"].ToString();
                 string isresitry = tbRegister.Rows[0]["IsRegisTry"].ToString();
                 chkThietlaptong.Checked = isresitry == "1" ? true : false;
+                string Moctg1 = tbRegister.Rows[0].Field<string>("Moctg1");
+                bool istaitudong = tbRegister.Rows[0].Field<string>("taitd") == "1" ? true : false;
+                allowUncheck = istaitudong;
+                if (istaitudong)
+                    radioButton2.Checked = istaitudong;
+
+                if (!string.IsNullOrEmpty(Moctg1))
+                {
+                    chkTime1.Checked = true;
+                    txtTime1.Text = Moctg1;
+                    txtTime1.Enabled = true;
+                }
                 // radVbDauvao.Location = new Point(panleMiddle.Location.X + 10, radVbDauvao.Location.Y);
                 // radVbDaura.Location = new Point(radVbDauvao.Width +10 , radVbDaura.Location.Y);
                 // radVbtudong.Location = new Point(  radVbDaura.Width + 10, radVbtudong.Location.Y);
@@ -6589,7 +6643,13 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             }
 
             CheckDB();
-
+            if (IsPopup())
+            {
+                hoverTimer = new Timer();
+                hoverTimer.Interval = 200; // 0.5s
+                hoverTimer.Tick += HoverTimer_Tick;
+                searchExpert = true;
+            }
             gridView5.Columns["Checked"].OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
             XoaNLTP(1);
             XoaNLTP(2);
@@ -9291,9 +9351,34 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         public string rpl2 = "";
         public string tkplNo = "";
         public string tkplCo = "";
+
+        public void UpdatePopup(int status)
+        {
+            string query = @"UPDATE tbSetting SET IsSuggest=?";
+           var parameters = new OleDbParameter[]
+    {
+                                new OleDbParameter("?",status.ToString())
+    };
+            var rowsAffected = ExecuteQueryResult(query, parameters);
+        }
+        public bool IsPopup()
+        {
+            string query = @"select * FROM tbSetting";
+           
+            var kq = ExecuteQuery(query);
+            int rs = int.Parse(kq.Rows[0]["IsSuggest"].ToString());
+            return rs == 1 ? true : false;
+        }
         protected override bool ProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData)
         {
-           
+            if (keyData == (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S))
+            {
+                frmSetting frmSetting = new frmSetting();
+                frmSetting.frmMain = this;
+                frmSetting.Show();
+                return true; // Đã xử lý phím
+            }
+
             if (keyData == (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M))
             {
                 string input = ShowInputDialog("Nhập mst:", "Input");
@@ -17177,7 +17262,19 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 xtraTabControl2.SelectedTabPageIndex = 1;
                 if (chkInvoice.Checked)
                 {
-                    Tainhacungcap();
+
+                    string querycheck = @"SELECT COUNT(*) FROM tbInvoiceInfo ";
+                    
+                    DataTable getTablecheck = ExecuteQuery(querycheck, null);
+                    int count = Convert.ToInt32(getTablecheck.Rows[0][0]);
+                    if (count > 0)
+                    {
+                        Tainhacungcap();
+                    }
+                    else
+                    {
+                        XtraMessageBox.Show("Chưa đăng ký thông tin nhà cung cấp không thể tải");
+                    }
                 }
                 else
                 {
@@ -18184,7 +18281,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             isHHPopupOpen = true;
                             if (frmhh != null)
                                 frmhh.Close();
-                            hoverTimer.Stop();
+                            if (IsPopup())
+                            {
+                                hoverTimer.Stop();
+                            }
+                           
                             frmHangHoa frmHangHoa = new frmHangHoa();
                             frmHangHoa.frmMain = this;
                             frmHangHoa.Typeform = 1;
@@ -33423,63 +33524,67 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void gridView4_MouseMove(object sender, MouseEventArgs e)
         {
-            Typechon = 2;
-            GridView view = sender as GridView;
-            gv4 = view;
-
-            // 🔥 1️⃣ ĐỔI ROW PARENT → ĐÓNG NGAY
-            //if (frmhh != null && frmhh.Visible &&
-            //    gv4.SourceRowHandle != activeParentRowHandle)
-            //{
-            //    hoverTimer.Stop();
-            //    frmhh.Hide();
-            //    return;
-            //}
-
-            GridHitInfo hitInfo = view.CalcHitInfo(e.Location);
-
-            // 🔑 2️⃣ KHÔNG TRONG CELL
-            //if (!hitInfo.InRowCell)
-            //{
-            //    Console.WriteLine("tick 1");
-            //    if (frmhh != null && frmhh.Visible)
-            //    {
-            //        Rectangle frmRect = new Rectangle(frmhh.Location, frmhh.Size);
-            //        if (frmRect.Contains(System.Windows.Forms.Control.MousePosition))
-            //            return;
-            //    }
-
-            //    hoverTimer.Stop();
-            //    frmhh?.Hide();
-
-            //    Console.WriteLine("tick 2");
-            //    return;
-            //}
-
-            // 🔥 3️⃣ ĐỔI DETAIL ROW → ĐÓNG
-            //if (frmhh != null && frmhh.Visible &&
-            //    hitInfo.RowHandle != activeSuggestRowHandle)
-            //{
-            //    hoverTimer.Stop();
-            //    frmhh.Hide();
-                 
-            //    return;
-            //}
-
-            // 4️⃣ LOGIC HOVER CŨ
-            if (hitInfo.InRowCell &&
-     hitInfo.RowHandle >= 0 &&
-     hitInfo.Column != null &&
-    (hitInfo.RowHandle != hoverRowHandle ||
-     hitInfo.Column.FieldName != hoverColumnName))
+            if (IsPopup())
             {
-                hoverTimer.Stop();
+                Typechon = 2;
+                GridView view = sender as GridView;
+                gv4 = view;
 
-                hoverRowHandle = hitInfo.RowHandle;
-                hoverColumnName = hitInfo.Column.FieldName;
+                // 🔥 1️⃣ ĐỔI ROW PARENT → ĐÓNG NGAY
+                //if (frmhh != null && frmhh.Visible &&
+                //    gv4.SourceRowHandle != activeParentRowHandle)
+                //{
+                //    hoverTimer.Stop();
+                //    frmhh.Hide();
+                //    return;
+                //}
 
-                hoverTimer.Start();
-            } 
+                GridHitInfo hitInfo = view.CalcHitInfo(e.Location);
+
+                // 🔑 2️⃣ KHÔNG TRONG CELL
+                //if (!hitInfo.InRowCell)
+                //{
+                //    Console.WriteLine("tick 1");
+                //    if (frmhh != null && frmhh.Visible)
+                //    {
+                //        Rectangle frmRect = new Rectangle(frmhh.Location, frmhh.Size);
+                //        if (frmRect.Contains(System.Windows.Forms.Control.MousePosition))
+                //            return;
+                //    }
+
+                //    hoverTimer.Stop();
+                //    frmhh?.Hide();
+
+                //    Console.WriteLine("tick 2");
+                //    return;
+                //}
+
+                // 🔥 3️⃣ ĐỔI DETAIL ROW → ĐÓNG
+                //if (frmhh != null && frmhh.Visible &&
+                //    hitInfo.RowHandle != activeSuggestRowHandle)
+                //{
+                //    hoverTimer.Stop();
+                //    frmhh.Hide();
+
+                //    return;
+                //}
+
+                // 4️⃣ LOGIC HOVER CŨ
+                if (hitInfo.InRowCell &&
+         hitInfo.RowHandle >= 0 &&
+         hitInfo.Column != null &&
+        (hitInfo.RowHandle != hoverRowHandle ||
+         hitInfo.Column.FieldName != hoverColumnName))
+                {
+                    hoverTimer.Stop();
+
+                    hoverRowHandle = hitInfo.RowHandle;
+                    hoverColumnName = hitInfo.Column.FieldName;
+
+                    hoverTimer.Start();
+                }
+            }
+           
         }
          
 
@@ -33499,25 +33604,29 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void gridView2_MouseMove(object sender, MouseEventArgs e)
         {
-            Typechon = 1;
-            GridView view = sender as GridView;
-            gv2= view;
+            if (IsPopup())
+            {
+                Typechon = 1;
+                GridView view = sender as GridView;
+                gv2 = view;
 
-            GridHitInfo hitInfo = view.CalcHitInfo(e.Location);
-            // 4️⃣ LOGIC HOVER CŨ
-            if (hitInfo.InRowCell &&
-     hitInfo.RowHandle >= 0 &&
-     hitInfo.Column != null &&
-    (hitInfo.RowHandle != hoverRowHandle ||
-     hitInfo.Column.FieldName != hoverColumnName))
-            { 
-                hoverTimer.Stop();
+                GridHitInfo hitInfo = view.CalcHitInfo(e.Location);
+                // 4️⃣ LOGIC HOVER CŨ
+                if (hitInfo.InRowCell &&
+         hitInfo.RowHandle >= 0 &&
+         hitInfo.Column != null &&
+        (hitInfo.RowHandle != hoverRowHandle ||
+         hitInfo.Column.FieldName != hoverColumnName))
+                {
+                    hoverTimer.Stop();
 
-                hoverRowHandle = hitInfo.RowHandle;
-                hoverColumnName = hitInfo.Column.FieldName;
+                    hoverRowHandle = hitInfo.RowHandle;
+                    hoverColumnName = hitInfo.Column.FieldName;
 
-                hoverTimer.Start();
+                    hoverTimer.Start();
+                }
             }
+            
         }
 
         private void gridView2_RowCellClick(object sender, RowCellClickEventArgs e)
@@ -34090,7 +34199,18 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void chkInvoice_CheckedChanged(object sender, EventArgs e)
         {
+            if (chkInvoice.Checked)
+            {
+                string querycheck = @"SELECT COUNT(*) FROM tbInvoiceInfo ";
 
+                DataTable getTablecheck = ExecuteQuery(querycheck, null);
+                int count = Convert.ToInt32(getTablecheck.Rows[0][0]);
+                if (count <=0)
+                {
+                    XtraMessageBox.Show("Chưa đăng ký thông tin nhà cung cấp không thể tải");
+                    chkInvoice.Checked = false;
+                }
+            }
         } 
 
         private void radVbDauvao_CheckedChanged(object sender, EventArgs e)
@@ -34451,6 +34571,152 @@ private static readonly Dictionary<string, string[]> BrandAliases =
      };
             int rowsAffected = ExecuteQueryResult(query, parameters);
             AddToStartup();
+        }
+
+        private void chkTime1_CheckedChanged(object sender, EventArgs e)
+        {
+            txtTime1.Enabled = chkTime1.Checked;
+            if (chkTime1.Checked == false)
+            {
+                txtTime1.Text = "";
+            }
+        }
+        string filename = "";
+        private void txtTime1_EditValueChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtTime1.Text))
+            {
+                string query = "UPDATE tbsetting SET Moctg1 = ?";
+                // Khai báo mảng tham số với đủ 10 tham số
+                OleDbParameter[] parameters = new OleDbParameter[]
+                {
+        new OleDbParameter("?", txtTime1.Text)
+                };
+
+                // Thực thi truy vấn và lấy kết quả
+                int a = ExecuteQueryResult(query, parameters);
+                ScheduleHelper ScheduleHelper = new ScheduleHelper();
+                DeleteSchedule($"{filename}_L1");
+            }
+        }
+        public static void DeleteSchedule(string taskName)
+        {
+            try
+            {
+                string cmd = $"schtasks /delete /tn \"{taskName}\" /f";
+                Process.Start("cmd", "/c " + cmd).WaitForExit();
+                XtraMessageBox.Show($"✅ Đã xóa lịch '{taskName}'!");
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show($"❌ Lỗi xóa: {ex.Message}");
+            }
+        }
+         public static void CreateSchedule(string taskName, int hour, int minute = 0)
+        {
+            try
+            {
+                string exePath = Application.ExecutablePath;
+                string timeStr = $"{hour:D2}:{minute:D2}";
+
+                // Xóa task cũ (nếu có)
+                RunSchTasks($"/delete /tn \"{taskName}\" /f", false);
+
+                // Chuỗi thực thi
+                string tr = $"\\\"{exePath}\\\" -autostart";
+
+                // Tạo task
+                string args =
+                    $"/create /tn \"{taskName}\" " +
+                    $"/tr \"{tr}\" " +
+                    $"/sc daily " +
+                    $"/st {timeStr} " +
+                    $"/f";
+
+                // Debug xem lệnh tạo ra
+                XtraMessageBox.Show(args);
+
+                RunSchTasks(args, true);
+
+                XtraMessageBox.Show($"Đã tạo lịch '{taskName}' lúc {timeStr} mỗi ngày.");
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show(ex.ToString());
+            }
+        }
+        private static void RunSchTasks(string arguments, bool throwIfError)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "schtasks.exe",
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            using (Process p = Process.Start(psi))
+            {
+                string output = p.StandardOutput.ReadToEnd();
+                string error = p.StandardError.ReadToEnd();
+
+                p.WaitForExit();
+
+                if (p.ExitCode != 0 && throwIfError)
+                {
+                    throw new Exception(
+                        $"ExitCode: {p.ExitCode}\r\n\r\n" +
+                        $"Output:\r\n{output}\r\n\r\n" +
+                        $"Error:\r\n{error}"
+                    );
+                }
+            }
+        }
+        private void txtTime1_Validated(object sender, EventArgs e)
+        {
+            string query = "UPDATE tbRegister SET Moctg1 = ?";
+            // Khai báo mảng tham số với đủ 10 tham số
+            OleDbParameter[] parameters = new OleDbParameter[]
+            {
+        new OleDbParameter("?", txtTime1.Text)
+            };
+
+            // Thực thi truy vấn và lấy kết quả
+            int a = ExecuteQueryResult(query, parameters);
+            ScheduleHelper ScheduleHelper = new ScheduleHelper();
+            DateTime time = DateTime.Parse(txtTime1.Text);
+
+            int hour = time.Hour;   // 10
+            int minute = time.Minute; // 30
+            try
+            {
+                CreateSchedule($"{filename}_L1", hour, minute);
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnfolder_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string currentYear = $"HD{dtTungay.DateTime.Year}";
+                string currentpath = Path.Combine(savedPath, currentYear,
+                    chkDauvao.Checked ? "HDVao" : "HDRa",
+                    dtTungay.DateTime.Month.ToString());
+
+                // Mở thư mục
+                System.Diagnostics.Process.Start("explorer.exe", currentpath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Không thể mở thư mục: {ex.Message}",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // ========================================

@@ -37,104 +37,7 @@ namespace SaovietTax {
             try
             { 
 
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                ServicePointManager.ServerCertificateValidationCallback = (a, b, c, d) => true;
-
-                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                //ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
-                //ServicePointManager.DefaultConnectionLimit = 100;
-                //ServicePointManager.Expect100Continue = false;
-                // Số + tiền theo en-US (1,234,567.89)
-
-
-                // QUAN TRỌNG: Đăng ký event dịch string – đây là cách chính thức!
-               // AddToStartup(); // 👈 GỌI Ở ĐÂY
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                if (isAutoStart)
-                {
-                    //mutex.WaitOne();
-                    //Application.Run(new frmAutoTai());
-                    //SaveConfig("Mode", "2");
-                    Application.Run(new frmAutotaiNew());
-                }
-                else
-                {
-                    SaveConfig("Mode", "1");
-                    string appPath = Assembly.GetExecutingAssembly().Location;
-
-                    // Lấy thư mục chứa ứng dụng
-                    string directoryPath = Path.GetDirectoryName(appPath);
-
-                    // Xóa phần \bin\Debug để lấy đường dẫn gốc
-                    string rootDirectory = Path.GetFullPath(Path.Combine(directoryPath, @"..\.."));
-
-                    // Tạo đường dẫn đến file dpPath.txt trong thư mục hoadon
-                    string filePaths = Path.Combine(rootDirectory, "hoadon", "status.txt");
-                    string content = "1";
-
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);
-
-                    // Bắt buộc DevExpress nhận biết DPI đúng
-                    WindowsFormsSettings.SetDPIAware();   // Dòng quan trọng nhất!
-
-                    // Force font chuẩn cho toàn app (nếu cần)
-                   // WindowsFormsSettings.DefaultFont = new Font("Tahoma", 8.25f);
-
-                    // Force font cho grid header (nếu vẫn to)
-                    //DevExpress.Utils.AppearanceObject.DefaultFont = new Font("Tahoma", 8.25f);
-                    try
-                    {
-                        content = File.ReadAllText(filePaths);
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
-
-                    //if (content.Trim() == "1")
-                    //    Application.Run(new frmMain());
-                    //else
-                    //{
-                    //    if (content.Trim() == "2")
-                    //        Application.Run(new KTHT());
-                    //    else
-                    //    {
-                    //        if (content.Trim() == "3")
-                    //            Application.Run(new frmTaihoadonvb());
-                    //        else
-                    //        {
-                    //            if (content.Trim() == "4")
-                    //                Application.Run(new Form3());
-                    //            else
-                    //            {
-                    //                if (content.Trim() == "5")
-                    //                    Application.Run(new APIInvoice());
-                    //                else
-                    //                {
-                    //                    if (content.Trim() == "6")
-                    //                        Application.Run(new BkavInvoice());
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //}
-                    switch (content.Trim())
-                    {
-                        case "1": Application.Run(new frmMain()); break;
-                        case "2": Application.Run(new KTHT()); break;
-                        case "3": Application.Run(new frmTaihoadonvb()); break;
-                        case "4": Application.Run(new Form3()); break;
-                        case "5": Application.Run(new APIInvoice()); break;
-                        case "6": Application.Run(new BkavInvoice()); break;
-                        case "7": Application.Run(new VNPTInvoice()); break;
-                        case "8": Application.Run(new TendoInvoice()); break;
-                        case "9": Application.Run(new frmQrcode()); break;
-                        case "10": Application.Run(new vb6Xemhoadon()); break;
-                        case "11": Application.Run(new Vanguard()); break;
-                    }
-                }
+                
             }
             catch (Exception ex)
             {
@@ -145,7 +48,106 @@ namespace SaovietTax {
                 //if (isAutoStart)
                 //    mutex.ReleaseMutex();
             }
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.ServerCertificateValidationCallback = (a, b, c, d) => true;
 
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            //ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            //ServicePointManager.DefaultConnectionLimit = 100;
+            //ServicePointManager.Expect100Continue = false;
+            // Số + tiền theo en-US (1,234,567.89)
+
+
+            // QUAN TRỌNG: Đăng ký event dịch string – đây là cách chính thức!
+            // AddToStartup(); // 👈 GỌI Ở ĐÂY
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            if (isAutoStart)
+            {
+                //mutex.WaitOne();
+                //Application.Run(new frmAutoTai());
+                //SaveConfig("Mode", "2");
+                Application.Run(new frmAutotaiNew());
+            }
+            else
+            {
+                SaveConfig("Mode", "1");
+                string appPath = Assembly.GetExecutingAssembly().Location;
+
+                // Lấy thư mục chứa ứng dụng
+                string directoryPath = Path.GetDirectoryName(appPath);
+
+                // Xóa phần \bin\Debug để lấy đường dẫn gốc
+                string rootDirectory = Path.GetFullPath(Path.Combine(directoryPath, @"..\.."));
+
+                // Tạo đường dẫn đến file dpPath.txt trong thư mục hoadon
+                string filePaths = Path.Combine(rootDirectory, "hoadon", "status.txt");
+                string content = "1";
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                // Bắt buộc DevExpress nhận biết DPI đúng
+                WindowsFormsSettings.SetDPIAware();   // Dòng quan trọng nhất!
+
+                // Force font chuẩn cho toàn app (nếu cần)
+                // WindowsFormsSettings.DefaultFont = new Font("Tahoma", 8.25f);
+
+                // Force font cho grid header (nếu vẫn to)
+                //DevExpress.Utils.AppearanceObject.DefaultFont = new Font("Tahoma", 8.25f);
+                try
+                {
+                    content = File.ReadAllText(filePaths);
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                //if (content.Trim() == "1")
+                //    Application.Run(new frmMain());
+                //else
+                //{
+                //    if (content.Trim() == "2")
+                //        Application.Run(new KTHT());
+                //    else
+                //    {
+                //        if (content.Trim() == "3")
+                //            Application.Run(new frmTaihoadonvb());
+                //        else
+                //        {
+                //            if (content.Trim() == "4")
+                //                Application.Run(new Form3());
+                //            else
+                //            {
+                //                if (content.Trim() == "5")
+                //                    Application.Run(new APIInvoice());
+                //                else
+                //                {
+                //                    if (content.Trim() == "6")
+                //                        Application.Run(new BkavInvoice());
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+
+                switch (content.Trim())
+                {
+                    case "1": Application.Run(new frmMain()); break;
+                    case "2": Application.Run(new KTHT()); break;
+                    case "3": Application.Run(new frmTaihoadonvb()); break;
+                    case "4": Application.Run(new Form3()); break;
+                    case "5": Application.Run(new APIInvoice()); break;
+                    case "6": Application.Run(new BkavInvoice()); break;
+                    case "7": Application.Run(new VNPTInvoice()); break;
+                    case "8": Application.Run(new TendoInvoice()); break;
+                    case "9": Application.Run(new frmQrcode()); break;
+                    case "10": Application.Run(new vb6Xemhoadon()); break;
+                    case "11": Application.Run(new Vanguard()); break;
+                    case "12": Application.Run(new Updater()); break;
+                }
+            }
         }
         public static void SaveConfig(string key, string value)
         {

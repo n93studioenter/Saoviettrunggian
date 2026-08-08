@@ -100,7 +100,7 @@
             this.gridControl2.MainView = this.gridView2;
             this.gridControl2.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.gridControl2.Name = "gridControl2";
-            this.gridControl2.Size = new System.Drawing.Size(59, 80);
+            this.gridControl2.Size = new System.Drawing.Size(59, 70);
             this.gridControl2.TabIndex = 16;
             this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView2});
@@ -558,7 +558,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(795, 480);
+            this.ClientSize = new System.Drawing.Size(795, 470);
             this.Controls.Add(this.txtdongia);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txtsoluong);
