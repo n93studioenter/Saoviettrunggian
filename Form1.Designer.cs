@@ -148,6 +148,8 @@
             this.panelControl9 = new DevExpress.XtraEditors.PanelControl();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panelControl12 = new DevExpress.XtraEditors.PanelControl();
+            this.Docnganhangmoi = new DevExpress.XtraEditors.SimpleButton();
+            this.btnfolder = new DevExpress.XtraEditors.SimpleButton();
             this.btnImportChungtunganhang = new DevExpress.XtraEditors.SimpleButton();
             this.btnPdf24 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
@@ -158,7 +160,6 @@
             this.btnClearNganhang = new DevExpress.XtraEditors.SimpleButton();
             this.btnLocdulieuNganhang = new DevExpress.XtraEditors.SimpleButton();
             this.panelControl11 = new DevExpress.XtraEditors.PanelControl();
-            this.btnfolder = new DevExpress.XtraEditors.SimpleButton();
             this.panelControl7 = new DevExpress.XtraEditors.PanelControl();
             this.chkVbdaura2 = new DevExpress.XtraEditors.CheckEdit();
             this.chkVbdaura = new DevExpress.XtraEditors.CheckEdit();
@@ -1778,7 +1779,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.11111F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.88889F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 451F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 170F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 174F));
             this.tableLayoutPanel1.Controls.Add(this.panelControl12, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.panelControl11, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.panelControl10, 0, 0);
@@ -1794,6 +1795,7 @@
             // 
             // panelControl12
             // 
+            this.panelControl12.Controls.Add(this.Docnganhangmoi);
             this.panelControl12.Controls.Add(this.btnfolder);
             this.panelControl12.Controls.Add(this.btnImportChungtunganhang);
             this.panelControl12.Controls.Add(this.btnPdf24);
@@ -1805,10 +1807,29 @@
             this.panelControl12.Controls.Add(this.btnClearNganhang);
             this.panelControl12.Controls.Add(this.btnLocdulieuNganhang);
             this.panelControl12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControl12.Location = new System.Drawing.Point(1023, 3);
+            this.panelControl12.Location = new System.Drawing.Point(1019, 3);
             this.panelControl12.Name = "panelControl12";
             this.panelControl12.Size = new System.Drawing.Size(445, 166);
             this.panelControl12.TabIndex = 5;
+            // 
+            // Docnganhangmoi
+            // 
+            this.Docnganhangmoi.ImageOptions.SvgImage = global::SaovietTax.Properties.Resources.documentpdf;
+            this.Docnganhangmoi.Location = new System.Drawing.Point(394, 5);
+            this.Docnganhangmoi.Name = "Docnganhangmoi";
+            this.Docnganhangmoi.Size = new System.Drawing.Size(46, 45);
+            this.Docnganhangmoi.TabIndex = 37;
+            this.Docnganhangmoi.Click += new System.EventHandler(this.Docnganhangmoi_Click);
+            // 
+            // btnfolder
+            // 
+            this.btnfolder.ImageOptions.SvgImage = global::SaovietTax.Properties.Resources.up;
+            this.btnfolder.Location = new System.Drawing.Point(411, 129);
+            this.btnfolder.Name = "btnfolder";
+            this.btnfolder.Size = new System.Drawing.Size(47, 29);
+            this.btnfolder.TabIndex = 36;
+            this.btnfolder.Visible = false;
+            this.btnfolder.Click += new System.EventHandler(this.btnfolder_Click);
             // 
             // btnImportChungtunganhang
             // 
@@ -1826,7 +1847,7 @@
             // btnPdf24
             // 
             this.btnPdf24.ImageOptions.Image = global::SaovietTax.Properties.Resources.projectfile_32x32;
-            this.btnPdf24.Location = new System.Drawing.Point(155, 16);
+            this.btnPdf24.Location = new System.Drawing.Point(125, 12);
             this.btnPdf24.Name = "btnPdf24";
             this.btnPdf24.Size = new System.Drawing.Size(104, 29);
             this.btnPdf24.TabIndex = 17;
@@ -1853,7 +1874,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDocfileExcel.AutoWidthInLayoutControl = true;
             this.btnDocfileExcel.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("btnDocfileExcel.ImageOptions.SvgImage")));
-            this.btnDocfileExcel.Location = new System.Drawing.Point(264, 11);
+            this.btnDocfileExcel.Location = new System.Drawing.Point(232, 9);
             this.btnDocfileExcel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnDocfileExcel.Name = "btnDocfileExcel";
             this.btnDocfileExcel.Size = new System.Drawing.Size(157, 33);
@@ -1935,20 +1956,10 @@
             this.panelControl11.Controls.Add(this.btnRefresh);
             this.panelControl11.Controls.Add(this.btnimport);
             this.panelControl11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControl11.Location = new System.Drawing.Point(524, 3);
+            this.panelControl11.Location = new System.Drawing.Point(522, 3);
             this.panelControl11.Name = "panelControl11";
-            this.panelControl11.Size = new System.Drawing.Size(493, 166);
+            this.panelControl11.Size = new System.Drawing.Size(491, 166);
             this.panelControl11.TabIndex = 4;
-            // 
-            // btnfolder
-            // 
-            this.btnfolder.ImageOptions.SvgImage = global::SaovietTax.Properties.Resources.up;
-            this.btnfolder.Location = new System.Drawing.Point(411, 129);
-            this.btnfolder.Name = "btnfolder";
-            this.btnfolder.Size = new System.Drawing.Size(47, 29);
-            this.btnfolder.TabIndex = 36;
-            this.btnfolder.Visible = false;
-            this.btnfolder.Click += new System.EventHandler(this.btnfolder_Click);
             // 
             // panelControl7
             // 
@@ -1958,7 +1969,7 @@
             this.panelControl7.Controls.Add(this.chkVbdaura);
             this.panelControl7.Location = new System.Drawing.Point(5, 114);
             this.panelControl7.Name = "panelControl7";
-            this.panelControl7.Size = new System.Drawing.Size(483, 39);
+            this.panelControl7.Size = new System.Drawing.Size(481, 39);
             this.panelControl7.TabIndex = 23;
             // 
             // chkVbdaura2
@@ -1987,7 +1998,7 @@
             // 
             this.simpleButton5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton5.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton5.ImageOptions.Image")));
-            this.simpleButton5.Location = new System.Drawing.Point(286, 10);
+            this.simpleButton5.Location = new System.Drawing.Point(284, 10);
             this.simpleButton5.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton5.Name = "simpleButton5";
             this.simpleButton5.Size = new System.Drawing.Size(203, 31);
@@ -2003,7 +2014,7 @@
             this.btnMdtk.Location = new System.Drawing.Point(257, 45);
             this.btnMdtk.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnMdtk.Name = "btnMdtk";
-            this.btnMdtk.Size = new System.Drawing.Size(172, 30);
+            this.btnMdtk.Size = new System.Drawing.Size(170, 30);
             this.btnMdtk.TabIndex = 9;
             this.btnMdtk.Text = "Mật định TK";
             this.btnMdtk.Click += new System.EventHandler(this.btnMdtk_Click);
@@ -2016,7 +2027,7 @@
             this.panelControl8.Controls.Add(this.chkVbdauvao);
             this.panelControl8.Location = new System.Drawing.Point(5, 78);
             this.panelControl8.Name = "panelControl8";
-            this.panelControl8.Size = new System.Drawing.Size(483, 35);
+            this.panelControl8.Size = new System.Drawing.Size(481, 35);
             this.panelControl8.TabIndex = 35;
             // 
             // chkVbdauvao2
@@ -2028,7 +2039,7 @@
             this.chkVbdauvao2.Properties.Appearance.ForeColor = System.Drawing.Color.Blue;
             this.chkVbdauvao2.Properties.Appearance.Options.UseForeColor = true;
             this.chkVbdauvao2.Properties.Caption = "Imp theo mật định đầu vào";
-            this.chkVbdauvao2.Size = new System.Drawing.Size(287, 20);
+            this.chkVbdauvao2.Size = new System.Drawing.Size(285, 20);
             this.chkVbdauvao2.TabIndex = 21;
             this.chkVbdauvao2.CheckedChanged += new System.EventHandler(this.chkVbdauvao2_CheckedChanged);
             // 
@@ -2055,7 +2066,7 @@
             this.btnChonthang.Location = new System.Drawing.Point(4, 10);
             this.btnChonthang.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnChonthang.Name = "btnChonthang";
-            this.btnChonthang.Size = new System.Drawing.Size(278, 30);
+            this.btnChonthang.Size = new System.Drawing.Size(276, 30);
             this.btnChonthang.TabIndex = 8;
             this.btnChonthang.Text = "Liệt kê hóa đơn";
             this.btnChonthang.Click += new System.EventHandler(this.btnChonthang_Click);
@@ -2064,7 +2075,7 @@
             // 
             this.btnClearMatdinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClearMatdinh.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnClearMatdinh.ImageOptions.Image")));
-            this.btnClearMatdinh.Location = new System.Drawing.Point(434, 39);
+            this.btnClearMatdinh.Location = new System.Drawing.Point(432, 39);
             this.btnClearMatdinh.Name = "btnClearMatdinh";
             this.btnClearMatdinh.Size = new System.Drawing.Size(52, 35);
             this.btnClearMatdinh.TabIndex = 13;
@@ -2078,7 +2089,7 @@
             this.btnOpenFolder.Location = new System.Drawing.Point(210, 44);
             this.btnOpenFolder.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(43, 29);
+            this.btnOpenFolder.Size = new System.Drawing.Size(41, 29);
             this.btnOpenFolder.TabIndex = 9;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
             // 
@@ -2129,14 +2140,14 @@
             this.panelControl10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControl10.Location = new System.Drawing.Point(3, 3);
             this.panelControl10.Name = "panelControl10";
-            this.panelControl10.Size = new System.Drawing.Size(515, 166);
+            this.panelControl10.Size = new System.Drawing.Size(513, 166);
             this.panelControl10.TabIndex = 3;
             // 
             // txtTime1
             // 
             this.txtTime1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTime1.Enabled = false;
-            this.txtTime1.Location = new System.Drawing.Point(447, 45);
+            this.txtTime1.Location = new System.Drawing.Point(445, 45);
             this.txtTime1.Name = "txtTime1";
             this.txtTime1.Size = new System.Drawing.Size(58, 23);
             this.txtTime1.TabIndex = 42;
@@ -2148,7 +2159,7 @@
             this.dtDenngay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtDenngay.EditValue = null;
-            this.dtDenngay.Location = new System.Drawing.Point(412, 83);
+            this.dtDenngay.Location = new System.Drawing.Point(410, 83);
             this.dtDenngay.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.dtDenngay.Name = "dtDenngay";
             this.dtDenngay.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -2162,7 +2173,7 @@
             // chkTime1
             // 
             this.chkTime1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkTime1.Location = new System.Drawing.Point(349, 47);
+            this.chkTime1.Location = new System.Drawing.Point(347, 47);
             this.chkTime1.Name = "chkTime1";
             this.chkTime1.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold);
             this.chkTime1.Properties.Appearance.ForeColor = System.Drawing.Color.Blue;
@@ -2178,7 +2189,7 @@
             this.labelControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl1.Appearance.ForeColor = System.Drawing.Color.Red;
             this.labelControl1.Appearance.Options.UseForeColor = true;
-            this.labelControl1.Location = new System.Drawing.Point(230, 90);
+            this.labelControl1.Location = new System.Drawing.Point(228, 90);
             this.labelControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(52, 16);
@@ -2234,7 +2245,7 @@
             this.labelControl3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl3.Appearance.ForeColor = System.Drawing.Color.Red;
             this.labelControl3.Appearance.Options.UseForeColor = true;
-            this.labelControl3.Location = new System.Drawing.Point(383, 89);
+            this.labelControl3.Location = new System.Drawing.Point(381, 89);
             this.labelControl3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(23, 16);
@@ -2257,7 +2268,7 @@
             this.dtTungay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtTungay.EditValue = null;
-            this.dtTungay.Location = new System.Drawing.Point(286, 83);
+            this.dtTungay.Location = new System.Drawing.Point(284, 83);
             this.dtTungay.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.dtTungay.Name = "dtTungay";
             this.dtTungay.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -2271,7 +2282,7 @@
             // txtpass
             // 
             this.txtpass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtpass.Location = new System.Drawing.Point(373, 9);
+            this.txtpass.Location = new System.Drawing.Point(371, 9);
             this.txtpass.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.txtpass.Name = "txtpass";
             this.txtpass.Size = new System.Drawing.Size(132, 23);
@@ -2287,7 +2298,7 @@
             this.simpleButton3.Appearance.Options.UseFont = true;
             this.simpleButton3.Appearance.Options.UseForeColor = true;
             this.simpleButton3.ImageOptions.Image = global::SaovietTax.Properties.Resources.drilldownonseries_chart_32x32;
-            this.simpleButton3.Location = new System.Drawing.Point(286, 125);
+            this.simpleButton3.Location = new System.Drawing.Point(284, 125);
             this.simpleButton3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton3.Name = "simpleButton3";
             this.simpleButton3.Size = new System.Drawing.Size(219, 28);
@@ -2313,7 +2324,7 @@
             this.labelControl12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl12.Appearance.ForeColor = System.Drawing.Color.Red;
             this.labelControl12.Appearance.Options.UseForeColor = true;
-            this.labelControl12.Location = new System.Drawing.Point(343, 13);
+            this.labelControl12.Location = new System.Drawing.Point(341, 12);
             this.labelControl12.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.labelControl12.Name = "labelControl12";
             this.labelControl12.Size = new System.Drawing.Size(26, 16);
@@ -2337,7 +2348,7 @@
             // chkDaura
             // 
             this.chkDaura.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkDaura.Location = new System.Drawing.Point(133, 126);
+            this.chkDaura.Location = new System.Drawing.Point(131, 126);
             this.chkDaura.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.chkDaura.Name = "chkDaura";
             this.chkDaura.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
@@ -4745,5 +4756,6 @@
         private DevExpress.XtraEditors.PanelControl panelControl11;
         private DevExpress.XtraEditors.PanelControl panelControl10;
         private DevExpress.XtraEditors.SimpleButton btnfolder;
+        private DevExpress.XtraEditors.SimpleButton Docnganhangmoi;
     }
 }

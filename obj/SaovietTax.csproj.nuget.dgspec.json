@@ -125,7 +125,7 @@
             },
             "PdfPig": {
               "target": "Package",
-              "version": "[0.1.10, )"
+              "version": "[0.1.15, )"
             },
             "PdfSharp": {
               "target": "Package",

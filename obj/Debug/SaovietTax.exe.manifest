@@ -2862,14 +2862,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SaovietTax.exe" size="8770560">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SaovietTax.exe" size="8803840">
       <assemblyIdentity name="SaovietTax" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>BPzOg/59GkrlzqwMXgI5iv2di66EPuIkoffuai/lEvY=</dsig:DigestValue>
+        <dsig:DigestValue>rMt6lvomqZMfBCFBVbAWqU9V1PBPAdaPObRq1dKm5TE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -3222,86 +3222,86 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.dll" size="4185600">
-      <assemblyIdentity name="UglyToad.PdfPig" version="0.1.10.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.dll" size="4228608">
+      <assemblyIdentity name="UglyToad.PdfPig" version="0.1.15.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>m5xjhwjiBSF0SvPgrV0XPF3etnEVHAZycNhNLn4xASU=</dsig:DigestValue>
+        <dsig:DigestValue>w5acqujO/pc1yO829p4qh9+AvHLqRmizGMomyUDHknU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.Core.dll" size="46080">
-      <assemblyIdentity name="UglyToad.PdfPig.Core" version="0.1.10.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.Core.dll" size="50176">
+      <assemblyIdentity name="UglyToad.PdfPig.Core" version="0.1.15.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>nBslzxx3lAuGOJ9vdt6f7dHhuWgNWZyLUihlF/ZNEuU=</dsig:DigestValue>
+        <dsig:DigestValue>pPzyhV0XghkN80AN9Y4CTOdK1a7weXp7IAGh1X3xb0Y=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.DocumentLayoutAnalysis.dll" size="246784">
-      <assemblyIdentity name="UglyToad.PdfPig.DocumentLayoutAnalysis" version="0.1.10.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="UglyToad.PdfPig.DocumentLayoutAnalysis" version="0.1.15.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>xuCxiMRtB83k2MjqVwm59Mn4UPLAUcpj+8sTr06lF1k=</dsig:DigestValue>
+        <dsig:DigestValue>XsPU0rWtms9z8PzMwS5gWVC1muvge4R5ONsasZ+LcrM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.Fonts.dll" size="1079296">
-      <assemblyIdentity name="UglyToad.PdfPig.Fonts" version="0.1.10.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.Fonts.dll" size="1083904">
+      <assemblyIdentity name="UglyToad.PdfPig.Fonts" version="0.1.15.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>rKH4s09quoWMkg8qmCpTHCk/a0wOxBs1fjO5i8MOz2M=</dsig:DigestValue>
+        <dsig:DigestValue>5IDDN+CkLLmHwL6sTUEFlq0hvsy1YgPqz2CiQQfHAz4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.Package.dll" size="4608">
-      <assemblyIdentity name="UglyToad.PdfPig.Package" version="0.1.10.0" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="UglyToad.PdfPig.Package" version="0.1.15.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>N+4qnUg1o3m5MB70+jSlqNSAcvR1NSd4BJ/bEx728ug=</dsig:DigestValue>
+        <dsig:DigestValue>0xXX57NQ2AYPjygYMX44UZUf+i/G+Hj+9w8yj5FVeKQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.Tokenization.dll" size="23552">
-      <assemblyIdentity name="UglyToad.PdfPig.Tokenization" version="0.1.10.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.Tokenization.dll" size="23040">
+      <assemblyIdentity name="UglyToad.PdfPig.Tokenization" version="0.1.15.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>YpsM2kqHcUWFfCFq4xVCCPUPmPlLUx6VIA/isux50pc=</dsig:DigestValue>
+        <dsig:DigestValue>VfI48lAlZsrsDAJTJhmyLqkPqJpAXbZm0WtLffscFiE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.Tokens.dll" size="44032">
-      <assemblyIdentity name="UglyToad.PdfPig.Tokens" version="0.1.10.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UglyToad.PdfPig.Tokens.dll" size="45056">
+      <assemblyIdentity name="UglyToad.PdfPig.Tokens" version="0.1.15.0" publicKeyToken="605D367334E74123" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>vPNi8KjtSYpjlk6xwwpAx7udxliFObN0cEaWbFkpdnE=</dsig:DigestValue>
+        <dsig:DigestValue>Z+a2E/BLFqORJ7noA4A8ZsKYnIH3Ap4tC60FRi966pU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -59,7 +59,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />
     <PackageReference Include="PdfPig">
-      <Version>0.1.10</Version>
+      <Version>0.1.15</Version>
     </PackageReference>
     <PackageReference Include="PdfSharp">
       <Version>6.2.0</Version>
@@ -326,6 +326,7 @@
     <Compile Include="DiagramHD.Designer.cs">
       <DependentUpon>DiagramHD.cs</DependentUpon>
     </Compile>
+    <Compile Include="DTO\BankStatementReader.cs" />
     <Compile Include="DTO\Daura_maytinhtien.cs" />
     <Compile Include="DTO\FuzzySharpSimilarity.cs" />
     <Compile Include="DTO\Matdinhnganhang.cs" />
@@ -403,6 +404,12 @@
     </Compile>
     <Compile Include="frmDinhdanh.Designer.cs">
       <DependentUpon>frmDinhdanh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDocnganhang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDocnganhang.Designer.cs">
+      <DependentUpon>frmDocnganhang.cs</DependentUpon>
     </Compile>
     <Compile Include="frmHangHoa.cs">
       <SubType>Form</SubType>
@@ -521,6 +528,7 @@
     </Compile>
     <Compile Include="OllamaProductChecker.cs" />
     <Compile Include="PersistentClass1.cs" />
+    <Compile Include="PersistentClass2.cs" />
     <Compile Include="PopupTaikhoan.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -652,6 +660,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmDinhdanh.resx">
       <DependentUpon>frmDinhdanh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDocnganhang.resx">
+      <DependentUpon>frmDocnganhang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmHangHoa.resx">
       <DependentUpon>frmHangHoa.cs</DependentUpon>
@@ -891,6 +902,8 @@
     <None Include="Resources\charttype_barstacked100.svg" />
     <None Include="Resources\bo_customer.svg" />
     <None Include="Resources\clearheaderandfooter.svg" />
+    <None Include="Resources\documentpdf.svg" />
+    <None Include="Resources\clearheaderandfooter1.svg" />
     <Content Include="Resources\favicon.ico" />
     <None Include="Resources\next.svg" />
     <None Include="Resources\next_16x16.png" />

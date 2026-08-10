@@ -6490,6 +6490,15 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                     tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
                     tableLayoutPanel1.ColumnStyles[1].Width = (int)(this.ClientSize.Width * 0.28);
                 }
+                if (computerName == "PC43")
+                {
+                    tableLayoutPanel1.ColumnStyles[0].SizeType = SizeType.Absolute;
+                    tableLayoutPanel1.ColumnStyles[0].Width = (int)(this.ClientSize.Width * 0.28);
+                    tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
+                    tableLayoutPanel1.ColumnStyles[1].Width = (int)(this.ClientSize.Width * 0.28);
+                }
+
+
                 // Thietlapcontrol();
                 // Tính 10% chiều rộng màn hình
                 //btnKTTen.Width = (int)(screenWidth * 0.07);
@@ -27828,7 +27837,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             }
         }
         private void simpleButton4_Click(object sender, EventArgs e)
-        {
+        { 
            // string url = "https://tools.pdf24.org/en/convert-from-pdf";
            // OpenUrl(url);
           
@@ -34718,7 +34727,14 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private string selectedFilePath = string.Empty;
 
+        private void Docnganhangmoi_Click(object sender, EventArgs e)
+        {
+            frmDocnganhang frmDocnganhang = new frmDocnganhang();
+            frmDocnganhang.ShowDialog();
+        }
+       
         // ========================================
         // HÀM TẢI FILE PDF
         // ========================================

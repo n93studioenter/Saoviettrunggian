@@ -32,10 +32,13 @@
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.warningDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colThang = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colHoadonthieu = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colImportloi = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colHangam = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colHethongTK = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colHoadonthua = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.warningDataBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
@@ -47,7 +50,7 @@
             this.gridControl1.Location = new System.Drawing.Point(-1, 2);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(907, 547);
+            this.gridControl1.Size = new System.Drawing.Size(956, 282);
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -59,13 +62,25 @@
             // gridView1
             // 
             this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colThang,
             this.colHoadonthieu,
             this.colImportloi,
             this.colHangam,
-            this.colHethongTK});
+            this.colHethongTK,
+            this.colHoadonthua});
             this.gridView1.GridControl = this.gridControl1;
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsView.ShowGroupPanel = false;
+            // 
+            // colThang
+            // 
+            this.colThang.Caption = "Tháng";
+            this.colThang.FieldName = "Thang";
+            this.colThang.MinWidth = 25;
+            this.colThang.Name = "colThang";
+            this.colThang.Visible = true;
+            this.colThang.VisibleIndex = 0;
+            this.colThang.Width = 59;
             // 
             // colHoadonthieu
             // 
@@ -74,8 +89,8 @@
             this.colHoadonthieu.MinWidth = 25;
             this.colHoadonthieu.Name = "colHoadonthieu";
             this.colHoadonthieu.Visible = true;
-            this.colHoadonthieu.VisibleIndex = 0;
-            this.colHoadonthieu.Width = 94;
+            this.colHoadonthieu.VisibleIndex = 1;
+            this.colHoadonthieu.Width = 254;
             // 
             // colImportloi
             // 
@@ -84,8 +99,8 @@
             this.colImportloi.MinWidth = 25;
             this.colImportloi.Name = "colImportloi";
             this.colImportloi.Visible = true;
-            this.colImportloi.VisibleIndex = 1;
-            this.colImportloi.Width = 94;
+            this.colImportloi.VisibleIndex = 2;
+            this.colImportloi.Width = 170;
             // 
             // colHangam
             // 
@@ -94,8 +109,8 @@
             this.colHangam.MinWidth = 25;
             this.colHangam.Name = "colHangam";
             this.colHangam.Visible = true;
-            this.colHangam.VisibleIndex = 2;
-            this.colHangam.Width = 94;
+            this.colHangam.VisibleIndex = 3;
+            this.colHangam.Width = 120;
             // 
             // colHethongTK
             // 
@@ -104,14 +119,35 @@
             this.colHethongTK.MinWidth = 25;
             this.colHethongTK.Name = "colHethongTK";
             this.colHethongTK.Visible = true;
-            this.colHethongTK.VisibleIndex = 3;
-            this.colHethongTK.Width = 94;
+            this.colHethongTK.VisibleIndex = 4;
+            this.colHethongTK.Width = 210;
+            // 
+            // colHoadonthua
+            // 
+            this.colHoadonthua.Caption = "Hoá đơn thừa";
+            this.colHoadonthua.FieldName = "HoaDonThua";
+            this.colHoadonthua.MinWidth = 25;
+            this.colHoadonthua.Name = "colHoadonthua";
+            this.colHoadonthua.Visible = true;
+            this.colHoadonthua.VisibleIndex = 5;
+            this.colHoadonthua.Width = 120;
+            // 
+            // simpleButton1
+            // 
+            this.simpleButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.simpleButton1.ImageOptions.SvgImage = global::SaovietTax.Properties.Resources.clearheaderandfooter1;
+            this.simpleButton1.Location = new System.Drawing.Point(910, 246);
+            this.simpleButton1.Name = "simpleButton1";
+            this.simpleButton1.Size = new System.Drawing.Size(45, 38);
+            this.simpleButton1.TabIndex = 1;
+            this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
             // 
             // Vanguard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(908, 552);
+            this.ClientSize = new System.Drawing.Size(958, 285);
+            this.Controls.Add(this.simpleButton1);
             this.Controls.Add(this.gridControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Vanguard";
@@ -134,5 +170,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn colImportloi;
         private DevExpress.XtraGrid.Columns.GridColumn colHangam;
         private DevExpress.XtraGrid.Columns.GridColumn colHethongTK;
+        private DevExpress.XtraGrid.Columns.GridColumn colThang;
+        private DevExpress.XtraGrid.Columns.GridColumn colHoadonthua;
+        private DevExpress.XtraEditors.SimpleButton simpleButton1;
     }
 }

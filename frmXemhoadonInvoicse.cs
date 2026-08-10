@@ -27,12 +27,19 @@ namespace SaovietTax
 
         private void frmXemhoadonInvoicse_Load(object sender, EventArgs e)
         {
-            webView21.Source = new Uri(path);
-            this.Text = name;
+            try
+            {
+                webView21.Source = new Uri(path);
+                this.Text = name;
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void frmXemhoadonInvoicse_FormClosed(object sender, FormClosedEventArgs e)
         {
+            if(invoicse!=null)
             invoicse.Close();
         }
     }
