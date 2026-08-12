@@ -10,10 +10,12 @@ using DevExpress.Data;
 using DevExpress.Data.Filtering;
 using DevExpress.Data.Utils;
 using DevExpress.DataAccess.ConnectionParameters;
+using DevExpress.DataAccess.Excel;
 using DevExpress.DataAccess.Sql;
 using DevExpress.Diagram.Core.Native;
 using DevExpress.DocumentServices.ServiceModel.DataContracts;
 using DevExpress.Drawing;
+using DevExpress.Export;
 using DevExpress.Internal.WinApi.Windows.UI.Notifications;
 using DevExpress.LookAndFeel;
 using DevExpress.Map.Native;
@@ -23,6 +25,7 @@ using DevExpress.Skins;
 using DevExpress.Spreadsheet;
 using DevExpress.UserSkins;
 using DevExpress.Utils;
+using DevExpress.Utils.CommonDialogs;
 using DevExpress.Utils.Drawing.Helpers;
 using DevExpress.Utils.Extensions;
 using DevExpress.Utils.VisualEffects;
@@ -37,10 +40,12 @@ using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Columns;
+using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraGrid.Views.Printing;
 using DevExpress.XtraLayout.Customization;
+using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.Design;
 using DevExpress.XtraReports.UI;
 using DevExpress.XtraRichEdit.API.Native;
@@ -179,6 +184,7 @@ namespace SaovietTax
    
     public partial class frmMain : DevExpress.XtraEditors.XtraForm
     {
+
         #region  Khai báo
         public string KyHieu { get; set; }
         public string tknh { get; set; }
@@ -414,12 +420,13 @@ namespace SaovietTax
         #region loadData
         public int mode { get; set; }
         public bool Isrunning=false;
+        private RuntimeDesigner _designer;
         public frmMain()
         {
-           
+          
             InitializeComponent();
             InitDB();
-
+            
             string queryGetdetail = @"SELECT * FROM tbRegister";
             DataTable tbRegister = ExecuteQuery(queryGetdetail);
             if (tbRegister.Rows[0]["IsRunning"].ToString() == "1")
@@ -6440,9 +6447,67 @@ Chỉ trả lời: CÓ hoặc KHÔNG
         bool autoTaidaura = false;
         public frmStatusAuto frmStatusAuto { get;set;}
         public bool isfirtrun = true;
+        float dpiX;
+        float dpiY;
+        public void GetScreenDPI()
+        {
+            Screen screen = Screen.PrimaryScreen; 
+            // Lấy DPI thông qua Graphics
+            using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                dpiX = graphics.DpiX;
+                dpiY = graphics.DpiY;
+                labelControl25.Text = ($"Màn hình: {screen.Bounds.Width}x{screen.Bounds.Height}");
+            }
+        }
+        private string layoutFile = "form_layout.xml";
+        private string workspaceName = "MyWorkspace";
         private async void frmMain_Load(object sender, EventArgs e)
         {
-            
+
+            string computerName = Environment.MachineName;
+            if (computerName != "MAYCHU")
+            {
+                // panelControl10.Width = (int)(this.ClientSize.Width * 0.15);
+                //panelControl11.Width = (int)(this.ClientSize.Width * 0.25);
+                // panelControl12.Width = (int)(this.ClientSize.Width * 0.23);
+                // panleFinal.Width = (int)(this.ClientSize.Width * 0.132);
+
+                //tableLayoutPanel1.ColumnStyles[0].SizeType = SizeType.Absolute;
+                //tableLayoutPanel1.ColumnStyles[0].Width = (int)(this.ClientSize.Width * 0.25);
+                //tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
+                //tableLayoutPanel1.ColumnStyles[1].Width = (int)(this.ClientSize.Width * 0.28);
+            }
+            if (computerName == "PC43")
+            {
+                //tableLayoutPanel1.ColumnStyles[0].SizeType = SizeType.Absolute;
+                //tableLayoutPanel1.ColumnStyles[0].Width = (int)(this.ClientSize.Width * 0.35);
+                //tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
+                //tableLayoutPanel1.ColumnStyles[1].Width = (int)(this.ClientSize.Width * 0.28);
+            }
+            _designer = new RuntimeDesigner();
+
+            _designer.Attach(tableLayoutPanel1);
+
+            _designer.PrepareForDesign(tableLayoutPanel1);
+
+            _designer.SetEnabled(true);
+
+            string file = Path.Combine(
+                Application.StartupPath,
+                "layout.xml");
+
+            _designer.Load(
+                tableLayoutPanel1,
+                file);
+
+
+            gridView5.OptionsCustomization.AllowSort = false;
+
+            GetScreenDPI();
+            cbbNganhangOrder.Properties.Items.Add("STT");
+            cbbNganhangOrder.Properties.Items.Add("Ngày giao dịch");
+            cbbNganhangOrder.SelectedIndex = 0;
             int checkcompare = CompareProductNew("BVS Diana Sensi Cool Fresh siêu mỏng cánhx20", "BVS Diana SENSI Cool Fresh SMCánh20 - 2302");
             // var list = AcbPdfReader.Read(@"C:\Users\Admin\Desktop\18687768_SAOKE_TK_202511.pdf");
 
@@ -6477,26 +6542,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
 
                 }
 
-                string computerName = Environment.MachineName;
-                if (computerName != "MAYCHU")
-                {
-                    // panelControl10.Width = (int)(this.ClientSize.Width * 0.15);
-                    //panelControl11.Width = (int)(this.ClientSize.Width * 0.25);
-                    // panelControl12.Width = (int)(this.ClientSize.Width * 0.23);
-                    // panleFinal.Width = (int)(this.ClientSize.Width * 0.132);
-
-                    tableLayoutPanel1.ColumnStyles[0].SizeType = SizeType.Absolute;
-                    tableLayoutPanel1.ColumnStyles[0].Width = (int)(this.ClientSize.Width * 0.25);
-                    tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
-                    tableLayoutPanel1.ColumnStyles[1].Width = (int)(this.ClientSize.Width * 0.28);
-                }
-                if (computerName == "PC43")
-                {
-                    tableLayoutPanel1.ColumnStyles[0].SizeType = SizeType.Absolute;
-                    tableLayoutPanel1.ColumnStyles[0].Width = (int)(this.ClientSize.Width * 0.28);
-                    tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
-                    tableLayoutPanel1.ColumnStyles[1].Width = (int)(this.ClientSize.Width * 0.28);
-                }
+               
 
 
                 // Thietlapcontrol();
@@ -6538,7 +6584,10 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 bool istaitudong = tbRegister.Rows[0].Field<string>("taitd") == "1" ? true : false;
                 allowUncheck = istaitudong;
                 if (istaitudong)
-                    radioButton2.Checked = istaitudong;
+                {
+                    //radioButton2.Checked = istaitudong;
+                    checkEdit2.Checked = istaitudong;
+                }
 
                 if (!string.IsNullOrEmpty(Moctg1))
                 {
@@ -16688,6 +16737,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         {
             if (xtraTabControl2.SelectedTabPage == xtraTabPage2)
             {
+               
+
                 if (dtMatdinhnganhang.Rows.Count == 0)
                 {
                     string queryCheckVatTu = @"SELECT * FROM tbDinhdanhNganhang ";
@@ -20458,6 +20509,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         {
             if (xtraTabControl2.SelectedTabPage == xtraTabPage2)
             {
+                ExportToExcel(gridControl3, lstNganhan.FirstOrDefault().NgayGD.Month, "");
                 DataTable lstnganhang = new DataTable();
                 string queryCheckVatTu = @"SELECT * FROM tbNganhang where Status= 0 ";
                 var parameterss = new OleDbParameter[]
@@ -20467,6 +20519,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                 lstnganhang = ExecuteQuery(queryCheckVatTu, parameterss);
                 foreach (var item in lstNganhan)
                 {
+                   
                     //Kiểm tra xem đã có chưa
                     if (lstnganhang.AsEnumerable().Any(row =>
                       row.Field<string>("SHDon") != null &&
@@ -26413,12 +26466,19 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 var cellValue = grid.GetRowCellValue(rowHandle, "ID");
                 if (cellValue == null)
                     return;
-                var filteredRows = tbImportDt.AsEnumerable()
-           .Where(m => m.Field<string>("ParentId") == cellValue.ToString());
-                if (filteredRows.Any(m => double.Parse(m["Percent"].ToString()) < 100))
-                { 
-                    e.Appearance.ForeColor = Color.Red;
-                } 
+                try
+                {
+                    var filteredRows = tbImportDt.AsEnumerable()
+          .Where(m => m.Field<string>("ParentId") == cellValue.ToString());
+                    if (filteredRows.Any(m => double.Parse(m["Percent"].ToString()) < 100))
+                    {
+                        e.Appearance.ForeColor = Color.Red;
+                    }
+                }
+                catch(Exception ex)
+                {
+
+                }
             }
         }
         private void gridView3_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
@@ -26756,6 +26816,14 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void gridView5_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
         {
+            if (cbbNganhangOrder.Text == "STT")
+            {
+                lstNganhan = lstNganhan.OrderBy(m => m.Stt).ToList();
+            }
+            else
+            {
+                lstNganhan = lstNganhan.OrderBy(m => m.NgayGD).ToList();
+            }
             //Lấy tháng của dòng
             int getMonthFirst = DateTime.Parse(gridView5.GetRowCellValue(e.RowHandle, "NgayGD").ToString()).Month;
             //xử lý cho các row còn lại
@@ -28721,6 +28789,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 excelilePath = openFileDialog.FileName;
+                if (excelilePath.Contains("NH_T"))
+                {
+                    ImportExcelNH(excelilePath);
+                    return;
+                }
                // DocfileNganhangExcel(excelilePath);
                 ReadFileExcelNganhang(excelilePath);
             }
@@ -28731,7 +28804,62 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             gridView5.SortInfo.Add(gridView5.Columns["NgayGD"], DevExpress.Data.ColumnSortOrder.Ascending);
 
         }
+        private  void ImportExcelNH(string path)
+        {
+           var queryDelete = @"DELETE FROM tbNganhang";
+            var result = ExecuteQueryResult(queryDelete, null); // Xóa trong database
+            using (var workbook = new XLWorkbook(path))
+            {
+                foreach (var worksheet in workbook.Worksheets)
+                {
+                    foreach (var row in worksheet.RowsUsed().Skip(1))
 
+                    {
+                        Nganhang tbNganhang = new Nganhang();
+                        string stt = row.Cell(1).GetString().Trim();
+                        tbNganhang.Stt = int.Parse(stt);
+                        tbNganhang.NgayGD = DateTime.Parse(row.Cell(2).GetString().Trim());
+                        tbNganhang.Maso = row.Cell(3).GetString().Trim();
+                        tbNganhang.Diengiai = row.Cell(4).GetString().Trim();
+                        tbNganhang.ThanhTien = double.Parse(row.Cell(5).GetString().Trim());
+                        tbNganhang.ThanhTien2= double.Parse(row.Cell(6).GetString().Trim());
+                        tbNganhang.TKNo = row.Cell(7).GetString().Trim();
+                        tbNganhang.TKCo = row.Cell(8).GetString().Trim();
+                        tbNganhang.TenKH= row.Cell(9).GetString().Trim();
+                        tbNganhang.MaKH = row.Cell(10).GetString().Trim();
+                        tbNganhang.Checked = row.Cell(12).GetString().Trim() == "TRUE" ? true : false;
+
+                        var query = @"INSERT INTO tbNganhang (SHDon, NgayGD, DienGiai, TongTien,TongTien2, TKNo,TKCo,Status,Checked,MaKH,TenKH,SoDu,[Key]) VALUES (?, ?, ?, ?, ?,?,?,?,?,?,?,?,?)";
+                        var parameters = new OleDbParameter[]
+                           {
+                        new OleDbParameter("?", tbNganhang.Maso),
+                        new OleDbParameter("?", tbNganhang.NgayGD.Date),
+                        new OleDbParameter("?", Helpers.ConvertUnicodeToVni(tbNganhang.Diengiai)),
+                        new OleDbParameter("?", tbNganhang.ThanhTien),
+                        new OleDbParameter("?", tbNganhang.ThanhTien2),
+                        new OleDbParameter("?", tbNganhang.TKNo),
+                        new OleDbParameter("?", tbNganhang.TKCo),
+                        new OleDbParameter("?","0"),
+                         new OleDbParameter("?",tbNganhang.Checked?"1":"0"),
+                         new OleDbParameter("?", !string.IsNullOrEmpty(tbNganhang.MaKH)?tbNganhang.MaKH:""),
+                         new OleDbParameter("?", !string.IsNullOrEmpty(tbNganhang.TenKH)?tbNganhang.TenKH:""),
+                         new OleDbParameter("?", tbNganhang.Balance),
+                         new OleDbParameter("?", $"{tbNganhang.ThanhTien}_{tbNganhang.ThanhTien2}_{tbNganhang.Balance}"),
+                           };
+                        try
+                        {
+                            int rowsAffected = ExecuteQueryResult(query, parameters);
+                            btnLocdulieuNganhang.PerformClick();
+                        }
+                        catch (Exception ex)
+                        {
+                            XtraMessageBox.Show(ex.Message + " " + tbNganhang.Maso);
+                        }
+                    }
+                }
+            }
+
+        }
         private void btnThemdong_Click(object sender, EventArgs e)
         {
             //Lấy stt của dòng hiện tại
@@ -28950,7 +29078,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     }
                 }
                 SaveHoadonexcel();
-
+                simpleButton6.PerformClick();
                 //Insert file vào phan mem
                 // gridControl1.DataSource = lstFileImporthd;
             }
@@ -29023,6 +29151,10 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 Hoadon hd = new Hoadon();
                 using (var workbook = new XLWorkbook(excelilePath))
                 {
+
+                    // Tạo tên file mới (có thể giữ nguyên tên hoặc thêm timestamp)
+                  
+
                     List<FileImport2> lstFileimport = new List<FileImport2>();
                     FileImport2 fileImport2 = new FileImport2();
                     Dictionary<string, string> dicCustomer = new Dictionary<string, string>();
@@ -29092,6 +29224,23 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                 DateTime parsedDate;
                                 DateTime.TryParse(cell1, out parsedDate);
                                 fileip2.NLap = parsedDate;
+
+
+                                //try
+                                //{
+                                //    string fileName = Path.GetFileName(excelilePath);
+                                //    string pathYear = $"HD{dtTungay.DateTime.Year}";
+                                //    string destFilePath = Path.Combine(savedPath, pathYear, "HDVao", fileip2.NLap.Month.ToString(), fileName);
+
+                                //    // Sao chép file
+                                //    File.Copy(excelilePath, destFilePath, true);
+
+                                //}
+                                //catch(Exception ex)
+                                //{
+
+                                //}
+
                                 //Tìm tên khkach1 hàng dòng tiếp theo
                                 row = worksheet.Row(item + 1); // Lấy hàng hiện tại
                                 string tenkh = row.Cell(1).GetString();
@@ -29342,7 +29491,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     }
                 }
             }
-            progressPanel1.Visible = false;
+            progressPanel1.Visible = false; 
         }
         private void SaveHoadonexcel()
         {
@@ -29454,8 +29603,24 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             progressPanel1.Visible = false;
         }
 
-        private void simpleButton6_Click(object sender, EventArgs e)
+        private async void simpleButton6_Click(object sender, EventArgs e)
         {
+            string queryct = "SELECT * FROM ChungTu"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
+            existingTbChungtu = ExecuteQuery(queryct);
+            _chungtuLookup = existingTbChungtu.AsEnumerable()
+       .ToLookup(h => (
+           SoHieu: h.Field<string>("SoHieu"),
+           NgayCT: h.Field<DateTime>("NgayCT")
+       ));
+            //existingTbHoadon
+            string queryhd = "SELECT * FROM HoaDon"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
+            existingTbHoadon = await Task.Run(() => ExecuteQuery(queryhd));
+            _hoadonLookup = existingTbHoadon.AsEnumerable()
+        .ToLookup(h => (
+            SoHD: h.Field<string>("SoHD"),
+            KyHieu: h.Field<string>("KyHieu")
+        ));
+
             lstImportVao = new BindingList<FileImport>();
             string queryCheckVatTu = @"SELECT * FROM tbimport   WHERE   Type = ? and Status <> ?";
 
@@ -29559,7 +29724,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         {
                             vatdt = int.Parse(it["VAT"].ToString());
                         }
-                        FileImportDetail fileImportDetail = new FileImportDetail(int.Parse(it["ID"].ToString()), Helpers.ConvertVniToUnicode(it["Ten"].ToString()), int.Parse(it["ParentId"].ToString()), (string)it["SoHieu"], double.Parse(it["SoLuong"].ToString()), double.Parse(it["DonGia"].ToString()), "", "", it["TKNo"].ToString(), it["TKCo"].ToString(), double.Parse(it["TTien"].ToString()), it["Percent"].ToString(), int.Parse(it["Tchat"].ToString()), vatdt);
+                        FileImportDetail fileImportDetail = new FileImportDetail(int.Parse(it["ID"].ToString()), Helpers.ConvertVniToUnicode(it["Ten"].ToString()), int.Parse(it["ParentId"].ToString()), (string)it["SoHieu"], double.Parse(it["SoLuong"].ToString()), double.Parse(it["DonGia"].ToString()),"xxx", "", it["TKNo"].ToString(), it["TKCo"].ToString(), double.Parse(it["TTien"].ToString()), it["Percent"].ToString(), int.Parse(it["Tchat"].ToString()), vatdt);
                         fileImport.fileImportDetails.Add(fileImportDetail);
                     }
                     lstImportVao.Add(fileImport);
@@ -29828,12 +29993,161 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             }
         }
 
+        public string ExportToExcel(GridControl gridControl, int month,string filePath = "")
+        {
+            try
+            {
+                // Lấy View hiện tại
+                var view = gridControl.DefaultView as DevExpress.XtraGrid.Views.Grid.GridView;
+                if (view == null)
+                    throw new Exception("Không tìm thấy GridView");
+
+                // Nếu không truyền đường dẫn, tự tạo
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    string pathYear = $"HD{dtTungay.DateTime.Year}";
+                    string directory = Path.Combine(savedPath, pathYear,"HDVao", month.ToString());
+                    if (!System.IO.Directory.Exists(directory))
+                        System.IO.Directory.CreateDirectory(directory);
+
+                    filePath = System.IO.Path.Combine(directory,
+                        $"NH_T{month}.xlsx");
+                }
+
+                // --- Tùy chọn export ---
+                XlsxExportOptionsEx options = new XlsxExportOptionsEx
+                {
+                    // Chế độ Data-Aware: giữ nhóm, lọc, tổng hợp, định dạng có điều kiện [citation:1][citation:3]
+                    ExportType = ExportType.DataAware
+                };
+
+                // Xuất file [citation:3][citation:5]
+                gridControl.ExportToXlsx(filePath, options);
+
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi xuất Excel: {ex.Message}");
+            }
+        }
+
+        //public static string ExportMasterDetailClean(GridControl gridControl, string filePath = "")
+        //{
+        //    try
+        //    {
+        //        var masterView = gridControl.DefaultView as GridView;
+        //        if (masterView == null)
+        //            throw new Exception("Không tìm thấy GridView");
+
+        //        // Tạo DataTable gộp dữ liệu
+        //        DataTable dt = new DataTable();
+
+        //        // Thêm cột cho Master
+        //        foreach (DevExpress.XtraGrid.Columns.GridColumn col in masterView.Columns)
+        //        {
+        //            if (col.Visible)
+        //                dt.Columns.Add(col.FieldName, typeof(string));
+        //        }
+
+        //        // Thêm cột cho Detail (nếu có)
+        //        //dt.Columns.Add("ChiTiet_SanPham", typeof(string));
+        //        //dt.Columns.Add("ChiTiet_SoLuong", typeof(string));
+        //        //dt.Columns.Add("ChiTiet_DonGia", typeof(string));
+        //        //dt.Columns.Add("ChiTiet_ThanhTien", typeof(string));
+
+        //        // Lấy dữ liệu Master và Detail
+        //        for (int i = 0; i < masterView.DataRowCount; i++)
+        //        {
+        //            DataRow masterRow = masterView.GetDataRow(i);
+        //            if (masterRow == null) continue;
+
+        //            // Lấy Detail View
+        //            ColumnView detailView = masterView.GetDetailView(i, 0) as ColumnView;
+
+        //            if (detailView != null && detailView.DataRowCount > 0)
+        //            {
+        //                // Có Detail: xuất từng dòng detail
+        //                for (int j = 0; j < detailView.DataRowCount; j++)
+        //                {
+        //                    DataRow detailRow = detailView.GetDataRow(j);
+        //                    if (detailRow == null) continue;
+
+        //                    DataRow newRow = dt.NewRow();
+
+        //                    // Copy Master
+        //                    foreach (DevExpress.XtraGrid.Columns.GridColumn col in masterView.Columns)
+        //                    {
+        //                        if (col.Visible && masterRow.Table.Columns.Contains(col.FieldName))
+        //                            newRow[col.FieldName] = masterRow[col.FieldName]?.ToString();
+        //                    }
+
+        //                    // Copy Detail
+        //                    newRow["ChiTiet_SanPham"] = detailRow["ProductName"]?.ToString();
+        //                    newRow["ChiTiet_SoLuong"] = detailRow["Quantity"]?.ToString();
+        //                    newRow["ChiTiet_DonGia"] = detailRow["UnitPrice"]?.ToString();
+        //                    newRow["ChiTiet_ThanhTien"] = detailRow["Total"]?.ToString();
+
+        //                    dt.Rows.Add(newRow);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                // Không có Detail: chỉ xuất Master
+        //                DataRow newRow = dt.NewRow();
+        //                foreach (DevExpress.XtraGrid.Columns.GridColumn col in masterView.Columns)
+        //                {
+        //                    if (col.Visible && masterRow.Table.Columns.Contains(col.FieldName))
+        //                        newRow[col.FieldName] = masterRow[col.FieldName]?.ToString();
+        //                }
+        //                dt.Rows.Add(newRow);
+        //            }
+        //        }
+
+        //        // Tạo GridControl mới để export (không ảnh hưởng UI)
+        //        using (GridControl tempGrid = new GridControl())
+        //        using (GridView tempView = new GridView())
+        //        {
+        //            tempGrid.ViewCollection.Add(tempView);
+        //            tempGrid.MainView = tempView;
+        //            tempView.GridControl = tempGrid;
+        //            tempView.OptionsView.ShowGroupPanel = false;
+
+        //            // Gán DataTable vào GridView tạm
+        //            tempGrid.DataSource = dt;
+        //            tempView.PopulateColumns();
+
+        //            // Export
+        //            if (string.IsNullOrEmpty(filePath))
+        //            {
+        //                string directory = @"D:\hoadon";
+        //                Directory.CreateDirectory(directory);
+        //                filePath = Path.Combine(directory, $"Export_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
+        //            }
+
+        //            XlsxExportOptionsEx options = new XlsxExportOptionsEx
+        //            {
+        //                ExportType = ExportType.DataAware,
+        //                ShowGridLines = true
+        //            };
+
+        //            tempGrid.ExportToXlsx(filePath, options);
+        //        }
+
+        //        return filePath;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception($"Lỗi: {ex.Message}");
+        //    }
+        //}
         private void btnimport_Click(object sender, EventArgs e)
         {
             if (chkDauvao.Checked)
             {
                 progressPanel1.Visible = true;
                 progressPanel1.Caption = "Đang xử lý";
+                
             }
             else
             {
@@ -34734,7 +35048,73 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             frmDocnganhang frmDocnganhang = new frmDocnganhang();
             frmDocnganhang.ShowDialog();
         }
-       
+
+        private void chkDVTMacdinh_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbbNganhangOrder_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GridView view = gridControl3.MainView as GridView;
+            view.ClearSorting();  // Xóa tất cả sắp xếp đang có (bao gồm cả cột TKNO)
+
+            if (cbbNganhangOrder.Text == "STT")
+            {
+                gridControl3.DataSource = lstNganhan.OrderBy(m => m.Stt).ToList();
+                gridControl3.RefreshDataSource();
+            }
+            else
+            {
+                if (view.SortInfo.Count > 0)
+                {
+                    MessageBox.Show($"Đang sắp xếp theo cột: {view.SortInfo[0].Column.FieldName}, thứ tự: {view.SortInfo[0].SortOrder}");
+                }
+                gridControl3.DataSource = lstNganhan.OrderBy(m => m.NgayGD).ToList();
+                gridView5.RefreshData();
+            }
+        }
+
+        private void checkEdit2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (allowUncheck)
+            {
+                radioButton1.Checked = false;
+                string querys = @"UPDATE tbRegister SET taitd = ?";
+
+                var parameterss = new OleDbParameter[]
+                 {
+                   new OleDbParameter("?","0"),
+                 };
+                int rowsAffecteds = ExecuteQueryResult(querys, parameterss);
+                allowUncheck = radioButton1.Checked;
+                RemoveFromStartup();
+                return;
+            }
+
+            // Lật trạng thái 
+            allowUncheck = radioButton1.Checked;
+            string query = @"UPDATE tbRegister SET taitd = ?";
+
+            var parameters = new OleDbParameter[]
+     {
+                                new OleDbParameter("?","1"),
+     };
+            int rowsAffected = ExecuteQueryResult(query, parameters);
+            AddToStartup();
+        }
+
+        private void btnSavelayout_Click(object sender, EventArgs e)
+        {
+            string file = Path.Combine(
+       Application.StartupPath,
+       "layout.xml");
+
+            _designer.Save(tableLayoutPanel1, file);
+
+            MessageBox.Show("Đã lưu giao diện.");
+        }
+
         // ========================================
         // HÀM TẢI FILE PDF
         // ========================================

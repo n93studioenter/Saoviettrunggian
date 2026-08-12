@@ -1,12 +1,16 @@
 ﻿using ClosedXML.Excel;
+using DevExpress.Utils;
+using DevExpress.Utils.Extensions;
 using DevExpress.XtraEditors;
 using SaovietTax.Database;
+using SaovietTax.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -119,7 +123,41 @@ namespace SaovietTax
 
             return dt;
         }
+        private void CreateFolder(string path)
+        {
+            try
+            {
+                // Kiểm tra đường dẫn có tồn tại không
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
 
+                // Tạo danh sách các tháng cần kiểm tra (1-12)
+                for (int month = 1; month <= 12; month++)
+                {
+                    // Tạo tên thư mục với định dạng 2 chữ số (01, 02, ..., 12)
+                    string folderName = month.ToString("D1");
+                    string folderPath = Path.Combine(path, folderName);
+
+                    // Kiểm tra nếu thư mục chưa tồn tại thì tạo mới
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                        Console.WriteLine($"Đã tạo thư mục: {folderPath}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Thư mục đã tồn tại: {folderPath}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi khi tạo thư mục: {ex.Message}");
+                throw;
+            }
+        }
         // Sử dụng: 
         private void Vanguard_Load(object sender, EventArgs e)
         {
@@ -155,13 +193,125 @@ namespace SaovietTax
                 if (kq.Rows.Count > 0)
                 {
                     savedPath = kq.Rows[0]["Hoadonpath"].ToString();
+
+                    //Kiểm tra va tạo đầu vào
+                    string pVao = Path.Combine(savedPath, $"HD{DateTime.Now.Year}", "HDVao");
+                    CreateFolder(pVao);
+
+                    //Kiểm tra va tạo đầu ra
+                    string pRa = Path.Combine(savedPath, $"HD{DateTime.Now.Year}", "HDRa");
+                    CreateFolder(pRa);
                 }
             }
             catch (Exception ex)
             {
                 XtraMessageBox.Show(ex.Message);
             }
-                        string queryct = @"
+            //Chạy code tải excel
+            TaiExcel();
+        }
+        DevExpress.XtraEditors.LabelControl lblThongBao;
+
+        private void LoadMeaasge()
+        {
+            var svgImageBox2 = new DevExpress.XtraEditors.SvgImageBox();
+            svgImageBox2.Location = new System.Drawing.Point(5, 7);
+            svgImageBox2.Name = "svgImageBox2";
+            svgImageBox2.Size = new System.Drawing.Size(69, 56);
+
+            // 👇 Set background trong suốt
+            svgImageBox2.BackColor = Color.Transparent;
+
+            // Icon Calendar màu xám
+            string svgCalendarGreen = @"<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
+    <rect x='3' y='4' width='18' height='18' rx='2' fill='none' stroke='#4CAF50' stroke-width='2'/>
+    <line x1='3' y1='10' x2='21' y2='10' stroke='#4CAF50' stroke-width='2'/>
+    <line x1='8' y1='2' x2='8' y2='6' stroke='#4CAF50' stroke-width='2'/>
+    <line x1='16' y1='2' x2='16' y2='6' stroke='#4CAF50' stroke-width='2'/>
+</svg>";
+
+            using (System.IO.MemoryStream stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(svgCalendarGreen)))
+            {
+                svgImageBox2.SvgImage = DevExpress.Utils.Svg.SvgImage.FromStream(stream);
+            }
+
+            svgImageBox2.TabIndex = 0;
+            this.Controls.Add(svgImageBox2);
+
+            var labelControl3 = new DevExpress.XtraEditors.LabelControl();
+            labelControl3.Location = new System.Drawing.Point(81, 40);
+            labelControl3.Name = "labelControl3";
+            labelControl3.Size = new System.Drawing.Size(63, 16);
+            labelControl3.TabIndex = 2;
+            labelControl3.Text = "1 cảnh báo";
+            // 
+            // labelControl2
+            // 
+            var labelControl2 = new DevExpress.XtraEditors.LabelControl();
+            labelControl2.Appearance.Font = new System.Drawing.Font("Tahoma", 8.8F, System.Drawing.FontStyle.Bold);
+            labelControl2.Appearance.Options.UseFont = true;
+            labelControl2.Location = new System.Drawing.Point(80, 16);
+            labelControl2.Name = "labelControl2";
+            labelControl2.Size = new System.Drawing.Size(69, 18);
+            labelControl2.TabIndex = 1;
+            labelControl2.Text = "07/2026";
+
+            var panelControl2 = new DevExpress.XtraEditors.PanelControl();
+            panelControl2.Appearance.BackColor = System.Drawing.Color.White;
+            panelControl2.Appearance.Options.UseBackColor = true;
+            panelControl2.Controls.Add(labelControl3);
+            panelControl2.Controls.Add(labelControl2);
+            panelControl2.Controls.Add(svgImageBox2);
+            panelControl2.Location = new System.Drawing.Point(5, 5);
+            panelControl2.Name = "panelControl2";
+            panelControl2.Size = new System.Drawing.Size(494, 97);
+            panelControl2.TabIndex = 0;
+
+
+
+            lblThongBao = new DevExpress.XtraEditors.LabelControl();
+            lblThongBao.Text = "🔴 12 Hóa đơn chưa nhập";
+            lblThongBao.Font = new Font("Segoe UI", 7, FontStyle.Bold);
+            lblThongBao.ForeColor = Color.Red;
+            lblThongBao.Appearance.BackColor = Color.Transparent;
+            lblThongBao.Appearance.Options.UseBackColor = true;
+            lblThongBao.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            lblThongBao.Size = new Size(200, 35);
+            int margin = (int)(panelControl2.Width * 0.3); // 20% của 400 = 80px
+
+            lblThongBao.Location = new Point(margin, 10); // Đặt vị trí trên form
+            lblThongBao.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+
+            // Thêm vào form
+            panelControl2.AddControl(lblThongBao);
+
+            //
+            lblThongBao = new DevExpress.XtraEditors.LabelControl();
+            lblThongBao.Text = "🔴 12 Hóa đơn chưa nhập";
+            lblThongBao.Font = new Font("Segoe UI", 7, FontStyle.Bold);
+            lblThongBao.ForeColor = Color.Blue;
+            lblThongBao.Appearance.BackColor = Color.Transparent;
+            lblThongBao.Appearance.Options.UseBackColor = true;
+            lblThongBao.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            lblThongBao.Size = new Size(200, 35);
+
+            lblThongBao.Location = new Point(margin, 40); // Đặt vị trí trên form
+            lblThongBao.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+
+            // Thêm vào form
+            panelControl2.AddControl(lblThongBao);
+            panelControl2.Height = 100;
+
+
+            this.panelControl1.Controls.Add(panelControl2);
+        }
+        private void TaiExcel()
+        { 
+
+        } 
+        private void LoadGrid()
+        {
+            string queryct = @"
                                        SELECT 
                         hd.SoHD,
                         hd.KyHieu,
@@ -209,39 +359,36 @@ namespace SaovietTax
             }
 
             string qrip = "SELECT * FROM tbImport";
-            tbImport= ExecuteQuery(qrip);
+            tbImport = ExecuteQuery(qrip);
 
-            for (int i = DateTime.Now.Month; i >=1; i--)
+
+            string qrtonkho = "select * from TonKho";
+            var dtTonKho = ExecuteQuery(qrtonkho);
+            string qrvt = "select * from Vattu";
+            var dtVattu = ExecuteQuery(qrvt);
+            string hangam = "";
+            for (int i = DateTime.Now.Month; i >= 1; i--)
             {
-                //Kiem tra bảng cân đối ps
-                        string qrac = @"
-                SELECT DISTINCTROW 
-                    HeThongTK.SoHieu, 
-                    HeThongTK.Cap, 
-                    HeThongTK.Ten, 
-                    HeThongTK.Kieu, 
-                    HeThongTK.Loai, 
-                    HeThongTK.DuNo_7 AS DkNo, 
-                    HeThongTK.DuCo_7 AS DkCo, 
-                    HeThongTK.No_8 AS PsNo, 
-                    HeThongTK.Co_8 AS PsCo, 
-                    HeThongTK.KC_N, 
-                    HeThongTK.KC_C, 
-                    HeThongTK.DuNo_8 AS CkNo, 
-                    HeThongTK.DuCo_8 AS CkCo
-                FROM HeThongTK
-                WHERE (
-                    (HeThongTK.MaTC = 0 OR HeThongTK.MaTC = HeThongTK.MaSo) 
-                    OR (HeThongTK.TK_ID3 Mod 10 >= 1)
-                ) 
-                AND (HeThongTK.Loai > 0)  
-                AND HeThongTK.Cap <= 2 
-                AND (
-                    HeThongTK.DuNo_8 <> 0 
-                    OR HeThongTK.DuCo_8 <> 0 
-                    OR HeThongTK.No_8 <> 0 
-                    OR HeThongTK.Co_8 <> 0
-                )";
+                //Kiểm tra tồn kho
+                hangam = "";
+                string columnName = $"Luong_{i}";
+                foreach (DataRow row in dtTonKho.Rows)
+                {
+                    // Lấy giá trị theo tên cột động
+                    object value = row[columnName];
+                    if (value != DBNull.Value && value != null)
+                    {
+                        double soLuong = Convert.ToDouble(value);
+                        if (soLuong < 0)
+                        {
+                            var getvattu = dtVattu.AsEnumerable().Where(m => m["MaSo"].ToString() == row["MaVatTu"].ToString()).FirstOrDefault();
+                            if (getvattu != null)
+                            {
+                                hangam += getvattu["SoHieu"] + ",";
+                            }
+                        }
+                    }
+                }
 
                 var result = GetHeThongTK(i, DateTime.Now.Year);
                 // Tổng DkNo
@@ -302,7 +449,7 @@ namespace SaovietTax
                 .Where(m => m.Field<DateTime>("NLap").Date.Month == i)
                 .Where(m => m["Status"].ToString() == "2");
 
-                DataTable getimportloi=new DataTable();
+                DataTable getimportloi = new DataTable();
                 if (qr.Any())
                 {
                     getimportloi = qr.CopyToDataTable();
@@ -328,29 +475,36 @@ namespace SaovietTax
                         var worksheet = workbook.Worksheet(1); // Lấy sheet đầu tiên
                         foreach (var row in worksheet.RowsUsed().Skip(3)) // Bỏ qua 6 hàng đầu tiên
                         {
-                            string khhd = row.Cell("B").Value.ToString(); // Lấy giá trị của cột A trong hàng hiện tại
-                            string getSHHD = row.Cell("C").Value.ToString(); // Lấy giá trị của cột A trong hàng hiện tại
-                            string getSohd = Helpers.RemoveLeadingZeros(row.Cell("D").Value.ToString()); // Lấy giá trị của cột C trong hàng hiện tại 
-                            string GetNLap = row.Cell("E").Value.ToString();
-                            string mstnb = row.Cell("F").Value.ToString();
-                            DateTime getdate = DateTime.Parse(GetNLap);
-                            HoaDonNhap HoaDonNhap = new HoaDonNhap();
-                            HoaDonNhap.SoHD = getSohd;
-                            HoaDonNhap.NLap = getdate;
-                            lstvao.Add(HoaDonNhap);
-
-                            if (!KiemtrahoadonCT(getSohd, getSHHD, getdate, mstnb, 1))
+                            try
                             {
-                                hdchuanhapvao+=1;
+                                string khhd = row.Cell("B").Value.ToString(); // Lấy giá trị của cột A trong hàng hiện tại
+                                string getSHHD = row.Cell("C").Value.ToString(); // Lấy giá trị của cột A trong hàng hiện tại
+                                string getSohd = Helpers.RemoveLeadingZeros(row.Cell("D").Value.ToString()); // Lấy giá trị của cột C trong hàng hiện tại 
+                                string GetNLap = row.Cell("E").Value.ToString();
+                                string mstnb = row.Cell("F").Value.ToString();
+                                DateTime getdate = DateTime.Parse(GetNLap);
+                                HoaDonNhap HoaDonNhap = new HoaDonNhap();
+                                HoaDonNhap.SoHD = getSohd;
+                                HoaDonNhap.NLap = getdate;
+                                lstvao.Add(HoaDonNhap);
+
+                                if (!KiemtrahoadonCT(getSohd, getSHHD, getdate, mstnb, 1))
+                                {
+                                    hdchuanhapvao += 1;
+                                }
+                                tongvao += 1;
                             }
-                            tongvao += 1;
-                          
+                            catch (Exception ex)
+                            {
+
+                            }
+
                         }
                     }
                     j++;
                 }
-                var getchungtuthang = lookupHoaDonCT.Where(m => m.NLap.Month == i && m.Type==1).ToList();
-                foreach(var it in getchungtuthang)
+                var getchungtuthang = lookupHoaDonCT.Where(m => m.NLap.Month == i && m.Type == 1).ToList();
+                foreach (var it in getchungtuthang)
                 {
                     var check = !lstvao.Any(m => m.SoHD == it.SoHD);
                     if (check)
@@ -376,8 +530,8 @@ namespace SaovietTax
                             {
                                 int dngg = 10;
                             }
-                            string mstnm = row.Cell("H").Value.ToString(); 
-                          
+                            string mstnm = row.Cell("H").Value.ToString();
+
                             if (DateTime.TryParse(GetNLap, out DateTime getdate))
                             {
                                 DateTime gd = DateTime.Parse(GetNLap);
@@ -385,7 +539,7 @@ namespace SaovietTax
                                 HoaDonNhap.SoHD = getSohd;
                                 HoaDonNhap.NLap = gd;
                                 lstRa.Add(HoaDonNhap);
-                                if (!KiemtrahoadonCT(getSohd, getkhhd, getdate, mstnm,2))
+                                if (!KiemtrahoadonCT(getSohd, getkhhd, getdate, mstnm, 2))
                                 {
                                     hdchuanhapra += 1;
                                 }
@@ -404,16 +558,16 @@ namespace SaovietTax
                         hdnhapduDaura += it.SoHD + ",";
                     }
                 }
-                if (excelFiles.Count > 0 || excelFilesra.Count>0)
+                if (excelFiles.Count > 0 || excelFilesra.Count > 0)
                 {
                     WarningData warningData = new WarningData();
                     warningData.Thang = i;
                     warningData.Hoadonthieu = $"{hdchuanhapvao} hd đầu vào, {hdchuanhapra} hd đầu ra";
 
                     //Import lỗi 
-                    if(getimportloi.Rows.Count > 0)
+                    if (getimportloi.Rows.Count > 0)
                     {
-                        foreach(DataRow item in getimportloi.Rows)
+                        foreach (DataRow item in getimportloi.Rows)
                         {
                             if (item["Type"].ToString() == "1")
                                 importvaoloi += item["SHDon"].ToString() + ",";
@@ -421,12 +575,12 @@ namespace SaovietTax
                                 importraloi += item["SHDon"].ToString() + ",";
                         }
                     }
-                    warningData.Importloi = !string.IsNullOrEmpty(importvaoloi)? $"Đầu vào  : {importvaoloi}":"";
+                    warningData.Importloi = !string.IsNullOrEmpty(importvaoloi) ? $"Đầu vào  : {importvaoloi}" : "";
                     warningData.Importloi += !string.IsNullOrEmpty(importraloi) ? $" Đầu ra  : {importraloi}" : "";
-                    warningData.HoaDonThua = !string.IsNullOrEmpty(hdnhapduDauvao)? $"Đv : {hdnhapduDauvao}":"";
+                    warningData.HoaDonThua = !string.IsNullOrEmpty(hdnhapduDauvao) ? $"Đv : {hdnhapduDauvao}" : "";
                     warningData.HoaDonThua += !string.IsNullOrEmpty(hdnhapduDaura) ? $"Đr : {hdnhapduDaura}" : "";
 
-                    if(sumDkNo!= sumDkCo)
+                    if (sumDkNo != sumDkCo)
                     {
                         warningData.HethongTK += $"Số dư đầu kỳ chưa cân {sumDkNo} -  {sumDkCo}";
                     }
@@ -438,11 +592,12 @@ namespace SaovietTax
                     {
                         warningData.HethongTK += $"Số dư cuối kỳ chưa cân {sumCkNo} -  {sumCkCo}";
                     }
+                    warningData.Hangam = hangam;
                     warningDatas.Add(warningData);
-                } 
+                }
             }
-          
-            gridControl1.DataSource = warningDatas.OrderByDescending(m=>m.Thang); 
+
+            gridControl1.DataSource = warningDatas.OrderByDescending(m => m.Thang);
         }
         private bool KiemtrahoadonCT(string SoHD, string KyHieu, DateTime NLap, string Mst, int type)
         {

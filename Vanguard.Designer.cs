@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Vanguard));
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.warningDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -39,21 +40,27 @@
             this.colHethongTK = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colHoadonthua = new DevExpress.XtraGrid.Columns.GridColumn();
             this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
+            this.svgImageBox1 = new DevExpress.XtraEditors.SvgImageBox();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.warningDataBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.svgImageBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.SuspendLayout();
             // 
             // gridControl1
             // 
             this.gridControl1.DataSource = this.warningDataBindingSource;
-            this.gridControl1.Location = new System.Drawing.Point(-1, 2);
+            this.gridControl1.Location = new System.Drawing.Point(977, 381);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(956, 282);
+            this.gridControl1.Size = new System.Drawing.Size(91, 44);
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
+            this.gridControl1.Visible = false;
             // 
             // warningDataBindingSource
             // 
@@ -90,7 +97,7 @@
             this.colHoadonthieu.Name = "colHoadonthieu";
             this.colHoadonthieu.Visible = true;
             this.colHoadonthieu.VisibleIndex = 1;
-            this.colHoadonthieu.Width = 254;
+            this.colHoadonthieu.Width = 246;
             // 
             // colImportloi
             // 
@@ -100,7 +107,7 @@
             this.colImportloi.Name = "colImportloi";
             this.colImportloi.Visible = true;
             this.colImportloi.VisibleIndex = 2;
-            this.colImportloi.Width = 170;
+            this.colImportloi.Width = 171;
             // 
             // colHangam
             // 
@@ -120,7 +127,7 @@
             this.colHethongTK.Name = "colHethongTK";
             this.colHethongTK.Visible = true;
             this.colHethongTK.VisibleIndex = 4;
-            this.colHethongTK.Width = 210;
+            this.colHethongTK.Width = 212;
             // 
             // colHoadonthua
             // 
@@ -130,23 +137,56 @@
             this.colHoadonthua.Name = "colHoadonthua";
             this.colHoadonthua.Visible = true;
             this.colHoadonthua.VisibleIndex = 5;
-            this.colHoadonthua.Width = 120;
+            this.colHoadonthua.Width = 125;
             // 
             // simpleButton1
             // 
-            this.simpleButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.simpleButton1.ImageOptions.SvgImage = global::SaovietTax.Properties.Resources.clearheaderandfooter1;
-            this.simpleButton1.Location = new System.Drawing.Point(910, 246);
+            this.simpleButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.simpleButton1.ImageOptions.Image = global::SaovietTax.Properties.Resources.delete_32x32;
+            this.simpleButton1.Location = new System.Drawing.Point(475, 11);
             this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(45, 38);
+            this.simpleButton1.Size = new System.Drawing.Size(41, 38);
             this.simpleButton1.TabIndex = 1;
             this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
+            // 
+            // svgImageBox1
+            // 
+            this.svgImageBox1.Location = new System.Drawing.Point(12, 8);
+            this.svgImageBox1.Name = "svgImageBox1";
+            this.svgImageBox1.Size = new System.Drawing.Size(60, 47);
+            this.svgImageBox1.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("svgImageBox1.SvgImage")));
+            this.svgImageBox1.TabIndex = 2;
+            this.svgImageBox1.Text = "svgImageBox1";
+            // 
+            // labelControl1
+            // 
+            this.labelControl1.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl1.Appearance.ForeColor = System.Drawing.Color.Black;
+            this.labelControl1.Appearance.Options.UseFont = true;
+            this.labelControl1.Appearance.Options.UseForeColor = true;
+            this.labelControl1.Location = new System.Drawing.Point(81, 22);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(264, 18);
+            this.labelControl1.TabIndex = 3;
+            this.labelControl1.Text = "CẢNH BÁO HỆ THỐNG THEO THÁNG";
+            // 
+            // panelControl1
+            // 
+            this.panelControl1.Appearance.BackColor = System.Drawing.Color.Transparent;
+            this.panelControl1.Appearance.Options.UseBackColor = true;
+            this.panelControl1.Location = new System.Drawing.Point(12, 61);
+            this.panelControl1.Name = "panelControl1";
+            this.panelControl1.Size = new System.Drawing.Size(504, 534);
+            this.panelControl1.TabIndex = 4;
             // 
             // Vanguard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(958, 285);
+            this.ClientSize = new System.Drawing.Size(524, 607);
+            this.Controls.Add(this.panelControl1);
+            this.Controls.Add(this.labelControl1);
+            this.Controls.Add(this.svgImageBox1);
             this.Controls.Add(this.simpleButton1);
             this.Controls.Add(this.gridControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -157,7 +197,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.warningDataBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.svgImageBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -173,5 +216,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn colThang;
         private DevExpress.XtraGrid.Columns.GridColumn colHoadonthua;
         private DevExpress.XtraEditors.SimpleButton simpleButton1;
+        private DevExpress.XtraEditors.SvgImageBox svgImageBox1;
+        private DevExpress.XtraEditors.LabelControl labelControl1;
+        private DevExpress.XtraEditors.PanelControl panelControl1;
     }
 }

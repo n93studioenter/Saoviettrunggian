@@ -542,6 +542,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
+    <Compile Include="RuntimeDesigner.cs" />
     <Compile Include="Saoviet_main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -895,6 +896,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Hoadon\invoice.txt" />
+    <None Include="Resources\next_32x321.png" />
+    <None Include="Resources\next_16x162.png" />
+    <None Include="Resources\movedown.svg" />
     <None Include="Resources\up.svg" />
     <None Include="Resources\next_16x161.png" />
     <None Include="Resources\selecttable_16x16.png" />
@@ -904,6 +908,7 @@
     <None Include="Resources\clearheaderandfooter.svg" />
     <None Include="Resources\documentpdf.svg" />
     <None Include="Resources\clearheaderandfooter1.svg" />
+    <None Include="Resources\delete_32x32.png" />
     <Content Include="Resources\favicon.ico" />
     <None Include="Resources\next.svg" />
     <None Include="Resources\next_16x16.png" />
