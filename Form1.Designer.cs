@@ -2280,7 +2280,7 @@
             this.chktaituweb.Properties.Appearance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.chktaituweb.Properties.Appearance.Options.UseForeColor = true;
             this.chktaituweb.Properties.Caption = "Tải  từ web";
-            this.chktaituweb.Size = new System.Drawing.Size(152, 20);
+            this.chktaituweb.Size = new System.Drawing.Size(124, 20);
             this.chktaituweb.TabIndex = 26;
             this.chktaituweb.CheckedChanged += new System.EventHandler(this.chktaituweb_CheckedChanged);
             // 
@@ -2318,11 +2318,11 @@
             this.simpleButton3.Appearance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.simpleButton3.Appearance.Options.UseFont = true;
             this.simpleButton3.Appearance.Options.UseForeColor = true;
-            this.simpleButton3.ImageOptions.Image = global::SaovietTax.Properties.Resources.drilldownonseries_chart_32x32;
-            this.simpleButton3.Location = new System.Drawing.Point(286, 125);
+            this.simpleButton3.ImageOptions.SvgImage = global::SaovietTax.Properties.Resources.customerprofilereport;
+            this.simpleButton3.Location = new System.Drawing.Point(286, 118);
             this.simpleButton3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton3.Name = "simpleButton3";
-            this.simpleButton3.Size = new System.Drawing.Size(219, 28);
+            this.simpleButton3.Size = new System.Drawing.Size(219, 40);
             this.simpleButton3.TabIndex = 13;
             this.simpleButton3.Text = "Thực hiện tải hoá đơn";
             this.simpleButton3.ToolTip = "https://hoadondientu.gdt.gov.vn/";
@@ -3687,11 +3687,12 @@
             // 
             // btnSavelayout
             // 
-            this.btnSavelayout.Location = new System.Drawing.Point(956, 17);
+            this.btnSavelayout.Location = new System.Drawing.Point(755, 11);
             this.btnSavelayout.Name = "btnSavelayout";
             this.btnSavelayout.Size = new System.Drawing.Size(94, 29);
             this.btnSavelayout.TabIndex = 40;
             this.btnSavelayout.Text = "simpleButton16";
+            this.btnSavelayout.Visible = false;
             this.btnSavelayout.Click += new System.EventHandler(this.btnSavelayout_Click);
             // 
             // btnTaiInvoice
@@ -3707,7 +3708,7 @@
             // chkUutiensoluong
             // 
             this.chkUutiensoluong.EditValue = true;
-            this.chkUutiensoluong.Location = new System.Drawing.Point(1019, 29);
+            this.chkUutiensoluong.Location = new System.Drawing.Point(1032, 30);
             this.chkUutiensoluong.Name = "chkUutiensoluong";
             this.chkUutiensoluong.Properties.Caption = "Ưu tiên số lượng";
             this.chkUutiensoluong.Size = new System.Drawing.Size(134, 20);

@@ -143,7 +143,7 @@
             // 
             this.simpleButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton1.ImageOptions.Image = global::SaovietTax.Properties.Resources.delete_32x32;
-            this.simpleButton1.Location = new System.Drawing.Point(475, 11);
+            this.simpleButton1.Location = new System.Drawing.Point(375, 8);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(41, 38);
             this.simpleButton1.TabIndex = 1;
@@ -160,13 +160,13 @@
             // 
             // labelControl1
             // 
-            this.labelControl1.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl1.Appearance.Font = new System.Drawing.Font("Tahoma", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControl1.Appearance.ForeColor = System.Drawing.Color.Black;
             this.labelControl1.Appearance.Options.UseFont = true;
             this.labelControl1.Appearance.Options.UseForeColor = true;
             this.labelControl1.Location = new System.Drawing.Point(81, 22);
             this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(264, 18);
+            this.labelControl1.Size = new System.Drawing.Size(210, 14);
             this.labelControl1.TabIndex = 3;
             this.labelControl1.Text = "CẢNH BÁO HỆ THỐNG THEO THÁNG";
             // 
@@ -176,14 +176,14 @@
             this.panelControl1.Appearance.Options.UseBackColor = true;
             this.panelControl1.Location = new System.Drawing.Point(12, 61);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(504, 534);
+            this.panelControl1.Size = new System.Drawing.Size(409, 534);
             this.panelControl1.TabIndex = 4;
             // 
             // Vanguard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 607);
+            this.ClientSize = new System.Drawing.Size(428, 607);
             this.Controls.Add(this.panelControl1);
             this.Controls.Add(this.labelControl1);
             this.Controls.Add(this.svgImageBox1);
@@ -194,6 +194,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vanguard";
             this.Load += new System.EventHandler(this.Vanguard_Load);
+            this.Shown += new System.EventHandler(this.Vanguard_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.warningDataBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();

@@ -5437,6 +5437,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
 
         private void EnsureColumns(OleDbConnection conn)
         {
+            AddColumnIfNotExists(conn, "tbInvoiceInfo", "SupplierId", "NUMBER");
             // tbRegister
             AddColumnIfNotExists(conn, "tbRegister", "tokken", "TEXT");
             AddColumnIfNotExists(conn, "tbRegister", "TimeTokken", "DATETIME");
@@ -6491,7 +6492,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
 
             _designer.PrepareForDesign(tableLayoutPanel1);
 
-            _designer.SetEnabled(true);
+            _designer.SetEnabled(false);
 
             string file = Path.Combine(
                 Application.StartupPath,
@@ -9427,8 +9428,62 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             int rs = int.Parse(kq.Rows[0]["IsSuggest"].ToString());
             return rs == 1 ? true : false;
         }
+        bool isdesign = false;
+        string bakName = "";
         protected override bool ProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData)
         {
+            if (keyData == (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R))
+            {
+                if (isdesign == false)
+                {
+                    bakName = this.Text;
+                    this.Text = "Phần mềm đang ở chế độ chỉnh sửa";
+                    isdesign = true;
+                    _designer.SetEnabled(true);
+
+                    //Readonly các checkbox
+                    chkDauvao.Properties.ReadOnly = true;
+                    chkDaura.Properties.ReadOnly = true;
+                    chkThietlaptong.Properties.ReadOnly = true;
+                    checkEdit2.Properties.ReadOnly = true;
+                    chkTime1.Properties.ReadOnly = true;
+                    chkVbdauvao.Properties.ReadOnly = true;
+                    chkVbdauvao2.Properties.ReadOnly = true;
+                    chkVbdaura.Properties.ReadOnly = true;
+                    chkVbdaura2.Properties.ReadOnly = true;
+                    chktaituweb.Properties.ReadOnly = true;
+                    chkInvoice.Properties.ReadOnly = true;
+                }
+                else
+                {
+                    this.Text = bakName;
+                    isdesign = false;
+                    _designer.SetEnabled(false);
+                    this.Opacity = 1;
+                    //Readonly các checkbox
+                    chkDauvao.Properties.ReadOnly = false;
+                    chkDaura.Properties.ReadOnly = false;
+                    chkThietlaptong.Properties.ReadOnly = false;
+                    checkEdit2.Properties.ReadOnly = false;
+                    chkTime1.Properties.ReadOnly = false;
+                    chkVbdauvao.Properties.ReadOnly = false;
+                    chkVbdauvao2.Properties.ReadOnly = false;
+                    chkVbdaura.Properties.ReadOnly = false;
+                    chkVbdaura2.Properties.ReadOnly = false;
+                    chktaituweb.Properties.ReadOnly = false;
+                    chkInvoice.Properties.ReadOnly = false;
+
+
+                    string file = Path.Combine(
+     Application.StartupPath,
+     "layout.xml");
+
+                    _designer.Save(tableLayoutPanel1, file);
+
+                    XtraMessageBox.Show("Đã lưu giao diện.");
+                }
+                    return true; // Đã xử lý phím
+            }
             if (keyData == (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S))
             {
                 frmSetting frmSetting = new frmSetting();
@@ -12415,6 +12470,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         }
         public async  void btnChonthang_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             Xulychonthang();  
         }
         public DataTable ExecuteQuery3(string query, string connectionst, params OleDbParameter[] parameters)
@@ -16670,6 +16727,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void btnMdtk_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             frmDinhdanh frmDinhdanh = new frmDinhdanh();
             frmDinhdanh.ShowDialog();
         }
@@ -16705,7 +16764,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void txtuser_TextChanged_1(object sender, EventArgs e)
         {
-
+            if (isdesign)
+                return;
             string query = "UPDATE tbRegister SET username = ?";
             // Khai báo mảng tham số với đủ 10 tham số
             OleDbParameter[] parameters = new OleDbParameter[]
@@ -16719,7 +16779,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void txtpass_TextChanged_1(object sender, EventArgs e)
         {
-            
+            if (isdesign)
+                return;
 
             string query = "UPDATE tbRegister SET [Password] = ?";
             // Khai báo mảng tham số với đủ 10 tham số
@@ -16867,6 +16928,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void btnOpenFolder_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             try
             {
                 string currentYear = $"HD{dtTungay.DateTime.Year}";
@@ -16925,6 +16988,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void dtTungay_EditValueChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             DateTime selectedDate = dtTungay.DateTime;
             // Lấy ngày cuối cùng của tháng
             DateTime lastDay = new DateTime(selectedDate.Year, selectedDate.Month, DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month));
@@ -17250,6 +17315,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (chkDauvao.Checked)
             {
                 progressPanel1.Visible = true;
@@ -17314,6 +17381,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         int uutienselect = 0;
         private void chkDaura_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (chkDaura.Checked && (uutienselect == 2 || uutienselect == 0))
             {
                 uutienselect = 2;
@@ -17403,16 +17472,22 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void chkDaura_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             uutienselect = 2;
         }
 
         private void chkDauvao_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             uutienselect = 1;
         }
 
         private void chkDauvao_CheckedChanged_1(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
 
             if (chkDaura.Checked && (uutienselect == 1 || uutienselect == 0))
             {
@@ -17452,6 +17527,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void dtDenngay_EditValueChanged_1(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (Isrunning==false)
             {
                 if (isfirtrun == false)
@@ -20501,12 +20578,16 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void btnMatdinhnganhang_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             frmMatdinhNganHang frmMatdinhNganHang = new frmMatdinhNganHang();
             frmMatdinhNganHang.Show();
         }
 
         private void btnImportChungtunganhang_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (xtraTabControl2.SelectedTabPage == xtraTabPage2)
             {
                 ExportToExcel(gridControl3, lstNganhan.FirstOrDefault().NgayGD.Month, "");
@@ -20878,8 +20959,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             public string password_expire { get; set; }
             public int expired { get; set; }
         }
+        int maxlogin = 1;
         private async void simpleButton3_Click(object sender, EventArgs e)
         {
+            maxlogin = 1;
+            if (isdesign)
+                return;
             if (chktaituweb.Checked)
             {
                 Thuchientaihoadontuweb();
@@ -21053,12 +21138,16 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                         Application.DoEvents();
                         if (loginRes.StatusCode == HttpStatusCode.Unauthorized)
                         {
-                            string err = await loginRes.Content.ReadAsStringAsync();
-                            ToastMeaasge("Đăng nhập thất bại (401): " + err + " sẽ thử lại sau 2s");
-                            //Tiến hành đăng nhập lại sau 2s
-                            Thread.Sleep(2000);
-                            simpleButton3.PerformClick();
-                            return;
+                            if (maxlogin < 3)
+                            {
+                                string err = await loginRes.Content.ReadAsStringAsync();
+                                ToastMeaasge("Đăng nhập thất bại (401): " + err + " sẽ thử lại sau 2s");
+                                //Tiến hành đăng nhập lại sau 2s
+                                Thread.Sleep(2000);
+                                simpleButton3.PerformClick();
+                                maxlogin += 1;
+                                return;
+                            } 
                         }
 
                         loginRes.EnsureSuccessStatusCode();
@@ -22334,22 +22423,30 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
             _keywordIndex = new Dictionary<string, HashSet<string>>();
             _quyCachIndex = new Dictionary<string, HashSet<string>>();
+
             if (_optimizedVatTu == null)
                 return;
+
             foreach (var kvp in _optimizedVatTu)
             {
-                // Index theo từ khóa (chỉ lấy từ dài >= 3 ký tự)
-                var words = kvp.Value.TenChuan.Split(new[] { ' ', '-', ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Where(w => w.Length >= 3);
+                if (kvp.Key == "NMAM-001")
+                {
+                    int estddd = 10;
+                }
+
+                var words = kvp.Value.TenChuan.ToLower()
+                    .Split(new[] { ' ', '-', ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Where(w => w.Length >= 2);
 
                 foreach (var word in words)
-                {
+                { 
+                    // ✅ SỬA: Chỉ tạo mới nếu chưa tồn tại
                     if (!_keywordIndex.ContainsKey(word))
                         _keywordIndex[word] = new HashSet<string>();
                     _keywordIndex[word].Add(kvp.Key);
                 }
 
-                // Index theo quy cách
+                // Index theo quy cách - phần này đúng
                 if (!string.IsNullOrEmpty(kvp.Value.QuyCach))
                 {
                     if (!_quyCachIndex.ContainsKey(kvp.Value.QuyCach))
@@ -22357,7 +22454,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     _quyCachIndex[kvp.Value.QuyCach].Add(kvp.Key);
                 }
             }
-
+            bool test = _keywordIndex["nước"].Contains("nmam-001");
             _isIndexBuilt = true;
         }
         // Thêm Dictionary chứa các từ đồng nghĩa
@@ -22459,6 +22556,10 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
             string originalTen = tbImportDetail.Ten?.Trim() ?? "";
             string normalizedTen = NormalizeNameForSearch(originalTen);
+            if(originalTen== "Mì Hảo Hảo Tôm chua cay 30 _ KM")
+            {
+                int aa = 100;
+            }
             string quyCach = regex.Match(normalizedTen).Value;
             string donViTinh = tbImportDetail.DVT?.Trim()?.ToLower() ?? "";
 
@@ -22466,30 +22567,33 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             Console.WriteLine($"   Quy cách: '{quyCach}'");
 
             double minPercent = int.Parse(txtTylechonHH.Text);
-
+           
             // ========== 1. TÌM CHÍNH XÁC ==========
             if (_optimizedVatTu != null)
             {
                 var exactMatch = _optimizedVatTu
              .FirstOrDefault(kvp =>
                  (NormalizeNameForSearch(kvp.Value.TenChuan) == normalizedTen ||
-                  NormalizeNameForSearch(kvp.Value.TenPhuChuan) == normalizedTen) &&
-                 (string.IsNullOrEmpty(quyCach) || kvp.Value.QuyCach == quyCach));
-
-                if (!exactMatch.Equals(default(KeyValuePair<string, (string, string, string, string, double, double)>)))
+                  NormalizeNameForSearch(kvp.Value.TenPhuChuan) == normalizedTen));
+                string getdvt = NormalizeNameForSearch(exactMatch.Value.DonVi);
+                if (donViTinh.ToLower() == Helpers.ConvertUnicodeToVni(exactMatch.Value.DonVi).ToLower())
                 {
-                    tbImportDetail.SoHieu = exactMatch.Key;
-                    tbImportDetail.Percent = 100;
-                    tbImportDetail.DVT = exactMatch.Value.DonVi;
-                    Console.WriteLine($"✅ Tìm chính xác: {exactMatch.Value.TenChuan}");
-                    return;
+                    if (!exactMatch.Equals(default(KeyValuePair<string, (string, string, string, string, double, double)>)))
+                    {
+                        tbImportDetail.SoHieu = exactMatch.Key;
+                        tbImportDetail.Percent = 100;
+                        tbImportDetail.DVT = Helpers.ConvertVniToUnicode(exactMatch.Value.DonVi);
+
+                        Console.WriteLine($"✅ Tìm chính xác: {exactMatch.Value.TenChuan}");
+                        return;
+                    }
                 }
-            }
-         
+                   
+            } 
 
             // ========== 2. TÁCH TỪ KHÓA ==========
             var words = normalizedTen.Split(new[] { ' ', '-', ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
-                .Where(w => w.Length >= 3)
+                .Where(w => w.Length >= 2)
                 .ToList();
 
             Console.WriteLine($"   Từ khóa: {string.Join(", ", words)}");
@@ -22558,9 +22662,17 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
             foreach (var key in candidateKeys)
             {
+                if(key== "nmam-001")
+                {
+                    int a = 10;
+                }
                 if (_optimizedVatTu.TryGetValue(key, out var vatTu))
                 {
                     string tenChuanHoa = NormalizeNameForSearch(vatTu.TenChuan);
+                    if(tenChuanHoa.ToLower().Contains("nước mắm ăn liền"))
+                    {
+                        int aaa = 10;
+                    }
                     string tenKhongNgoac = ExtractMainName(tenChuanHoa);
                     string tenHoaDonKhongNgoac = ExtractMainName(normalizedTen);
 
@@ -22579,13 +22691,13 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                     // Đếm số từ khóa khớp
                     int matchCount = 0;
-                    foreach (var word in words)
-                    {
-                        if (tenChuanHoa.Contains(word) || tenKhongNgoac.Contains(word))
-                            matchCount++;
-                    }
+                    //foreach (var word in words)
+                    //{
+                    //    if (tenChuanHoa.Contains(word) || tenKhongNgoac.Contains(word))
+                    //        matchCount++;
+                    //}
 
-                    finalPercent += matchCount * 5;
+                    //finalPercent += matchCount * 5;
 
                     // So sánh quy cách
                     string quyCachTrongKho = vatTu.QuyCach?.ToLower()?.Trim() ?? "";
@@ -26721,6 +26833,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void btnReadPDF_Click_1(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             typeNganhang = 1;
             progressPanel1.Visible = true;
             Application.DoEvents();
@@ -26739,6 +26853,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         private int typeBank = 0;
         private void btnLocdulieuNganhang_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             typeBank = 2;
             progressPanel4.Visible = true;
             Application.DoEvents();
@@ -27905,10 +28021,12 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             }
         }
         private void simpleButton4_Click(object sender, EventArgs e)
-        { 
-           // string url = "https://tools.pdf24.org/en/convert-from-pdf";
-           // OpenUrl(url);
-          
+        {
+            if (isdesign)
+                return;
+            // string url = "https://tools.pdf24.org/en/convert-from-pdf";
+            // OpenUrl(url);
+
             typeBank = 1;
             xtraTabControl2.SelectedTabPageIndex = 2;
             if (lblTKNganHangTitle.Text == "...")
@@ -28089,6 +28207,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         }
         private void XoaDulieunganhang()
         {
+            if (isdesign)
+                return;
             progressPanel1.Visible = true;
             Application.DoEvents();
             var query = @"delete from  tbNganhang";
@@ -28100,6 +28220,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         }
         private void btnClearNganhang_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             XoaDulieunganhang();
         }
         public int indexNgay = 0;
@@ -28776,6 +28898,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         }
         private void btnDocfileExcel_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             progressPanel4.Visible = true;
             typeBank = 2;
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -29085,6 +29209,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         }
         private async void simpleButton5_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             string queryct = "SELECT * FROM ChungTu"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
             existingTbChungtu = ExecuteQuery(queryct);
             _chungtuLookup = existingTbChungtu.AsEnumerable()
@@ -29605,6 +29731,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private async void simpleButton6_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             string queryct = "SELECT * FROM ChungTu"; // Giả sử bạn muốn lấy tất cả dữ liệu từ bảng KhachHang
             existingTbChungtu = ExecuteQuery(queryct);
             _chungtuLookup = existingTbChungtu.AsEnumerable()
@@ -30143,6 +30271,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         //}
         private void btnimport_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (chkDauvao.Checked)
             {
                 progressPanel1.Visible = true;
@@ -33462,6 +33592,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void btnPdf24_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             typeBank = 2;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             string inputFile = "";
@@ -34031,6 +34163,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void chktaituweb_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             btnSetting.Visible = chktaituweb.Checked; 
         }
 
@@ -34122,7 +34256,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
             string username = row["Username"]?.ToString();
             string password = row["Password"]?.ToString();
-
+            int SupplierId = int.Parse(row["SupplierId"]?.ToString());
             var url = "https://vinvoice.viettel.vn/api/auth/login";
             using (HttpClientHandler handler = new HttpClientHandler())
             {
@@ -34186,7 +34320,27 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
                     var result = await response.Content.ReadAsStringAsync();
                     loginResponse = JsonConvert.DeserializeObject<LoginResponse>(result);
-                    if (loginResponse != null)
+
+
+                    //Get Superid
+
+                    string urlsuper = $"https://vinvoice.viettel.vn/api/cluster5/services/einvoiceapplication/api/e-invoice/get-tenant-branch";
+                    if (!string.IsNullOrEmpty(useCookie.access_token))
+                    {
+                        client.DefaultRequestHeaders.Authorization =
+                            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", useCookie.access_token);
+                    }
+                    var responsess = await client.GetAsync(urlsuper);
+                    if (responsess.IsSuccessStatusCode)
+                    {
+                        string jsonResult = await responsess.Content.ReadAsStringAsync();
+                        JObject jsons = JObject.Parse(jsonResult);
+
+                        SupplierId = (int)jsons["data"][0]["id"];
+                    }
+
+
+                        if (loginResponse != null)
                     {
                         progressPanel1.Caption = "Đăng nhập hệ thống thành công...";
                         Application.DoEvents();
@@ -34198,7 +34352,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             // ========================================
                             int page = 0;
                             int size = 1000;
-                            int supplierId = 103807;
+                            int supplierId = SupplierId;
 
 
 
@@ -34522,6 +34676,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void chkInvoice_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (chkInvoice.Checked)
             {
                 string querycheck = @"SELECT COUNT(*) FROM tbInvoiceInfo ";
@@ -34538,6 +34694,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void radVbDauvao_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             var query = "UPDATE tbRegister SET VbCoche=? ";
             var parametersss = new OleDbParameter[]
             {
@@ -34548,6 +34706,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void radVbDaura_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             var query = "UPDATE tbRegister SET VbCoche=? ";
             var parametersss = new OleDbParameter[]
             {
@@ -34588,7 +34748,9 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void chkVbdauvao_CheckedChanged(object sender, EventArgs e)
         {
-            if(lock1==true)
+            if (isdesign)
+                return;
+            if (lock1==true)
             {
                 lock1 = false;
                 return;
@@ -34620,6 +34782,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         bool lock4 = false;
         private void chkVbdauvao2_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (lock2 == true)
             {
                 lock2 = false;
@@ -34649,6 +34813,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void chkVbdaura_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (lock3 == true)
             {
                 lock3 = false;
@@ -34678,6 +34844,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void chkVbdaura2_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (lock4 == true)
             {
                 lock4 = false;
@@ -34722,6 +34890,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         string connectionString2 { get; set; }
         private void chkThietlaptong_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (chkThietlaptong.Checked)
             {
                 //Gỡ tải khi khoi dong máy
@@ -34898,6 +35068,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void chkTime1_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             txtTime1.Enabled = chkTime1.Checked;
             if (chkTime1.Checked == false)
             {
@@ -34907,6 +35079,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         string filename = "";
         private void txtTime1_EditValueChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (string.IsNullOrEmpty(txtTime1.Text))
             {
                 string query = "UPDATE tbsetting SET Moctg1 = ?";
@@ -34999,22 +35173,25 @@ private static readonly Dictionary<string, string[]> BrandAliases =
         }
         private void txtTime1_Validated(object sender, EventArgs e)
         {
-            string query = "UPDATE tbRegister SET Moctg1 = ?";
-            // Khai báo mảng tham số với đủ 10 tham số
-            OleDbParameter[] parameters = new OleDbParameter[]
-            {
-        new OleDbParameter("?", txtTime1.Text)
-            };
-
-            // Thực thi truy vấn và lấy kết quả
-            int a = ExecuteQueryResult(query, parameters);
-            ScheduleHelper ScheduleHelper = new ScheduleHelper();
-            DateTime time = DateTime.Parse(txtTime1.Text);
-
-            int hour = time.Hour;   // 10
-            int minute = time.Minute; // 30
+            if (isdesign)
+                return;
+           
             try
             {
+                string query = "UPDATE tbRegister SET Moctg1 = ?";
+                // Khai báo mảng tham số với đủ 10 tham số
+                OleDbParameter[] parameters = new OleDbParameter[]
+                {
+        new OleDbParameter("?", txtTime1.Text)
+                };
+
+                // Thực thi truy vấn và lấy kết quả
+                int a = ExecuteQueryResult(query, parameters);
+                ScheduleHelper ScheduleHelper = new ScheduleHelper();
+                DateTime time = DateTime.Parse(txtTime1.Text);
+
+                int hour = time.Hour;   // 10
+                int minute = time.Minute; // 30
                 CreateSchedule($"{filename}_L1", hour, minute);
             }
             catch (Exception ex)
@@ -35025,6 +35202,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void btnfolder_Click(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             try
             {
                 string currentYear = $"HD{dtTungay.DateTime.Year}";
@@ -35077,6 +35256,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void checkEdit2_CheckedChanged(object sender, EventArgs e)
         {
+            if (isdesign)
+                return;
             if (allowUncheck)
             {
                 radioButton1.Checked = false;

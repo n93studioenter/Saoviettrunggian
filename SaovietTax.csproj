@@ -329,6 +329,7 @@
     <Compile Include="DTO\BankStatementReader.cs" />
     <Compile Include="DTO\Daura_maytinhtien.cs" />
     <Compile Include="DTO\FuzzySharpSimilarity.cs" />
+    <Compile Include="DTO\Kiemtravattu.cs" />
     <Compile Include="DTO\Matdinhnganhang.cs" />
     <Compile Include="DTO\Rootclass.cs" />
     <Compile Include="DTO\RootDetail.cs" />
@@ -909,6 +910,7 @@
     <None Include="Resources\documentpdf.svg" />
     <None Include="Resources\clearheaderandfooter1.svg" />
     <None Include="Resources\delete_32x32.png" />
+    <None Include="Resources\customerprofilereport.svg" />
     <Content Include="Resources\favicon.ico" />
     <None Include="Resources\next.svg" />
     <None Include="Resources\next_16x16.png" />

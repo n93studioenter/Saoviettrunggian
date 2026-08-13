@@ -15,22 +15,22 @@
       <TableColumnLayout>
         <Index>0</Index>
         <SizeType>Absolute</SizeType>
-        <Width>518</Width>
+        <Width>566</Width>
       </TableColumnLayout>
       <TableColumnLayout>
         <Index>1</Index>
         <SizeType>Absolute</SizeType>
-        <Width>479</Width>
+        <Width>475</Width>
       </TableColumnLayout>
       <TableColumnLayout>
         <Index>2</Index>
         <SizeType>Absolute</SizeType>
-        <Width>695</Width>
+        <Width>677</Width>
       </TableColumnLayout>
       <TableColumnLayout>
         <Index>3</Index>
         <SizeType>Absolute</SizeType>
-        <Width>238</Width>
+        <Width>212</Width>
       </TableColumnLayout>
     </Columns>
     <Rows>
@@ -43,9 +43,9 @@
   </ControlLayout>
   <ControlLayout>
     <Name>panelControl12</Name>
-    <Left>1000</Left>
+    <Left>1044</Left>
     <Top>3</Top>
-    <Width>689</Width>
+    <Width>671</Width>
     <Height>166</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
@@ -129,7 +129,7 @@
     <Name>btnMatdinhnganhang</Name>
     <Left>5</Left>
     <Top>50</Top>
-    <Width>204</Width>
+    <Width>233</Width>
     <Height>32</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
@@ -175,9 +175,9 @@
   </ControlLayout>
   <ControlLayout>
     <Name>panelControl11</Name>
-    <Left>521</Left>
+    <Left>569</Left>
     <Top>3</Top>
-    <Width>473</Width>
+    <Width>469</Width>
     <Height>166</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
@@ -211,8 +211,8 @@
   </ControlLayout>
   <ControlLayout>
     <Name>chkVbdaura</Name>
-    <Left>29</Left>
-    <Top>9</Top>
+    <Left>28</Left>
+    <Top>10</Top>
     <Width>159</Width>
     <Height>20</Height>
     <Visible>true</Visible>
@@ -357,7 +357,7 @@
     <Name>panelControl10</Name>
     <Left>3</Left>
     <Top>3</Top>
-    <Width>512</Width>
+    <Width>560</Width>
     <Height>166</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
@@ -367,7 +367,7 @@
   </ControlLayout>
   <ControlLayout>
     <Name>checkEdit2</Name>
-    <Left>171</Left>
+    <Left>172</Left>
     <Top>47</Top>
     <Width>142</Width>
     <Height>20</Height>
@@ -381,7 +381,7 @@
     <Name>txtTime1</Name>
     <Left>447</Left>
     <Top>45</Top>
-    <Width>58</Width>
+    <Width>98</Width>
     <Height>23</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
@@ -391,11 +391,11 @@
   </ControlLayout>
   <ControlLayout>
     <Name />
-    <Left>4</Left>
-    <Top>3</Top>
-    <Width>50</Width>
-    <Height>16</Height>
-    <Visible>true</Visible>
+    <Left>0</Left>
+    <Top>0</Top>
+    <Width>80</Width>
+    <Height>20</Height>
+    <Visible>false</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
     <Anchor>Top Left</Anchor>
@@ -403,8 +403,8 @@
   </ControlLayout>
   <ControlLayout>
     <Name>dtDenngay</Name>
-    <Left>412</Left>
-    <Top>83</Top>
+    <Left>455</Left>
+    <Top>85</Top>
     <Width>93</Width>
     <Height>23</Height>
     <Visible>true</Visible>
@@ -428,7 +428,7 @@
   <ControlLayout>
     <Name>chkTime1</Name>
     <Left>349</Left>
-    <Top>47</Top>
+    <Top>48</Top>
     <Width>102</Width>
     <Height>20</Height>
     <Visible>true</Visible>
@@ -451,8 +451,8 @@
   </ControlLayout>
   <ControlLayout>
     <Name>chkThietlaptong</Name>
-    <Left>9</Left>
-    <Top>48</Top>
+    <Left>12</Left>
+    <Top>49</Top>
     <Width>180</Width>
     <Height>20</Height>
     <Visible>true</Visible>
@@ -475,8 +475,8 @@
   </ControlLayout>
   <ControlLayout>
     <Name>chkInvoice</Name>
-    <Left>139</Left>
-    <Top>86</Top>
+    <Left>126</Left>
+    <Top>87</Top>
     <Width>91</Width>
     <Height>20</Height>
     <Visible>true</Visible>
@@ -487,8 +487,8 @@
   </ControlLayout>
   <ControlLayout>
     <Name>labelControl3</Name>
-    <Left>383</Left>
-    <Top>89</Top>
+    <Left>419</Left>
+    <Top>88</Top>
     <Width>23</Width>
     <Height>16</Height>
     <Visible>true</Visible>
@@ -499,7 +499,7 @@
   </ControlLayout>
   <ControlLayout>
     <Name>chktaituweb</Name>
-    <Left>9</Left>
+    <Left>10</Left>
     <Top>87</Top>
     <Width>152</Width>
     <Height>20</Height>
@@ -513,7 +513,7 @@
     <Name>dtTungay</Name>
     <Left>286</Left>
     <Top>83</Top>
-    <Width>93</Width>
+    <Width>119</Width>
     <Height>23</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
@@ -525,7 +525,7 @@
     <Name />
     <Left>4</Left>
     <Top>3</Top>
-    <Width>64</Width>
+    <Width>90</Width>
     <Height>16</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
@@ -535,10 +535,10 @@
   </ControlLayout>
   <ControlLayout>
     <Name>txtpass</Name>
-    <Left>373</Left>
-    <Top>9</Top>
-    <Width>132</Width>
-    <Height>22</Height>
+    <Left>351</Left>
+    <Top>8</Top>
+    <Width>194</Width>
+    <Height>23</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -548,9 +548,9 @@
   <ControlLayout>
     <Name>simpleButton3</Name>
     <Left>286</Left>
-    <Top>125</Top>
-    <Width>219</Width>
-    <Height>28</Height>
+    <Top>115</Top>
+    <Width>266</Width>
+    <Height>38</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -561,7 +561,7 @@
     <Name>txtuser</Name>
     <Left>114</Left>
     <Top>10</Top>
-    <Width>127</Width>
+    <Width>151</Width>
     <Height>22</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
@@ -571,8 +571,8 @@
   </ControlLayout>
   <ControlLayout>
     <Name>labelControl12</Name>
-    <Left>278</Left>
-    <Top>10</Top>
+    <Left>309</Left>
+    <Top>12</Top>
     <Width>26</Width>
     <Height>16</Height>
     <Visible>true</Visible>
@@ -583,8 +583,8 @@
   </ControlLayout>
   <ControlLayout>
     <Name>chkDaura</Name>
-    <Left>133</Left>
-    <Top>126</Top>
+    <Left>159</Left>
+    <Top>125</Top>
     <Width>101</Width>
     <Height>22</Height>
     <Visible>true</Visible>
@@ -607,9 +607,9 @@
   </ControlLayout>
   <ControlLayout>
     <Name>pictureEdit2</Name>
-    <Left>1695</Left>
+    <Left>1721</Left>
     <Top>3</Top>
-    <Width>232</Width>
+    <Width>206</Width>
     <Height>166</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
