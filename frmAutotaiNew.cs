@@ -32,6 +32,116 @@ namespace SaovietTax
         public frmAutotaiNew()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Minimized;
+            InitializeNotifyIcon();
+        }
+        private void InitializeNotifyIcon()
+        {
+            // Tạo NotifyIcon
+            notifyIcon = new NotifyIcon();
+
+            // Set icon (bạn cần có file .ico hoặc dùng icon mặc định)
+            notifyIcon.Icon = SystemIcons.Application; // Hoặc load từ file: new Icon("app.ico")
+
+            // Set tooltip khi hover
+            string appPaths = Assembly.GetExecutingAssembly().Location;
+
+            // Lấy thư mục chứa ứng dụng
+            string directoryPath = Path.GetDirectoryName(appPaths);
+
+            // Xóa phần \bin\Debug để lấy đường dẫn gốc
+            string rootDirectory = Path.GetFullPath(Path.Combine(directoryPath, @"..\.."));
+
+            // Tạo đường dẫn đến file dpPath.txt trong thư mục hoadon
+            string filePaths = Path.Combine(rootDirectory, "hoadon", "dpPath.txt");
+            string pathThumuc = Path.Combine(rootDirectory);
+            string dbPath = "";
+            //MessageBox.Show(pathThumuc);
+            try
+            {
+                string content = File.ReadAllText(filePaths);
+                string dbName = Path.GetFileNameWithoutExtension(content);
+                notifyIcon.Text = dbName;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi đọc file: " + ex.Message);
+            }
+
+            string appPath = Application.StartupPath;
+
+            // Đi lên 2 cấp để đến thư mục Resources trong source
+            // Ví dụ: bin\Debug\ → ..\..\Resources\favicon.ico
+            string iconPath = Path.Combine(appPath, @"..\..\Resources\favicon.ico");
+            // Kiểm tra file tồn tại
+            if (File.Exists(iconPath))
+            {
+                notifyIcon.Icon = new Icon(iconPath);
+            }
+            else
+            {
+                notifyIcon.Icon = SystemIcons.Application;
+            }
+            // Tạo menu chuột phải
+            contextMenu = new ContextMenuStrip();
+
+            // Thêm các menu item
+            contextMenu.Items.Add("Hiện ứng dụng", null, ShowApp_Click);
+            contextMenu.Items.Add("-"); // Separator
+            contextMenu.Items.Add("Thoát", null, ExitApp_Click);
+
+            // Gán menu cho NotifyIcon
+            notifyIcon.ContextMenuStrip = contextMenu;
+
+            // Xử lý sự kiện click đúp chuột vào icon
+            notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
+
+            // Hiển thị NotifyIcon
+            notifyIcon.Visible = true;
+
+            // Khi form load, ẩn form (nếu cần) 
+        }
+
+        private void NotifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            // Double click vào icon → hiện form
+            ShowApp();
+        }
+
+        private void ShowApp_Click(object sender, EventArgs e)
+        {
+            ShowApp();
+        }
+
+        private void ShowApp()
+        {
+            // Hiện form
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true; // Hiện lại trên taskbar
+            this.BringToFront();
+
+            // Focus vào form
+            this.Activate();
+        }
+
+        private void ExitApp_Click(object sender, EventArgs e)
+        {
+            // Thoát ứng dụng
+            notifyIcon.Visible = false;
+            notifyIcon.Dispose();
+            Application.Exit();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Hide();
+               // this.ShowInTaskbar = false;
+            }
         }
         #region Properties
         string password, connectionString;
@@ -592,11 +702,112 @@ namespace SaovietTax
             var tbRegister = ExecuteQuery(querykh, new OleDbParameter("?", ""));
             string originpath = tbRegister.Rows[0]["Hoadonpath"].ToString();
             string username = tbRegister.Rows[0]["Username"].ToString();
-            var invoicesVao = await GetListHoaDonCanTai(username, originpath, 1);
-            await TaiHangLoatHoaDon(invoicesVao, "đầu vào");
+            //var invoicesVao = await GetListHoaDonCanTai(username, originpath, 1);
+            // await TaiHangLoatHoaDon(invoicesVao, "đầu vào");
 
+            Task<bool> t1r = XulyexelraAsync(tokken, 1);
+            Task<bool> t2r = XulyexelraAsync(tokken, 2);
+
+           result = await Task.WhenAll(t1r, t2r);
+            lblCurrent.Text = "Tải excel đầu ra thành công, bắt đầu tiến hành tải hoá đơn...";
+            var invoicesRa = await GetListHoaDonCanTai(username, originpath, 2);
+            await TaiHangLoatHoaDon(invoicesRa, "đầu ra");
         }
+        public async Task<bool> XulyexelraAsync(string token, int _type)
+        {
+            DateTime dtFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            DateTime dtTo = dtFrom.AddMonths(1).AddDays(-1);
 
+            string formattedDate1 = dtFrom.ToString("dd/MM/yyyyTHH:mm:ss");
+            string formattedDate2 = dtTo.ToString("dd/MM/yyyyTHH:mm:ss");
+
+            string url, filename;
+
+            switch (_type)
+            {
+                case 1:
+                    url = $"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-excel?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge={formattedDate1};tdlap=le={formattedDate2}";
+                    filename = $"{mstcongty}_Hoadondientu.xlsx";
+                    break;
+
+                case 2:
+                    url = $"https://hoadondientu.gdt.gov.vn/api/sco-query/invoices/export-excel?sort=tdlap:desc,khmshdon:asc,shdon:desc&search=tdlap=ge={formattedDate1};tdlap=le={formattedDate2}";
+                    filename = $"{mstcongty}_HDDienTuMayTinhTien.xlsx";
+                    break;
+
+                default:
+                    return false;
+            }
+
+            string currentYear = $"HD{DateTime.Now.Year}";
+            string directoryPath = Path.Combine(savedPath, currentYear, "HDRa", DateTime.Now.Month.ToString());
+            Directory.CreateDirectory(directoryPath);
+
+            string filePath = Path.Combine(directoryPath, filename);
+
+            if (File.Exists(filePath))
+            {
+                TimeSpan ts = DateTime.Now - File.GetLastWriteTime(filePath);
+
+                if (ts.TotalMinutes < 30)
+                {
+                    return true;
+                }
+
+                File.Delete(filePath);
+            }
+
+            const int maxRetry = 3;
+
+            for (int retry = 1; retry <= maxRetry; retry++)
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.Timeout = TimeSpan.FromSeconds(10);
+
+                        client.DefaultRequestHeaders.Authorization =
+                            new AuthenticationHeaderValue("Bearer", token);
+
+                        client.DefaultRequestHeaders.Accept.Add(
+                            new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
+
+                        HttpResponseMessage response = await client.GetAsync(
+                            url,
+                            HttpCompletionOption.ResponseHeadersRead);
+
+                        response.EnsureSuccessStatusCode();
+
+                        using (var fs = new FileStream(
+                            filePath,
+                            FileMode.Create,
+                            FileAccess.Write,
+                            FileShare.None))
+                        {
+                            await response.Content.CopyToAsync(fs);
+                        }
+
+
+                        return true;
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                }
+                catch (Exception ex)
+                {
+                }
+
+                if (retry < maxRetry)
+                {
+                    await Task.Delay(3000);
+                }
+            }
+
+            return false;
+        }
         #region Xulyhoadon
         private async Task<List<InvoiceInfo>> GetListHoaDonCanTai(string mstcongty, string savedPath, int type)
         {
@@ -695,81 +906,90 @@ namespace SaovietTax
         }
         private async Task TaiHangLoatHoaDon(List<InvoiceInfo> invoices, string typeName)
         {
-            try
+            int type = 0;
+            if(typeName== "đầu ra")
             {
-                if (invoices == null || invoices.Count == 0)
+                type = 2;
+            }
+            else
+            {
+                type = 1;
+            }
+                try
                 {
-                    UpdateStatus($"📭 Không có hóa đơn {typeName} để tải");
-                    return;
-                }
-
-                UpdateStatus($"📥 Bắt đầu tải {invoices.Count} hóa đơn {typeName} (song song 5 luồng, mỗi HĐ thử tối đa 3 lần)...");
-
-                int total = invoices.Count;
-                int downloaded = 0;
-                int failed = 0;
-                object lockObj = new object();
-
-                var stopwatch = Stopwatch.StartNew();
-
-                await Task.Run(() =>
-                {
-                    Parallel.ForEach(invoices, new ParallelOptions { MaxDegreeOfParallelism = 5 }, invoice =>
+                    if (invoices == null || invoices.Count == 0)
                     {
-                        try
-                        {
-                            // Gọi hàm tải 1 hóa đơn (có retry bên trong)
-                            bool success = DownloadSingleInvoiceSync(invoice);
+                        UpdateStatus($"📭 Không có hóa đơn {typeName} để tải");
+                        return;
+                    }
 
-                            lock (lockObj)
+                    UpdateStatus($"📥 Bắt đầu tải {invoices.Count} hóa đơn {typeName} (song song 5 luồng, mỗi HĐ thử tối đa 3 lần)...");
+
+                    int total = invoices.Count;
+                    int downloaded = 0;
+                    int failed = 0;
+                    object lockObj = new object();
+
+                    var stopwatch = Stopwatch.StartNew();
+
+                    await Task.Run(() =>
+                    {
+                        Parallel.ForEach(invoices, new ParallelOptions { MaxDegreeOfParallelism = 5 }, invoice =>
+                        {
+                            try
                             {
-                                if (success)
+                                // Gọi hàm tải 1 hóa đơn (có retry bên trong)
+                                bool success = DownloadSingleInvoiceSync(invoice, type);
+
+                                lock (lockObj)
                                 {
-                                    downloaded++;
+                                    if (success)
+                                    {
+                                        downloaded++;
+                                    }
+                                    else
+                                    {
+                                        failed++;
+                                    }
+
+                                    if ((downloaded + failed) % 10 == 0 || (downloaded + failed) == total)
+                                    {
+                                        UpdateStatus($"⏳ Đã xử lý {downloaded + failed}/{total} hóa đơn {typeName} (✅ {downloaded} thành công, ❌ {failed} thất bại)");
+                                    }
                                 }
-                                else
+                            }
+                            catch (Exception ex)
+                            {
+                                lock (lockObj)
                                 {
                                     failed++;
-                                }
-
-                                if ((downloaded + failed) % 10 == 0 || (downloaded + failed) == total)
-                                {
-                                    UpdateStatus($"⏳ Đã xử lý {downloaded + failed}/{total} hóa đơn {typeName} (✅ {downloaded} thành công, ❌ {failed} thất bại)");
+                                    UpdateStatus($"❌ Lỗi HĐ {invoice.Sohd}: {ex.Message}");
                                 }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            lock (lockObj)
-                            {
-                                failed++;
-                                UpdateStatus($"❌ Lỗi HĐ {invoice.Sohd}: {ex.Message}");
-                            }
-                        }
+                        });
                     });
-                });
 
-                stopwatch.Stop();
+                    stopwatch.Stop();
 
-                UpdateStatus($"✅ Hoàn thành tải {typeName}! Đã tải: {downloaded}/{total} hóa đơn, thất bại: {failed}, thời gian: {stopwatch.Elapsed.TotalSeconds:F1}s");
+                    UpdateStatus($"✅ Hoàn thành tải {typeName}! Đã tải: {downloaded}/{total} hóa đơn, thất bại: {failed}, thời gian: {stopwatch.Elapsed.TotalSeconds:F1}s");
 
-                if (downloaded > 0)
-                {
-                    UpdateStatus($"📊 Bắt đầu xử lý {downloaded} hóa đơn {typeName}...");
-                    // await XuLyHoaDonDaTai(invoices, typeName);
+                    if (downloaded > 0)
+                    {
+                        UpdateStatus($"📊 Bắt đầu xử lý {downloaded} hóa đơn {typeName}...");
+                        // await XuLyHoaDonDaTai(invoices, typeName);
+                    }
+
+                    if (failed > 0)
+                    {
+                        UpdateStatus($"⚠️ Có {failed} hóa đơn {typeName} thất bại sau 3 lần thử!");
+                    }
                 }
-
-                if (failed > 0)
+                catch (Exception ex)
                 {
-                    UpdateStatus($"⚠️ Có {failed} hóa đơn {typeName} thất bại sau 3 lần thử!");
+                    UpdateStatus($"❌ Lỗi TaiHangLoatHoaDon {typeName}: {ex.Message}");
                 }
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"❌ Lỗi TaiHangLoatHoaDon {typeName}: {ex.Message}");
-            }
         }
-        private bool DownloadSingleInvoiceSync(InvoiceInfo invoice)
+        private bool DownloadSingleInvoiceSync(InvoiceInfo invoice,int type)
         {
             if (invoice == null) return false;
 
@@ -778,7 +998,7 @@ namespace SaovietTax
 
             int maxRetry = 3;
             int retryCount = 0;
-
+            int fileIndex = 1; // Đánh dấu loại file Excel (1, 2, 3)
             while (retryCount < maxRetry)
             {
                 retryCount++;
@@ -786,6 +1006,33 @@ namespace SaovietTax
                 try
                 {
                     string url = $"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-xml?nbmst={invoice.Mst}&khhdon={invoice.SHHD}&shdon={invoice.Sohd}&khmshdon={invoice.Khhd}";
+
+                    if (type == 1) // Đầu vào (HDVao)
+                    {
+                        if (fileIndex == 1 || fileIndex == 2)
+                        {
+                            // Hóa đơn điện tử có mã và không mã
+                            url = $"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-xml?nbmst={invoice.Mst}&khhdon={invoice.SHHD}&shdon={invoice.Sohd}&khmshdon={invoice.Khhd}";
+                        }
+                        else // fileIndex == 3
+                        {
+                            // Hóa đơn máy tính tiền
+                            url = $"https://hoadondientu.gdt.gov.vn/api/sco-query/invoices/export-xml?nbmst={invoice.Mst}&khhdon={invoice.SHHD}&shdon={invoice.Sohd}&khmshdon={invoice.Khhd}";
+                        }
+                    }
+                    else // Đầu ra (HDRa)
+                    {
+                        if (fileIndex == 1)
+                        {
+                            // Hóa đơn điện tử đầu ra
+                            url = $"https://hoadondientu.gdt.gov.vn/api/sco-query/invoices/export-xml?nbmst={invoice.Mst}&khhdon={invoice.SHHD}&shdon={invoice.Sohd}&khmshdon={invoice.Khhd}";
+                        }
+                        else // fileIndex == 2
+                        {
+                            // Hóa đơn máy tính tiền đầu ra
+                            url = $"https://hoadondientu.gdt.gov.vn/api/query/invoices/export-xml?nbmst={invoice.Mst}&khhdon={invoice.SHHD}&shdon={invoice.Sohd}&khmshdon={invoice.Khhd}";
+                        }
+                    }
 
                     string filename = $"{invoice.NLap:yyyyMMdd}_{invoice.Mst}_{invoice.Sohd}_{invoice.SHHD}.zip";
                     string path = Path.Combine(invoice.DirectoryPath, filename);

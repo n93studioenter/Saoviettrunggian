@@ -367,8 +367,8 @@
   </ControlLayout>
   <ControlLayout>
     <Name>checkEdit2</Name>
-    <Left>172</Left>
-    <Top>47</Top>
+    <Left>179</Left>
+    <Top>51</Top>
     <Width>142</Width>
     <Height>20</Height>
     <Visible>true</Visible>
@@ -547,10 +547,10 @@
   </ControlLayout>
   <ControlLayout>
     <Name>simpleButton3</Name>
-    <Left>286</Left>
-    <Top>115</Top>
+    <Left>282</Left>
+    <Top>122</Top>
     <Width>266</Width>
-    <Height>38</Height>
+    <Height>30</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>

@@ -1,18 +1,10 @@
-﻿using DevExpress.LookAndFeel;
-using DevExpress.Skins;
-using DevExpress.UserSkins;
-using DevExpress.Utils.Localization;
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
-using System.Drawing;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
@@ -33,7 +25,7 @@ namespace SaovietTax {
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
            // mutex = new Mutex(false, "Global\\MyCompany_MyProduct_SingleInstance");
-            bool isAutoStart = args.Length > 0 && args[0] == "-autostart";
+            bool isAutoStart = args.Length > 0 && args[0] == "-autostart"; 
             try
             { 
 
@@ -63,11 +55,12 @@ namespace SaovietTax {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             if (isAutoStart)
-            {
+            { 
                 //mutex.WaitOne();
-                //Application.Run(new frmAutoTai());
-                //SaveConfig("Mode", "2");
-                Application.Run(new frmAutotaiNew());
+                SaveConfig("Mode", "2");
+                Application.Run(new frmMain());
+              
+               // Application.Run(new frmAutotaiNew());
             }
             else
             {

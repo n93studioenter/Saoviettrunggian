@@ -120,6 +120,7 @@
             this.colTKNo2 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.coltkco2 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn12 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colLock = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colIndex = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -1316,7 +1317,8 @@
             this.colMaCT2,
             this.colTKNo2,
             this.coltkco2,
-            this.gridColumn12});
+            this.gridColumn12,
+            this.colLock});
             this.gridView2.DetailHeight = 332;
             this.gridView2.GridControl = this.gridControl1;
             this.gridView2.Name = "gridView2";
@@ -1442,6 +1444,16 @@
             this.gridColumn12.MinWidth = 29;
             this.gridColumn12.Name = "gridColumn12";
             this.gridColumn12.Width = 106;
+            // 
+            // colLock
+            // 
+            this.colLock.Caption = "Lock";
+            this.colLock.FieldName = "Lock";
+            this.colLock.MinWidth = 25;
+            this.colLock.Name = "colLock";
+            this.colLock.Visible = true;
+            this.colLock.VisibleIndex = 9;
+            this.colLock.Width = 94;
             // 
             // gridControl1
             // 
@@ -2201,7 +2213,7 @@
             this.chkTime1.Properties.Appearance.Options.UseFont = true;
             this.chkTime1.Properties.Appearance.Options.UseForeColor = true;
             this.chkTime1.Properties.Caption = "Theo giờ";
-            this.chkTime1.Size = new System.Drawing.Size(102, 20);
+            this.chkTime1.Size = new System.Drawing.Size(92, 20);
             this.chkTime1.TabIndex = 41;
             this.chkTime1.CheckedChanged += new System.EventHandler(this.chkTime1_CheckedChanged);
             // 
@@ -2319,10 +2331,10 @@
             this.simpleButton3.Appearance.Options.UseFont = true;
             this.simpleButton3.Appearance.Options.UseForeColor = true;
             this.simpleButton3.ImageOptions.SvgImage = global::SaovietTax.Properties.Resources.customerprofilereport;
-            this.simpleButton3.Location = new System.Drawing.Point(286, 118);
+            this.simpleButton3.Location = new System.Drawing.Point(286, 122);
             this.simpleButton3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.simpleButton3.Name = "simpleButton3";
-            this.simpleButton3.Size = new System.Drawing.Size(219, 40);
+            this.simpleButton3.Size = new System.Drawing.Size(219, 36);
             this.simpleButton3.TabIndex = 13;
             this.simpleButton3.Text = "Thực hiện tải hoá đơn";
             this.simpleButton3.ToolTip = "https://hoadondientu.gdt.gov.vn/";
@@ -4808,5 +4820,6 @@
         private DevExpress.XtraEditors.CheckEdit checkEdit2;
         private DevExpress.Utils.WorkspaceManager workspaceManager1;
         private DevExpress.XtraEditors.SimpleButton btnSavelayout;
+        private DevExpress.XtraGrid.Columns.GridColumn colLock;
     }
 }

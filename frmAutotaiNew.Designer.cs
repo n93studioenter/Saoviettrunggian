@@ -388,7 +388,7 @@
             this.Controls.Add(this.progressPanel1);
             this.Controls.Add(this.panelControl1);
             this.Controls.Add(this.xtraTabControl1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmAutotaiNew";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmAutotaiNew";
