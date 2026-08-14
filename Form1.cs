@@ -437,10 +437,10 @@ namespace SaovietTax
             }
             ConfigurationManager.RefreshSection("appSettings");
             serverMode = ConfigurationManager.AppSettings["Mode"];
-            serverMode = "2";
+            //serverMode = "2";
             if (serverMode == "2")
             {
-                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
                 InitializeNotifyIcon();
             }
             // Giữ format số theo en-US (1,234.56)
@@ -624,7 +624,8 @@ namespace SaovietTax
 
             if (this.WindowState == FormWindowState.Minimized)
             {
-                this.Hide();
+                if (serverMode == "2")
+                    this.Hide();
                 // this.ShowInTaskbar = false;
             }
         }
@@ -4129,6 +4130,12 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 string quer = "SELECT * FROM License";
                 tbLicense = ExecuteQuery(quer, null);
                 int namtc = int.Parse(tbLicense.Rows[0]["NamTC"].ToString());
+                if (serverMode == "2")
+                {
+                    FrmMessage frmMessage = new FrmMessage(Helpers.ConvertVniToUnicode(tbLicense.Rows[0]["TenCty"].ToString()));
+                    frmMessage.Show();
+                    this.WindowState = FormWindowState.Minimized;
+                }
                 int thangtc = 0;
                 if (namtc < DateTime.Now.Year)
                 {
@@ -6718,7 +6725,10 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 if (istaitudong)
                 {
                     //radioButton2.Checked = istaitudong;
+                    if (istaitudong == true)
+                        isSet = true;
                     checkEdit2.Checked = istaitudong;
+                   
                 }
 
                 if (!string.IsNullOrEmpty(Moctg1))
@@ -14300,7 +14310,11 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                     string rootPath = Path.GetDirectoryName(path);
                     string getnamefile = Path.GetFileNameWithoutExtension(path);
                     string directoryPath = rootPath + @"\Giainen" + "_" + getnamefile;
-
+                    //if (File.Exists(path))
+                    //{
+                    //    File.Delete(path);
+                    //    return;
+                    //}
                     ZipFile.ExtractToDirectory(path, directoryPath);
 
                     var files = Directory.GetFiles(directoryPath, "invoice.html", SearchOption.AllDirectories);
@@ -26574,7 +26588,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                                                 if (serverMode == "2")
                                                     ToastMeaasge("Đã tải xong liệu cơ quan thuế, đang tiến hành đọc");
                                                 modeClick =1;
-                                               // btnChonthang.PerformClick();
+                                                Xulychonthang();
                                             }
                                             //double percent = (double)progressCount / totalInvoices * 100;
                                             //progressPanel1.Description = $"{percent:F1}% - {Path.GetFileName(path)}";
@@ -35584,14 +35598,14 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 gridView5.RefreshData();
             }
         }
-        bool isfirstrun = true;
+        bool isSet = false;
         private void checkEdit2_CheckedChanged(object sender, EventArgs e)
         {
             if (isdesign)
                 return;
-            if (isfirstrun == false)
+            if (isSet == false)
             {
-                if (allowUncheck)
+                if (!checkEdit2.Checked)
                 {
                     radioButton1.Checked = false;
                     string querys = @"UPDATE tbRegister SET taitd = ?";
@@ -35625,7 +35639,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                  };
                 var rowsAffecteds2 = ExecuteQueryResult(qr, parameterss2);
                 //Xoá luôn tbcompany trong tool tong
-                    string dbPath = Path.Combine("D:\\", "Tooldb.accdb");
+                string dbPath = Path.Combine("D:\\", "Tooldb.accdb");
                 connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
                 var qrqd = "delete from tbCompany  WHERE MST=?";
                 var prmt = new OleDbParameter[]
@@ -35635,11 +35649,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 ExecuteQueryResult2(qrqd, prmt);
                 chkThietlaptong.Checked = false;
             }
-            else
-            {
-                isfirstrun = false;
-            }
-            
+            if (isSet = true)
+                isSet = false;
         }
 
         private void btnSavelayout_Click(object sender, EventArgs e)

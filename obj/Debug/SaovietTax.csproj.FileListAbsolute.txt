@@ -1482,3 +1482,4 @@ D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.application
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.csproj.Up2Date
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.exe
 D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.pdb
+D:\DA3\SourcePmTrungGiang\SaovietTax\SaovietTax\obj\Debug\SaovietTax.FrmMessage.resources

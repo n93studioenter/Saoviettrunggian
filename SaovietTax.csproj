@@ -448,6 +448,12 @@
     <Compile Include="frmMatdinhNganHang.Designer.cs">
       <DependentUpon>frmMatdinhNganHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMessage.Designer.cs">
+      <DependentUpon>FrmMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmQrcode.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -683,6 +689,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMatdinhNganHang.resx">
       <DependentUpon>frmMatdinhNganHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMessage.resx">
+      <DependentUpon>FrmMessage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmQrcode.resx">
       <DependentUpon>frmQrcode.cs</DependentUpon>
