@@ -437,7 +437,7 @@ namespace SaovietTax
             }
             ConfigurationManager.RefreshSection("appSettings");
             serverMode = ConfigurationManager.AppSettings["Mode"];
-            //serverMode = "2";
+            serverMode = "2";
             if (serverMode == "2")
             {
                 this.ShowInTaskbar = false;
@@ -4728,8 +4728,8 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             if (Isrunning && lstvt.Count>0)
             {
                 string computerName = Environment.MachineName;
-                //string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
-                string dbPath = Path.Combine("D:\\", "Tooldb.accdb");
+                string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+                
                 string connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
                 string queryGetdetail = @"SELECT * FROM tbRemember where Saoviet=? ";
                 var parameters2 = new OleDbParameter[]
@@ -4749,7 +4749,8 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                     dtDenngay.DateTime = denngay;
                     frmStatusAuto.LoadMessage("Tiến hành liệt kê hoá đơn đầu vào...");
                     Application.DoEvents();
-                    btnChonthang.PerformClick();
+                    //btnChonthang.PerformClick();
+                    Xulychonthang();
                 }
             }
             if (serverMode == "2")
@@ -22685,43 +22686,51 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void BuildIndexes()
         {
-            if (_isIndexBuilt) return;
-
-            _keywordIndex = new Dictionary<string, HashSet<string>>();
-            _quyCachIndex = new Dictionary<string, HashSet<string>>();
-
-            if (_optimizedVatTu == null)
-                return;
-
-            foreach (var kvp in _optimizedVatTu)
+            try
             {
-                if (kvp.Key == "NMAM-001")
+                if (_isIndexBuilt) return;
+
+                _keywordIndex = new Dictionary<string, HashSet<string>>();
+                _quyCachIndex = new Dictionary<string, HashSet<string>>();
+
+                if (_optimizedVatTu == null)
+                    return;
+
+                foreach (var kvp in _optimizedVatTu)
                 {
-                    int estddd = 10;
-                }
+                    if (kvp.Key == "NMAM-001")
+                    {
+                        int estddd = 10;
+                    }
 
-                var words = kvp.Value.TenChuan.ToLower()
-                    .Split(new[] { ' ', '-', ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Where(w => w.Length >= 2);
+                    var words = kvp.Value.TenChuan.ToLower()
+                        .Split(new[] { ' ', '-', ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Where(w => w.Length >= 2);
+                    foreach (var word in words)
+                    {
+                        // ✅ SỬA: Chỉ tạo mới nếu chưa tồn tại
+                        if (!_keywordIndex.ContainsKey(word))
+                            _keywordIndex[word] = new HashSet<string>();
+                        _keywordIndex[word].Add(kvp.Key);
+                    }
+                    // Index theo quy cách - phần này đúng
+                    if (!string.IsNullOrEmpty(kvp.Value.QuyCach))
+                    {
+                        if (!_quyCachIndex.ContainsKey(kvp.Value.QuyCach))
+                            _quyCachIndex[kvp.Value.QuyCach] = new HashSet<string>();
+                        _quyCachIndex[kvp.Value.QuyCach].Add(kvp.Key);
+                    } 
 
-                foreach (var word in words)
-                { 
-                    // ✅ SỬA: Chỉ tạo mới nếu chưa tồn tại
-                    if (!_keywordIndex.ContainsKey(word))
-                        _keywordIndex[word] = new HashSet<string>();
-                    _keywordIndex[word].Add(kvp.Key);
                 }
-
-                // Index theo quy cách - phần này đúng
-                if (!string.IsNullOrEmpty(kvp.Value.QuyCach))
-                {
-                    if (!_quyCachIndex.ContainsKey(kvp.Value.QuyCach))
-                        _quyCachIndex[kvp.Value.QuyCach] = new HashSet<string>();
-                    _quyCachIndex[kvp.Value.QuyCach].Add(kvp.Key);
-                }
+                //bool test = _keywordIndex["nước"].Contains("nmam-001");
+                _isIndexBuilt = true;
             }
-            bool test = _keywordIndex["nước"].Contains("nmam-001");
-            _isIndexBuilt = true;
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show(ex.Message);
+            }
+
+          
         }
         // Thêm Dictionary chứa các từ đồng nghĩa
         private Dictionary<string, string> _synonymDictionary;
@@ -24878,10 +24887,21 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                         var importList = chkDauvao.Checked ? lstImportVao : lstImportRa;
                         if (currentList.Any(m => m.SHDon == tbImport.SHDon && m.NLap.Date == tbImport.NLap.Date && m.Mst == tbImport.Mst)) return null;
                         if (importList.Any(m => m.SHDon == tbImport.SHDon && m.NLap.Date == tbImport.NLap.Date)) return null;
-                        if ((Kiemtrahoadon(tbImport.SHDon, tbImport.NLap, tbImport.Mst, type) && modeClick!=2) || KiemtrahoadonCT(tbImport.SHDon, tbImport.KHHDon, tbImport.NLap, tbImport.Mst, type))
+                        if(serverMode == "1")
                     {
-                        isAddhd=false;
-                        return null;
+                        if ((Kiemtrahoadon(tbImport.SHDon, tbImport.NLap, tbImport.Mst, type) && modeClick != 2 ) || KiemtrahoadonCT(tbImport.SHDon, tbImport.KHHDon, tbImport.NLap, tbImport.Mst, type))
+                        {
+                            isAddhd = false;
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        if ((Kiemtrahoadon(tbImport.SHDon, tbImport.NLap, tbImport.Mst, type) ) || KiemtrahoadonCT(tbImport.SHDon, tbImport.KHHDon, tbImport.NLap, tbImport.Mst, type))
+                        {
+                            isAddhd = false;
+                            return null;
+                        }
                     }
 
                     // 7. Khởi tạo khách hàng mới
@@ -35217,8 +35237,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                 int rowsAffecteds2 = ExecuteQueryResult(querys2, parameterss22);
                 checkEdit2.Checked = false;
                 chkTime1.Checked = false;
-                //string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
-                string dbPath = Path.Combine("D:\\", "Tooldb.accdb");
+                string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+                // string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
                 connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
                 string queryGetdetail = @"SELECT * FROM tbCompany";
                 DataTable tbImportdetails = ExecuteQuery2(queryGetdetail);
@@ -35389,6 +35409,19 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             {
                 txtTime1.Text = "";
             }
+            else
+            {
+                //Xoá luôn tbcompany trong tool tong
+                 string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+                connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
+                var qrqd = "delete from tbCompany  WHERE MST=?";
+                var prmt = new OleDbParameter[]
+                {
+                                                new OleDbParameter("?", mstcongty),
+                };
+                ExecuteQueryResult2(qrqd, prmt);
+                chkThietlaptong.Checked = false;
+            }
         }
         string filename = "";
         private void txtTime1_EditValueChanged(object sender, EventArgs e)
@@ -35515,7 +35548,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     DataTable getRegister = ExecuteQuery(qr);
 
 
-                    string dbPath = Path.Combine("D:\\", "Tooldb.accdb");
+                     string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
                     connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
                     string querys = @"UPDATE tbRegister SET IsRegistry = ?";
                     var pra = new OleDbParameter[]
@@ -35639,7 +35672,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                  };
                 var rowsAffecteds2 = ExecuteQueryResult(qr, parameterss2);
                 //Xoá luôn tbcompany trong tool tong
-                string dbPath = Path.Combine("D:\\", "Tooldb.accdb");
+                 string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
                 connectionString2 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
                 var qrqd = "delete from tbCompany  WHERE MST=?";
                 var prmt = new OleDbParameter[]

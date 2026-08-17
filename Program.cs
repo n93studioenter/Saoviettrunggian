@@ -139,6 +139,7 @@ namespace SaovietTax {
                     case "10": Application.Run(new vb6Xemhoadon()); break;
                     case "11": Application.Run(new Vanguard()); break;
                     case "12": Application.Run(new Updater()); break;
+                    case "13": Application.Run(new ExportExcelBC()); break;
                 }
             }
         }

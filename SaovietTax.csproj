@@ -340,6 +340,10 @@
     <Compile Include="DTO\VietnameseProductMatcher.cs" />
     <Compile Include="DTO\VietQRService.cs" />
     <Compile Include="DTO\ViettelInvoiceService.cs" />
+    <Compile Include="ExportExcelBC.cs" />
+    <Compile Include="ExportExcelBC.Designer.cs">
+      <DependentUpon>ExportExcelBC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -634,6 +638,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DiagramHD.resx">
       <DependentUpon>DiagramHD.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExportExcelBC.resx">
+      <DependentUpon>ExportExcelBC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

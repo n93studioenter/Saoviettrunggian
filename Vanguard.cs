@@ -632,7 +632,7 @@ namespace SaovietTax
                 }
                 month1.Total = month1.Warnings.Count;
                 months.Add(month1);
-            } 
+            }
 
             // ===== Tính Total =====
             foreach (var month in months)
@@ -640,80 +640,285 @@ namespace SaovietTax
                 month.Total = month.Warnings.Count;
             }
 
+
+            // ==========================================================
+            // TẠO KHU VỰC SCROLL HIỂN THỊ CÁC THÁNG
+            // ==========================================================
+
+            // Xóa giao diện cũ
+            panelControl1.Controls.Clear();
+
+            // Panel chứa danh sách tháng
+            Panel panelScroll = new Panel();
+            panelScroll.Name = "panelScrollMonth";
+            panelScroll.Dock = DockStyle.Fill;
+            panelScroll.AutoScroll = true;
+            panelScroll.BackColor = Color.White;
+
+            // Thêm panel scroll vào panel chính
+            panelControl1.Controls.Add(panelScroll);
+
+
+            // ==========================================================
+            // CÁC THÔNG SỐ GIAO DIỆN
+            // ==========================================================
+
             int yPos = 5;
+
+            int headerHeight = 45;
+            int warningHeight = 22;
+
+            int leftMargin = 5;
+            int rightMargin = 15;
+            int bottomMargin = 5;
+
+
+            // ==========================================================
+            // TẠO PANEL CHO TỪNG THÁNG
+            // ==========================================================
 
             foreach (var monthData in months)
             {
-                // Panel cho mỗi tháng
-                var panelControl2 = new DevExpress.XtraEditors.PanelControl();
-                panelControl2.Appearance.BackColor = System.Drawing.Color.White;
-                panelControl2.Appearance.Options.UseBackColor = true;
-                panelControl2.Location = new System.Drawing.Point(5, yPos);
-                panelControl2.Name = $"panelControl_{monthData.Month.Replace("/", "_")}";
-                int parentWidth = this.panelControl1.Width;
-                int panelWidth = (int)(parentWidth * 0.99); // 80% của parent
+                // ------------------------------------------------------
+                // Panel của tháng
+                // ------------------------------------------------------
 
-                panelControl2.Size = new System.Drawing.Size(panelWidth, 50 + (monthData.Warnings.Count * 30));
+                var panelControl2 = new DevExpress.XtraEditors.PanelControl();
+
+                panelControl2.Name =
+                    $"panelControl_{monthData.Month.Replace("/", "_")}";
+
+                panelControl2.Appearance.BackColor = Color.White;
+                panelControl2.Appearance.Options.UseBackColor = true;
+
+                panelControl2.Location = new Point(
+                    leftMargin,
+                    yPos
+                );
+
+
+                // Chiều rộng thực tế của vùng scroll
+                int panelWidth = panelScroll.ClientSize.Width
+                                 - leftMargin
+                                 - rightMargin;
+
+                if (panelWidth < 100)
+                    panelWidth = 100;
+
+
+                // Chiều cao theo số warning
+                int panelHeight =
+                    headerHeight +
+                    (monthData.Warnings.Count * warningHeight) +
+                    bottomMargin;
+
+                panelControl2.Size = new Size(
+                    panelWidth,
+                    panelHeight
+                );
+
                 panelControl2.TabIndex = 0;
 
-                // SVG Icon
+
+                // ======================================================
+                // ICON LỊCH
+                // ======================================================
+
                 var svgImageBox2 = new DevExpress.XtraEditors.SvgImageBox();
-                svgImageBox2.Location = new System.Drawing.Point(5, 7);
+
+                svgImageBox2.Location = new Point(5, 5);
                 svgImageBox2.Name = "svgImageBox2";
-                svgImageBox2.Size = new System.Drawing.Size(50, 40);
+                svgImageBox2.Size = new Size(50, 35);
                 svgImageBox2.BackColor = Color.Transparent;
 
-                string svgCalendarGreen = @"<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
-            <rect x='3' y='4' width='18' height='18' rx='2' fill='none' stroke='#4CAF50' stroke-width='2'/>
-            <line x1='3' y1='10' x2='21' y2='10' stroke='#4CAF50' stroke-width='2'/>
-            <line x1='8' y1='2' x2='8' y2='6' stroke='#4CAF50' stroke-width='2'/>
-            <line x1='16' y1='2' x2='16' y2='6' stroke='#4CAF50' stroke-width='2'/>
-        </svg>";
+                string svgCalendarGreen = @"
+<svg xmlns='http://www.w3.org/2000/svg'
+     width='24'
+     height='24'
+     viewBox='0 0 24 24'>
 
-                using (System.IO.MemoryStream stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(svgCalendarGreen)))
+    <rect x='3'
+          y='4'
+          width='18'
+          height='18'
+          rx='2'
+          fill='none'
+          stroke='#4CAF50'
+          stroke-width='2'/>
+
+    <line x1='3'
+          y1='10'
+          x2='21'
+          y2='10'
+          stroke='#4CAF50'
+          stroke-width='2'/>
+
+    <line x1='8'
+          y1='2'
+          x2='8'
+          y2='6'
+          stroke='#4CAF50'
+          stroke-width='2'/>
+
+    <line x1='16'
+          y1='2'
+          x2='16'
+          y2='6'
+          stroke='#4CAF50'
+          stroke-width='2'/>
+
+</svg>";
+
+
+                using (System.IO.MemoryStream stream =
+                       new System.IO.MemoryStream(
+                           System.Text.Encoding.UTF8.GetBytes(
+                               svgCalendarGreen)))
                 {
-                    svgImageBox2.SvgImage = DevExpress.Utils.Svg.SvgImage.FromStream(stream);
+                    svgImageBox2.SvgImage =
+                        DevExpress.Utils.Svg.SvgImage.FromStream(stream);
                 }
+
                 panelControl2.Controls.Add(svgImageBox2);
 
-                // Label tháng
-                var labelControl2 = new DevExpress.XtraEditors.LabelControl();
-                labelControl2.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+
+                // ======================================================
+                // LABEL THÁNG
+                // ======================================================
+
+                var labelControl2 =
+                    new DevExpress.XtraEditors.LabelControl();
+
+                labelControl2.Appearance.Font =
+                    new System.Drawing.Font(
+                        "Tahoma",
+                        9F,
+                        System.Drawing.FontStyle.Bold);
+
                 labelControl2.Appearance.Options.UseFont = true;
-                labelControl2.Location = new System.Drawing.Point(65, 10);
+
+                labelControl2.Location =
+                    new System.Drawing.Point(65, 10);
+
                 labelControl2.Name = "labelControl2";
+
                 labelControl2.Text = monthData.Month;
+
                 panelControl2.Controls.Add(labelControl2);
 
-                // Label tổng cảnh báo
-                var labelControl3 = new DevExpress.XtraEditors.LabelControl();
-                labelControl3.Location = new System.Drawing.Point(140, 12);
+
+                // ======================================================
+                // LABEL TỔNG CẢNH BÁO
+                // ======================================================
+
+                var labelControl3 =
+                    new DevExpress.XtraEditors.LabelControl();
+
+                labelControl3.Location =
+                    new System.Drawing.Point(140, 12);
+
                 labelControl3.Name = "labelControl3";
-                labelControl3.Text = $"{monthData.Total} cảnh báo";
-                labelControl3.ForeColor = Color.Gray;
+
+                labelControl3.Text =
+                    $"{monthData.Total} cảnh báo";
+
+                labelControl3.ForeColor =
+                    Color.Gray;
+
                 panelControl2.Controls.Add(labelControl3);
 
-                // Danh sách cảnh báo
-                int warningY = 50;
+
+                // ======================================================
+                // DANH SÁCH CẢNH BÁO
+                // ======================================================
+
+                int warningY = headerHeight;
+
+
                 foreach (var warning in monthData.Warnings)
                 {
-                    var lblWarning = new DevExpress.XtraEditors.LabelControl();
+                    var lblWarning =
+                        new DevExpress.XtraEditors.LabelControl();
+
                     lblWarning.Text = warning.Text;
-                    lblWarning.Font = new Font("Segoe UI", 7.5F, FontStyle.Bold);
-                    lblWarning.ForeColor = warning.Color;
-                    lblWarning.Appearance.BackColor = Color.Transparent;
-                    lblWarning.Appearance.Options.UseBackColor = true;
-                    lblWarning.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-                    lblWarning.Size = new Size(panelWidth, 22);
-                    lblWarning.Location = new Point(20, warningY);
-                    lblWarning.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-                    panelControl2.Controls.Add(lblWarning);
-                    warningY += 22;
+
+                    lblWarning.Font =
+                        new Font(
+                            "Segoe UI",
+                            7.5F,
+                            FontStyle.Bold);
+
+                    lblWarning.ForeColor =
+                        warning.Color;
+
+                    lblWarning.Appearance.BackColor =
+                        Color.Transparent;
+
+                    lblWarning.Appearance.Options.UseBackColor =
+                        true;
+
+                    lblWarning.AutoSizeMode =
+                        DevExpress.XtraEditors.LabelAutoSizeMode.None;
+
+
+                    // Chừa khoảng cách trái phải
+                    int warningWidth =
+                        panelWidth - 30;
+
+                    if (warningWidth < 50)
+                        warningWidth = 50;
+
+
+                    lblWarning.Size =
+                        new Size(
+                            warningWidth,
+                            warningHeight);
+
+
+                    lblWarning.Location =
+                        new Point(
+                            20,
+                            warningY);
+
+
+                    lblWarning.Appearance.TextOptions.HAlignment =
+                        DevExpress.Utils.HorzAlignment.Near;
+
+                    lblWarning.Appearance.TextOptions.VAlignment =
+                        DevExpress.Utils.VertAlignment.Center;
+
+
+                    panelControl2.Controls.Add(
+                        lblWarning);
+
+
+                    warningY += warningHeight;
                 }
 
-                this.panelControl1.Controls.Add(panelControl2);
+
+                // ======================================================
+                // THÊM PANEL THÁNG VÀO PANEL SCROLL
+                // ======================================================
+
+                panelScroll.Controls.Add(
+                    panelControl2);
+
+
+                // Vị trí tháng tiếp theo
                 yPos += panelControl2.Height + 5;
             }
+
+
+            // ==========================================================
+            // CẬP NHẬT SCROLL
+            // ==========================================================
+
+            panelScroll.AutoScrollMinSize =
+                new Size(
+                    0,
+                    yPos + 5);
+            panelScroll.HorizontalScroll.Enabled = false;
+            panelScroll.HorizontalScroll.Visible = false;
         }
         string tokken = "";
         int maxlogin = 1;
