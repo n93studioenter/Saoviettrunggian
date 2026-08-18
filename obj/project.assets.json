@@ -435,6 +435,9 @@
           "itext": "9.2.0"
         }
       },
+      "jQuery/1.6.3": {
+        "type": "package"
+      },
       "MethodBoundaryAspect.Fody/2.0.149": {
         "type": "package",
         "dependencies": {
@@ -2223,6 +2226,12 @@
           "build/Tesseract.targets": {}
         }
       },
+      "toastr/2.1.1": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.6.3"
+        }
+      },
       "WebDriverManager/2.17.6": {
         "type": "package",
         "dependencies": {
@@ -2675,6 +2684,9 @@
         "dependencies": {
           "itext": "9.2.0"
         }
+      },
+      "jQuery/1.6.3": {
+        "type": "package"
       },
       "MethodBoundaryAspect.Fody/2.0.149": {
         "type": "package",
@@ -4235,6 +4247,12 @@
           "build/Tesseract.targets": {}
         }
       },
+      "toastr/2.1.1": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.6.3"
+        }
+      },
       "WebDriverManager/2.17.6": {
         "type": "package",
         "dependencies": {
@@ -4687,6 +4705,9 @@
         "dependencies": {
           "itext": "9.2.0"
         }
+      },
+      "jQuery/1.6.3": {
+        "type": "package"
       },
       "MethodBoundaryAspect.Fody/2.0.149": {
         "type": "package",
@@ -6259,6 +6280,12 @@
           "build/Tesseract.targets": {}
         }
       },
+      "toastr/2.1.1": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.6.3"
+        }
+      },
       "WebDriverManager/2.17.6": {
         "type": "package",
         "dependencies": {
@@ -6711,6 +6738,9 @@
         "dependencies": {
           "itext": "9.2.0"
         }
+      },
+      "jQuery/1.6.3": {
+        "type": "package"
       },
       "MethodBoundaryAspect.Fody/2.0.149": {
         "type": "package",
@@ -8286,6 +8316,12 @@
           "build/Tesseract.targets": {}
         }
       },
+      "toastr/2.1.1": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.6.3"
+        }
+      },
       "WebDriverManager/2.17.6": {
         "type": "package",
         "dependencies": {
@@ -8738,6 +8774,9 @@
         "dependencies": {
           "itext": "9.2.0"
         }
+      },
+      "jQuery/1.6.3": {
+        "type": "package"
       },
       "MethodBoundaryAspect.Fody/2.0.149": {
         "type": "package",
@@ -10307,6 +10346,12 @@
           "build/Tesseract.targets": {}
         }
       },
+      "toastr/2.1.1": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.6.3"
+        }
+      },
       "WebDriverManager/2.17.6": {
         "type": "package",
         "dependencies": {
@@ -10857,6 +10902,24 @@
         "gnu-agpl-v3.0.md",
         "itext7.9.2.0.nupkg.sha512",
         "itext7.nuspec"
+      ]
+    },
+    "jQuery/1.6.3": {
+      "sha512": "vb0p7+eRmc2evBCT9W7PCUupqWiDMi9/ofBHN99LraRzLY5jPKMeFzFYBoMgwA8TiwRoFDke5hiDDLsvae7qMg==",
+      "type": "package",
+      "path": "jquery/1.6.3",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Content/Scripts/jquery-1.6.3-vsdoc.js",
+        "Content/Scripts/jquery-1.6.3.js",
+        "Content/Scripts/jquery-1.6.3.min.js",
+        "Tools/install.ps1",
+        "Tools/jquery-1.6.3-vsdoc-para.js",
+        "Tools/uninstall.ps1",
+        "jquery.1.6.3.nupkg.sha512",
+        "jquery.nuspec"
       ]
     },
     "MethodBoundaryAspect.Fody/2.0.149": {
@@ -14521,6 +14584,23 @@
         "x86/tesseract50.dll"
       ]
     },
+    "toastr/2.1.1": {
+      "sha512": "h/688XvzYk1xVYn213ryU+HCElE4n/drYzAHJkAi9LsSUPS3EbI6wGlvCglBUt7i4h5iESgAVarYaigjQmVpqg==",
+      "type": "package",
+      "path": "toastr/2.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/content/toastr.css",
+        "content/content/toastr.less",
+        "content/content/toastr.min.css",
+        "content/content/toastr.scss",
+        "content/scripts/toastr.js",
+        "content/scripts/toastr.min.js",
+        "toastr.2.1.1.nupkg.sha512",
+        "toastr.nuspec"
+      ]
+    },
     "WebDriverManager/2.17.6": {
       "sha512": "TyelgYIuQsa3i8gbJPJ6kPnsD7q74fFcGN6gHhIs3Vmm0DvbKd/2+aV9E/LdgcOLOo+mFJu0dgz5PfhJNooH4w==",
       "type": "package",
@@ -14570,7 +14650,8 @@
       "TensorFlow.NET >= 0.150.0",
       "Tesseract >= 5.2.0",
       "WebDriverManager >= 2.17.6",
-      "itext7 >= 9.2.0"
+      "itext7 >= 9.2.0",
+      "toastr >= 2.1.1"
     ]
   },
   "packageFolders": {
@@ -14748,6 +14829,10 @@
           "itext7": {
             "target": "Package",
             "version": "[9.2.0, )"
+          },
+          "toastr": {
+            "target": "Package",
+            "version": "[2.1.1, )"
           }
         },
         "imports": [

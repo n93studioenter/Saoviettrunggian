@@ -4,6 +4,7 @@ using DevExpress.Utils;
 using DevExpress.Utils.Extensions;
 using DevExpress.XtraEditors;
 using DevExpress.XtraWaitForm;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using Newtonsoft.Json;
 using SaovietTax.Database;
 using SaovietTax.DTO;
@@ -21,6 +22,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -28,6 +30,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static SaovietTax.frmMain;
 using static SaovietTax.Vanguard;
+using DataTable = System.Data.DataTable;
+using Size = System.Drawing.Size;
 
 namespace SaovietTax
 {
@@ -296,8 +300,16 @@ namespace SaovietTax
                 Total = warnings?.Count ?? 0;
             }
         }
+        public class VattuAm
+        {
+            public string MaVT { get; set; }
+            public string TenVT { get; set; }
+            public string MaPL { get; set; }
+        }
+        List<VattuAm> vattuAms { get; set; }    
         private void LoadMeaasge()
         {
+            vattuAms = new List<VattuAm>();
             string queryct = @"
                                        SELECT 
                         hd.SoHD,
@@ -353,7 +365,8 @@ namespace SaovietTax
             string qrvt = "select * from Vattu";
             var dtVattu = ExecuteQuery(qrvt);
             string hangam = "";
-
+             qrip = "SELECT * FROM PhanLoaiVattu";
+            var phanloaivt = ExecuteQuery(qrip);
             var months = new List<MonthWarning>();
             for (int i = DateTime.Now.Month; i >= 1; i--)
             {
@@ -416,6 +429,11 @@ namespace SaovietTax
                             if (getvattu != null)
                             {
                                 hangam += getvattu["SoHieu"] + ",";
+                                VattuAm VattuAm = new VattuAm();
+                                VattuAm.MaVT = getvattu["SoHieu"].ToString();
+                                VattuAm.TenVT = getvattu["TenVattu"].ToString();
+                                VattuAm.MaPL = phanloaivt.AsEnumerable().Where(m => m["MaSo"].ToString() == getvattu["MaPhanLoai"].ToString()).FirstOrDefault()["SoHieu"].ToString();
+                                vattuAms.Add(VattuAm);
                             }
                         }
                     }
@@ -425,7 +443,9 @@ namespace SaovietTax
                 List<HoaDonNhap> lstvao = new List<HoaDonNhap>();
                 List<HoaDonNhap> lstRa = new List<HoaDonNhap>();
                 int hdchuanhapvao = 0;
+                string dshdvaochunhap = "";
                 int hdchuanhapra = 0;
+                string dshdrachunhap = "";
                 int tongvao = 0;
                 int tongra = 0;
                   string hdnhapduDauvao = "";
@@ -477,6 +497,7 @@ namespace SaovietTax
                                 if (!KiemtrahoadonCT(getSohd, getSHHD, getdate, mstnb, 1))
                                 {
                                     hdchuanhapvao += 1;
+                                    dshdvaochunhap += getSohd + ",";
                                 }
                                 tongvao += 1;
                             }
@@ -529,6 +550,7 @@ namespace SaovietTax
                                 if (!KiemtrahoadonCT(getSohd, getkhhd, getdate, mstnm, 2))
                                 {
                                     hdchuanhapra += 1;
+                                    dshdrachunhap += getSohd + ",";
                                 }
                             }
                             tongra += 1;
@@ -556,18 +578,18 @@ namespace SaovietTax
                 {
                     if (hdchuanhapra > 0)
                     {
-                        warning1.Text += $"🔴 {hdchuanhapvao} Hóa đơn đầu vào , {hdchuanhapra} Hóa đơn đầu ra chưa nhập";
+                        warning1.Text += $"🔴 {hdchuanhapvao} Hóa đơn đầu vào  , {hdchuanhapra} Hóa đơn đầu ra chưa nhập ";
                     }
                     else
                     {
-                        warning1.Text = $"🔴 {hdchuanhapvao} Hóa đơn đầu vào chưa nhập";
+                        warning1.Text = $"🔴 {hdchuanhapvao} Hóa đơn đầu vào chưa nhập ";
                     }
                 }
                 else
                 {
                     if (hdchuanhapra > 0)
                     {
-                        warning1.Text = $"🔴 {hdchuanhapra} Hóa đơn đầu ra chưa nhập";
+                        warning1.Text = $"🔴 {hdchuanhapra} Hóa đơn đầu ra chưa nhập"; 
                     }
                 }
 
@@ -584,7 +606,12 @@ namespace SaovietTax
                 if (getimportloi.Rows.Count > 0)
                 {
                     var warning3 = new Warning();
-                    warning3.Text = $"🔵 {getimportloi.Rows.Count} import lỗi";
+                    var listimportloi = "";
+                    foreach (DataRow row in getimportloi.Rows)
+                    {
+                        listimportloi += row["SHDon"].ToString() + ",";
+                    }
+                    warning3.Text = $"🔵 {getimportloi.Rows.Count} import lỗi : {listimportloi}";
                     warning3.Color = Color.Blue;
                     month1.Warnings.Add(warning3);
 
@@ -593,9 +620,13 @@ namespace SaovietTax
 
                 if (!string.IsNullOrEmpty(hangam))
                 {
+                    var group = vattuAms.GroupBy(m => m.MaPL);
                     var warning4 = new Warning();
-                    warning4.Text = $"🔴 Có {hangam.Split(',').Count()-1} hàng đang âm ";
-                    warning4.Color = Color.Green;
+                    foreach( var m in group)
+                    {
+                        warning4.Text = $"🔵 Nhóm {m.Key} Có {m.Count()} ⚠️ hàng đang âm";
+                    } 
+                    warning4.Color = Color.DarkCyan;
                     month1.Warnings.Add(warning4);
                 }
 
@@ -728,7 +759,7 @@ namespace SaovietTax
 
                 svgImageBox2.Location = new Point(5, 5);
                 svgImageBox2.Name = "svgImageBox2";
-                svgImageBox2.Size = new Size(50, 35);
+                svgImageBox2.Size = new System.Drawing.Size(50, 35);
                 svgImageBox2.BackColor = Color.Transparent;
 
                 string svgCalendarGreen = @"
@@ -789,6 +820,17 @@ namespace SaovietTax
                 var labelControl2 =
                     new DevExpress.XtraEditors.LabelControl();
 
+                // 1. Kích hoạt chế độ bọc chữ (Wrap)
+                labelControl2.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+                // Quan trọng: Phải bật option này để TextOptions có hiệu lực [citation:2][citation:10]
+                labelControl2.Appearance.Options.UseTextOptions = true;
+
+                // 2. Thiết lập chế độ tự động co giãn theo chiều dọc (Vertical)
+                // Điều này đảm bảo label sẽ tăng chiều cao để hiển thị toàn bộ text khi bị bọc [citation:5][citation:7]
+                labelControl2.AutoSizeMode = LabelAutoSizeMode.Vertical;
+
+                // 3. Xác định chiều rộng tối đa cho label 
+
                 labelControl2.Appearance.Font =
                     new System.Drawing.Font(
                         "Tahoma",
@@ -815,7 +857,7 @@ namespace SaovietTax
                     new DevExpress.XtraEditors.LabelControl();
 
                 labelControl3.Location =
-                    new System.Drawing.Point(140, 12);
+                    new System.Drawing.Point(170, 12);
 
                 labelControl3.Name = "labelControl3";
 
@@ -823,7 +865,7 @@ namespace SaovietTax
                     $"{monthData.Total} cảnh báo";
 
                 labelControl3.ForeColor =
-                    Color.Gray;
+                    Color.DarkRed;
 
                 panelControl2.Controls.Add(labelControl3);
 

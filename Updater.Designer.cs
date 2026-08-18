@@ -38,7 +38,7 @@
             this.progressPanel1.Caption = "Đang update vui lòng chờ";
             this.progressPanel1.Location = new System.Drawing.Point(3, 2);
             this.progressPanel1.Name = "progressPanel1";
-            this.progressPanel1.Size = new System.Drawing.Size(445, 65);
+            this.progressPanel1.Size = new System.Drawing.Size(493, 65);
             this.progressPanel1.TabIndex = 0;
             this.progressPanel1.Text = "progressPanel1";
             // 
@@ -50,7 +50,7 @@
             this.Appearance.Options.UseForeColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(460, 69);
+            this.ClientSize = new System.Drawing.Size(527, 69);
             this.Controls.Add(this.progressPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Updater";

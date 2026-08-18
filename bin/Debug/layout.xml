@@ -20,12 +20,12 @@
       <TableColumnLayout>
         <Index>1</Index>
         <SizeType>Absolute</SizeType>
-        <Width>475</Width>
+        <Width>478</Width>
       </TableColumnLayout>
       <TableColumnLayout>
         <Index>2</Index>
         <SizeType>Absolute</SizeType>
-        <Width>677</Width>
+        <Width>674</Width>
       </TableColumnLayout>
       <TableColumnLayout>
         <Index>3</Index>
@@ -43,9 +43,9 @@
   </ControlLayout>
   <ControlLayout>
     <Name>panelControl12</Name>
-    <Left>1044</Left>
+    <Left>1047</Left>
     <Top>3</Top>
-    <Width>671</Width>
+    <Width>668</Width>
     <Height>166</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
@@ -177,7 +177,7 @@
     <Name>panelControl11</Name>
     <Left>569</Left>
     <Top>3</Top>
-    <Width>469</Width>
+    <Width>472</Width>
     <Height>166</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>

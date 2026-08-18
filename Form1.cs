@@ -34,6 +34,7 @@ using DevExpress.Xpo.DB;
 using DevExpress.Xpo.DB.Helpers;
 using DevExpress.Xpo.Helpers;
 using DevExpress.Xpo.Metadata;
+using DevExpress.XtraBars.Alerter;
 using DevExpress.XtraCharts.Designer.Native;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
@@ -424,7 +425,8 @@ namespace SaovietTax
         public frmMain()
         {
           
-            InitializeComponent();
+            InitializeComponent(); 
+
             InitDB();
             
             string queryGetdetail = @"SELECT * FROM tbRegister";
@@ -437,7 +439,7 @@ namespace SaovietTax
             }
             ConfigurationManager.RefreshSection("appSettings");
             serverMode = ConfigurationManager.AppSettings["Mode"];
-            serverMode = "2";
+            //serverMode = "2";
             if (serverMode == "2")
             {
                 this.ShowInTaskbar = false;
@@ -4032,7 +4034,27 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 {
                     savedPath = kq.Rows[0]["Hoadonpath"].ToString();
                     txtuser.Text = kq.Rows[0]["Username"].ToString();
-                    txtpass.Text = kq.Rows[0]["Password"].ToString();
+
+                    //Trước khi lấy password nên kiểm tra Vietstar Accaount trước
+
+                    string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "VietstarAccount.mdb");
+                    // string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+                    connectionString3= $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
+                    string queryGetdetail = @"SELECT * FROM tbcompany where Username ?";
+                    var parameters2 = new OleDbParameter[]
+                              {
+                                    new OleDbParameter("?", kq.Rows[0]["Username"].ToString()),
+                              };
+                    DataTable tbImportdetails = ExecuteQuery3(queryGetdetail, parameters2);
+                    if (tbImportdetails.Rows.Count > 0)
+                    {
+                        XtraMessageBox.Show($"Hệ thống phát hiện password đã được thay đổi, mật khẩu mới : {tbImportdetails.Rows[0]["Password"].ToString()}");
+                        txtpass.Text = tbImportdetails.Rows[0]["Password"].ToString();
+                    }
+                    else
+                    {
+                        txtpass.Text = kq.Rows[0]["Password"].ToString();
+                    }
                 }
             }
             catch (Exception ex)
@@ -4040,6 +4062,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 XtraMessageBox.Show(ex.Message);
             }
         }
+        string connectionString3 = "";
         private BackgroundWorker worker;
         private static int GetColumnLength(OleDbConnection connection, string tableName, string columnName)
         {
@@ -5593,7 +5616,8 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbRegister", "VbCoche", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "VbCoche2", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "IsRunning", "NUMBER");
-         
+            AddColumnIfNotExists(conn, "tbRegister", "IsNCC", "NUMBER");
+
             // tbimport
             AddColumnIfNotExists(conn, "tbimport", "Khautruthue", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "hdon", "TEXT");
@@ -5848,11 +5872,45 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 ? ""
                 : row["Username"].ToString();
 
-            txtpass.Text = row["Password"] == DBNull.Value
-                ? ""
-                : row["Password"].ToString();
-
-
+            //txtpass.Text = row["Password"] == DBNull.Value
+            //    ? ""
+            //    : row["Password"].ToString();
+            try
+            {
+                string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "VietstarAccount.mdb");
+                // string dbPath = Path.Combine("\\\\192.168.1.90\\Ke toan 2025 New\\1 Copi vao dung 1\\Hoadon", "Tooldb.accdb");
+                connectionString3 = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
+                string queryGetdetail = @"SELECT * FROM tbcompany where Username = ?";
+                var parameters2 = new OleDbParameter[]
+                          {
+                                    new OleDbParameter("?", row["Username"].ToString()),
+                          };
+                DataTable tbImportdetails = ExecuteQuery3(queryGetdetail, parameters2);
+                if (tbImportdetails.Rows.Count > 0)
+                {
+                    if(row["Password"].ToString() != tbImportdetails.Rows[0]["Password"].ToString())
+                    {
+                        XtraMessageBox.Show($"Hệ thống phát hiện password đã được thay đổi, mật khẩu mới : {tbImportdetails.Rows[0]["Password"].ToString()}");
+                        txtpass.Text = tbImportdetails.Rows[0]["Password"].ToString();
+                    }
+                    else
+                    {
+                        txtpass.Text = row["Password"].ToString();
+                    }
+                }
+                else
+                {
+                    txtpass.Text = row["Password"].ToString();
+                }
+            }
+            catch(Exception ex)
+            {
+                txtpass.Text = row["Password"].ToString();
+            }
+            if (row["IsNCC"].ToString()=="1")
+            {
+                chkInvoice.Checked = true;
+            }
         }
         private void LoadTbImportData()
         {
@@ -6604,7 +6662,6 @@ Chỉ trả lời: CÓ hoặc KHÔNG
         private string workspaceName = "MyWorkspace";
         private async void frmMain_Load(object sender, EventArgs e)
         {
-
             string computerName = Environment.MachineName;
             if (computerName != "MAYCHU")
             {
@@ -6858,8 +6915,6 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             XoaNLTP(4);
             XoaNLTP(5);
 
-
-           
         }
         private void XoaNLTP(int index)
         {
@@ -21934,7 +21989,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 }
                                 catch(Exception ex)
                                 {
-                                    XtraMessageBox.Show(node.SelectSingleNode("THHDVu")?.InnerText +"   "+TbImport.SHDon);
+                                    //XtraMessageBox.Show(node.SelectSingleNode("THHDVu")?.InnerText +"   "+TbImport.SHDon);
+                                    ShowToast(node.SelectSingleNode("THHDVu")?.InnerText + "   " + TbImport.SHDon, "Thông báo");
                                 }
                                 
                             }
@@ -34574,7 +34630,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
             string username = row["Username"]?.ToString();
             string password = row["Password"]?.ToString();
-            int SupplierId = int.Parse(row["SupplierId"]?.ToString());
+            //int SupplierId = int.Parse(row["SupplierId"]?.ToString());
+            int SupplierId =0;
             var url = "https://vinvoice.viettel.vn/api/auth/login";
             using (HttpClientHandler handler = new HttpClientHandler())
             {
@@ -35007,6 +35064,24 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     XtraMessageBox.Show("Chưa đăng ký thông tin nhà cung cấp không thể tải");
                     chkInvoice.Checked = false;
                 }
+                else
+                {
+                    var query = "UPDATE tbRegister SET IsNCC=? ";
+                    var parametersss = new OleDbParameter[]
+                    {
+                new OleDbParameter("?","1")
+                    };
+                    ExecuteQueryResult(query, parametersss);
+                }
+            }
+            else
+            {
+                var query = "UPDATE tbRegister SET IsNCC=? ";
+                var parametersss = new OleDbParameter[]
+                {
+                new OleDbParameter("?","0")
+                };
+                ExecuteQueryResult(query, parametersss);
             }
         } 
 
@@ -35262,8 +35337,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     string qrInsert = @"INSERT INTO tbCompany (Name, Dbpath, FolderPath, MST, STT, Status, IsRun, Dauvao, Daura, Saoviet) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-                    //string namecongty = getRegister.Rows[0]["Dbpath"].ToString().Split('\\')[4].Replace(".MDB", "");
-                    string namecongty = "xxx";
+                    string namecongty = Path.GetFileName(getRegister.Rows[0]["Dbpath"].ToString());
+                     // string namecongty = "xxx";
                     var parameters = new OleDbParameter[]
                     {
                         new OleDbParameter("?", namecongty),                                      // 1. Name
@@ -35370,7 +35445,39 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
             return dataTable; // Trả về DataTable chứa dữ liệu
         }
+        public System.Data.DataTable ExecuteQuery3(string query, params OleDbParameter[] parameters)
+        {
+            System.Data.DataTable dataTable = new System.Data.DataTable();
 
+            using (OleDbConnection connection = new OleDbConnection(connectionString3))
+            {
+                try
+                {
+                    connection.Open();
+
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        // Thêm các tham số vào command
+                        if (parameters != null)
+                        {
+                            command.Parameters.AddRange(parameters);
+                        }
+
+                        using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(command))
+                        {
+                            dataAdapter.Fill(dataTable);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+
+            return dataTable; // Trả về DataTable chứa dữ liệu
+        }
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             if (allowUncheck)
@@ -35449,7 +35556,8 @@ private static readonly Dictionary<string, string[]> BrandAliases =
             {
                 string cmd = $"schtasks /delete /tn \"{taskName}\" /f";
                 Process.Start("cmd", "/c " + cmd).WaitForExit();
-                XtraMessageBox.Show($"✅ Đã xóa lịch '{taskName}'!");
+                //XtraMessageBox.Show($"✅ Đã xóa lịch '{taskName}'!");
+                ShowToast($"✅ Đã xóa lịch '{taskName}'!", "Thông báo");
             }
             catch (Exception ex)
             {
@@ -35474,21 +35582,52 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     $"/create /tn \"{taskName}\" " +
                     $"/tr \"{tr}\" " +
                     $"/sc daily " +
-                    $"/st {timeStr} " +
+                    $"/st {timeStr} " + 
                     $"/f";
 
-                // Debug xem lệnh tạo ra
-                XtraMessageBox.Show(args);
+                // Debug xem lệnh tạo ra 
 
                 RunSchTasks(args, true);
+                // Hiển thị thông báo
+                // ShowNotification($"Đã tạo lịch '{taskName}' lúc {timeStr} mỗi ngày.", "Thành công", ToolTipIcon.Info);
+                //XtraMessageBox.Show($"Đã tạo lịch '{taskName}' lúc {timeStr} mỗi ngày.");
+                ShowToast($"Đã tạo lịch '{taskName}' lúc {timeStr} mỗi ngày.", "Thông báo");
 
-                XtraMessageBox.Show($"Đã tạo lịch '{taskName}' lúc {timeStr} mỗi ngày.");
             }
             catch (Exception ex)
             {
                 XtraMessageBox.Show(ex.ToString());
             }
         }
+        private static NotifyIcon _notifyIcon;
+
+        public static void ShowToast(string message, string title = "Thông báo")
+        {
+            AlertControl alert = new AlertControl();
+
+            // Tùy chỉnh giao diện 
+           // alert.LookAndFeel.UseDefaultLookAndFeel = false;
+            alert.AppearanceCaption.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            alert.AppearanceCaption.ForeColor = Color.White;
+            alert.AppearanceCaption.BackColor = Color.FromArgb(255, 0, 0);
+          
+            alert.AppearanceText.Font = new Font("Segoe UI", 9);
+            alert.AppearanceText.ForeColor = Color.Black;
+            alert.AppearanceText.BackColor = Color.White;
+            alert.FormShowingEffect = AlertFormShowingEffect.FadeIn;
+
+            // Cấu hình khác
+            alert.AutoFormDelay = 1000;
+            alert.ShowPinButton = false;
+            alert.ShowCloseButton = true;
+
+            // ✅ Đúng: Dùng Location
+            alert.FormLocation = AlertFormLocation.TopRight; 
+
+            alert.Show(null, title, message);
+        }
+        // Gọi từ bất kỳ đâu (kể cả static)
+
         private static void RunSchTasks(string arguments, bool throwIfError)
         {
             ProcessStartInfo psi = new ProcessStartInfo
