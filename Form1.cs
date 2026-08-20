@@ -162,6 +162,7 @@ using DataTable = System.Data.DataTable;
 using Font = System.Drawing.Font;
 using Formatting = Newtonsoft.Json.Formatting;
 using GridView = DevExpress.XtraGrid.Views.Grid.GridView;
+using ImageFormat = System.Drawing.Imaging.ImageFormat;
 using Keys = OpenQA.Selenium.Keys;
 using Label = System.Windows.Forms.Label;
 using Match = System.Text.RegularExpressions.Match;
@@ -4748,6 +4749,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                 Application.DoEvents();
             }
             lstvt = await LoadDataVattuAsync();
+            //CaptureScreen();
             if (Isrunning && lstvt.Count>0)
             {
                 string computerName = Environment.MachineName;
@@ -4774,6 +4776,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                     Application.DoEvents();
                     //btnChonthang.PerformClick();
                     Xulychonthang();
+
                 }
             }
             if (serverMode == "2")
@@ -5617,7 +5620,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbRegister", "VbCoche2", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "IsRunning", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "IsNCC", "NUMBER");
-
+            AddColumnIfNotExists(conn, "tbRegister", "StatusClose", "NUMBER");
             // tbimport
             AddColumnIfNotExists(conn, "tbimport", "Khautruthue", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "hdon", "TEXT");
@@ -6660,8 +6663,30 @@ Chỉ trả lời: CÓ hoặc KHÔNG
         }
         private string layoutFile = "form_layout.xml";
         private string workspaceName = "MyWorkspace";
+        private void CaptureScreen()
+        {
+
+            // Lấy kích thước của toàn bộ màn hình
+            Rectangle screenBounds = Screen.PrimaryScreen.Bounds;
+            using (Bitmap bitmap = new Bitmap(screenBounds.Width, screenBounds.Height))
+            {
+                // Tạo đối tượng Graphics từ Bitmap để vẽ lên đó
+                using (Graphics graphics = Graphics.FromImage(bitmap))
+                {
+                    // Sao chép toàn bộ nội dung màn hình vào Bitmap
+                    graphics.CopyFromScreen(0, 0, 0, 0, screenBounds.Size);
+                }
+
+                // Lưu ảnh chụp màn hình (ví dụ: lưu ra Desktop với tên "screenshot.png")
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\screenshot.png";
+                bitmap.Save(filePath, ImageFormat.Png);
+
+              //  MessageBox.Show($"Đã chụp màn hình và lưu tại: {filePath}");
+            }
+        }
         private async void frmMain_Load(object sender, EventArgs e)
         {
+
             string computerName = Environment.MachineName;
             if (computerName != "MAYCHU")
             {
@@ -6913,8 +6938,8 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             XoaNLTP(2);
             XoaNLTP(3);
             XoaNLTP(4);
-            XoaNLTP(5);
-
+            XoaNLTP(5); 
+           
         }
         private void XoaNLTP(int index)
         {
@@ -16776,8 +16801,8 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             }
             if (sohieu.Length > 15)
                 sohieu = sohieu.Substring(0, 15);
-            if (DVTinh == "")
-                DVTinh = "xxx";
+            //if (DVTinh == "")
+            //    DVTinh = "xxx";
             if (DVTinh.Length>10)
                 DVTinh = DVTinh.Substring(0, 10);   
             if (!lstvt.Any(m => m.SoHieu.ToLower() == sohieu.ToLower()))
@@ -16949,22 +16974,34 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //try
-            //{
+            try
+            {
+                if (string.IsNullOrEmpty(savedPath))
+                    return;
+                string status = "";
+                if (isClick)
+                {
+                    status = "1";
+                }
+                else
+                {
+                    status = "0";
+                }
+                string query = "UPDATE tbRegister SET StatusClose = ?";
+                // Khai báo mảng tham số với đủ 10 tham số
+                OleDbParameter[] parameters = new OleDbParameter[]
+                {
+        new OleDbParameter("?", status)
+                };
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    if (string.IsNullOrEmpty(savedPath))
-            //        return;
-            //    if (isClick)
-            //        File.WriteAllText(savedPath + "\\status.txt", "ButtonClicked");
-            //    else
-            //        File.WriteAllText(savedPath + "\\status.txt", "");
-            //}
-        }
-
-
+                // Thực thi truy vấn và lấy kết quả
+                int a = ExecuteQueryResult(query, parameters);
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        } 
 
         private void btnMdtk_Click(object sender, EventArgs e)
         {
@@ -24995,6 +25032,11 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     tbImport.Vat = 0;
                     tbImport.Vat2 = "0";
                     tbImport.Vat3 = "0";
+                    var TTCKTMai= ttToan.SelectSingleNode("TTCKTMai");
+                    if (TTCKTMai != null)
+                    {
+                        var ddd = TTCKTMai.InnerText;
+                    }
                     var thueNodes = ttToan.SelectNodes("THTTLTSuat//LTSuat");
                         if (thueNodes != null)
                         {
@@ -25068,14 +25110,19 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             bool daGiam = tenGoc.Contains("Đã giảm");
                             if (tchat == 4 && !daGiam) continue;
 
+                            string dvtempty = "";
+                            if (serverMode == "2" || Isrunning)
+                            {
+                                dvtempty = "...";
+                            }
                             TbImportDetail dt = new TbImportDetail
                             {
                                 Tchat = tchat,
                                 Ten = tenGoc,
                                 TKNo = tbImport.TKNo,
                                 TKCo = tbImport.TKCo,
-                                // Thêm kiểm tra null cho DVTinh
-                                DVT = CapitalizeFirstLetter(Helpers.ConvertUnicodeToVni(node.SelectSingleNode("DVTinh")?.InnerText ?? "")),
+                                // Thêm kiểm tra null cho DVTinh 
+                                DVT = CapitalizeFirstLetter(Helpers.ConvertUnicodeToVni(node.SelectSingleNode("DVTinh")?.InnerText ?? dvtempty)),
                                 // Sử dụng SafeParse để không bao giờ bị văng lỗi
                                 Soluong = SafeParse(node.SelectSingleNode("SLuong")?.InnerText),
                                 Dongia = SafeParse(node.SelectSingleNode("DGia")?.InnerText),
@@ -25125,6 +25172,28 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             }
 
                         }
+                    if (TTCKTMai != null && double.Parse(TTCKTMai.InnerText)>0)
+                    {
+                        if (chkDauvao.Checked)
+                        {
+                            TbImportDetail dt = new TbImportDetail
+                            {
+                                Tchat = 1,
+                                Ten = "Chiết khấu",
+                                TKNo = tbImport.TKNo,
+                                TKCo = "711",
+                                // Thêm kiểm tra null cho DVTinh
+                                DVT = "xxx",
+                                // Sử dụng SafeParse để không bao giờ bị văng lỗi
+                                Soluong = 0,
+                                Dongia = 0,
+                                TTien = double.Parse(TTCKTMai.InnerText),
+                                SoPSGoc = 0,
+                                Vat = 0
+                            };
+                            tbImport.tbImportDetails.Add(dt);
+                        }
+                    }
                     //Tiến hành làm tròn và phân bổ thằng cuối cùng
                     foreach (var lt in tbImport.tbImportDetails)
                     {
@@ -33132,7 +33201,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
-             
+            CaptureScreen();
         }
 
         private void simpleButton10_Click(object sender, EventArgs e)

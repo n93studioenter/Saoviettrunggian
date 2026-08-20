@@ -503,6 +503,12 @@
     <Compile Include="frmTaikhoan.Designer.cs">
       <DependentUpon>frmTaikhoan.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmTinhGiaVon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTinhGiaVon.Designer.cs">
+      <DependentUpon>frmTinhGiaVon.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmWebbrowser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -726,6 +732,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmTaikhoan.resx">
       <DependentUpon>frmTaikhoan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTinhGiaVon.resx">
+      <DependentUpon>frmTinhGiaVon.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmWebbrowser.resx">
       <DependentUpon>frmWebbrowser.cs</DependentUpon>
