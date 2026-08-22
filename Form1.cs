@@ -189,6 +189,7 @@ namespace SaovietTax
     {
 
         #region  Khai báo
+        public string strLayout = "";
         public string KyHieu { get; set; }
         public string tknh { get; set; }
         public string savedPath = "";
@@ -3522,12 +3523,19 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
                     // Tạo mảng tham số với giá trị cho câu lệnh SQL
 
                     var kq = ExecuteQuery(query, null);
+                    query = "SELECT * FROM tbRegister";
+                    var kq2 = ExecuteQuery(query, null);
+
                     if (kq.Rows.Count > 0)
                     {
                         string tencongty = kq.Rows[0]["TenCty"].ToString();
                         string fileName = Path.GetFileName(dbPath.Trim());
                         mstcongty = kq.Rows[0]["MaSoThue"].ToString();
                         lblDpPath.Text = Helpers.ConvertVniToUnicode(tencongty) + "|" + mstcongty + "|" + fileName + " | " + "Version "+ "9/12/2025";
+                        if (!string.IsNullOrEmpty(kq2.Rows[0]["DateExpert"].ToString()))
+                        {
+                            lblDpPath.Text += lblDpPath.Text + " | " + kq2.Rows[0]["DateExpert"].ToString();
+                        }
                         if (mstcongty == "3502469834")
                         {
                             is5111 = true;
@@ -5395,6 +5403,10 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             string query = "SELECT * FROM License";
 
             DataTable tb = ExecuteQuery(query, null);
+
+            query = "SELECT * FROM tbRegister";
+            var kq2 = ExecuteQuery(query, null);
+
             if (tb == null || tb.Rows.Count == 0)
                 return;
 
@@ -5426,9 +5438,11 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
 
             string fileName = Path.GetFileName(dbPath);
 
-            lblDpPath.Text =
-                tenCty + " | " + mstcongty + " | " + fileName + " | Version 06/02/26";
-
+            lblDpPath.Text =  tenCty + " | " + mstcongty + " | " + fileName + " | Version 22/08/26";
+            if (!string.IsNullOrEmpty(kq2.Rows[0]["DateExpert"].ToString()))
+            {
+                lblDpPath.Text +=" |" + "Ngày hết hạn : "+ DateTime.Parse(kq2.Rows[0]["DateExpert"].ToString()).ToShortDateString();
+            }
             is5111 = (mstcongty == "3502469834");
 
             lblThongbaos.Text = "Kết nối database thành công";
@@ -5621,6 +5635,7 @@ new OleDbParameter("?", dtDenngay.DateTime.Date) // End date
             AddColumnIfNotExists(conn, "tbRegister", "IsRunning", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "IsNCC", "NUMBER");
             AddColumnIfNotExists(conn, "tbRegister", "StatusClose", "NUMBER");
+            AddColumnIfNotExists(conn, "tbRegister", "DateExpert", "DATETIME");
             // tbimport
             AddColumnIfNotExists(conn, "tbimport", "Khautruthue", "NUMBER");
             AddColumnIfNotExists(conn, "tbimport", "hdon", "TEXT");
@@ -6652,12 +6667,18 @@ Chỉ trả lời: CÓ hoặc KHÔNG
         float dpiY;
         public void GetScreenDPI()
         {
-            //tableLayoutPanel1.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 25F);
-            //tableLayoutPanel1.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 25F);
-            //tableLayoutPanel1.ColumnStyles[2] = new ColumnStyle(SizeType.Percent, 25F);
-            //tableLayoutPanel1.ColumnStyles[3] = new ColumnStyle(SizeType.Percent, 15F);
-            //tableLayoutPanel1.ColumnStyles[4] = new ColumnStyle(SizeType.Percent, 10F);
-            Screen screen = Screen.PrimaryScreen; 
+            _designer = new RuntimeDesigner();
+
+            _designer.Attach(tableLayoutPanel1);
+
+            _designer.PrepareForDesign(tableLayoutPanel1);
+
+            _designer.SetEnabled(false);
+
+         
+
+           
+            Screen screen = Screen.PrimaryScreen;
             // Lấy DPI thông qua Graphics
             using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
             {
@@ -6665,14 +6686,31 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 dpiY = graphics.DpiY;
                 labelControl25.Text = ($"Màn hình: {screen.Bounds.Width}x{screen.Bounds.Height}");
             }
-            //if (screen.Bounds.Width==1280)
-            //{
-            //    tableLayoutPanel1.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 30F);
-            //    tableLayoutPanel1.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 25F);
-            //    tableLayoutPanel1.ColumnStyles[2] = new ColumnStyle(SizeType.Percent, 25F);
-            //    tableLayoutPanel1.ColumnStyles[3] = new ColumnStyle(SizeType.Percent, 15F);
-            //    tableLayoutPanel1.ColumnStyles[4] = new ColumnStyle(SizeType.Percent, 5F);
-            //}
+            if (screen.Bounds.Width == 1920)
+            {
+                strLayout = "layout_1920.xml";
+                //tableLayoutPanel1.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 22.5F);
+                //tableLayoutPanel1.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 18F);
+                //tableLayoutPanel1.ColumnStyles[2] = new ColumnStyle(SizeType.Percent, 15F);
+                //tableLayoutPanel1.ColumnStyles[3] = new ColumnStyle(SizeType.Percent, 15F);
+                //tableLayoutPanel1.ColumnStyles[4] = new ColumnStyle(SizeType.Percent, 20);
+            }
+            if (screen.Bounds.Width == 1280)
+            {
+                strLayout = "layout_1280.xml";
+               
+                //tableLayoutPanel1.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 39F);
+                //tableLayoutPanel1.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 30F);
+                //tableLayoutPanel1.ColumnStyles[2] = new ColumnStyle(SizeType.Percent, 28F);
+                //tableLayoutPanel1.ColumnStyles[3] = new ColumnStyle(SizeType.Percent, 4F);
+                //tableLayoutPanel1.ColumnStyles[4] = new ColumnStyle(SizeType.Percent, 2F);
+            }
+            string file = Path.Combine(
+               Application.StartupPath,
+               strLayout);
+            _designer.Load(
+              tableLayoutPanel1,
+              file);
         }
         private string layoutFile = "form_layout.xml";
         private string workspaceName = "MyWorkspace";
@@ -6721,21 +6759,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 //tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
                 //tableLayoutPanel1.ColumnStyles[1].Width = (int)(this.ClientSize.Width * 0.28);
             }
-            _designer = new RuntimeDesigner();
-
-            _designer.Attach(tableLayoutPanel1);
-
-            _designer.PrepareForDesign(tableLayoutPanel1);
-
-            _designer.SetEnabled(false);
-
-            string file = Path.Combine(
-                Application.StartupPath,
-                "layout.xml");
-
-            //_designer.Load(
-            //    tableLayoutPanel1,
-            //    file);
+         
 
 
             gridView5.OptionsCustomization.AllowSort = false;
@@ -9712,7 +9736,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                     string file = Path.Combine(
      Application.StartupPath,
-     "layout.xml");
+     strLayout);
 
                     _designer.Save(tableLayoutPanel1, file);
 
@@ -21274,6 +21298,31 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
         bool needLogin = true;
         private async void Taihoadon()
         {
+            try
+            {
+                string DateExpert = tbRegister.Rows[0]["DateExpert"].ToString();
+                if (!string.IsNullOrEmpty(DateExpert))
+                {
+                    DateTime dateconvert = DateTime.Parse(DateExpert);
+                    if (dateconvert != null)
+                    {
+                        if ((dateconvert.Date - DateTime.Now.Date).TotalDays == 1)
+                        {
+                            XtraMessageBox.Show("Mật khẩu còn 1 ngày nữa hết hạn, vui lòng đổi mật khẩu mới");
+                            return;
+                        }
+                        if ((dateconvert.Date - DateTime.Now.Date).TotalDays <= 0)
+                        {
+                            XtraMessageBox.Show("Mật khẩu đã hết hạn, vui lòng đổi mật khẩu mới");
+                            return;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
             maxlogin = 1;
             if (isdesign)
                 return;
@@ -21487,6 +21536,13 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
 
                         // GỬI REQUEST LOGIN
                         var loginRes = await client.PostAsync(loginUrl, content);
+
+                        string response = await loginRes.Content.ReadAsStringAsync();
+
+                        var result = JsonConvert.DeserializeObject<LoginResponse2>(response);
+
+                        string message = result.message; 
+                      
                         if (serverMode == "1")
                         {
                             progressPanel1.Caption = "Đăng nhập thành công";
@@ -21495,7 +21551,12 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                             
                         if (loginRes.StatusCode == HttpStatusCode.Unauthorized)
                         {
-                            if (maxlogin < 3)
+                            if (message== "Tên đăng nhập hoặc mật khẩu không đúng")
+                            {
+                                XtraMessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!");
+                                return;
+                            }
+                                if (maxlogin < 3)
                             {
                                 string err = await loginRes.Content.ReadAsStringAsync();
                                 ToastMeaasge("Đăng nhập thất bại (401): " + err + " sẽ thử lại sau 2s");
@@ -21533,8 +21594,24 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
                                 {
                                     DateTime expireDate = DateTime.Parse(prof.password_expire);
                                     TimeSpan remain = expireDate - DateTime.Now;
-
-                                    if (remain.TotalDays <= 0)
+                                    ExecuteQueryResult(
+                           "UPDATE tbRegister SET DateExpert=?",
+                           new OleDbParameter[]
+                           {
+                    new OleDbParameter("?", expireDate.ToString("dd/MM/yyyy"))
+                           }
+                       );
+                                    if (remain.TotalDays ==1)
+                                    {
+                                        XtraMessageBox.Show(
+                                           $"Mật khẩu đã hết hạn ngày {expireDate:dd/MM/yyyy}.",
+                                           "Hết hạn!",
+                                           MessageBoxButtons.OK,
+                                           MessageBoxIcon.Warning
+                                       );
+                                        return;
+                                    }
+                                        if (remain.TotalDays <= 0)
                                     {
                                         XtraMessageBox.Show(
                                             $"Mật khẩu đã hết hạn ngày {expireDate:dd/MM/yyyy}.",
@@ -21623,7 +21700,7 @@ WHERE LCase(TenVattu) = LCase(?) AND LCase(DonVi) = LCase(?)";
             }
         }
         private async void simpleButton3_Click(object sender, EventArgs e)
-        {
+        { 
             Taihoadon();
         }
 
@@ -25194,7 +25271,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             }
 
                         }
-                    if (TTCKTMai != null && double.Parse(TTCKTMai.InnerText)>0)
+                    if (TTCKTMai != null && !string.IsNullOrEmpty(TTCKTMai.InnerText) && double.Parse(TTCKTMai.InnerText)>0)
                     {
                         if (chkDauvao.Checked)
                         {

@@ -47,6 +47,13 @@ namespace SaovietTax
                 Screen.PrimaryScreen.WorkingArea.Bottom - this.Height
             );
         }
+        public class LoginResponse2
+        {
+            public string timestamp { get; set; }
+            public string message { get; set; }
+            public string details { get; set; }
+            public string path { get; set; }
+        }
         public class LoginResponse
         {
             public string access_token { get; set; }
