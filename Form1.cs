@@ -6736,8 +6736,8 @@ Chỉ trả lời: CÓ hoặc KHÔNG
             }
         }
         private async void frmMain_Load(object sender, EventArgs e)
-        {
-
+        { 
+            
             string computerName = Environment.MachineName;
            
             if (computerName != "MAYCHU")
@@ -6758,10 +6758,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 //tableLayoutPanel1.ColumnStyles[0].Width = (int)(this.ClientSize.Width * 0.35);
                 //tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
                 //tableLayoutPanel1.ColumnStyles[1].Width = (int)(this.ClientSize.Width * 0.28);
-            }
-         
-
-
+            } 
             gridView5.OptionsCustomization.AllowSort = false;
 
             GetScreenDPI();
@@ -6800,10 +6797,7 @@ Chỉ trả lời: CÓ hoặc KHÔNG
                 {
                     //Lấy ra dien giai tu chung tu
 
-                }
-
-               
-
+                }  
 
                 // Thietlapcontrol();
                 // Tính 10% chiều rộng màn hình
@@ -25231,6 +25225,10 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                             };
                             if (string.IsNullOrEmpty(dt.DVT))
                             {
+                                if (serverMode == "2" || Isrunning)
+                                {
+                                    dt.DVT = "...";
+                                }
                                 var findvt = lstvt.FirstOrDefault(m => m.TenVattu.ToLower() == dt.Ten.ToLower());
                                 if (findvt != null)
                                 {
@@ -31051,6 +31049,7 @@ private static readonly Dictionary<string, string[]> BrandAliases =
                     }
                     if (item.fileImportDetails.Any(m => string.IsNullOrEmpty(m.DVT) && m.Dongia != 0 && m.Soluong != 0) && item.Checked && !item.TKNo.Contains("64"))
                     {
+                       
                         XtraMessageBox.Show("Hoá đơn " + item.SHDon + " có chi tiết chưa có đơn vị tính. Vui lòng kiểm tra lại!");
                         DevExpress.XtraGrid.Views.Grid.GridView view = gridControl1.MainView as DevExpress.XtraGrid.Views.Grid.GridView;
                         for (int i = 0; i < view.RowCount; i++)

@@ -4,8 +4,8 @@
     <Name>tableLayoutPanel1</Name>
     <Left>2</Left>
     <Top>2</Top>
-    <Width>1894</Width>
-    <Height>137</Height>
+    <Width>1889</Width>
+    <Height>172</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>Fill</Dock>
@@ -30,19 +30,19 @@
       <TableColumnLayout>
         <Index>3</Index>
         <SizeType>Absolute</SizeType>
-        <Width>136</Width>
+        <Width>172</Width>
       </TableColumnLayout>
       <TableColumnLayout>
         <Index>4</Index>
         <SizeType>Absolute</SizeType>
-        <Width>625</Width>
+        <Width>589</Width>
       </TableColumnLayout>
     </Columns>
     <Rows>
       <TableRowLayout>
         <Index>0</Index>
         <SizeType>Absolute</SizeType>
-        <Height>137</Height>
+        <Height>172</Height>
       </TableRowLayout>
     </Rows>
   </ControlLayout>
@@ -51,7 +51,7 @@
     <Left>857</Left>
     <Top>2</Top>
     <Width>321</Width>
-    <Height>133</Height>
+    <Height>168</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -183,7 +183,7 @@
     <Left>470</Left>
     <Top>2</Top>
     <Width>383</Width>
-    <Height>133</Height>
+    <Height>168</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -207,7 +207,7 @@
     <Left>153</Left>
     <Top>5</Top>
     <Width>182</Width>
-    <Height>19</Height>
+    <Height>20</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -219,7 +219,7 @@
     <Left>4</Left>
     <Top>7</Top>
     <Width>127</Width>
-    <Height>19</Height>
+    <Height>20</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -279,7 +279,7 @@
     <Left>153</Left>
     <Top>5</Top>
     <Width>182</Width>
-    <Height>19</Height>
+    <Height>20</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -291,7 +291,7 @@
     <Left>4</Left>
     <Top>5</Top>
     <Width>127</Width>
-    <Height>19</Height>
+    <Height>20</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -363,7 +363,7 @@
     <Left>2</Left>
     <Top>2</Top>
     <Width>464</Width>
-    <Height>133</Height>
+    <Height>168</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -375,7 +375,7 @@
     <Left>170</Left>
     <Top>35</Top>
     <Width>145</Width>
-    <Height>19</Height>
+    <Height>20</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -387,7 +387,7 @@
     <Left>403</Left>
     <Top>35</Top>
     <Width>46</Width>
-    <Height>20</Height>
+    <Height>23</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -411,7 +411,7 @@
     <Left>375</Left>
     <Top>63</Top>
     <Width>74</Width>
-    <Height>20</Height>
+    <Height>23</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -422,8 +422,8 @@
     <Name />
     <Left>4</Left>
     <Top>3</Top>
-    <Width>49</Width>
-    <Height>14</Height>
+    <Width>45</Width>
+    <Height>16</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -435,7 +435,7 @@
     <Left>319</Left>
     <Top>37</Top>
     <Width>74</Width>
-    <Height>19</Height>
+    <Height>20</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -446,8 +446,8 @@
     <Name>labelControl1</Name>
     <Left>217</Left>
     <Top>72</Top>
-    <Width>44</Width>
-    <Height>13</Height>
+    <Width>52</Width>
+    <Height>16</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -459,7 +459,7 @@
     <Left>7</Left>
     <Top>38</Top>
     <Width>144</Width>
-    <Height>19</Height>
+    <Height>20</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -470,8 +470,8 @@
     <Name>chkDauvao</Name>
     <Left>8</Left>
     <Top>100</Top>
-    <Width>98</Width>
-    <Height>19</Height>
+    <Width>115</Width>
+    <Height>22</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -483,7 +483,7 @@
     <Left>111</Left>
     <Top>69</Top>
     <Width>73</Width>
-    <Height>19</Height>
+    <Height>20</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -494,8 +494,8 @@
     <Name>labelControl3</Name>
     <Left>351</Left>
     <Top>68</Top>
-    <Width>20</Width>
-    <Height>13</Height>
+    <Width>23</Width>
+    <Height>16</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -507,7 +507,7 @@
     <Left>7</Left>
     <Top>70</Top>
     <Width>99</Width>
-    <Height>19</Height>
+    <Height>20</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -519,7 +519,7 @@
     <Left>274</Left>
     <Top>63</Top>
     <Width>74</Width>
-    <Height>20</Height>
+    <Height>23</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -530,8 +530,8 @@
     <Name />
     <Left>4</Left>
     <Top>3</Top>
-    <Width>49</Width>
-    <Height>14</Height>
+    <Width>45</Width>
+    <Height>16</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -541,9 +541,9 @@
   <ControlLayout>
     <Name>txtpass</Name>
     <Left>343</Left>
-    <Top>5</Top>
+    <Top>7</Top>
     <Width>106</Width>
-    <Height>20</Height>
+    <Height>21</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -564,8 +564,8 @@
   </ControlLayout>
   <ControlLayout>
     <Name>txtuser</Name>
-    <Left>91</Left>
-    <Top>8</Top>
+    <Left>110</Left>
+    <Top>11</Top>
     <Width>102</Width>
     <Height>20</Height>
     <Visible>true</Visible>
@@ -578,8 +578,8 @@
     <Name>labelControl12</Name>
     <Left>304</Left>
     <Top>10</Top>
-    <Width>22</Width>
-    <Height>13</Height>
+    <Width>26</Width>
+    <Height>16</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -588,10 +588,10 @@
   </ControlLayout>
   <ControlLayout>
     <Name>chkDaura</Name>
-    <Left>118</Left>
+    <Left>132</Left>
     <Top>101</Top>
     <Width>81</Width>
-    <Height>19</Height>
+    <Height>22</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -602,8 +602,8 @@
     <Name>labelControl13</Name>
     <Left>10</Left>
     <Top>13</Top>
-    <Width>74</Width>
-    <Height>13</Height>
+    <Width>88</Width>
+    <Height>16</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -614,8 +614,8 @@
     <Name>pictureEdit2</Name>
     <Left>1182</Left>
     <Top>2</Top>
-    <Width>132</Width>
-    <Height>133</Height>
+    <Width>168</Width>
+    <Height>168</Height>
     <Visible>true</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -626,8 +626,8 @@
     <Name />
     <Left>0</Left>
     <Top>0</Top>
-    <Width>17</Width>
-    <Height>80</Height>
+    <Width>26</Width>
+    <Height>100</Height>
     <Visible>false</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
@@ -638,8 +638,8 @@
     <Name />
     <Left>0</Left>
     <Top>0</Top>
-    <Width>80</Width>
-    <Height>17</Height>
+    <Width>100</Width>
+    <Height>26</Height>
     <Visible>false</Visible>
     <AutoSize>false</AutoSize>
     <Dock>None</Dock>
